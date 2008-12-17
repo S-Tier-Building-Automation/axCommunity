@@ -1,0 +1,12 @@
+<!-- Module Include File -->
+
+<!-- Types -->
+<types>
+  <type name="CSVStringToStatusNumeric" class="com.axcommunity.niagara.conversion.BCSVStringToStatusNumeric" />
+  <type name="StatusEnumToStatusString" class="com.axcommunity.niagara.conversion.BStatusEnumToStatusString" />
+  <type name="StatusNumericToStatusBoolean" class="com.axcommunity.niagara.conversion.BStatusNumericToStatusBoolean" />
+  <type name="StatusNumericToRelTime" class="com.axcommunity.niagara.conversion.BStatusNumericToRelTime" />
+  <type name="AbsTimeToDateParts" class="com.axcommunity.niagara.conversion.BAbsTimeToDateParts"></type>
+  <type name="DatePartsToAbsTime" class="com.axcommunity.niagara.conversion.BDatePartsToAbsTime"></type>
+  <type name="StatusStringToString" class="com.axcommunity.niagara.conversion.BStatusStringToString"></type>
+ </types>

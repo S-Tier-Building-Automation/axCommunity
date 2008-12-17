@@ -1,0 +1,21 @@
+<!-- Module Build File -->
+
+<module
+  name = "axCommunity"
+  bajaVersion = "0"
+  preferredSymbol = ""
+  description = "AX Community Objects"
+  vendor = ""
+>
+
+  <!-- Dependencies -->
+  <dependency name="baja" />
+  <dependency name="control" />
+  <dependency name="driver" />
+  <!-- Packages -->
+  <package name="com.axcommunity.niagara.conversion" doc="true" />
+ 
+  <resources name="com/axcommunity/niagara/graphics/*.*"/>
+
+
+</module>

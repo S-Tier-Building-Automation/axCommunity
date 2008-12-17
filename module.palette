@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bajaObjectGraph version="1.0">
+  <p m="b=baja" t="b:Folder">
+	<p m="b=baja" t="b:Folder" n="Conversion">
+	  <p n="StatusNumericToStatusBoolean" m="k=axCommunity" t="k:StatusNumericToStatusBoolean" />
+	  <p n="StatusNumericToRelTime" m="k=axCommunity" t="k:StatusNumericToRelTime" />
+	  <p n="AbsTimeToDateParts" m="k=axCommunity" t="k:AbsTimeToDateParts" />
+	  <p n="DatePartsToAbsTime" m="k=axCommunity" t="k:DatePartsToAbsTime" />
+	  <p n="StatusEnumToStatusString" m="k=axCommunity" t="k:StatusEnumToStatusString" />
+	  <p n="CSVStringToStatusNumeric" m="k=axCommunity" t="k:CSVStringToStatusNumeric" />
+	  <p n="StatusStringToString" m="k=axCommunity" t="k:StatusStringToString" />
+    </p>
+  </p>
+</bajaObjectGraph>
