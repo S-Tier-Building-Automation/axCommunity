@@ -1,4 +1,4 @@
-package com.axcommunity.niagara.conversion;
+package org.axcommunity.niagara.conversion;
 
 import javax.baja.status.*;
 import javax.baja.sys.*;
@@ -139,7 +139,7 @@ public class BCSVStringToStatusNumeric extends BComponent {
     public void setStartingAtElement(BStatusNumeric v) { set(startingAtElement, v); }
     
 	public BIcon getIcon() { return icon; }
-	private static final BIcon icon = BIcon.make("local:|module://axCommunity/com/axcommunity/niagara/graphics/korsLogo.png");
+	private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");
 	    
     public static final Type TYPE = Sys.loadType(BCSVStringToStatusNumeric.class);
     public Type getType() { return TYPE; }   

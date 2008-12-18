@@ -1,4 +1,4 @@
-package com.axcommunity.niagara.conversion;
+package org.axcommunity.niagara.conversion;
 
 import javax.baja.status.BStatusNumeric;
 import javax.baja.sys.BAbsTime;
@@ -88,7 +88,7 @@ public class BDatePartsToAbsTime extends BComponent {
     public void setYearIn(BStatusNumeric v) { set(yearIn, v); }
 
     public BIcon getIcon() { return icon; }
-    private static final BIcon icon = BIcon.make("local:|module://axCommunity/com/axcommunity/niagara/graphics/korsLogo.png");
+    private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");
     
     public static final Type TYPE = Sys.loadType(BDatePartsToAbsTime.class);
     public Type getType() { return TYPE; }

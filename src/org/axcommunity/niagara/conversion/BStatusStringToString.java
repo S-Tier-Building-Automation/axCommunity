@@ -1,4 +1,4 @@
-package com.axcommunity.niagara.conversion;
+package org.axcommunity.niagara.conversion;
 
 import javax.baja.sys.*;
 import javax.baja.status.*;
@@ -46,7 +46,7 @@ public class BStatusStringToString
 
 
   public BIcon getIcon() { return icon; }
-  private static final BIcon icon = BIcon.make("local:|module://axCommunity/com/axcommunity/niagara/graphics/korsLogo.png");
+  private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");
 
   
 }
