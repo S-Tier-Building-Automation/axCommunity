@@ -5,7 +5,8 @@
   bajaVersion = "0"
   preferredSymbol = ""
   description = "AX Community Objects"
-  vendor = ""
+  vendor = "org.axcommunity"
+  vendorVersion = "09.01.01"
 >
 
   <!-- Dependencies -->
@@ -17,5 +18,10 @@
  
   <resources name="org/axcommunity/niagara/graphics/*.*"/>
 
-
+  <resources name="org/axcommunity/niagara/graphics/coils/small/*.*" />
+  <resources name="org/axcommunity/niagara/graphics/dampers/small/*.*" />
+  <resources name="org/axcommunity/niagara/graphics/devices/small/*.*" />
+  <resources name="org/axcommunity/niagara/graphics/ducts/small/*.*" />
+  <resources name="org/axcommunity/niagara/graphics/equipment/extraSmall/*.*" />
+  <resources name="org/axcommunity/niagara/graphics/equipment/small/*.*" />
 </module>
