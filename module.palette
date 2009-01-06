@@ -2,14 +2,19 @@
 <bajaObjectGraph version="1.0">
     <p m="b=baja" t="b:Folder">
         <p m="b=baja" t="b:Folder" n="Conversion">
-            <p n="StatusNumericToStatusBoolean" m="k=axCommunity" t="k:StatusNumericToStatusBoolean" />
-            <p n="StatusNumericToRelTime" m="k=axCommunity" t="k:StatusNumericToRelTime" />
-            <p n="AbsTimeToDateParts" m="k=axCommunity" t="k:AbsTimeToDateParts" />
-            <p n="DatePartsToAbsTime" m="k=axCommunity" t="k:DatePartsToAbsTime" />
-            <p n="StatusEnumToStatusString" m="k=axCommunity" t="k:StatusEnumToStatusString" />
-            <p n="CSVStringToStatusNumeric" m="k=axCommunity" t="k:CSVStringToStatusNumeric" />
-            <p n="StatusStringToString" m="k=axCommunity" t="k:StatusStringToString" />
+            <p n="StatusNumericToStatusBoolean" m="axc=axCommunity" t="axc:StatusNumericToStatusBoolean" />
+            <p n="StatusNumericToRelTime" m="w=axCommunity" t="w:StatusNumericToRelTime" />
+            <p n="AbsTimeToDateParts" m="w=axCommunity" t="w:AbsTimeToDateParts" />
+            <p n="DatePartsToAbsTime" m="w=axCommunity" t="w:DatePartsToAbsTime" />
+            <p n="StatusEnumToStatusString" m="w=axCommunity" t="w:StatusEnumToStatusString" />
+            <p n="CSVStringToStatusNumeric" m="w=axCommunity" t="w:CSVStringToStatusNumeric" />
+            <p n="StatusStringToString" m="w=axCommunity" t="w:StatusStringToString" />
         </p>
+        <p m="b=baja" t="b:Folder" n="Math">
+  	        <p n="RoundUp" m="k=axCommunity" t="k:RoundUp" />
+		    <p n="Modulo" m="k=axCommunity" t="k:Modulo" />
+		</p>
+        
         <p m="b=baja" t="b:Folder" n="PxGraphics">
             <p n="boolean" t="b:UnrestrictedFolder">
                 <p n="small" t="b:Folder">

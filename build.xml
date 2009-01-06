@@ -3,10 +3,10 @@
 <module
   name = "axCommunity"
   bajaVersion = "0"
-  preferredSymbol = ""
+  preferredSymbol = "axc"
   description = "AX Community Objects"
   vendor = "org.axcommunity"
-  vendorVersion = "09.01.01"
+  vendorVersion = "09.01.02"
 >
 
   <!-- Dependencies -->
@@ -15,6 +15,7 @@
   <dependency name="driver" />
   <!-- Packages -->
   <package name="org.axcommunity.niagara.conversion" doc="true" />
+  <package name="org.axcommunity.niagara.math" doc="true" />
  
   <resources name="org/axcommunity/niagara/graphics/*.*"/>
 

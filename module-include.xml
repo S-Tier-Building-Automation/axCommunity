@@ -9,4 +9,6 @@
   <type name="AbsTimeToDateParts" class="org.axcommunity.niagara.conversion.BAbsTimeToDateParts"></type>
   <type name="DatePartsToAbsTime" class="org.axcommunity.niagara.conversion.BDatePartsToAbsTime"></type>
   <type name="StatusStringToString" class="org.axcommunity.niagara.conversion.BStatusStringToString"></type>
+  <type name="RoundUp" class="org.axcommunity.niagara.math.BRoundUp" /> 
+  <type name="Modulo" class="org.axcommunity.niagara.math.BModulo" /> 
  </types>
