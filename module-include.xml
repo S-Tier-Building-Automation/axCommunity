@@ -11,4 +11,9 @@
   <type name="StatusStringToString" class="org.axcommunity.niagara.conversion.BStatusStringToString"></type>
   <type name="RoundUp" class="org.axcommunity.niagara.math.BRoundUp" /> 
   <type name="Modulo" class="org.axcommunity.niagara.math.BModulo" /> 
+  <type name="TrAdd" class="org.axcommunity.niagara.math.BTrAdd" ></type> 
+  <type name="TrCopy" class="org.axcommunity.niagara.math.BTrCopy" ></type> 
+  <type name="TrDivide" class="org.axcommunity.niagara.math.BTrDivide" /> 
+  <type name="TrMultiply" class="org.axcommunity.niagara.math.BTrMultiply" /> 
+  <type name="TrSubtract" class="org.axcommunity.niagara.math.BTrSubtract" />
  </types>

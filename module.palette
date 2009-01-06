@@ -13,6 +13,11 @@
         <p m="b=baja" t="b:Folder" n="Math">
   	        <p n="RoundUp" m="k=axCommunity" t="k:RoundUp" />
 		    <p n="Modulo" m="k=axCommunity" t="k:Modulo" />
+		    <p n="TrAdd" m="k=axCommunity" t="k:TrAdd" />
+		    <p n="TrCopy" m="k=axCommunity" t="k:TrCopy" />
+		    <p n="TrDivide" m="k=axCommunity" t="k:TrDivide" />
+		    <p n="TrMultiply" m="k=axCommunity" t="k:TrMultiply" />
+		    <p n="TrSubtract" m="k=axCommunity" t="k:TrSubtract" />
 		</p>
         
         <p m="b=baja" t="b:Folder" n="PxGraphics">
@@ -24,8 +29,8 @@
  						<!-- /boolean/bulbSmall/bnd -->
                         <p n="bnd" m="ui=bajaui" t="ui:ValueBinding">
                             <p n="image" m="conv=converters" t="conv:IBooleanToSimple">
-                                <p n="trueValue" m="gx=gx" t="gx:Image" v="module://axCommunity/org/axcommunity/niagara/graphics/boolean/bulbSmallTrue.gif" />
-                                <p n="falseValue" t="gx:Image" v="module://axCommunity/org/axcommunity/niagara/graphics/boolean/bulbSmallFalse.gif" />
+                                <p n="trueValue" m="gx=gx" t="gx:Image" v="module://johnGraphics/boolean/bulbSmallTrue.gif" />
+                                <p n="falseValue" t="gx:Image" v="module://johnGraphics/boolean/bulbSmallFalse.gif" />
                             </p>
                         </p>
                     </p>
@@ -35,8 +40,8 @@
 						<!-- /boolean/occupiedSmall/bnd -->
                         <p n="bnd" t="ui:ValueBinding">
                             <p n="image" t="conv:IBooleanToSimple">
-                                <p n="trueValue" t="gx:Image" v="module://axCommunity/org/axcommunity/niagara/graphics/boolean/occupiedSmallTrue.gif" />
-                                <p n="falseValue" t="gx:Image" v="module://axCommunity/org/axcommunity/niagara/graphics/boolean/occupiedSmallFalse.gif" />
+                                <p n="trueValue" t="gx:Image" v="module://johnGraphics/boolean/occupiedSmallTrue.gif" />
+                                <p n="falseValue" t="gx:Image" v="module://johnGraphics/boolean/occupiedSmallFalse.gif" />
                             </p>
                         </p>
                     </p>
@@ -52,8 +57,8 @@
 						<!-- /coils/small/coolingCoil/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:IBooleanToSimple">
-                                <p n="trueValue" t="gx:Image" v="module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOn.gif" />
-                                <p n="falseValue" t="gx:Image" v="module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOff.gif" />
+                                <p n="trueValue" t="gx:Image" v="module://johnGraphics/coils/small/coolingCoilOn.gif" />
+                                <p n="falseValue" t="gx:Image" v="module://johnGraphics/coils/small/coolingCoilOff.gif" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="5,3,8" />
@@ -64,7 +69,7 @@
 						<!-- /coils/small/coolingCoil2wL/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:INumericToSimple">
-                                <p n="map" v="gx:Image -inf:10=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOffv2wL.png;10:20=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv2wL.png;20:40=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv2wL.png;40:60=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv2wL.png;60:80=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv2wL.png;80:100=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv2wL.png;default=null;" />
+                                <p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/coolingCoilOffv2wL.png;10:20=module://johnGraphics/coils/small/coolingCoilOnv2wL.png;20:40=module://johnGraphics/coils/small/coolingCoilOnv2wL.png;40:60=module://johnGraphics/coils/small/coolingCoilOnv2wL.png;60:80=module://johnGraphics/coils/small/coolingCoilOnv2wL.png;80:100=module://johnGraphics/coils/small/coolingCoilOnv2wL.png;default=null;" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
@@ -75,7 +80,7 @@
 						<!-- /coils/small/coolingCoilv2wR/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:INumericToSimple">
-                                <p n="map" v="gx:Image -inf:10=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOffv2wR.png;10:20=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv2wR.png;20:40=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv2wR.png;40:60=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv2wR.png;60:80=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv2wR.png;80:100=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv2wR.png;default=null;" />
+                                <p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/coolingCoilOffv2wR.png;10:20=module://johnGraphics/coils/small/coolingCoilOnv2wR.png;20:40=module://johnGraphics/coils/small/coolingCoilOnv2wR.png;40:60=module://johnGraphics/coils/small/coolingCoilOnv2wR.png;60:80=module://johnGraphics/coils/small/coolingCoilOnv2wR.png;80:100=module://johnGraphics/coils/small/coolingCoilOnv2wR.png;default=null;" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
@@ -86,7 +91,7 @@
 						<!-- /coils/small/coolingCoilv3wL/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:INumericToSimple">
-                                <p n="map" v="gx:Image -inf:10=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOffv3wL.png;10:20=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv3wL.png;20:40=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv3wL.png;40:60=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv3wL.png;60:80=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv3wL.png;80:100=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv3wL.png;default=null;" />
+                                <p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/coolingCoilOffv3wL.png;10:20=module://johnGraphics/coils/small/coolingCoilOnv3wL.png;20:40=module://johnGraphics/coils/small/coolingCoilOnv3wL.png;40:60=module://johnGraphics/coils/small/coolingCoilOnv3wL.png;60:80=module://johnGraphics/coils/small/coolingCoilOnv3wL.png;80:100=module://johnGraphics/coils/small/coolingCoilOnv3wL.png;default=null;" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
@@ -97,7 +102,7 @@
 						<!-- /coils/small/coolingCoilv3wR/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:INumericToSimple">
-                                <p n="map" v="gx:Image -inf:10=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOffv3wR.png;10:20=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv3wR.png;20:40=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv3wR.png;40:60=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv3wR.png;60:80=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv3wR.png;80:100=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/coolingCoilOnv3wR.png;default=null;" />
+                                <p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/coolingCoilOffv3wR.png;10:20=module://johnGraphics/coils/small/coolingCoilOnv3wR.png;20:40=module://johnGraphics/coils/small/coolingCoilOnv3wR.png;40:60=module://johnGraphics/coils/small/coolingCoilOnv3wR.png;60:80=module://johnGraphics/coils/small/coolingCoilOnv3wR.png;80:100=module://johnGraphics/coils/small/coolingCoilOnv3wR.png;default=null;" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
@@ -108,8 +113,8 @@
 						<!-- /coils/small/electricHeatingCoil/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:IBooleanToSimple">
-                                <p n="trueValue" t="gx:Image" v="module://axCommunity/org/axcommunity/niagara/graphics/coils/small/electricHeatingCoilOn.gif" />
-                                <p n="falseValue" t="gx:Image" v="module://axCommunity/org/axcommunity/niagara/graphics/coils/small/electricHeatingCoilOff.gif" />
+                                <p n="trueValue" t="gx:Image" v="module://johnGraphics/coils/small/electricHeatingCoilOn.gif" />
+                                <p n="falseValue" t="gx:Image" v="module://johnGraphics/coils/small/electricHeatingCoilOff.gif" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="25,23,8" />
@@ -120,7 +125,7 @@
 						<!-- /coils/small/filterV/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:INumericToSimple">
-                                <p n="map" v="gx:Image -inf:0.5=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/filterVa.gif;0.5:1=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/filterVb.gif;1:1.5=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/filterVc.gif;1.5:2=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/filterVd.gif;2:+inf=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/filterVe.gif;default=null;" />
+                                <p n="map" v="gx:Image -inf:0.5=module://johnGraphics/coils/small/filterVa.gif;0.5:1=module://johnGraphics/coils/small/filterVb.gif;1:1.5=module://johnGraphics/coils/small/filterVc.gif;1.5:2=module://johnGraphics/coils/small/filterVd.gif;2:+inf=module://johnGraphics/coils/small/filterVe.gif;default=null;" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
@@ -131,8 +136,8 @@
 						<!-- /coils/small/heatingCoil/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:IBooleanToSimple">
-                                <p n="trueValue" t="gx:Image" v="module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOn.gif" />
-                                <p n="falseValue" t="gx:Image" v="module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOff.gif" />
+                                <p n="trueValue" t="gx:Image" v="module://johnGraphics/coils/small/heatingCoilOn.gif" />
+                                <p n="falseValue" t="gx:Image" v="module://johnGraphics/coils/small/heatingCoilOff.gif" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="5,3,8" />
@@ -143,7 +148,7 @@
 						<!-- /coils/small/heatingCoilv2wL/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:INumericToSimple">
-                                <p n="map" v="gx:Image -inf:10=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOffv2wL.png;10:20=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv2wL.png;20:40=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv2wL.png;40:60=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv2wL.png;60:80=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv2wL.png;80:100=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv2wL.png;default=null;" />
+                                <p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/heatingCoilOffv2wL.png;10:20=module://johnGraphics/coils/small/heatingCoilOnv2wL.png;20:40=module://johnGraphics/coils/small/heatingCoilOnv2wL.png;40:60=module://johnGraphics/coils/small/heatingCoilOnv2wL.png;60:80=module://johnGraphics/coils/small/heatingCoilOnv2wL.png;80:100=module://johnGraphics/coils/small/heatingCoilOnv2wL.png;default=null;" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
@@ -154,7 +159,7 @@
 						<!-- /coils/small/heatingCoilv2wR/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:INumericToSimple">
-                                <p n="map" v="gx:Image -inf:10=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOffv2wR.png;10:20=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv2wR.png;20:40=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv2wR.png;40:60=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv2wR.png;60:80=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv2wR.png;80:100=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv2wR.png;default=null;" />
+                                <p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/heatingCoilOffv2wR.png;10:20=module://johnGraphics/coils/small/heatingCoilOnv2wR.png;20:40=module://johnGraphics/coils/small/heatingCoilOnv2wR.png;40:60=module://johnGraphics/coils/small/heatingCoilOnv2wR.png;60:80=module://johnGraphics/coils/small/heatingCoilOnv2wR.png;80:100=module://johnGraphics/coils/small/heatingCoilOnv2wR.png;default=null;" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
@@ -165,7 +170,7 @@
 						<!-- /coils/small/heatingCoilv3wL/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:INumericToSimple">
-                                <p n="map" v="gx:Image -inf:10=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOffv3wL.png;10:20=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv3wL.png;20:40=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv3wL.png;40:60=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv3wL.png;60:80=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv3wL.png;80:100=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv3wL.png;default=null;" />
+                                <p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/heatingCoilOffv3wL.png;10:20=module://johnGraphics/coils/small/heatingCoilOnv3wL.png;20:40=module://johnGraphics/coils/small/heatingCoilOnv3wL.png;40:60=module://johnGraphics/coils/small/heatingCoilOnv3wL.png;60:80=module://johnGraphics/coils/small/heatingCoilOnv3wL.png;80:100=module://johnGraphics/coils/small/heatingCoilOnv3wL.png;default=null;" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
@@ -176,7 +181,7 @@
 						<!-- /coils/small/heatingCoilv3wR/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:INumericToSimple">
-                                <p n="map" v="gx:Image -inf:10=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOffv3wR.png;10:20=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv3wR.png;20:40=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv3wR.png;40:60=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv3wR.png;60:80=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv3wR.png;80:100=module://axCommunity/org/axcommunity/niagara/graphics/coils/small/heatingCoilOnv3wR.png;default=null;" />
+                                <p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/heatingCoilOffv3wR.png;10:20=module://johnGraphics/coils/small/heatingCoilOnv3wR.png;20:40=module://johnGraphics/coils/small/heatingCoilOnv3wR.png;40:60=module://johnGraphics/coils/small/heatingCoilOnv3wR.png;60:80=module://johnGraphics/coils/small/heatingCoilOnv3wR.png;80:100=module://johnGraphics/coils/small/heatingCoilOnv3wR.png;default=null;" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
@@ -194,7 +199,7 @@
 						<!-- /dampers/small/damperH_NC/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:INumericToSimple">
-                                <p n="map" v="gx:Image -inf:20=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperH1a.gif;20:40=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperH1b.gif;40:60=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperH1c.gif;60:80=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperH1d.gif;80:+inf=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperH1e.gif;default=null;" />
+                                <p n="map" v="gx:Image -inf:20=module://johnGraphics/dampers/small/damperH1a.gif;20:40=module://johnGraphics/dampers/small/damperH1b.gif;40:60=module://johnGraphics/dampers/small/damperH1c.gif;60:80=module://johnGraphics/dampers/small/damperH1d.gif;80:+inf=module://johnGraphics/dampers/small/damperH1e.gif;default=null;" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="14,11,8" />
@@ -205,7 +210,7 @@
 						<!-- /dampers/small/damperH_NO/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:INumericToSimple">
-                                <p n="map" v="gx:Image -inf:20=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperH1e.gif;20:40=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperH1d.gif;40:60=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperH1c.gif;60:80=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperH1b.gif;80:+inf=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperH1a.gif;default=null;" />
+                                <p n="map" v="gx:Image -inf:20=module://johnGraphics/dampers/small/damperH1e.gif;20:40=module://johnGraphics/dampers/small/damperH1d.gif;40:60=module://johnGraphics/dampers/small/damperH1c.gif;60:80=module://johnGraphics/dampers/small/damperH1b.gif;80:+inf=module://johnGraphics/dampers/small/damperH1a.gif;default=null;" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="14,11,8" />
@@ -216,7 +221,7 @@
 						<!-- /dampers/small/damperV_NC/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:INumericToSimple">
-                                <p n="map" v="gx:Image -inf:20=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperV1a.gif;20:40=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperV1b.gif;40:60=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperV1c.gif;60:80=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperV1d.gif;80:+inf=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperV1e.gif;default=null;" />
+                                <p n="map" v="gx:Image -inf:20=module://johnGraphics/dampers/small/damperV1a.gif;20:40=module://johnGraphics/dampers/small/damperV1b.gif;40:60=module://johnGraphics/dampers/small/damperV1c.gif;60:80=module://johnGraphics/dampers/small/damperV1d.gif;80:+inf=module://johnGraphics/dampers/small/damperV1e.gif;default=null;" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="18,15,8" />
@@ -227,7 +232,7 @@
 						<!-- /dampers/small/damperV_NO/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:INumericToSimple">
-                                <p n="map" v="gx:Image -inf:20=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperV1e.gif;20:40=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperV1d.gif;40:60=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperV1c.gif;60:80=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperV1b.gif;80:+inf=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/damperV1a.gif;default=null;" />
+                                <p n="map" v="gx:Image -inf:20=module://johnGraphics/dampers/small/damperV1e.gif;20:40=module://johnGraphics/dampers/small/damperV1d.gif;40:60=module://johnGraphics/dampers/small/damperV1c.gif;60:80=module://johnGraphics/dampers/small/damperV1b.gif;80:+inf=module://johnGraphics/dampers/small/damperV1a.gif;default=null;" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="18,15,8" />
@@ -238,7 +243,7 @@
 						<!-- /dampers/small/vavDamperS/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:INumericToSimple">
-                                <p n="map" v="gx:Image -inf:20=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/vavDamper1a.gif;20:40=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/vavDamper1b.gif;40:60=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/vavDamper1c.gif;60:80=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/vavDamper1d.gif;80:+inf=module://axCommunity/org/axcommunity/niagara/graphics/dampers/small/vavDamper1e.gif;default=null;" />
+                                <p n="map" v="gx:Image -inf:20=module://johnGraphics/dampers/small/vavDamper1a.gif;20:40=module://johnGraphics/dampers/small/vavDamper1b.gif;40:60=module://johnGraphics/dampers/small/vavDamper1c.gif;60:80=module://johnGraphics/dampers/small/vavDamper1d.gif;80:+inf=module://johnGraphics/dampers/small/vavDamper1e.gif;default=null;" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="22,19,8" />
@@ -255,121 +260,121 @@
 					<!-- /devices/small/dpsLongBtmAlarm -->
                     <p n="dpsLongBtmAlarm" t="kitPx:BoundLabel">
                         <p n="layout" v="60,30,110,50" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/dpsLongBtmAlarm.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/dpsLongBtmAlarm.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="68,76,8" />
                     </p>
 					<!-- /devices/small/dpsLongBtmNorm -->
                     <p n="dpsLongBtmNorm" t="kitPx:BoundLabel">
                         <p n="layout" v="60,90,110,50" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/dpsLongBtmNorm.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/dpsLongBtmNorm.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="68,74,8" />
                     </p>
 					<!-- /devices/small/dpsLongTopAlarm -->
                     <p n="dpsLongTopAlarm" t="kitPx:BoundLabel">
                         <p n="layout" v="60,160,110,50" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/dpsLongTopAlarm.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/dpsLongTopAlarm.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="68,70,8" />
                     </p>
 					<!-- /devices/small/dpsLongTopNorm -->
                     <p n="dpsLongTopNorm" t="kitPx:BoundLabel">
                         <p n="layout" v="60,230,110,50" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/dpsLongTopNorm.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/dpsLongTopNorm.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="64,66,8" />
                     </p>
 					<!-- /devices/small/dpsShortBtmAlarm -->
                     <p n="dpsShortBtmAlarm" t="kitPx:BoundLabel">
                         <p n="layout" v="60,310,44,50" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/dpsShortBtmAlarm.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/dpsShortBtmAlarm.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="60,62,8" />
                     </p>
 					<!-- /devices/small/dpsShortBtmNorm -->
                     <p n="dpsShortBtmNorm" t="kitPx:BoundLabel">
                         <p n="layout" v="60,380,44,50" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/dpsShortBtmNorm.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/dpsShortBtmNorm.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="56,58,8" />
                     </p>
 					<!-- /devices/small/dpsShortTopAlarm -->
                     <p n="dpsShortTopAlarm" t="kitPx:BoundLabel">
                         <p n="layout" v="70,440,44,50" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/dpsShortTopAlarm.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/dpsShortTopAlarm.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="52,54,8" />
                     </p>
 					<!-- /devices/small/dpsShortTopNorm -->
                     <p n="dpsShortTopNorm" t="kitPx:BoundLabel">
                         <p n="layout" v="70,500,44,50" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/dpsShortTopNorm.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/dpsShortTopNorm.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="48,50,8" />
                     </p>
 					<!-- /devices/small/pipe$2dpsiH -->
                     <p n="pipe$2dpsiH" t="kitPx:BoundLabel">
                         <p n="layout" v="220,30,100,14" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/pipe-psiH.png" />
+                        <p n="image" v="module://johnGraphics/devices/small/pipe-psiH.png" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="68,76,8" />
                     </p>
 					<!-- /devices/small/pipe$2dpsiV -->
                     <p n="pipe$2dpsiV" t="ui:Label">
                         <p n="layout" v="260,50,9,100" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/pipe-psiV.png" />
+                        <p n="image" v="module://johnGraphics/devices/small/pipe-psiV.png" />
                     </p>
 					<!-- /devices/small/Press$2dSw$2dSide -->
                     <p n="Press$2dSw$2dSide" t="ui:Label">
                         <p n="layout" v="260,180,16,32" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/Press-Sw-Side.png" />
+                        <p n="image" v="module://johnGraphics/devices/small/Press-Sw-Side.png" />
                     </p>
 					<!-- /devices/small/Press$2dSw$2dTop -->
                     <p n="Press$2dSw$2dTop" t="ui:Label">
                         <p n="layout" v="260,230,32,16" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/Press-Sw-Top.png" />
+                        <p n="image" v="module://johnGraphics/devices/small/Press-Sw-Top.png" />
                     </p>
 					<!-- /devices/small/Sensor$2dHorz$2dFreezestat -->
                     <p n="Sensor$2dHorz$2dFreezestat" t="ui:Label">
                         <p n="layout" v="260,260,25,69" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/Sensor-Horz-Freezestat.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-Freezestat.gif" />
                     </p>
 					<!-- /devices/small/Sensor$2dHorz$2dHiPressCutOut -->
                     <p n="Sensor$2dHorz$2dHiPressCutOut" t="ui:Label">
                         <p n="layout" v="260,350,25,52" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/Sensor-Horz-HiPressCutOut.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-HiPressCutOut.gif" />
                     </p>
 					<!-- /devices/small/Sensor$2dHorz$2dLoPressCutOut -->
                     <p n="Sensor$2dHorz$2dLoPressCutOut" t="ui:Label">
                         <p n="layout" v="260,410,25,52" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/Sensor-Horz-LoPressCutOut.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-LoPressCutOut.gif" />
                     </p>
 					<!-- /devices/small/Sensor$2dMixedAir$2dTop -->
                     <p n="Sensor$2dMixedAir$2dTop" t="ui:Label">
                         <p n="layout" v="260,470,25,68" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/Sensor-Horz-MixedAir.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-MixedAir.gif" />
                     </p>
 					<!-- /devices/small/Sensor$2dStaticPressTop -->
                     <p n="Sensor$2dStaticPressTop" t="ui:Label">
                         <p n="layout" v="370,30,25,52" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/Sensor-Horz-StaticPress.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-StaticPress.gif" />
                     </p>
 					<!-- /devices/small/Sensor$2dStaticPressBot -->
                     <p n="Sensor$2dStaticPressBot" t="ui:Label">
                         <p n="layout" v="370,100,25,52" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/Sensor-Horz-StaticPressBot.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-StaticPressBot.gif" />
                     </p>
 					<!-- /devices/small/Sensor$2dSmoDetector$2dTop -->
                     <p n="Sensor$2dSmoDetector$2dTop" t="ui:Label">
                         <p n="layout" v="370,170,32,54" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/Sensor-Left-SmoDetector.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/Sensor-Left-SmoDetector.gif" />
                     </p>
 					<!-- /devices/small/Sensor$2dMixedAir$2dBottom -->
                     <p n="Sensor$2dMixedAir$2dBottom" t="ui:Label">
                         <p n="layout" v="370,230,25,68" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/Sensor-MixedAir.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/Sensor-MixedAir.gif" />
                     </p>
 					<!-- /devices/small/Sensor$2dSmoDetector$2dBottom -->
                     <p n="Sensor$2dSmoDetector$2dBottom" t="ui:Label">
                         <p n="layout" v="370,310,32,54" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/Sensor-Right-Bot-SmoDetector.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/Sensor-Right-Bot-SmoDetector.gif" />
                     </p>
 					<!-- /devices/small/Sensor$2dStaticPressRight -->
                     <p n="Sensor$2dStaticPressRight" t="ui:Label">
                         <p n="layout" v="360,390,52,25" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/Sensor-Vert-StaticPressBot.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/Sensor-Vert-StaticPressBot.gif" />
                     </p>
 					<!-- /devices/small/Sensor$2dSmoDetector$2dAni -->
                     <p n="Sensor$2dSmoDetector$2dAni" t="kitPx:BoundLabel">
@@ -378,8 +383,8 @@
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="ord" v="station:|slot:/Drivers/NiagaraNetwork/Kaiser_3701_PH/Playground/BWTrue" />
                             <p n="image" t="conv:IBooleanToSimple">
-                                <p n="trueValue" t="gx:Image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/smokeDetectorOn.png" />
-                                <p n="falseValue" t="gx:Image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/smokeDetectorOff.png" />
+                                <p n="trueValue" t="gx:Image" v="module://johnGraphics/devices/small/smokeDetectorOn.png" />
+                                <p n="falseValue" t="gx:Image" v="module://johnGraphics/devices/small/smokeDetectorOff.png" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="5,3,8" />
@@ -387,46 +392,46 @@
 					<!-- /devices/small/tempSensorBottom -->
                     <p n="tempSensorBottom" t="kitPx:BoundLabel">
                         <p n="layout" v="510,380,14,51" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/tempSensorBottom.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/tempSensorBottom.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="12,14,8" />
                     </p>
 					<!-- /devices/small/tempSensorBottomSmall -->
                     <p n="tempSensorBottomSmall" t="ui:Label">
                         <p n="layout" v="340,500,14,51" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/tempSensorBottomSmall.GIF" />
+                        <p n="image" v="module://johnGraphics/devices/small/tempSensorBottomSmall.GIF" />
                     </p>
 					<!-- /devices/small/tempSensorLeft -->
                     <p n="tempSensorLeft" t="kitPx:BoundLabel">
                         <p n="layout" v="550,490,51,14" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/tempSensorLeft.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/tempSensorLeft.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="8,10,8" />
                     </p>
 					<!-- /devices/small/tempSensorLeftSmall -->
                     <p n="tempSensorLeftSmall" t="ui:Label">
                         <p n="layout" v="380,530,51,14" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/tempSensorLeftSmall.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/tempSensorLeftSmall.gif" />
                     </p>
 					<!-- /devices/small/tempSensorRight -->
                     <p n="tempSensorRight" t="kitPx:BoundLabel">
                         <p n="layout" v="620,500,51,14" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/tempSensorRight.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/tempSensorRight.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="8,10,8" />
                     </p>
 					<!-- /devices/small/tempSensorRightSmall -->
                     <p n="tempSensorRightSmall" t="ui:Label">
                         <p n="layout" v="430,530,51,14" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/tempSensorRightSmall.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/tempSensorRightSmall.gif" />
                     </p>
 					<!-- /devices/small/tempSensorTop -->
                     <p n="tempSensorTop" t="kitPx:BoundLabel">
                         <p n="layout" v="500,460,14,51" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/tempSensorTop.gif" />
+                        <p n="image" v="module://johnGraphics/devices/small/tempSensorTop.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="4,6,8" />
                     </p>
 					<!-- /devices/small/tempSensorTopSmall -->
                     <p n="tempSensorTopSmall" t="ui:Label">
                         <p n="layout" v="460,570,14,51" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/devices/small/tempSensorTopSmall.GIF" />
+                        <p n="image" v="module://johnGraphics/devices/small/tempSensorTopSmall.GIF" />
                     </p>
                 </p>
             </p>
@@ -437,169 +442,169 @@
 					<!-- /ducts/small/NE -->
                     <p n="NE" t="kitPx:BoundLabel">
                         <p n="layout" v="570,340,84,84" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/NE.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/NE.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
                     </p>
 					<!-- /ducts/small/NW -->
                     <p n="NW" t="kitPx:BoundLabel">
                         <p n="layout" v="450,310,84,84" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/NW.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/NW.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
                     </p>
 					<!-- /ducts/small/SE -->
                     <p n="SE" t="kitPx:BoundLabel">
                         <p n="layout" v="540,310,84,84" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/SE.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/SE.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
                     </p>
 					<!-- /ducts/small/SW -->
                     <p n="SW" t="kitPx:BoundLabel">
                         <p n="layout" v="660,310,84,84" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/SW.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/SW.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
                     </p>
 					<!-- /ducts/small/ductA -->
                     <p n="ductA" t="kitPx:BoundLabel">
                         <p n="layout" v="20,10,434,208" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/duct1.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/duct1.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="102,103,8" />
                     </p>
 					<!-- /ducts/small/ductB -->
                     <p n="ductB" t="kitPx:BoundLabel">
                         <p n="layout" v="70,20,434,208" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/duct2.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/duct2.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="98,99,8" />
                     </p>
 					<!-- /ducts/small/ductC -->
                     <p n="ductC" t="kitPx:BoundLabel">
                         <p n="layout" v="40,80,434,135" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/duct3.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/duct3.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="94,95,8" />
                     </p>
 					<!-- /ducts/small/ductD -->
                     <p n="ductD" t="kitPx:BoundLabel">
                         <p n="layout" v="60,30,434,135" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/duct4.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/duct4.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="90,91,8" />
                     </p>
 					<!-- /ducts/small/hlbreak -->
                     <p n="hlbreak" t="kitPx:BoundLabel">
                         <p n="layout" v="100,20,50,68" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/hlbreak.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/hlbreak.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="86,87,8" />
                     </p>
 					<!-- /ducts/small/hlend -->
                     <p n="hlend" t="kitPx:BoundLabel">
                         <p n="layout" v="100,100,50,68" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/hlend.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/hlend.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="82,83,8" />
                     </p>
 					<!-- /ducts/small/hmid -->
                     <p n="hmid" t="kitPx:BoundLabel">
                         <p n="layout" v="40,190,150,68" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/hmid.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/hmid.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="78,79,8" />
                     </p>
 					<!-- /ducts/small/hmidSmall -->
                     <p n="hmidSmall" t="kitPx:BoundLabel">
                         <p n="layout" v="100,280,50,68" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/hmidSmall.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/hmidSmall.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="74,75,8" />
                     </p>
 					<!-- /ducts/small/hrbreak -->
                     <p n="hrbreak" t="kitPx:BoundLabel">
                         <p n="layout" v="100,360,60,68" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/hrbreak.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/hrbreak.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="70,71,8" />
                     </p>
 					<!-- /ducts/small/hrend -->
                     <p n="hrend" t="kitPx:BoundLabel">
                         <p n="layout" v="110,440,50,68" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/hrend.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/hrend.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="66,67,8" />
                     </p>
 					<!-- /ducts/small/hrendGrate -->
                     <p n="hrendGrate" t="kitPx:BoundLabel">
                         <p n="layout" v="110,520,34,68" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/hrendGrate.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/hrendGrate.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="62,63,8" />
                     </p>
 					<!-- /ducts/small/hrendHole -->
                     <p n="hrendHole" t="kitPx:BoundLabel">
                         <p n="layout" v="280,20,34,68" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/hrendHole.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/hrendHole.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="58,59,8" />
                     </p>
 					<!-- /ducts/small/hrendSolid -->
                     <p n="hrendSolid" t="kitPx:BoundLabel">
                         <p n="layout" v="280,100,34,68" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/hrendSolid.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/hrendSolid.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="54,55,8" />
                     </p>
 					<!-- /ducts/small/hrwhy3wayL -->
                     <p n="hrwhy3wayL" t="kitPx:BoundLabel">
                         <p n="layout" v="260,310,81,169" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/hrwhy3wayL.png" />
+                        <p n="image" v="module://johnGraphics/ducts/small/hrwhy3wayL.png" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="46,47,8" />
                     </p>
 					<!-- /ducts/small/hrwhy3wayR -->
                     <p n="hrwhy3wayR" t="kitPx:BoundLabel">
                         <p n="layout" v="370,310,81,169" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/hrwhy3wayR.png" />
+                        <p n="image" v="module://johnGraphics/ducts/small/hrwhy3wayR.png" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="42,43,8" />
                     </p>
 					<!-- /ducts/small/hrwhyL -->
                     <p n="hrwhyL" t="kitPx:BoundLabel">
                         <p n="layout" v="270,180,67,118" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/hrwhySmall.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/hrwhySmall.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="50,51,8" />
                     </p>
 					<!-- /ducts/small/hrwhyR -->
                     <p n="hrwhyR" t="kitPx:BoundLabel">
                         <p n="layout" v="370,180,67,118" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/hrwhySmallOut.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/hrwhySmallOut.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="50,51,8" />
                     </p>
 					<!-- /ducts/small/teast -->
                     <p n="teast" t="kitPx:BoundLabel">
                         <p n="layout" v="580,430,84,101" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/teast.png" />
+                        <p n="image" v="module://johnGraphics/ducts/small/teast.png" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
                     </p>
 					<!-- /ducts/small/tnorth -->
                     <p n="tnorth" t="kitPx:BoundLabel">
                         <p n="layout" v="520,30,101,84" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/tnorth.png" />
+                        <p n="image" v="module://johnGraphics/ducts/small/tnorth.png" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="18,19,8" />
                     </p>
 					<!-- /ducts/small/tsouth -->
                     <p n="tsouth" t="kitPx:BoundLabel">
                         <p n="layout" v="520,130,101,84" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/tsouth.png" />
+                        <p n="image" v="module://johnGraphics/ducts/small/tsouth.png" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="14,15,8" />
                     </p>
 					<!-- /ducts/small/twest -->
                     <p n="twest" t="kitPx:BoundLabel">
                         <p n="layout" v="710,420,84,101" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/twest.png" />
+                        <p n="image" v="module://johnGraphics/ducts/small/twest.png" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
                     </p>
 					<!-- /ducts/small/vbend -->
                     <p n="vbend" t="kitPx:BoundLabel">
                         <p n="layout" v="540,240,68,50" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/vbend.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/vbend.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="10,11,8" />
                     </p>
 					<!-- /ducts/small/vmid -->
                     <p n="vmid" t="kitPx:BoundLabel">
                         <p n="layout" v="540,310,68,150" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/vmid.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/vmid.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
                     </p>
 					<!-- /ducts/small/vtend -->
                     <p n="vtend" t="kitPx:BoundLabel">
                         <p n="layout" v="540,480,68,50" />
-                        <p n="image" v="module://axCommunity/org/axcommunity/niagara/graphics/ducts/small/vtend.gif" />
+                        <p n="image" v="module://johnGraphics/ducts/small/vtend.gif" />
                         <p n="wsAnnotation" t="b:WsAnnotation" v="2,3,8" />
                     </p>
                     <p n="wsAnnotation" f="r" t="b:WsAnnotation" v="41,25,8" />
@@ -616,8 +621,8 @@
 						<!-- /equipment/small/fanLeft/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:IBooleanToSimple">
-                                <p n="trueValue" t="gx:Image" v="module://axCommunity/org/axcommunity/niagara/graphics/equipment/small/fanLeftAnimated.gif" />
-                                <p n="falseValue" t="gx:Image" v="module://axCommunity/org/axcommunity/niagara/graphics/equipment/small/fanLeft.gif" />
+                                <p n="trueValue" t="gx:Image" v="module://johnGraphics/equipment/small/fanLeftAnimated.gif" />
+                                <p n="falseValue" t="gx:Image" v="module://johnGraphics/equipment/small/fanLeft.gif" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="18,16,8" />
@@ -628,8 +633,8 @@
 						<!-- /equipment/small/fanRight/ValueBinding -->
                         <p n="ValueBinding" t="ui:ValueBinding">
                             <p n="image" t="conv:IBooleanToSimple">
-                                <p n="trueValue" t="gx:Image" v="module://axCommunity/org/axcommunity/niagara/graphics/equipment/small/fanRightAnimated.gif" />
-                                <p n="falseValue" t="gx:Image" v="module://axCommunity/org/axcommunity/niagara/graphics/equipment/small/fanRight.gif" />
+                                <p n="trueValue" t="gx:Image" v="module://johnGraphics/equipment/small/fanRightAnimated.gif" />
+                                <p n="falseValue" t="gx:Image" v="module://johnGraphics/equipment/small/fanRight.gif" />
                             </p>
                         </p>
                         <p n="wsAnnotation" t="b:WsAnnotation" v="19,17,8" />
