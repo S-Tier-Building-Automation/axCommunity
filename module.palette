@@ -9,6 +9,12 @@
             <p n="StatusEnumToStatusString" m="w=axCommunity" t="w:StatusEnumToStatusString" />
             <p n="CSVStringToStatusNumeric" m="w=axCommunity" t="w:CSVStringToStatusNumeric" />
             <p n="StatusStringToString" m="w=axCommunity" t="w:StatusStringToString" />
+            <p n="TimeSplitter" m="w=axCommunity" t="w:TimeSplitter">
+  				<p n="updateTime" f="s"/>
+  				<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="7,3,17"/>
+ 			</p>
+            <p n="PingHealthConverter" m="w=axCommunity" t="w:PingHealthConverter"/>
+            
         </p>
         <p m="b=baja" t="b:Folder" n="Math">
   	        <p n="RoundUp" m="k=axCommunity" t="k:RoundUp" />
@@ -18,7 +24,26 @@
 		    <p n="TrDivide" m="k=axCommunity" t="k:TrDivide" />
 		    <p n="TrMultiply" m="k=axCommunity" t="k:TrMultiply" />
 		    <p n="TrSubtract" m="k=axCommunity" t="k:TrSubtract" />
+ 			<p n="AvgMinMax" m="w=axCommunity" t="w:AvgMinMax"/>
 		</p>
+        
+        <p m="b=baja" t="b:Folder" n="Logic">
+            <p n="ToggleSwitch" m="k=axCommunity" t="k:ToggleSwitch">
+  				<p n="booleanCmd" f="s"/>
+  				<p n="boolNormalOpen" f="s"/>
+  				<p n="boolNormalClose" f="s"/>
+  				<p n="boolOutput" f="s"/>
+  				<p n="analogNormalOpen" f="s"/>
+  				<p n="analogNormalClose" f="s"/>
+  				<p n="analogOutput" f="s"/>
+  				<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="33,3,12"/>
+ 			</p>
+ 			<p n="ToggleLatch" m="k=axCommunity" t="k:ToggleLatch"/>
+ 			<p n="NumericLatchObject" m="k=axCommunity" t="k:NumericLatchObject"/>
+ 			<p n="NumericLatchCustom" m="k=axCommunity" t="k:NumericLatchCustom"/>
+ 			
+        </p>
+        
         
         <p m="b=baja" t="b:Folder" n="PxGraphics">
             <p n="boolean" t="b:UnrestrictedFolder">

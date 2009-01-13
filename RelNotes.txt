@@ -1,0 +1,23 @@
+v09.01.01 Jan 01, 2009
+-initial release
+
+v09.01.02 Jan 06, 2009
+-added graphics package from John Siebert
+-added Modulo 
+-added RoundUp 
+-added TriggeredAdd 
+-added TriggeredSubtract 
+-added TriggeredMultiply 
+-added TriggeredDivide 
+-added TriggerdCopy
+
+v09.01.03 Jan 13, 2009
+-added from Kevin Crabill, Cochrane Supply:
+	AvgMinMax: Determines the minimum, maximum and average based on variable amount of inputs.
+	NumericLatchCustom:	This is a modification to the existing latch object.  Currently you can only store one value for latching.  
+						This object can store the previous X values.  A good example is monthly metering that istriggered at the end of the month.
+	NumericLatchObject:	Same as Tridium's Latch object except the out property doesn't have transient flag set so value is maintained through a reboot.
+	PingHealthConverter: Takes a BPingHealth input from a driver device and splits it into three different outputs.
+	BTimeSplitter: Executes every updateTime and displays the current time in seven different outputs out, hours, minutes, seconds, day, month and year.
+	BToggleLatch: This object has two different actions on it.  The latch action sets the out property to true while the unlatch action sets it to false.
+	BToggleSwitch: The outputs for Analog and Boolean switch to either the NormalOpen input or the NormalClose input.  This is determined by booleanCmd input.						
