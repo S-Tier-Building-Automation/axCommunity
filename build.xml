@@ -6,7 +6,7 @@
   preferredSymbol = "axc"
   description = "AX Community Objects"
   vendor = "org.axcommunity"
-  vendorVersion = "09.01.02"
+  vendorVersion = "09.01.03"
 >
 
   <!-- Dependencies -->
@@ -16,6 +16,7 @@
   <!-- Packages -->
   <package name="org.axcommunity.niagara.conversion" doc="true" />
   <package name="org.axcommunity.niagara.math" doc="true" />
+  <package name="org.axcommunity.niagara.logic" doc="true" />
  
   <resources name="org/axcommunity/niagara/graphics/*.*"/>
 
