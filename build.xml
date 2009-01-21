@@ -6,7 +6,7 @@
   preferredSymbol = "axc"
   description = "AX Community Objects"
   vendor = "org.axcommunity"
-  vendorVersion = "09.01.03"
+  vendorVersion = "09.01.04"
 >
 
   <!-- Dependencies -->

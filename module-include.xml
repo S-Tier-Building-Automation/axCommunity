@@ -23,5 +23,6 @@
   <type name="PingHealthConverter" class="org.axcommunity.niagara.conversion.BPingHealthConverter"/>
   <type name="NumericLatchObject" class="org.axcommunity.niagara.logic.BNumericLatchObject"/>
   <type name="NumericLatchCustom" class="org.axcommunity.niagara.logic.BNumericLatchCustom"/> 
+  <type name="StatusNumericToStatusStringNoPad" class="org.axcommunity.niagara.conversion.BStatusNumericToStatusStringNoPad"/> 
   
  </types>

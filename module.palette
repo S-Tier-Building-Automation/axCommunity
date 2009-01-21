@@ -14,6 +14,7 @@
   				<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="7,3,17"/>
  			</p>
             <p n="PingHealthConverter" m="w=axCommunity" t="w:PingHealthConverter"/>
+            <p n="StatusNumericToStatusStringNoPad" m="w=axCommunity" t="w:StatusNumericToStatusStringNoPad" />
             
         </p>
         <p m="b=baja" t="b:Folder" n="Math">
