@@ -23,4 +23,4 @@ v09.01.03 Jan 13, 2009
 	BToggleSwitch: The outputs for Analog and Boolean switch to either the NormalOpen input or the NormalClose input.  This is determined by booleanCmd input.						
 
 v09.01.04 Jan 21, 2009
--added BStatusNumericToStatusStringNoPad: same as niagara numeric to string converter, but no padded 0's before or after the decimal.	
+-added BStatusNumericToStatusStringNoPad: same as niagara numeric to string converter, but no padded 0's before or after the decimal, no decimal if no fraction	
