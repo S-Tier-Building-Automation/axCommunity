@@ -97,7 +97,7 @@ public class BBqlNumericRecap extends BComponent {
 	// Example: Avg all Numeric Points starting with ZN-T
 	//  station:|slot:/|bql:select out from control:NumericPoint where displayName like 'ZN-T*'
 
-	public void onStart() throws Exception
+	public void started() throws Exception
 	{
 		updateTimer();
 	}
@@ -164,7 +164,7 @@ public class BBqlNumericRecap extends BComponent {
 	}
 
 
-	public void onStop() throws Exception
+	public void stopped() throws Exception
 	{
 		if (ticket != null) ticket.cancel();
 	}
