@@ -24,5 +24,6 @@
   <type name="NumericLatchObject" class="org.axcommunity.niagara.logic.BNumericLatchObject"/>
   <type name="NumericLatchCustom" class="org.axcommunity.niagara.logic.BNumericLatchCustom"/> 
   <type name="StatusNumericToStatusStringNoPad" class="org.axcommunity.niagara.conversion.BStatusNumericToStatusStringNoPad"/> 
+  <type name="BqlNumericRecap" class="org.axcommunity.niagara.bql.BBqlNumericRecap"/> 
   
  </types>

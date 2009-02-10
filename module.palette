@@ -17,6 +17,8 @@
             <p n="StatusNumericToStatusStringNoPad" m="w=axCommunity" t="w:StatusNumericToStatusStringNoPad" />
             
         </p>
+        
+        
         <p m="b=baja" t="b:Folder" n="Math">
   	        <p n="RoundUp" m="k=axCommunity" t="k:RoundUp" />
 		    <p n="Modulo" m="k=axCommunity" t="k:Modulo" />
@@ -44,7 +46,9 @@
  			<p n="NumericLatchCustom" m="k=axCommunity" t="k:NumericLatchCustom"/>
  			
         </p>
-        
+        <p m="b=baja" t="b:Folder" n="BQL">
+ 			<p n="BqlNumericRecap" m="k=axCommunity" t="k:BqlNumericRecap"/>
+  	    </p>
         
         <p m="b=baja" t="b:Folder" n="PxGraphics">
             <p n="boolean" t="b:UnrestrictedFolder">
