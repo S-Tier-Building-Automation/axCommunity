@@ -14,11 +14,14 @@
   <dependency name="baja" />
   <dependency name="control" />
   <dependency name="driver" />
+  <dependency name="platform" />
+
   <!-- Packages -->
   <package name="org.axcommunity.niagara.conversion" doc="true" />
   <package name="org.axcommunity.niagara.math" doc="true" />
   <package name="org.axcommunity.niagara.logic" doc="true" />
   <package name="org.axcommunity.niagara.bql" doc="true" />
+  <package name="org.axcommunity.niagara.system" doc="true" />
  
   <resources name="org/axcommunity/niagara/graphics/*.*"/>
 
