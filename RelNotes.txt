@@ -23,4 +23,9 @@ v09.01.03 Jan 13, 2009
 	BToggleSwitch: The outputs for Analog and Boolean switch to either the NormalOpen input or the NormalClose input.  This is determined by booleanCmd input.						
 
 v09.01.04 Jan 21, 2009
--added BStatusNumericToStatusStringNoPad: same as niagara numeric to string converter, but no padded 0's before or after the decimal, no decimal if no fraction	
+-added BStatusNumericToStatusStringNoPad: same as niagara numeric to string converter, but no padded 0's before or after the decimal, no decimal if no fraction
+
+V09.02.02 Feb 16, 2009
+-added 	BBqlNumericRecap from B. Collins,Electro Controls, Inc.  Executes a BQL query based on the Execute Period for one or more NumericPoint values.  
+ 					 Object calculates the Count, Average, Minimum, Maxium and Sum of the values returned by the BQL query 
+-added BSysInfo, gets system information every X time period.  Linkable!
