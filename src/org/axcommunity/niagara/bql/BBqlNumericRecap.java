@@ -12,6 +12,7 @@ import javax.baja.status.BStatusString;
 import javax.baja.sys.Action;
 import javax.baja.sys.BComponent;
 import javax.baja.sys.BDouble;
+import javax.baja.sys.BIcon;
 import javax.baja.sys.BRelTime;
 import javax.baja.sys.Clock;
 import javax.baja.sys.Flags;
@@ -20,21 +21,42 @@ import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
 import javax.baja.util.BNameMap;
 
+/**
+ * Object executes a BQL query based on the Execute Period for one or more NumericPoint values.  
+ * Object calculates the Count, Average, Minimum, Maxium and Sum of the values returned by the BQL query.  
+ * If no values are returned by the BQL query the object will set the Avg, Min, Max and Sum to the Fallback value.  
+ * If any values return a ‘nan’ they are omitted from the calculation.
+ * 
+ * NOTE – A valid BQL ord string is required in the ‘In Bql Ord’ slot for the object to execute.  
+ * If the slot is empty or the syntax of the query is incorrect, the object will not execute.
+ * 
+ * Sample Query 1:  station:|slot:/Drivers/BacnetNetwork|bql:select out from control:NumericPoint where displayName = 'ZoneTemp’
+ * Sample Query 2:  station:|slot:/Drivers/LonNetwork|bql:select out from control:NumericPoint where displayName like '*nvoAirFlow’
 
+ *
+ * @author    Brian W. Collins, Electro Controls, Inc.
+ */
 public class BBqlNumericRecap extends BComponent {
 
 	//
 	//Declare static properties
 	//
+	/** Time interval at which object executes BQL query and calculates values.  */
 	public static final Property executePeriod = newProperty(Flags.SUMMARY,  BRelTime.make(60000));
+	/** BQL query string (baja:StatusString)  */
 	public static final Property inBqlOrd = newProperty(Flags.SUMMARY,  new BStatusString());
+	/** Number/Count of values returned by BQL query (baja:StatusNumeric)  */
 	public static final Property num = newProperty(Flags.SUMMARY,  new BStatusNumeric());
+	/** Average of values returned by BQL query (baja:StatusNumeric)  */
 	public static final Property avg = newProperty(Flags.SUMMARY,  new BStatusNumeric());
+	/** Minimum value returned by BQL query (baja:StatusNumeric)  */
 	public static final Property min = newProperty(Flags.SUMMARY,  new BStatusNumeric());
+	/** Maximum value returned by BQL query (baja:StatusNumeric)  */
 	public static final Property max = newProperty(Flags.SUMMARY,  new BStatusNumeric());
+	/** Sum of all values returned by BQL query (baja:StatusNumeric)  */
 	public static final Property sum = newProperty(Flags.SUMMARY,  new BStatusNumeric());
+	/** Value is returned is no values are returned by BQL query (baja:StatusNumeric)  */
 	public static final Property fallback = newProperty(Flags.SUMMARY,  new BStatusNumeric());
-	public static final Property displayNames = newProperty(Flags.SUMMARY,  BNameMap.DEFAULT);
 
 
 
@@ -50,7 +72,6 @@ public class BBqlNumericRecap extends BComponent {
 	public BStatusNumeric getMax() { return (BStatusNumeric)get("max"); }
 	public BStatusNumeric getSum() { return (BStatusNumeric)get("sum"); }
 	public BStatusNumeric getFallback() { return (BStatusNumeric)get("fallback"); }
-	public BNameMap getDisplayNames() { return (BNameMap)get("displayNames"); }
 
 	////////////////////////////////////////////////////////////////
 	// Setters
@@ -64,7 +85,6 @@ public class BBqlNumericRecap extends BComponent {
 	public void setMax(javax.baja.status.BStatusNumeric v) { set("max", v); }
 	public void setSum(javax.baja.status.BStatusNumeric v) { set("sum", v); }
 	public void setFallback(javax.baja.status.BStatusNumeric v) { set("fallback", v); }
-	public void setDisplayNames(javax.baja.util.BNameMap v) { set("displayNames", v); }
 
 	//events for the timer
 	/**
@@ -179,6 +199,9 @@ public class BBqlNumericRecap extends BComponent {
 	Clock.Ticket ticket;
 	long lastOnExecuteTicks;
 
+	 
+	  public BIcon getIcon() { return icon; }
+	  private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/electro_diamond_header.png");
 
 	//TYPE declaration
 	public Type getType() { return TYPE; }
