@@ -13,6 +13,7 @@ import javax.baja.sys.Property;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
 
+import com.tridium.platform.BFilesystemAttributes;
 import com.tridium.platform.BSystemPlatformService;
 
 /**
@@ -26,7 +27,7 @@ public class BSysInfo extends BComponent
 
 	private BSystemPlatformService sysObject = new BSystemPlatformService();
 
-	private BFileSystem fs = BFileSystem.INSTANCE;
+	private BFilesystemAttributes fs;
 
 	
 	public static final Property executePeriod = newProperty(Flags.SUMMARY,  BRelTime.make(60000));
@@ -46,18 +47,18 @@ public class BSysInfo extends BComponent
 	public void started(){
 		updateTimer();
 	    sysObject =(BSystemPlatformService)Sys.getService(BSystemPlatformService.TYPE);
+	    fs = (BFilesystemAttributes)sysObject.filesystemAttributes;
+	    
 	}
 	
 
 
 	public void doTimerExpired() throws Exception 
 	{
-		
-	
 		getCpuUsage().setValue((double)sysObject.getCurrentCpuUsage());
 		getBajaHome().setValue( sysObject.getBajaHome());
 		getFreePhysicalMemory().setValue((double)sysObject.getFreePhysicalMemory());
-		getStationHostId().setValue(sysObject.getHostId());
+//		getStationHostId().setValue(sysObject.getHostId());
 		getJavaVmName().setValue(sysObject.getJavaVmName());
 		getJavaVmVersion().setValue(sysObject.getJavaVmVersion());
 		getLocale().setValue(sysObject.getLocale());
@@ -68,6 +69,7 @@ public class BSysInfo extends BComponent
 		getPlatformServiceDescription().setValue(sysObject.getPlatformServiceDescription());
 		getStationName().setValue(sysObject.getStationName());
 		getTotalPhysicalMemory().setValue((double)sysObject.getTotalPhysicalMemory());
+		Property[] fsProp = fs.asComponent().getPropertiesArray();
 		
 	}
 	void updateTimer()
@@ -87,15 +89,12 @@ public class BSysInfo extends BComponent
 		return (BStatusString)get(bajaHome); 
 	}
 	
-	
-
-	
 	/***/
-    public static final Property stationHostID = newProperty(Flags.SUMMARY, new BStatusString());
-    public void setStationHostId(BStatusString v) { set(stationHostID, v); }
-	public BStatusString getStationHostId() { 
-		return (BStatusString)get(stationHostID); 
-	}
+//    public static final Property stationHostID = newProperty(Flags.SUMMARY, new BStatusString());
+//    public void setStationHostId(BStatusString v) { set(stationHostID, v); }
+//	public BStatusString getStationHostId() { 
+//		return (BStatusString)get(stationHostID); 
+//	}
 
 	/***/
     public static final Property javaVmName = newProperty(Flags.SUMMARY, new BStatusString());
