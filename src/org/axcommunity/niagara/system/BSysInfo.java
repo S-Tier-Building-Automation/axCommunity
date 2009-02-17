@@ -69,7 +69,6 @@ public class BSysInfo extends BComponent
 		getPlatformServiceDescription().setValue(sysObject.getPlatformServiceDescription());
 		getStationName().setValue(sysObject.getStationName());
 		getTotalPhysicalMemory().setValue((double)sysObject.getTotalPhysicalMemory());
-		Property[] fsProp = fs.asComponent().getPropertiesArray();
 		
 	}
 	void updateTimer()
