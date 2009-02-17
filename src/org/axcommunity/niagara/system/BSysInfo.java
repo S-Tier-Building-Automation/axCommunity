@@ -27,9 +27,7 @@ public class BSysInfo extends BComponent
 
 	private BSystemPlatformService sysObject = new BSystemPlatformService();
 
-	private BFilesystemAttributes fs;
 
-	
 	public static final Property executePeriod = newProperty(Flags.SUMMARY,  BRelTime.make(60000));
 	public BRelTime getExecutePeriod() { return (BRelTime)get("executePeriod"); }
 	public void setExecutePeriod(javax.baja.sys.BRelTime v) { set("executePeriod", v); }
@@ -47,7 +45,6 @@ public class BSysInfo extends BComponent
 	public void started(){
 		updateTimer();
 	    sysObject =(BSystemPlatformService)Sys.getService(BSystemPlatformService.TYPE);
-	    fs = (BFilesystemAttributes)sysObject.filesystemAttributes;
 	    
 	}
 	
