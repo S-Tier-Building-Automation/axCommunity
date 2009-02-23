@@ -15,6 +15,14 @@
   <dependency name="control" />
   <dependency name="driver" />
   <dependency name="platform" />
+  <dependency name="fox" />
+  <dependency name="niagaraDriver" /> 
+  <dependency name="bql" /> 
+  <dependency name="workbench" /> 
+  <dependency name="bajaui" /> 
+  <dependency name="alarm" /> 
+  <dependency name="history" /> 
+
 
   <!-- Packages -->
   <package name="org.axcommunity.niagara.conversion" doc="true" />
@@ -22,6 +30,8 @@
   <package name="org.axcommunity.niagara.logic" doc="true" />
   <package name="org.axcommunity.niagara.bql" doc="true" />
   <package name="org.axcommunity.niagara.system" doc="true" />
+  <package name="org.axcommunity.niagara.tools" doc="true" />
+
  
   <resources name="org/axcommunity/niagara/graphics/*.*"/>
 

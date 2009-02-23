@@ -29,3 +29,8 @@ V09.02.02 Feb 16, 2009
 -added 	BBqlNumericRecap from B. Collins,Electro Controls, Inc.  Executes a BQL query based on the Execute Period for one or more NumericPoint values.  
  					 Object calculates the Count, Average, Minimum, Maxium and Sum of the values returned by the BQL query 
 -added BSysInfo, gets system information every X time period.  Linkable!
+
+V09.02.03 Feb 22, 2009
+- added from Tucker Watson, Activelogix
+  - BPasswordReveal - Returns stored passwords for all users in UserService or stations in NiagaraNetwork 
+  - BTrendAnalyzer - Displays min,max,avg,count for selected trend/history

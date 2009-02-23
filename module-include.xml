@@ -26,5 +26,6 @@
   <type name="StatusNumericToStatusStringNoPad" class="org.axcommunity.niagara.conversion.BStatusNumericToStatusStringNoPad"/> 
   <type name="BqlNumericRecap" class="org.axcommunity.niagara.bql.BBqlNumericRecap"/> 
   <type name="SysInfo" class="org.axcommunity.niagara.system.BSysInfo"/> 
-  
- </types>
+  <type name="PasswordReveal" class="org.axcommunity.niagara.tools.BPasswordReveal"/>
+  <type name="TrendAnalyzer" class="org.axcommunity.niagara.bql.BTrendAnalyzer"/>
+</types>

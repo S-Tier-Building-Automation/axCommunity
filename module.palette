@@ -48,11 +48,17 @@
         </p>
         <p m="b=baja" t="b:Folder" n="BQL">
  			<p n="BqlNumericRecap" m="k=axCommunity" t="k:BqlNumericRecap"/>
+  	    	<p n="TrendAnalyzer" m="k=axCommunity" t="k:TrendAnalyzer"/>
   	    </p>
         
         <p m="b=baja" t="b:Folder" n="System">
  			<p n="SysInfo" m="k=axCommunity" t="k:SysInfo"/>
   	    </p>
+
+        <p m="b=baja" t="b:Folder" n="Tools">
+ 			<p n="PasswordReveal" m="k=axCommunity" t="k:PasswordReveal"/>
+  	    </p>  	    
+  	    
         <p m="b=baja" t="b:Folder" n="PxGraphics">
             <p n="boolean" t="b:UnrestrictedFolder">
                 <p n="small" t="b:Folder">
