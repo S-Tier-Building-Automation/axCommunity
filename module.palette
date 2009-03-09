@@ -55,9 +55,7 @@
  			<p n="SysInfo" m="k=axCommunity" t="k:SysInfo"/>
   	    </p>
 
-        <p m="b=baja" t="b:Folder" n="Tools">
- 			<p n="PasswordReveal" m="k=axCommunity" t="k:PasswordReveal"/>
-  	    </p>  	    
+	    
   	    
         <p m="b=baja" t="b:Folder" n="PxGraphics">
             <p n="boolean" t="b:UnrestrictedFolder">
