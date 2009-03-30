@@ -27,4 +27,5 @@
   <type name="BqlNumericRecap" class="org.axcommunity.niagara.bql.BBqlNumericRecap"/> 
   <type name="SysInfo" class="org.axcommunity.niagara.system.BSysInfo"/> 
   <type name="TrendAnalyzer" class="org.axcommunity.niagara.bql.BTrendAnalyzer"/>
+  <type name="StatusNumericFifo" class="org.axcommunity.niagara.math.BStatusNumericFifo"/>
 </types>

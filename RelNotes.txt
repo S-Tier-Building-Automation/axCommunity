@@ -34,3 +34,6 @@ V09.02.03 Feb 22, 2009
 - added from Tucker Watson, Activelogix
   - BPasswordReveal - Returns stored passwords for all users in UserService or stations in NiagaraNetwork 
   - BTrendAnalyzer - Displays min,max,avg,count for selected trend/history
+  
+ V09.03.01 Mar 12, 2009
+ -added BStatusNumericFifo, takes a status numeric input and puts it into a fifo that shifts with a trigger input.  calculates min/max/avg of buffered values.

@@ -28,6 +28,9 @@
 		    <p n="TrMultiply" m="k=axCommunity" t="k:TrMultiply" />
 		    <p n="TrSubtract" m="k=axCommunity" t="k:TrSubtract" />
  			<p n="AvgMinMax" m="w=axCommunity" t="w:AvgMinMax"/>
+ 			<p n="StatusNumericFifo" m="w=axCommunity" t="w:StatusNumericFifo"/>
+ 			
+ 			
 		</p>
         
         <p m="b=baja" t="b:Folder" n="Logic">
