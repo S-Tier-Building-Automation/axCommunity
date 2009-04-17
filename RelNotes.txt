@@ -37,3 +37,8 @@ V09.02.03 Feb 22, 2009
   
  V09.03.01 Mar 12, 2009
  -added BStatusNumericFifo, takes a status numeric input and puts it into a fifo that shifts with a trigger input.  calculates min/max/avg of buffered values.
+ 
+ V09.04.01 Apr 17, 2009
+ - added from Vance Hensley, PCTECHS4U 
+   BBooleanCompareCmdStatus, compares the status to the command over the defined time period. If status does not match by the end of the elapsed time from, sets output to true (for alarm).
+ - added BFireOnChange, Accepts a StatusString, StatusNumeric or StatusBoolean input, fires the appropriate event when String changes or Number changes or Boolean changes from False to True. 

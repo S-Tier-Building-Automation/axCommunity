@@ -18,6 +18,7 @@
   <type name="TrSubtract" class="org.axcommunity.niagara.math.BTrSubtract" />
   <type name="ToggleSwitch" class="org.axcommunity.niagara.logic.BToggleSwitch"/>
   <type name="ToggleLatch" class="org.axcommunity.niagara.logic.BToggleLatch"/>
+  <type name="BooleanCompareCmdStatus" class="org.axcommunity.niagara.logic.BBooleanCompareCmdStatus"/>
   <type name="TimeSplitter" class="org.axcommunity.niagara.conversion.BTimeSplitter"/>
   <type name="AvgMinMax" class="org.axcommunity.niagara.math.BAvgMinMax"/>
   <type name="PingHealthConverter" class="org.axcommunity.niagara.conversion.BPingHealthConverter"/>
@@ -28,4 +29,5 @@
   <type name="SysInfo" class="org.axcommunity.niagara.system.BSysInfo"/> 
   <type name="TrendAnalyzer" class="org.axcommunity.niagara.bql.BTrendAnalyzer"/>
   <type name="StatusNumericFifo" class="org.axcommunity.niagara.math.BStatusNumericFifo"/>
+  <type name="FireOnChange" class="org.axcommunity.niagara.logic.BFireOnChange" />
 </types>
