@@ -1,0 +1,209 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<bajadoc version='1.0' createdBy='Niagara Devkit 3.4.43' createdAt='03-May-2009' createdOn='100-acre-forest'>
+<class
+  module='axCommunity'
+  qualifiedName='org.axcommunity.niagara.bql.BTrendAnalyzer'
+  name='BTrendAnalyzer'
+  packageName='org.axcommunity.niagara.bql'
+>
+<description>BTrendAnalyzer uses a BQL query to grab the count, min, max, average
+ and sum for a user selected trend.
+ </description>
+<tag name='author'>Tucker Watson</tag>
+<tag name='creation'>02 Feb 07</tag>
+<tag name='company'>Activelogix (http://www.activelogix.com)</tag>
+<tag name='blog'>http://www.tuckwat.com</tag>
+<extends module='baja' class='javax.baja.sys.BComponent'/>
+
+<!-- property history -->
+<property name='history' flags=''>
+<type module='baja' class='javax.baja.naming.BOrd'/>
+<description>Slot for the &lt;code&gt;history&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#getHistory</tag>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#setHistory</tag>
+</property>
+
+<!-- property dateRange -->
+<property name='dateRange' flags=''>
+<type module='baja' class='javax.baja.util.BAbsTimeRange'/>
+<description>Slot for the &lt;code&gt;dateRange&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#getDateRange</tag>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#setDateRange</tag>
+</property>
+
+<!-- property count -->
+<property name='count' flags='s'>
+<type module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Slot for the &lt;code&gt;count&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#getCount</tag>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#setCount</tag>
+</property>
+
+<!-- property min -->
+<property name='min' flags='s'>
+<type module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Slot for the &lt;code&gt;min&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#getMin</tag>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#setMin</tag>
+</property>
+
+<!-- property max -->
+<property name='max' flags='s'>
+<type module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Slot for the &lt;code&gt;max&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#getMax</tag>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#setMax</tag>
+</property>
+
+<!-- property average -->
+<property name='average' flags='s'>
+<type module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Slot for the &lt;code&gt;average&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#getAverage</tag>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#setAverage</tag>
+</property>
+
+<!-- property sum -->
+<property name='sum' flags='s'>
+<type module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Slot for the &lt;code&gt;sum&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#getSum</tag>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#setSum</tag>
+</property>
+
+<!-- action execute -->
+<action name='execute' flags=''>
+<return class='void'/>
+<description>Slot for the &lt;code&gt;execute&lt;/code&gt; action.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#execute()</tag>
+</action>
+
+<!-- public baja:javax.baja.naming.BOrd getHistory() -->
+<method name='getHistory' public='true'>
+<return module='baja' class='javax.baja.naming.BOrd'/>
+<description>Get the &lt;code&gt;history&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#history</tag>
+</method>
+
+<!-- public void setHistory(baja:javax.baja.naming.BOrd v) -->
+<method name='setHistory' public='true'>
+<parameter name='v' module='baja' class='javax.baja.naming.BOrd'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;history&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#history</tag>
+</method>
+
+<!-- public baja:javax.baja.util.BAbsTimeRange getDateRange() -->
+<method name='getDateRange' public='true'>
+<return module='baja' class='javax.baja.util.BAbsTimeRange'/>
+<description>Get the &lt;code&gt;dateRange&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#dateRange</tag>
+</method>
+
+<!-- public void setDateRange(baja:javax.baja.util.BAbsTimeRange v) -->
+<method name='setDateRange' public='true'>
+<parameter name='v' module='baja' class='javax.baja.util.BAbsTimeRange'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;dateRange&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#dateRange</tag>
+</method>
+
+<!-- public baja:javax.baja.status.BStatusNumeric getCount() -->
+<method name='getCount' public='true'>
+<return module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Get the &lt;code&gt;count&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#count</tag>
+</method>
+
+<!-- public void setCount(baja:javax.baja.status.BStatusNumeric v) -->
+<method name='setCount' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusNumeric'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;count&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#count</tag>
+</method>
+
+<!-- public baja:javax.baja.status.BStatusNumeric getMin() -->
+<method name='getMin' public='true'>
+<return module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Get the &lt;code&gt;min&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#min</tag>
+</method>
+
+<!-- public void setMin(baja:javax.baja.status.BStatusNumeric v) -->
+<method name='setMin' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusNumeric'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;min&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#min</tag>
+</method>
+
+<!-- public baja:javax.baja.status.BStatusNumeric getMax() -->
+<method name='getMax' public='true'>
+<return module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Get the &lt;code&gt;max&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#max</tag>
+</method>
+
+<!-- public void setMax(baja:javax.baja.status.BStatusNumeric v) -->
+<method name='setMax' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusNumeric'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;max&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#max</tag>
+</method>
+
+<!-- public baja:javax.baja.status.BStatusNumeric getAverage() -->
+<method name='getAverage' public='true'>
+<return module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Get the &lt;code&gt;average&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#average</tag>
+</method>
+
+<!-- public void setAverage(baja:javax.baja.status.BStatusNumeric v) -->
+<method name='setAverage' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusNumeric'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;average&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#average</tag>
+</method>
+
+<!-- public baja:javax.baja.status.BStatusNumeric getSum() -->
+<method name='getSum' public='true'>
+<return module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Get the &lt;code&gt;sum&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#sum</tag>
+</method>
+
+<!-- public void setSum(baja:javax.baja.status.BStatusNumeric v) -->
+<method name='setSum' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusNumeric'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;sum&lt;/code&gt; property.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#sum</tag>
+</method>
+
+<!-- public void execute() -->
+<method name='execute' public='true'>
+<return class='void'/>
+<description>Invoke the &lt;code&gt;execute&lt;/code&gt; action.</description>
+<tag name='see'>org.axcommunity.niagara.bql.BTrendAnalyzer#execute</tag>
+</method>
+
+<!-- public baja:javax.baja.sys.Type getType() -->
+<method name='getType' public='true'>
+<return module='baja' class='javax.baja.sys.Type'/>
+</method>
+
+<!-- public void doExecute() -->
+<method name='doExecute' public='true'>
+<return class='void'/>
+</method>
+
+<!-- public final static baja:javax.baja.sys.Type TYPE -->
+<field name='TYPE' public='true' static='true' final='true'>
+<type module='baja' class='javax.baja.sys.Type'/>
+</field>
+
+</class>
+</bajadoc>

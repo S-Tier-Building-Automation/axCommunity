@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<bajadoc version='1.0' createdBy='Niagara Devkit 3.4.43' createdAt='03-May-2009' createdOn='100-acre-forest'>
+<class
+  module='axCommunity'
+  qualifiedName='org.axcommunity.niagara.math.BAvgMinMax'
+  name='BAvgMinMax'
+  packageName='org.axcommunity.niagara.math'
+>
+<description>Determines the minimum, maximum and average based on 
+variable amount of inputs. It can be greater than the 10 that
+the original MinMaxAvg object provides.</description>
+<tag name='author'>, Cochrane Supply</tag>
+<extends module='baja' class='javax.baja.sys.BComponent'/>
+
+<!-- property inCount -->
+<property name='inCount' flags='s'>
+<type module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>number of numeric inputs, resources determine the limits</description>
+</property>
+
+<!-- property min -->
+<property name='min' flags='s'>
+<type module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>minimum value of all numeric inputs</description>
+</property>
+
+<!-- property max -->
+<property name='max' flags='s'>
+<type module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>maximum value of all numeric inputs.</description>
+</property>
+
+<!-- property avg -->
+<property name='avg' flags='s'>
+<type module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Slot for the &lt;code&gt;avg&lt;/code&gt; property.</description>
+</property>
+
+<!-- public baja:javax.baja.status.BStatusNumeric getInCount() -->
+<method name='getInCount' public='true'>
+<return module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Get the &lt;code&gt;inCount&lt;/code&gt; property.</description>
+</method>
+
+<!-- public void setInCount(baja:javax.baja.status.BStatusNumeric v) -->
+<method name='setInCount' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusNumeric'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;inCount&lt;/code&gt; property.</description>
+</method>
+
+<!-- public baja:javax.baja.status.BStatusNumeric getMin() -->
+<method name='getMin' public='true'>
+<return module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Get the &lt;code&gt;min&lt;/code&gt; property.</description>
+</method>
+
+<!-- public void setMin(baja:javax.baja.status.BStatusNumeric v) -->
+<method name='setMin' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusNumeric'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;min&lt;/code&gt; property.</description>
+</method>
+
+<!-- public baja:javax.baja.status.BStatusNumeric getMax() -->
+<method name='getMax' public='true'>
+<return module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Get the &lt;code&gt;max&lt;/code&gt; property.</description>
+</method>
+
+<!-- public void setMax(baja:javax.baja.status.BStatusNumeric v) -->
+<method name='setMax' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusNumeric'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;max&lt;/code&gt; property.</description>
+</method>
+
+<!-- public baja:javax.baja.status.BStatusNumeric getAvg() -->
+<method name='getAvg' public='true'>
+<return module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Get the &lt;code&gt;avg&lt;/code&gt; property.</description>
+</method>
+
+<!-- public void setAvg(baja:javax.baja.status.BStatusNumeric v) -->
+<method name='setAvg' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusNumeric'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;avg&lt;/code&gt; property.</description>
+</method>
+
+<!-- public baja:javax.baja.sys.Type getType() -->
+<method name='getType' public='true'>
+<return module='baja' class='javax.baja.sys.Type'/>
+</method>
+
+<!-- public baja:javax.baja.sys.BIcon getIcon() -->
+<method name='getIcon' public='true'>
+<return module='baja' class='javax.baja.sys.BIcon'/>
+</method>
+
+<!-- public void changed(baja:javax.baja.sys.Property prop, baja:javax.baja.sys.Context cx) -->
+<method name='changed' public='true'>
+<parameter name='prop' module='baja' class='javax.baja.sys.Property'/>
+<parameter name='cx' module='baja' class='javax.baja.sys.Context'/>
+<return class='void'/>
+</method>
+
+<!-- public void createOutput() -->
+<method name='createOutput' public='true'>
+<return class='void'/>
+</method>
+
+<!-- public final static baja:javax.baja.sys.Type TYPE -->
+<field name='TYPE' public='true' static='true' final='true'>
+<type module='baja' class='javax.baja.sys.Type'/>
+</field>
+
+</class>
+</bajadoc>

@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<bajadoc version='1.0' createdBy='Niagara Devkit 3.4.43' createdAt='03-May-2009' createdOn='100-acre-forest'>
+<class
+  module='axCommunity'
+  qualifiedName='org.axcommunity.niagara.logic.BFireOnChange'
+  name='BFireOnChange'
+  packageName='org.axcommunity.niagara.logic'
+>
+<description>Accepts a StatusString, StatusNumeric or StatusBoolean input, fires the appropriate event when:
+ String changes or
+ Number changes or
+ Boolean changes from False to True.
+ 
+ I really did this to figure out how Topics work, but found it pretty handy!</description>
+<tag name='author'>Mike Arnott, Kors Engineering</tag>
+<extends module='baja' class='javax.baja.sys.BComponent'/>
+
+<!-- property stringIn -->
+<property name='stringIn' flags='s'>
+<type module='baja' class='javax.baja.status.BStatusString'/>
+<description>String Input</description>
+</property>
+
+<!-- property numericIn -->
+<property name='numericIn' flags='s'>
+<type module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>String Input</description>
+</property>
+
+<!-- property booleanIn -->
+<property name='booleanIn' flags='s'>
+<type module='baja' class='javax.baja.status.BStatusBoolean'/>
+<description>Boolean Input</description>
+</property>
+
+<!-- topic newStringInput -->
+<topic name='newStringInput' flags=''>
+<eventType module='baja' class='javax.baja.sys.BString'/>
+<description>Event fired when a new string is detected</description>
+</topic>
+
+<!-- topic newNumericInput -->
+<topic name='newNumericInput' flags=''>
+<eventType module='baja' class='javax.baja.sys.BDouble'/>
+<description>Event fired when a new Number is detected</description>
+</topic>
+
+<!-- topic newBooleanInput -->
+<topic name='newBooleanInput' flags=''>
+<eventType module='baja' class='javax.baja.sys.BBoolean'/>
+<description>Event fired when a boolean True is detected</description>
+</topic>
+
+<!-- public void changed(baja:javax.baja.sys.Property property, baja:javax.baja.sys.Context context) -->
+<method name='changed' public='true'>
+<parameter name='property' module='baja' class='javax.baja.sys.Property'/>
+<parameter name='context' module='baja' class='javax.baja.sys.Context'/>
+<return class='void'/>
+</method>
+
+<!-- public baja:javax.baja.status.BStatusString getStringIn() -->
+<method name='getStringIn' public='true'>
+<return module='baja' class='javax.baja.status.BStatusString'/>
+</method>
+
+<!-- public void setStringIn(baja:javax.baja.status.BStatusString v) -->
+<method name='setStringIn' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusString'/>
+<return class='void'/>
+</method>
+
+<!-- public baja:javax.baja.status.BStatusNumeric getNumericIn() -->
+<method name='getNumericIn' public='true'>
+<return module='baja' class='javax.baja.status.BStatusNumeric'/>
+</method>
+
+<!-- public void setNumericIn(baja:javax.baja.status.BStatusNumeric v) -->
+<method name='setNumericIn' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusNumeric'/>
+<return class='void'/>
+</method>
+
+<!-- public baja:javax.baja.status.BStatusBoolean getBooleanIn() -->
+<method name='getBooleanIn' public='true'>
+<return module='baja' class='javax.baja.status.BStatusBoolean'/>
+</method>
+
+<!-- public void setBooleanIn(baja:javax.baja.status.BStatusBoolean v) -->
+<method name='setBooleanIn' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusBoolean'/>
+<return class='void'/>
+</method>
+
+<!-- public void fireNewStringInput(baja:javax.baja.sys.BString event) -->
+<method name='fireNewStringInput' public='true'>
+<parameter name='event' module='baja' class='javax.baja.sys.BString'/>
+<return class='void'/>
+</method>
+
+<!-- public void fireNewNumericInput(baja:javax.baja.sys.BDouble event) -->
+<method name='fireNewNumericInput' public='true'>
+<parameter name='event' module='baja' class='javax.baja.sys.BDouble'/>
+<return class='void'/>
+</method>
+
+<!-- public void fireNewBooleanInput(baja:javax.baja.sys.BBoolean event) -->
+<method name='fireNewBooleanInput' public='true'>
+<parameter name='event' module='baja' class='javax.baja.sys.BBoolean'/>
+<return class='void'/>
+</method>
+
+<!-- public baja:javax.baja.sys.BIcon getIcon() -->
+<method name='getIcon' public='true'>
+<return module='baja' class='javax.baja.sys.BIcon'/>
+</method>
+
+<!-- public baja:javax.baja.sys.Type getType() -->
+<method name='getType' public='true'>
+<return module='baja' class='javax.baja.sys.Type'/>
+</method>
+
+<!-- public final static baja:javax.baja.sys.Type TYPE -->
+<field name='TYPE' public='true' static='true' final='true'>
+<type module='baja' class='javax.baja.sys.Type'/>
+</field>
+
+</class>
+</bajadoc>

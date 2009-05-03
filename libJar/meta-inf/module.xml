@@ -1,3 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module
+  name = "axCommunity"
+  bajaVersion = "0"
+  vendor = "org.axcommunity"
+  vendorVersion = "9.4.2"
+  description = "AX Community Objects"
+  preferredSymbol = "axc"
+  buildDate = "03-May-09 16:55 EDT"
+  buildMillis = "1241384110850"
+  buildHost = "100-acre-forest"
+>
+
+<dependencies>
+  <dependency name="baja"/>
+  <dependency name="control"/>
+  <dependency name="driver"/>
+  <dependency name="platform"/>
+  <dependency name="fox"/>
+  <dependency name="niagaraDriver"/>
+  <dependency name="bql"/>
+  <dependency name="workbench"/>
+  <dependency name="bajaui"/>
+  <dependency name="alarm"/>
+  <dependency name="history"/>
+</dependencies>
+
+<dirs>
+  <dir name="org/axcommunity/niagara/conversion" install="runtime"/>
+  <dir name="org/axcommunity/niagara/math" install="runtime"/>
+  <dir name="org/axcommunity/niagara/logic" install="runtime"/>
+  <dir name="org/axcommunity/niagara/bql" install="runtime"/>
+  <dir name="org/axcommunity/niagara/system" install="runtime"/>
+  <dir name="org/axcommunity/niagara/graphics" install="runtime"/>
+  <dir name="doc" install="doc"/>
+</dirs>
+
 <!-- Module Include File -->
 
 <!-- Types -->
@@ -33,3 +70,5 @@
   <type name="StatusBooleanToStatusEnum" class="org.axcommunity.niagara.conversion.BStatusBooleanToStatusEnum" />
   <type name="BooleanRotateOnExecute" class="org.axcommunity.niagara.logic.BBooleanRotateOnExecute"/>
 </types>
+
+</module>

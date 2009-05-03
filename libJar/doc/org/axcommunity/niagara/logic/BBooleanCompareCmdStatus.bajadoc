@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<bajadoc version='1.0' createdBy='Niagara Devkit 3.4.43' createdAt='03-May-2009' createdOn='100-acre-forest'>
+<class
+  module='axCommunity'
+  qualifiedName='org.axcommunity.niagara.logic.BBooleanCompareCmdStatus'
+  name='BBooleanCompareCmdStatus'
+  packageName='org.axcommunity.niagara.logic'
+>
+<description>Use to determine failure by comparing the status to the command over the defined time period.
+  If status does not match by the end of the elapsed time from, sets output to true (for alarm).
+  Actually just a variation of BBooleanDelay by Andy Saunders @ Tridium </description>
+<tag name='author'>Vance Hensley, pctechs4u</tag>
+<tag name='creation'>Apr 13, 2009</tag>
+<extends module='baja' class='javax.baja.sys.BComponent'/>
+
+<!-- property inCmd -->
+<property name='inCmd' flags='ts'>
+<type module='baja' class='javax.baja.status.BStatusBoolean'/>
+<description>Slot for the &lt;code&gt;inCmd&lt;/code&gt; property.</description>
+</property>
+
+<!-- property inStatus -->
+<property name='inStatus' flags='ts'>
+<type module='baja' class='javax.baja.status.BStatusBoolean'/>
+<description>Slot for the &lt;code&gt;inStatus&lt;/code&gt; property.</description>
+</property>
+
+<!-- property onDelay -->
+<property name='onDelay' flags=''>
+<type module='baja' class='javax.baja.sys.BRelTime'/>
+<description>Slot for the &lt;code&gt;onDelay&lt;/code&gt; property.</description>
+</property>
+
+<!-- property onDelayActive -->
+<property name='onDelayActive' flags='rt'>
+<type class='boolean'/>
+<description>Slot for the &lt;code&gt;onDelayActive&lt;/code&gt; property.</description>
+</property>
+
+<!-- property out -->
+<property name='out' flags='tsd'>
+<type module='baja' class='javax.baja.status.BStatusBoolean'/>
+<description>Slot for the &lt;code&gt;out&lt;/code&gt; property.</description>
+</property>
+
+<!-- action onTimerExpired -->
+<action name='onTimerExpired' flags='h'>
+<return class='void'/>
+<description>Slot for the &lt;code&gt;onTimerExpired&lt;/code&gt; action.</description>
+</action>
+
+<!-- public baja:javax.baja.status.BStatusBoolean getInCmd() -->
+<method name='getInCmd' public='true'>
+<return module='baja' class='javax.baja.status.BStatusBoolean'/>
+<description>Get the &lt;code&gt;inCmd&lt;/code&gt; property.</description>
+</method>
+
+<!-- public void setInCmd(baja:javax.baja.status.BStatusBoolean v) -->
+<method name='setInCmd' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusBoolean'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;inCmd&lt;/code&gt; property.</description>
+</method>
+
+<!-- public baja:javax.baja.status.BStatusBoolean getInStatus() -->
+<method name='getInStatus' public='true'>
+<return module='baja' class='javax.baja.status.BStatusBoolean'/>
+<description>Get the &lt;code&gt;inStatus&lt;/code&gt; property.</description>
+</method>
+
+<!-- public void setInStatus(baja:javax.baja.status.BStatusBoolean v) -->
+<method name='setInStatus' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusBoolean'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;inCmd&lt;/code&gt; property.</description>
+</method>
+
+<!-- public baja:javax.baja.sys.BRelTime getOnDelay() -->
+<method name='getOnDelay' public='true'>
+<return module='baja' class='javax.baja.sys.BRelTime'/>
+<description>Get the &lt;code&gt;onDelay&lt;/code&gt; property.</description>
+</method>
+
+<!-- public void setOnDelay(baja:javax.baja.sys.BRelTime v) -->
+<method name='setOnDelay' public='true'>
+<parameter name='v' module='baja' class='javax.baja.sys.BRelTime'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;onDelay&lt;/code&gt; property.</description>
+</method>
+
+<!-- public boolean getOnDelayActive() -->
+<method name='getOnDelayActive' public='true'>
+<return class='boolean'/>
+<description>Get the &lt;code&gt;onDelayActive&lt;/code&gt; property.</description>
+</method>
+
+<!-- public void setOnDelayActive(boolean v) -->
+<method name='setOnDelayActive' public='true'>
+<parameter name='v' class='boolean'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;onDelayActive&lt;/code&gt; property.</description>
+</method>
+
+<!-- public void onTimerExpired() -->
+<method name='onTimerExpired' public='true'>
+<return class='void'/>
+<description>Invoke the &lt;code&gt;onTimerExpired&lt;/code&gt; action.</description>
+</method>
+
+<!-- public baja:javax.baja.status.BStatusBoolean getOut() -->
+<method name='getOut' public='true'>
+<return module='baja' class='javax.baja.status.BStatusBoolean'/>
+<description>Get the &lt;code&gt;out&lt;/code&gt; property.</description>
+</method>
+
+<!-- public void setOut(baja:javax.baja.status.BStatusBoolean v) -->
+<method name='setOut' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusBoolean'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;out&lt;/code&gt; property.</description>
+</method>
+
+<!-- public baja:javax.baja.sys.Type getType() -->
+<method name='getType' public='true'>
+<return module='baja' class='javax.baja.sys.Type'/>
+</method>
+
+<!-- public baja:javax.baja.sys.BIcon getIcon() -->
+<method name='getIcon' public='true'>
+<return module='baja' class='javax.baja.sys.BIcon'/>
+</method>
+
+<!-- public void started() -->
+<method name='started' public='true'>
+<return class='void'/>
+</method>
+
+<!-- public void atSteadyState() -->
+<method name='atSteadyState' public='true'>
+<return class='void'/>
+</method>
+
+<!-- public void changed(baja:javax.baja.sys.Property p, baja:javax.baja.sys.Context cx) -->
+<method name='changed' public='true'>
+<parameter name='p' module='baja' class='javax.baja.sys.Property'/>
+<parameter name='cx' module='baja' class='javax.baja.sys.Context'/>
+<return class='void'/>
+</method>
+
+<!-- public void calculate() -->
+<method name='calculate' public='true'>
+<return class='void'/>
+</method>
+
+<!-- public void doOnTimerExpired() -->
+<method name='doOnTimerExpired' public='true'>
+<return class='void'/>
+</method>
+
+<!-- public final static baja:javax.baja.sys.Type TYPE -->
+<field name='TYPE' public='true' static='true' final='true'>
+<type module='baja' class='javax.baja.sys.Type'/>
+</field>
+
+</class>
+</bajadoc>

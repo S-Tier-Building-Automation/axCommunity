@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<bajadoc version='1.0' createdBy='Niagara Devkit 3.4.43' createdAt='03-May-2009' createdOn='100-acre-forest'>
+<package
+  module='axCommunity'
+  name='org.axcommunity.niagara.system'
+>
+<class qualifiedName='org.axcommunity.niagara.system.BSysInfo'>Executes every executePeriod and displays current system information.</class>
+</package>
+</bajadoc>

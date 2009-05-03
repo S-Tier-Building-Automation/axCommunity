@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<bajadoc version='1.0' createdBy='Niagara Devkit 3.4.43' createdAt='03-May-2009' createdOn='100-acre-forest'>
+<class
+  module='axCommunity'
+  qualifiedName='org.axcommunity.niagara.logic.BNumericLatchObject'
+  name='BNumericLatchObject'
+  packageName='org.axcommunity.niagara.logic'
+>
+<description>Same as Tridium's Latch object except the out property doesn't have
+ transient flag set so value is maintained through a reboot.</description>
+<tag name='author'>Kevin Crabill, Cochrane Supply</tag>
+<extends module='baja' class='javax.baja.sys.BComponent'/>
+
+<!-- property facets -->
+<property name='facets' flags=''>
+<type module='baja' class='javax.baja.sys.BFacets'/>
+<description>Slot for the &lt;code&gt;facets&lt;/code&gt; property.
+ These facets are applied against all out properties.</description>
+</property>
+
+<!-- property clock -->
+<property name='clock' flags='tso'>
+<type module='baja' class='javax.baja.status.BStatusBoolean'/>
+<description>doesn't do anything</description>
+</property>
+
+<!-- property out -->
+<property name='out' flags='rso'>
+<type module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>last value of the input when the latch action was used.</description>
+</property>
+
+<!-- property in -->
+<property name='in' flags='s'>
+<type module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>numeric input that is placed into out property on latch action</description>
+</property>
+
+<!-- action latch -->
+<action name='latch' flags=''>
+<return class='void'/>
+<description>Slot for the &lt;code&gt;latch&lt;/code&gt; action.</description>
+</action>
+
+<!-- public baja:javax.baja.sys.BFacets getFacets() -->
+<method name='getFacets' public='true'>
+<return module='baja' class='javax.baja.sys.BFacets'/>
+<description>Get the &lt;code&gt;facets&lt;/code&gt; property.</description>
+</method>
+
+<!-- public void setFacets(baja:javax.baja.sys.BFacets v) -->
+<method name='setFacets' public='true'>
+<parameter name='v' module='baja' class='javax.baja.sys.BFacets'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;facets&lt;/code&gt; property.</description>
+</method>
+
+<!-- public baja:javax.baja.status.BStatusBoolean getClock() -->
+<method name='getClock' public='true'>
+<return module='baja' class='javax.baja.status.BStatusBoolean'/>
+<description>Get the &lt;code&gt;clock&lt;/code&gt; property.</description>
+</method>
+
+<!-- public void setClock(baja:javax.baja.status.BStatusBoolean v) -->
+<method name='setClock' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusBoolean'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;clock&lt;/code&gt; property.</description>
+</method>
+
+<!-- public baja:javax.baja.status.BStatusNumeric getOut() -->
+<method name='getOut' public='true'>
+<return module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Get the &lt;code&gt;out&lt;/code&gt; property.</description>
+</method>
+
+<!-- public void setOut(baja:javax.baja.status.BStatusNumeric v) -->
+<method name='setOut' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusNumeric'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;out&lt;/code&gt; property.</description>
+</method>
+
+<!-- public baja:javax.baja.status.BStatusNumeric getIn() -->
+<method name='getIn' public='true'>
+<return module='baja' class='javax.baja.status.BStatusNumeric'/>
+<description>Get the &lt;code&gt;in&lt;/code&gt; property.</description>
+</method>
+
+<!-- public void setIn(baja:javax.baja.status.BStatusNumeric v) -->
+<method name='setIn' public='true'>
+<parameter name='v' module='baja' class='javax.baja.status.BStatusNumeric'/>
+<return class='void'/>
+<description>Set the &lt;code&gt;in&lt;/code&gt; property.</description>
+</method>
+
+<!-- public void latch() -->
+<method name='latch' public='true'>
+<return class='void'/>
+<description>Invoke the &lt;code&gt;latch&lt;/code&gt; action.</description>
+</method>
+
+<!-- public baja:javax.baja.sys.Type getType() -->
+<method name='getType' public='true'>
+<return module='baja' class='javax.baja.sys.Type'/>
+</method>
+
+<!-- public final void setOutStatusValue(baja:javax.baja.status.BStatusValue value) -->
+<method name='setOutStatusValue' public='true' final='true'>
+<parameter name='value' module='baja' class='javax.baja.status.BStatusValue'/>
+<return class='void'/>
+<description>Get the control output value.</description>
+</method>
+
+<!-- public final baja:javax.baja.status.BStatusValue getInStatusValue() -->
+<method name='getInStatusValue' public='true' final='true'>
+<return module='baja' class='javax.baja.status.BStatusValue'/>
+</method>
+
+<!-- public void changed(baja:javax.baja.sys.Property property, baja:javax.baja.sys.Context context) -->
+<method name='changed' public='true'>
+<parameter name='property' module='baja' class='javax.baja.sys.Property'/>
+<parameter name='context' module='baja' class='javax.baja.sys.Context'/>
+<return class='void'/>
+</method>
+
+<!-- public void doLatch() -->
+<method name='doLatch' public='true'>
+<return class='void'/>
+</method>
+
+<!-- public baja:javax.baja.sys.BFacets getSlotFacets(baja:javax.baja.sys.Slot slot) -->
+<method name='getSlotFacets' public='true'>
+<parameter name='slot' module='baja' class='javax.baja.sys.Slot'/>
+<return module='baja' class='javax.baja.sys.BFacets'/>
+</method>
+
+<!-- public java.lang.String toString(baja:javax.baja.sys.Context cx) -->
+<method name='toString' public='true'>
+<parameter name='cx' module='baja' class='javax.baja.sys.Context'/>
+<return class='java.lang.String'/>
+</method>
+
+<!-- public baja:javax.baja.status.BStatus getStatus() -->
+<method name='getStatus' public='true'>
+<return module='baja' class='javax.baja.status.BStatus'/>
+</method>
+
+<!-- public double getNumeric() -->
+<method name='getNumeric' public='true'>
+<return class='double'/>
+</method>
+
+<!-- public final baja:javax.baja.sys.BFacets getNumericFacets() -->
+<method name='getNumericFacets' public='true' final='true'>
+<return module='baja' class='javax.baja.sys.BFacets'/>
+</method>
+
+<!-- public baja:javax.baja.sys.BIcon getIcon() -->
+<method name='getIcon' public='true'>
+<return module='baja' class='javax.baja.sys.BIcon'/>
+<description>Get the icon.</description>
+</method>
+
+<!-- public final static baja:javax.baja.sys.Type TYPE -->
+<field name='TYPE' public='true' static='true' final='true'>
+<type module='baja' class='javax.baja.sys.Type'/>
+</field>
+
+</class>
+</bajadoc>
