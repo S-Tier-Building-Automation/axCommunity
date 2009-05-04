@@ -68,7 +68,7 @@ public class BStatusBooleanToStatusEnum
 /**
  * Slot for the <code>trueValue</code> property.
  */
-public static final Property trueValue = newProperty(Flags.TRANSIENT|Flags.SUMMARY, new BStatusNumeric(),null);
+public static final Property trueValue = newProperty(Flags.SUMMARY, new BStatusNumeric(),null);
 
 /**
  * Get the <code>trueValue</code> property.
@@ -87,7 +87,7 @@ public void setTrueValue(BStatusNumeric v) { set(trueValue,v,null); }
 /**
 * Slot for the <code>falseValue</code> property.
 */
-public static final Property falseValue = newProperty(Flags.TRANSIENT|Flags.SUMMARY, new BStatusNumeric(),null);
+public static final Property falseValue = newProperty(Flags.SUMMARY, new BStatusNumeric(),null);
 
 /**
 * Get the <code>falseValue</code> property.
