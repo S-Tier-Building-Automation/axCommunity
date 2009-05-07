@@ -273,16 +273,15 @@ public class BTrendAnalyzer extends BComponent
 		ColumnList columns = result.getColumns();
 		TableCursor c = (TableCursor) result.cursor();
 
-		// We should only have one entry in the history since we're querying
-		// 50 years
+		// We should only have one entry in the history since we're querying 50 years
 		c.next(); // Move to 1st (and only) record
 
 		// Grab the info from the corresponding rows
-		double count = Double.parseDouble(c.get(columns.get(2)).toString());
-		double min = Double.parseDouble(c.get(columns.get(3)).toString());
-		double max = Double.parseDouble(c.get(columns.get(4)).toString());
-		double avg = Double.parseDouble(c.get(columns.get(5)).toString());
-		double sum = Double.parseDouble(c.get(columns.get(6)).toString());
+		double count = Double.parseDouble(c.get(columns.get(2)).toString().replace(',','.'));
+		double min = Double.parseDouble(c.get(columns.get(3)).toString().replace(',','.'));
+		double max = Double.parseDouble(c.get(columns.get(4)).toString().replace(',','.'));
+		double avg = Double.parseDouble(c.get(columns.get(5)).toString().replace(',','.'));
+		double sum = Double.parseDouble(c.get(columns.get(6)).toString().replace(',','.'));
 
 		// Set each value
 		getCount().setValue(count);
