@@ -50,6 +50,7 @@
   			<p n="BooleanCompareCmdStatus" m="k=axCommunity" t="k:BooleanCompareCmdStatus"/>
  			<p n="FireOnChange" m="k=axCommunity" t="k:FireOnChange" />
  			<p n="BooleanRotateOnExecute" m="k=axCommunity" t="k:BooleanRotateOnExecute"/>
+ 			<p n="PeakValueAndTstamp" m="k=axCommunity" t="k:PeakValueAndTstamp"/>
  			
         </p>
         <p m="b=baja" t="b:Folder" n="BQL">
