@@ -32,4 +32,5 @@
   <type name="FireOnChange" class="org.axcommunity.niagara.logic.BFireOnChange" />
   <type name="StatusBooleanToStatusEnum" class="org.axcommunity.niagara.conversion.BStatusBooleanToStatusEnum" />
   <type name="BooleanRotateOnExecute" class="org.axcommunity.niagara.logic.BBooleanRotateOnExecute"/>
+  <type name="PeakValueAndTstamp" class="org.axcommunity.niagara.logic.BPeakValueAndTstamp"/>
 </types>
