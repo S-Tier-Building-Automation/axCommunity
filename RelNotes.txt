@@ -40,7 +40,7 @@ V09.02.03 Feb 22, 2009
  
  V09.04.01 Apr 17, 2009
  - added from Vance Hensley, PCTECHS4U 
-   BBooleanCompareCmdStatus, compares the status to the command over the defined time period. If status does not match by the end of the elapsed time from, sets output to true (for alarm).
+   BBooleanCompareCmdStatus, (Note: This has a bug - after station restarts, all go out go true. Anyone want to take a look?) compares the status to the command over the defined time period. If status does not match by the end of the elapsed time from, sets output to true (for alarm).
  - added from Mike Arnott, Kors Engineering
    added BFireOnChange, Accepts a StatusString, StatusNumeric or StatusBoolean input, fires the appropriate event when String changes or Number changes or Boolean changes from False to True.
  
@@ -50,4 +50,9 @@ V09.02.03 Feb 22, 2009
   							  via two actions to set True Value & False Value. Handy for LON enums; occupancy is true via "0" (mostly)
   							  but SatSwitchs are often true via "1" or however the controller is programmed.
   BooleanRotateOnExecute - very simple boolean rotation object, use a trigger to execute.
+  
+  V09.04.03 June 22, 2009
+ -added from Vance Hensley, Hoffman Building Technologies
+  PeakValueAndTstamp - takes StatusNumeric input and checks for peaks. Includes a String display of the Date/Time Stamp as well.
+  							  This object is coded to "Zero Out" at the first of the month.
   
