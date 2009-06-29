@@ -5,6 +5,7 @@
  */
 package org.axcommunity.niagara.logic;
 
+import javax.baja.sys.Action;
 import javax.baja.sys.BComponent;
 import javax.baja.sys.BFacets;
 import javax.baja.sys.BIcon;
@@ -172,6 +173,13 @@ public void changed(Property p, Context cx)
     }
   }
 
+  
+  public void doClear()
+  {
+      getHold().setValue(0.0);
+  }
+public static final Action clear = newAction(0,null);
+public void clear() { invoke(clear,null,null); }
 
 public Type getType() { return TYPE; }
 public static final Type TYPE = Sys.loadType(BPeakValueAndTstamp.class);
