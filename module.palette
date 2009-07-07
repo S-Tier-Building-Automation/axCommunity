@@ -16,9 +16,8 @@
             <p n="PingHealthConverter" m="w=axCommunity" t="w:PingHealthConverter"/>
             <p n="StatusNumericToStatusStringNoPad" m="w=axCommunity" t="w:StatusNumericToStatusStringNoPad" />
             <p n="StatusBooleanToStatusEnum" m="w=axCommunity" t="w:StatusBooleanToStatusEnum" />
+            <p n="AbsTimesToAbsTimeRange" m="w=axCommunity" t="w:AbsTimesToAbsTimeRange" />
         </p>
-        
-        
         <p m="b=baja" t="b:Folder" n="Math">
   	        <p n="RoundUp" m="k=axCommunity" t="k:RoundUp" />
 		    <p n="Modulo" m="k=axCommunity" t="k:Modulo" />
@@ -29,6 +28,7 @@
 		    <p n="TrSubtract" m="k=axCommunity" t="k:TrSubtract" />
  			<p n="AvgMinMax" m="w=axCommunity" t="w:AvgMinMax"/>
  			<p n="StatusNumericFifo" m="w=axCommunity" t="w:StatusNumericFifo"/>
+ 			<p n="AbsTimeOffset" m="w=axCommunity" t="w:AbsTimeOffset"/>
  			
  			
 		</p>

@@ -55,4 +55,8 @@ V09.02.03 Feb 22, 2009
  -added from Vance Hensley, Hoffman Building Technologies
   PeakValueAndTstamp - takes StatusNumeric input and checks for peaks. Includes a String display of the Date/Time Stamp as well.
   							  This object is coded to "Zero Out" at the first of the month.
+  							  
+V09.07.01 July 6, 2008
+-added BAbsTimesToAbsTimeRange, takes two abs time inputs, creates an abs time range output  	
+-aded BAbsTimeOffset, takes one abs time and one number as seconds, adds seconds (positive or negative) to time input to create time output.						  
   
