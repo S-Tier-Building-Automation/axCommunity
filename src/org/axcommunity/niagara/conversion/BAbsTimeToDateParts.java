@@ -41,7 +41,6 @@ public class BAbsTimeToDateParts extends BComponent {
 			setShortDayOut(new BStatusString(stDay));
 			getJulianOut().setValue(toJulian(new int[]{(int)getYearOut().getValue(),(int)getMonthOut().getValue(),(int)getDayOut().getValue()}));
 			getStringDateOut().setValue(dtNow.encodeToString());
-			
 		}
 	}    
 	/**Absolute Time Input*/
