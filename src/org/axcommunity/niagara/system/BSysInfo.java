@@ -1,6 +1,5 @@
 package org.axcommunity.niagara.system;
 
-import javax.baja.file.BFileSystem;
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
 import javax.baja.sys.Action;
@@ -13,7 +12,6 @@ import javax.baja.sys.Property;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
 
-import com.tridium.platform.BFilesystemAttributes;
 import com.tridium.platform.BSystemPlatformService;
 
 /**
@@ -52,6 +50,7 @@ public class BSysInfo extends BComponent
 
 	public void doTimerExpired() throws Exception 
 	{
+
 		getCpuUsage().setValue((double)sysObject.getCurrentCpuUsage());
 		getBajaHome().setValue( sysObject.getBajaHome());
 		getFreePhysicalMemory().setValue((double)sysObject.getFreePhysicalMemory());
@@ -66,7 +65,14 @@ public class BSysInfo extends BComponent
 		getPlatformServiceDescription().setValue(sysObject.getPlatformServiceDescription());
 		getStationName().setValue(sysObject.getStationName());
 		getTotalPhysicalMemory().setValue((double)sysObject.getTotalPhysicalMemory());
-		
+		long totalMem = Runtime.getRuntime().totalMemory()/1024;
+		long freeMem = Runtime.getRuntime().freeMemory()/1024;
+		long usedMem = totalMem - freeMem;
+
+		getTotalHeap().setValue(totalMem);
+		getUsedHeap().setValue(usedMem);
+		getFreeHeap().setValue(freeMem);
+
 	}
 	void updateTimer()
 	{            
@@ -178,8 +184,18 @@ public class BSysInfo extends BComponent
 		return (BStatusNumeric)get(overallCpuUsage); 
 	}
 
+	public static final Property usedHeap = newProperty(Flags.SUMMARY, new BStatusNumeric()); 
+	public BStatusNumeric getUsedHeap() { return (BStatusNumeric)get(usedHeap); }
+	public void setUsedHeap(javax.baja.status.BStatusNumeric v) { set(usedHeap, v); }
 
-	
+	public static final Property totalHeap = newProperty(Flags.SUMMARY, new BStatusNumeric()); 
+	public BStatusNumeric getTotalHeap() { return (BStatusNumeric)get(totalHeap); }
+	public void setTotalHeap(javax.baja.status.BStatusNumeric v) { set(totalHeap, v); }
+
+	public static final Property freeHeap = newProperty(Flags.SUMMARY, new BStatusNumeric()); 
+	public BStatusNumeric getFreeHeap() { return (BStatusNumeric)get(freeHeap); }
+	public void setFreeHeap(javax.baja.status.BStatusNumeric v) { set(freeHeap, v); }
+
 	
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");
