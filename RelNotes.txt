@@ -63,4 +63,4 @@ V09.07.01 July 6, 2009
 V09.08.01 August 14, 2009
 -added BGetHTTP, simple object to retrieve a web page as a StatusString
 -modified BSysInfo, added Heap Total, Heap Used and Heap Free fields						  
-  
+-figured out how to add BajaDoc!

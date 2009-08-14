@@ -32,7 +32,7 @@
   <package name="org.axcommunity.niagara.system" doc="true" />
   <package name="org.axcommunity.niagara.web" doc="true" />
 
- 
+  <resources name="doc/*.*" install="doc" />
   <resources name="org/axcommunity/niagara/graphics/*.*"/>
 
  </module>
