@@ -61,6 +61,9 @@
         <p m="b=baja" t="b:Folder" n="System">
  			<p n="SysInfo" m="k=axCommunity" t="k:SysInfo"/>
   	    </p>
+        <p m="b=baja" t="b:Folder" n="Web">
+ 			<p n="GetHTTP" m="k=axCommunity" t="k:GetHTTP"/>
+  	    </p>
  
 	    
   	    

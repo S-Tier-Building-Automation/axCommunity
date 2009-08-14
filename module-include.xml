@@ -35,4 +35,5 @@
   <type name="PeakValueAndTstamp" class="org.axcommunity.niagara.logic.BPeakValueAndTstamp"/>
   <type name="AbsTimesToAbsTimeRange" class="org.axcommunity.niagara.conversion.BAbsTimesToAbsTimeRange" />
   <type name="AbsTimeOffset" class="org.axcommunity.niagara.math.BAbsTimeOffset"/>
+  <type name="GetHTTP" class="org.axcommunity.niagara.web.BGetHTTP"/>
 </types>

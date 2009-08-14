@@ -30,6 +30,7 @@
   <package name="org.axcommunity.niagara.logic" doc="true" />
   <package name="org.axcommunity.niagara.bql" doc="true" />
   <package name="org.axcommunity.niagara.system" doc="true" />
+  <package name="org.axcommunity.niagara.web" doc="true" />
 
  
   <resources name="org/axcommunity/niagara/graphics/*.*"/>
