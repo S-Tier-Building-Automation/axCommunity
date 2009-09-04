@@ -9,15 +9,15 @@ import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
 import javax.baja.status.*;
 import javax.baja.sys.*;
-import javax.baja.control.*;
-import javax.baja.control.util.*;
-import javax.baja.control.enums.*;
 
 /**Converts a StatusBoolean input to a 2-state StatusEnum
 * Just tacking on a Boolean Input to the BStatusNumericToStatusEnum by Andy Saunders @ tridium
 * to make 1 object instead of stringing 3 together.
 * @author Vance Hensley, pctechs4u
 * @creation Apr 25, 2009
+* modified BStatusEnum "out" slot to "outEnum" to accommodate add below
+* added BStatusNumeric "outNumeric" slot to convert boolean to numeric to make a multi-purpose object.
+* @modified July, 17, 2009
 */
 public class BStatusBooleanToStatusEnum
   extends BComponent
@@ -100,23 +100,42 @@ public BStatusNumeric getFalseValue() { return (BStatusNumeric)get(falseValue); 
 public void setFalseValue(BStatusNumeric v) { set(falseValue,v,null); }
 
 ////////////////////////////////////////////////////////////////
-//Property "out"
+//Property "outEnum"
 ////////////////////////////////////////////////////////////////
 
 /**
- * Slot for the <code>out</code> property.
+ * Slot for the <code>outEnum</code> property.
  */
-public static final Property out = newProperty(Flags.TRANSIENT|Flags.READONLY|Flags.SUMMARY, new BStatusEnum(),null);
+public static final Property outEnum = newProperty(Flags.TRANSIENT|Flags.READONLY|Flags.SUMMARY, new BStatusEnum(),null);
 
 /**
- * Get the <code>out</code> property.
+ * Get the <code>outEnum</code> property.
  */
-public BStatusEnum getOut() { return (BStatusEnum)get(out); }
+public BStatusEnum getOutEnum() { return (BStatusEnum)get(outEnum); }
 
 /**
- * Set the <code>out</code> property.
+ * Set the <code>outEnum</code> property.
  */
-public void setOut(BStatusEnum v) { set(out,v,null); }
+public void setOutEnum(BStatusEnum v) { set(outEnum,v,null); }
+
+////////////////////////////////////////////////////////////////
+//Property "outNumeric"
+////////////////////////////////////////////////////////////////
+
+/**
+* Slot for the <code>outNumeric</code> property.
+*/
+public static final Property outNumeric = newProperty(Flags.TRANSIENT|Flags.READONLY|Flags.SUMMARY, new BStatusNumeric(),null);
+
+/**
+* Get the <code>outNumeric</code> property.
+*/
+public BStatusNumeric getOutNumeric() { return (BStatusNumeric)get(outNumeric); }
+
+/**
+* Set the <code>outNumeric</code> property.
+*/
+public void setOutNumeric(BStatusNumeric v) { set(outNumeric,v,null); }
 
 /////////////////////////////////////////////////////////////////
 // Begin main code
@@ -144,31 +163,49 @@ public void changed(Property p, Context cx)
 
 void calculate()
 {
-  BStatusEnum workingValue = getOut();
-  boolean inValue = getIn().getValue();
-  if(inValue)
+       BStatusEnum bstatusenum = getOutEnum();
+        boolean flag = getIn().getValue();
+        if(flag)
     {
-    workingValue.setValue(BDynamicEnum.make((int)getTrueValue().getValue()) );
-    workingValue.setStatusNull(false);
-    workingValue.setStatusFault(false);
-    }
-  else if(!inValue)
+            bstatusenum.setValue(BDynamicEnum.make((int)getTrueValue().getValue()));
+            bstatusenum.setStatusNull(false);
+            bstatusenum.setStatusFault(false);
+    } else
+        if(!flag)
     {
-    workingValue.setValue(BDynamicEnum.make((int)getFalseValue().getValue()) );
-    workingValue.setStatusNull(false);
-    workingValue.setStatusFault(false);
+            bstatusenum.setValue(BDynamicEnum.make((int)getFalseValue().getValue()));
+            bstatusenum.setStatusNull(false);
+            bstatusenum.setStatusFault(false);
+    } else
+    {
+            bstatusenum.setStatusNull(true);
+           bstatusenum.setStatusFault(true);
     }
-  else    
-  {
-    workingValue.setStatusNull(true);
-    workingValue.setStatusFault(true);
-  }
-  setOut(workingValue);
+        BStatusNumeric bstatusnumeric = getOutNumeric();
+        if(flag)
+    {
+            bstatusnumeric.setValue(getTrueValue().getValue());
+            bstatusnumeric.setStatusNull(false);
+            bstatusnumeric.setStatusFault(false);
+    } else
+        if(!flag)
+    {
+            bstatusnumeric.setValue(getFalseValue().getValue());
+            bstatusnumeric.setStatusNull(false);
+            bstatusnumeric.setStatusFault(false);
+    } else
+    {
+            bstatusnumeric.setStatusNull(true);
+            bstatusnumeric.setStatusFault(true);
+    }
+        setOutEnum(bstatusenum);
+        setOutNumeric(bstatusnumeric);
 }
+
 
 public String toString(Context cx)
 {
-  return getOut().toString(cx);
+  return getOutEnum().toString(cx);
 }
 
 /**
@@ -176,7 +213,7 @@ public String toString(Context cx)
  */
 public BFacets getSlotFacets(Slot slot)
 {
-  if (slot == out)return getFacets();
+  if (slot == outEnum)return getFacets();
   return super.getSlotFacets(slot);
 }
 
