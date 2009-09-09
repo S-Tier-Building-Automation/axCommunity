@@ -68,7 +68,7 @@ public class BGetHTTP extends BComponent{
     
     
     public BIcon getIcon() { return icon; }
-    private static final BIcon icon = BIcon.make("local:|module://KorsMaster/com/korsengineering/niagara/graphics/korsLogo.png");
+    private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");
 
     public static final Type TYPE = Sys.loadType(BGetHTTP.class);
     public Type getType() { return TYPE; }
