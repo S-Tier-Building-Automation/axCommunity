@@ -64,3 +64,7 @@ V09.08.01 August 14, 2009
 -added BGetHTTP, simple object to retrieve a web page as a StatusString
 -modified BSysInfo, added Heap Total, Heap Used and Heap Free fields						  
 -figured out how to add BajaDoc!
+
+V09.09.01 Sept 09, 2009
+-bug fix in BFireOnChange, was not passing the value in the "New Numeric Input" event
+-added from Christopher Howard, Zen-Com, BHistoryToCSV, exports a history to a CSV file. 

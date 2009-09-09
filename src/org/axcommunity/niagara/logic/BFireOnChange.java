@@ -51,7 +51,7 @@ public class BFireOnChange extends BComponent {
        		if(getNumericIn().getValue()!=lastNumber)
        		{
        			//new value, fire output
-       			lastString = getStringIn().getValue();
+       			lastNumber = getNumericIn().getValue();
        			this.fireNewNumericInput(BDouble.make(lastNumber));
        		}
        	}
