@@ -67,4 +67,4 @@ V09.08.01 August 14, 2009
 
 V09.09.01 Sept 09, 2009
 -bug fix in BFireOnChange, was not passing the value in the "New Numeric Input" event
--added from Christopher Howard, Zen-Com, BHistoryToCSV, exports a history to a CSV file. 
+-added from Christopher Howard, Xen-Com, BHistoryToCSV, exports a history to a CSV file. 
