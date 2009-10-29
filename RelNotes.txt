@@ -68,3 +68,11 @@ V09.08.01 August 14, 2009
 V09.09.01 Sept 09, 2009
 -bug fix in BFireOnChange, was not passing the value in the "New Numeric Input" event
 -added from Christopher Howard, Xen-Com, BHistoryToCSV, exports a history to a CSV file. 
+
+V09.10.01 September 17, 2009: 
+Tyler Long, McKenney's Inc.
+-added BAvgMinMax_v1: This is a build upon Crabill's AvgMinMax type on version v09.01.03.  Added two inputs to exclude 
+	values above and below set points inMaximum and inMinimum. Enabled actions so that the inputs (ie. InMinimum, InMaximum, & inCount)
+	may be configured outside of the property sheet.
+-added BParentFolderInfo: simple object that gets the parent folder name and outputs it as a String.
+-added BSetNumericAction: A lot like the trCopy object, but instead of outputing a numeric, it fires a top that can be linked to the set/override actions of a numeric writable.
