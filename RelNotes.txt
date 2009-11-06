@@ -76,3 +76,7 @@ Tyler Long, McKenney's Inc.
 	may be configured outside of the property sheet.
 -added BParentFolderInfo: simple object that gets the parent folder name and outputs it as a String.
 -added BSetNumericAction: A lot like the trCopy object, but instead of outputing a numeric, it fires a top that can be linked to the set/override actions of a numeric writable.
+
+V09.11.01 November 6, 2009:
+Not released as a jar yet, source only
+-added BEnumWithStringOutput: it's an extension of the enumwritable that also accepts a numeric in and has a string output equivalent of the enum value.  

@@ -40,4 +40,5 @@
   <type name="HistoryToCSV" class="org.axcommunity.niagara.bql.BHistoryToCSV"/>
   <type name="SetNumericAction" class="org.axcommunity.niagara.logic.BSetNumericAction"/>
   <type name="ParentFolderInfo" class="org.axcommunity.niagara.string.BParentFolderInfo"/>
+  <type name="EnumWithStringOutput" class="org.axcommunity.niagara.conversion.BEnumWithStringOutput"/>
 </types>

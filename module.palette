@@ -17,6 +17,7 @@
             <p n="StatusNumericToStatusStringNoPad" m="w=axCommunity" t="w:StatusNumericToStatusStringNoPad" />
             <p n="StatusBooleanToStatusEnum" m="w=axCommunity" t="w:StatusBooleanToStatusEnum" />
             <p n="AbsTimesToAbsTimeRange" m="w=axCommunity" t="w:AbsTimesToAbsTimeRange" />
+            <p n="EnumWithStringOutput" m="w=axCommunity" t="w:EnumWithStringOutput" />
         </p>
         <p m="b=baja" t="b:Folder" n="Math">
   	        <p n="RoundUp" m="k=axCommunity" t="k:RoundUp" />
