@@ -18,6 +18,9 @@
             <p n="StatusBooleanToStatusEnum" m="w=axCommunity" t="w:StatusBooleanToStatusEnum" />
             <p n="AbsTimesToAbsTimeRange" m="w=axCommunity" t="w:AbsTimesToAbsTimeRange" />
             <p n="EnumWithStringOutput" m="w=axCommunity" t="w:EnumWithStringOutput" />
+            <p n="BitsToStatusNumeric" m="w=axCommunity" t="w:BitsToStatusNumeric" />
+            
+            
         </p>
         <p m="b=baja" t="b:Folder" n="Math">
   	        <p n="RoundUp" m="k=axCommunity" t="k:RoundUp" />
