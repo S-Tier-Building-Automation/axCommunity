@@ -57,6 +57,7 @@
  			<p n="BooleanRotateOnExecute" m="k=axCommunity" t="k:BooleanRotateOnExecute"/>
  			<p n="PeakValueAndTstamp" m="k=axCommunity" t="k:PeakValueAndTstamp"/>
  			<p n="SetNumericAction" m="k=axCommunity" t="k:SetNumericAction"/>
+ 			<p n="SetBooleanAction" m="k=axCommunity" t="k:SetBooleanAction"/>
        </p>
         <p m="b=baja" t="b:Folder" n="BQL">
  			<p n="BqlNumericRecap" m="k=axCommunity" t="k:BqlNumericRecap"/>

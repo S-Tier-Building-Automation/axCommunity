@@ -83,3 +83,6 @@ Not released as a jar yet, source only
 
 V10.01.01 January 11, 2010:
 -added BBitsToStatusNumeric: takes 8 bits in, creates a numeric output from binary
+
+V10.02.01 February 24, 2010:
+-added BSetBooleanAction: actions to set a boolean true/false
