@@ -67,9 +67,11 @@
         
         <p m="b=baja" t="b:Folder" n="System">
  			<p n="SysInfo" m="k=axCommunity" t="k:SysInfo"/>
+ 			<p n="StringToFile" m="k=axCommunity" t="k:StringToFile"/>
   	    </p>
         <p m="b=baja" t="b:Folder" n="Web">
  			<p n="GetHTTP" m="k=axCommunity" t="k:GetHTTP"/>
+ 			<p n="StringToFile" m="k=axCommunity" t="k:StringToFile"/>
   	    </p>
         <p m="b=baja" t="b:Folder" n="String">
  			<p n="ParentFolderInfo" m="k=axCommunity" t="k:ParentFolderInfo"/>
