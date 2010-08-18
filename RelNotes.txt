@@ -89,3 +89,6 @@ V10.02.01 February 24, 2010:
 
 V10.04.01 April 13,2010
 -added StringToFile: writes a status string to a file. Borrowed heavily from the BHistoryToCSV from CMH, thanks!
+
+V10.08.01 August 18, 2010
+-added RevolvingTextLabel: widget that scrolls text if it is larger than the label size.  Will also parse delimited text and return a specific index if desired.

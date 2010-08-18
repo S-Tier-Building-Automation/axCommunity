@@ -44,4 +44,6 @@
   <type name="BitsToStatusNumeric" class="org.axcommunity.niagara.conversion.BBitsToStatusNumeric"/>
   <type name="SetBooleanAction" class="org.axcommunity.niagara.logic.BSetBooleanAction"/>
   <type name="StringToFile" class="org.axcommunity.niagara.system.BStringToFile"/>
+  <type name="RevolvingTextLabel" class="org.axcommunity.niagara.widgets.BRevolvingTextLabel" />  
+  
 </types>

@@ -76,6 +76,28 @@
         <p m="b=baja" t="b:Folder" n="String">
  			<p n="ParentFolderInfo" m="k=axCommunity" t="k:ParentFolderInfo"/>
   	    </p>
+        <p m="b=baja" t="b:Folder" n="Widgets">
+ 			<p n="RevolvingTextLabel" m="k=axCommunity" t="k:RevolvingTextLabel">
+  				<p n="layout" v="0.0,0.0,120.0,20.0"/>
+  				<!-- /RevolvingTextLabel/bindText -->
+  				<p n="bindText"  m="kitPx=kitPx" t="kitPx:SetPointBinding">
+    					<p n="popupEnabled" v="false"/>
+					<p n="widgetProperty" v="text"/>
+  				</p>
+			  	<!-- /RevolvingTextLabel/bindVisible -->
+  				<p n="bindVisible" m="kitPx=kitPx" t="kitPx:SetPointBinding">
+   					<p n="popupEnabled" v="false"/>
+   					<p n="widgetProperty" v="visible"/>
+  				</p>
+  				<!-- /RevolvingTextLabel/bindFlash -->
+  				<p n="bindFlash"  m="kitPx=kitPx" t="kitPx:SetPointBinding">
+ 					<p n="popupEnabled" v="false"/>
+   					<p n="widgetProperty" v="flash"/>
+  				</p>
+  	    	</p>
+  	    </p>
+  	    
+  	    
   	    
         <p m="b=baja" t="b:Folder" n="PxGraphics">
             <p n="boolean" t="b:UnrestrictedFolder">

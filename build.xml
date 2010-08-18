@@ -6,7 +6,7 @@
   preferredSymbol = "axc"
   description = "AX Community Objects"
   vendor = "org.axcommunity"
-  vendorVersion = "10.04.01"
+  vendorVersion = "10.08.01"
   edition="j2se"
 >
 
@@ -22,7 +22,7 @@
   <dependency name="bajaui" /> 
   <dependency name="alarm" /> 
   <dependency name="history" /> 
-
+  <dependency name="gx" /> 
 
   <!-- Packages -->
   <package name="org.axcommunity.niagara.conversion" doc="true" />
@@ -32,6 +32,9 @@
   <package name="org.axcommunity.niagara.system" doc="true" />
   <package name="org.axcommunity.niagara.web" doc="true" />
   <package name="org.axcommunity.niagara.string" doc="true" />
+  <package name="org.axcommunity.niagara.widgets" doc="true" />
+
+
 
   <resources name="doc/*.*" install="doc" />
   <resources name="org/axcommunity/niagara/graphics/*.*"/>
