@@ -21,8 +21,8 @@ public class BEnumWithStringOutput extends BEnumWritable {
 		if(!Sys.atSteadyState() || !isRunning()){
     		return;
     	}
-		System.out.println(property.getName().toString());
-		System.out.println(property.getType().toString());
+		//System.out.println(property.getName().toString());
+		//System.out.println(property.getType().toString());
         if (property == out) 
         {
             String tag =  ((BEnumRange)this.getFacets().get("range")).getDisplayTag(this.getOut().getValue().getOrdinal(), null);

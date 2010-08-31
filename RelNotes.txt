@@ -92,3 +92,6 @@ V10.04.01 April 13,2010
 
 V10.08.01 August 18, 2010
 -added RevolvingTextLabel: widget that scrolls text if it is larger than the label size.  Will also parse delimited text and return a specific index if desired.
+
+V10.08.02 August 31, 2010
+-revised BEnumWithStringOutput to eliminate extraneous messages logged in system output
