@@ -95,3 +95,7 @@ V10.08.01 August 18, 2010
 
 V10.08.02 August 31, 2010
 -revised BEnumWithStringOutput to eliminate extraneous messages logged in system output
+
+V10.10.01 October 20, 2010
+-added BTrendDynamicAnalyzer by Alper Uzmezler, BAS Services: similar to the existing TrendAnalyzer, but uses dynamic time ranges (last month)
+-added axCommunity.BEnumFromCommaSepVar: an EnumWritable extension that has a linkable string input you can use to create an enum from a comma separated value list

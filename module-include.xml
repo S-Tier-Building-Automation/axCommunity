@@ -45,5 +45,6 @@
   <type name="SetBooleanAction" class="org.axcommunity.niagara.logic.BSetBooleanAction"/>
   <type name="StringToFile" class="org.axcommunity.niagara.system.BStringToFile"/>
   <type name="RevolvingTextLabel" class="org.axcommunity.niagara.widgets.BRevolvingTextLabel" />  
-  
+  <type name="TrendDynamicAnalyzer" class="org.axcommunity.niagara.bql.BTrendDynamicAnalyzer" />  
+  <type name="EnumFromCommaSepVar" class="org.axcommunity.niagara.conversion.BEnumFromCommaSepVar"/>
 </types>

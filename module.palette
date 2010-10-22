@@ -19,6 +19,8 @@
             <p n="AbsTimesToAbsTimeRange" m="w=axCommunity" t="w:AbsTimesToAbsTimeRange" />
             <p n="EnumWithStringOutput" m="w=axCommunity" t="w:EnumWithStringOutput" />
             <p n="BitsToStatusNumeric" m="w=axCommunity" t="w:BitsToStatusNumeric" />
+            <p n="EnumFromCommaSepVar" m="w=axCommunity" t="w:EnumFromCommaSepVar" />
+            
             
             
         </p>
@@ -62,7 +64,8 @@
         <p m="b=baja" t="b:Folder" n="BQL">
  			<p n="BqlNumericRecap" m="k=axCommunity" t="k:BqlNumericRecap"/>
   	    	<p n="TrendAnalyzer" m="k=axCommunity" t="k:TrendAnalyzer"/>
-  	    	<p n="HistoryToCSV" m="k=axCommunity" t="k:HistoryToCSV"/>
+  	    	<p n="HistoryToCSV" m="k=axCommunity" t="k:HistoryToCSV"/> 	    
+  	    	<p n="TrendDynamicAnalyzer" m="k=axCommunity" t="k:TrendDynamicAnalyzer"/> 	    
   	    </p>
         
         <p m="b=baja" t="b:Folder" n="System">
