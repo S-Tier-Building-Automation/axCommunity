@@ -3,6 +3,9 @@
  */
 package org.axcommunity.niagara.conversion;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.baja.status.*;
 import javax.baja.sys.*;
 import javax.baja.units.*;
@@ -27,6 +30,7 @@ public class BAbsTimeToDateParts extends BComponent {
 			BAbsTime dtNow = getTimeIn();
 			getSecondsOut().setValue((dtNow.getSecond()));
 			getMinutesOut().setValue((dtNow.getMinute()));
+			
 			setHoursOut(new BStatusNumeric(dtNow.getHour()));
 			setDayOut(new BStatusNumeric(dtNow.getDay()));
 			setMonthOut(new BStatusNumeric(getTimeIn().getMonth().getMonthOfYear()));
@@ -41,6 +45,10 @@ public class BAbsTimeToDateParts extends BComponent {
 			setShortDayOut(new BStatusString(stDay));
 			getJulianOut().setValue(toJulian(new int[]{(int)getYearOut().getValue(),(int)getMonthOut().getValue(),(int)getDayOut().getValue()}));
 			getStringDateOut().setValue(dtNow.encodeToString());
+		  Calendar cal = Calendar.getInstance();
+	    cal.set(dtNow.getYear(),dtNow.getMonth().getMonthOfYear() - 1,dtNow.getDay(),dtNow.getHour(),dtNow.getMinute(),dtNow.getSecond());
+	    getOutSerialTime().setValue(cal.getTimeInMillis());
+	    
 		}
 	}    
 	/**Absolute Time Input*/
@@ -115,6 +123,12 @@ public class BAbsTimeToDateParts extends BComponent {
 	public void setStringDateOut(BStatusString v) { set(stringDateOut, v); }
 
 
+	 /**StatusNumeric value out representing milliseconds since epoch (January 1, 1970, 00:00:00 GMT)*/
+  public final static Property outSerialTime = newProperty(Flags.SUMMARY, new BStatusNumeric(),BFacets.makeNumeric(0));
+  public BStatusNumeric getOutSerialTime() { return (BStatusNumeric)get(outSerialTime); }
+  public void setOutSerialTime(BStatusNumeric v) { set(outSerialTime, v); }
+
+	
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");
 
