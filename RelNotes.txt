@@ -103,3 +103,7 @@ V10.10.01 October 20, 2010
 V10.11.01 November 2, 2010
 -modified BAbsTimeToDateParts, added serial time out slot for milliseconds since epoch (1-1-1970)
 -added BEpochToAbsTime: used to convert the serial time from BAbsTimeToDateParts back to an AbsTime
+
+V11.03.01 March 22, 2011
+-added BChangeCase by Justin Koffler: takes a string in and converts it to all uppercase, all lowercase and title case outputs.
+-modified BStatusNumericFifo: nuisance station output removed, handles all 0's better than before (no NaN).

@@ -110,7 +110,7 @@ public class BStatusNumericFifo extends BComponent {
 	        			if (out instanceof BStatusNumeric) {
 	        				double value = ((BStatusNumeric)out).getValue();
 	        				BFacets bfc = point.getFacets();
-	        				System.out.println(bfc == null);
+	        				//System.out.println(bfc == null);
 	        				if(bfc == null){
 	        					shiftData(value);
 		        				minData();
@@ -232,7 +232,13 @@ public class BStatusNumericFifo extends BComponent {
     			goodVals += 1;
     		}
     	}
-    	avgVal = tempVal / goodVals;
+    	if(goodVals>0){
+    	  avgVal = tempVal / goodVals;
+    	}
+    	else
+    	{
+    	  avgVal = 0;
+    	}
     	set(getProperty(AVG), new BStatusNumeric(avgVal));
     	setFacets(getSlot(AVG), bfc);
     }
@@ -246,8 +252,14 @@ public class BStatusNumericFifo extends BComponent {
     			goodVals += 1;
     		}
     	}
-    	avgVal = tempVal / goodVals;
-    	set(getProperty(AVG), new BStatusNumeric(avgVal));
+      if(goodVals>0){
+        avgVal = tempVal / goodVals;
+      }
+      else
+      {
+        avgVal = 0;
+      }
+      set(getProperty(AVG), new BStatusNumeric(avgVal));
     }
 
     public static final Property trigger = newProperty(Flags.SUMMARY, new BStatusBoolean(false));

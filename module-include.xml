@@ -48,4 +48,5 @@
   <type name="TrendDynamicAnalyzer" class="org.axcommunity.niagara.bql.BTrendDynamicAnalyzer" />  
   <type name="EnumFromCommaSepVar" class="org.axcommunity.niagara.conversion.BEnumFromCommaSepVar"/>
   <type name="EpochToAbsTime" class="org.axcommunity.niagara.conversion.BEpochToAbsTime"/>
+  <type name="ChangeCase" class="org.axcommunity.niagara.conversion.BChangeCase" />
 </types>

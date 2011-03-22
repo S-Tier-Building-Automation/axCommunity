@@ -21,6 +21,7 @@
             <p n="BitsToStatusNumeric" m="w=axCommunity" t="w:BitsToStatusNumeric" />
             <p n="EnumFromCommaSepVar" m="w=axCommunity" t="w:EnumFromCommaSepVar" />
             <p n="EpochToAbsTime" m="w=axCommunity" t="w:EpochToAbsTime" />
+            <p n="ChangeCase" m="w=axCommunity" t="w:ChangeCase" />
         </p>
         <p m="b=baja" t="b:Folder" n="Math">
   	        <p n="RoundUp" m="k=axCommunity" t="k:RoundUp" />
