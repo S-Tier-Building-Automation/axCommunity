@@ -35,10 +35,10 @@
  			<p n="AvgMinMax_v1" m="w=axCommunity" t="w:AvgMinMax_v1"/>
  			<p n="StatusNumericFifo" m="w=axCommunity" t="w:StatusNumericFifo"/>
  			<p n="AbsTimeOffset" m="w=axCommunity" t="w:AbsTimeOffset"/>
- 			
- 			
-		</p>
-        
+ 		</p>
+        <p m="b=baja" t="b:Folder" n="Time">
+            <p n="Stopwatch" m="w=axCommunity" t="w:Stopwatch" />
+        </p>
         <p m="b=baja" t="b:Folder" n="Logic">
             <p n="ToggleSwitch" m="k=axCommunity" t="k:ToggleSwitch">
   				<p n="booleanCmd" f="s"/>

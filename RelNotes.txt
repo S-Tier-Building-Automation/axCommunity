@@ -107,3 +107,6 @@ V10.11.01 November 2, 2010
 V11.03.01 March 22, 2011
 -added BChangeCase by Justin Koffler: takes a string in and converts it to all uppercase, all lowercase and title case outputs.
 -modified BStatusNumericFifo: nuisance station output removed, handles all 0's better than before (no NaN).
+
+V11.05.01 May 8, 2011
+-added BStopwatch by Justin Koffler: the mother of all elapsed timers!
