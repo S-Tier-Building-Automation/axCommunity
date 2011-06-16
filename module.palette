@@ -12,6 +12,7 @@
             <p n="TimeSplitter" m="w=axCommunity" t="w:TimeSplitter">
   				<p n="updateTime" f="s"/>
   				<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="7,3,17"/>
+  				
  			</p>
             <p n="PingHealthConverter" m="w=axCommunity" t="w:PingHealthConverter"/>
             <p n="StatusNumericToStatusStringNoPad" m="w=axCommunity" t="w:StatusNumericToStatusStringNoPad" />
@@ -22,6 +23,7 @@
             <p n="EnumFromCommaSepVar" m="w=axCommunity" t="w:EnumFromCommaSepVar" />
             <p n="EpochToAbsTime" m="w=axCommunity" t="w:EpochToAbsTime" />
             <p n="ChangeCase" m="w=axCommunity" t="w:ChangeCase" />
+            <p n="RelTimeToStatusNumeric"  m="w=axCommunity" t="w:RelTimeToStatusNumeric"></p>
         </p>
         <p m="b=baja" t="b:Folder" n="Math">
   	        <p n="RoundUp" m="k=axCommunity" t="k:RoundUp" />
@@ -38,6 +40,9 @@
  		</p>
         <p m="b=baja" t="b:Folder" n="Time">
             <p n="Stopwatch" m="w=axCommunity" t="w:Stopwatch" />
+        </p>
+        <p m="b=baja" t="b:UnrestrictedFolder" n="Extensions">
+            <p n="FilterExt" m="w=axCommunity" t="w:FilterExt" />
         </p>
         <p m="b=baja" t="b:Folder" n="Logic">
             <p n="ToggleSwitch" m="k=axCommunity" t="k:ToggleSwitch">

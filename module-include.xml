@@ -50,4 +50,6 @@
   <type name="EpochToAbsTime" class="org.axcommunity.niagara.conversion.BEpochToAbsTime"/>
   <type name="ChangeCase" class="org.axcommunity.niagara.conversion.BChangeCase" />
   <type class="org.axcommunity.niagara.time.BStopwatch" name="Stopwatch"/>
+  <type name="FilterExt" class="org.axcommunity.niagara.extensions.BFilterExt" />
+  <type name="RelTimeToStatusNumeric" class="org.axcommunity.niagara.conversion.BRelTimeToStatusNumeric" />
 </types>

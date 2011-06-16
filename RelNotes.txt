@@ -110,3 +110,7 @@ V11.03.01 March 22, 2011
 
 V11.05.01 May 8, 2011
 -added BStopwatch by Justin Koffler: the mother of all elapsed timers!
+
+V11.06.01 June 16 2011
+-added BFilterExt by Dean Mynott: Drop it onto a BNumericPoint and it will filter the parent's output with a simple but effective filter. start with a value of 5
+-added BRelTimeToStatusNumeric by Dean Mynott: rounds BrelTime into Hours, Minutes, Seconds
