@@ -52,4 +52,5 @@
   <type class="org.axcommunity.niagara.time.BStopwatch" name="Stopwatch"/>
   <type name="FilterExt" class="org.axcommunity.niagara.extensions.BFilterExt" />
   <type name="RelTimeToStatusNumeric" class="org.axcommunity.niagara.conversion.BRelTimeToStatusNumeric" />
+  <type name="SuperOr" class="org.axcommunity.niagara.logic.BSuperOr" />
 </types>

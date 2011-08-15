@@ -114,3 +114,6 @@ V11.05.01 May 8, 2011
 V11.06.01 June 16 2011
 -added BFilterExt by Dean Mynott: Drop it onto a BNumericPoint and it will filter the parent's output with a simple but effective filter. start with a value of 5
 -added BRelTimeToStatusNumeric by Dean Mynott: rounds BrelTime into Hours, Minutes, Seconds
+
+V11.08.01 Aug 15, 2011
+-added BSuperOr by Christopher Howard @ xen-com: This is an OrGate on steriods!  This OrGate can be generated to accommodate any number of points. 
