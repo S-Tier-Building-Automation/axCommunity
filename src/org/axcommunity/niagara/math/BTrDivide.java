@@ -2,7 +2,10 @@ package org.axcommunity.niagara.math;
 
 import javax.baja.sys.*;
 import javax.baja.status.*;
-
+/**
+ * Divides the dividend by the divisor on transition of the trigger from false to true
+ * @author Mike Arnott, Kors Engineering
+ */
 public class BTrDivide extends BComponent{
 	
 	boolean fire = false;

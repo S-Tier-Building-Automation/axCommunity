@@ -10,6 +10,10 @@ import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
 import javax.baja.util.BAbsTimeRange;
 
+/**
+ * takes two abs time inputs, creates an abs time range output
+ * @author Mike Arnott, Kors Engineering
+ */
 public class BAbsTimesToAbsTimeRange extends BComponent {
 	public void changed(Property property, Context context){
 		super.changed(property, context);

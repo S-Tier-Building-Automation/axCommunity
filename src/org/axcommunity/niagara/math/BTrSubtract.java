@@ -2,7 +2,10 @@ package org.axcommunity.niagara.math;
 
 import javax.baja.sys.*;
 import javax.baja.status.*;
-
+/**
+ * Subtracts the subtrahend from the minuend on the transition of the trigger from false to true
+ * @author Mike Arnott, Kors Engineering
+ */
 public class BTrSubtract extends BComponent{
 	
 	boolean fire = false;

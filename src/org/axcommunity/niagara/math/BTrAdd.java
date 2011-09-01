@@ -2,7 +2,10 @@ package org.axcommunity.niagara.math;
 
 import javax.baja.sys.*;
 import javax.baja.status.*;
-
+/**
+ * Adds inputs on transition of trigger from false to true
+ * @author Mike Arnott, Kors Engineering
+ */
 public class BTrAdd extends BComponent{
 	
 	boolean fire = false;

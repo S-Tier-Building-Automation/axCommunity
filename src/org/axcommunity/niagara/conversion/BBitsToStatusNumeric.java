@@ -10,6 +10,11 @@ import javax.baja.sys.Property;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
 
+/**
+ * Creates a numeric output from 8 binary bits in
+ * @author Mike Arnott, Kors Engineering
+ */
+
 
 public class BBitsToStatusNumeric  extends BComponent {
 	public void changed(Property property, Context context){

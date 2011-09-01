@@ -12,7 +12,10 @@ import javax.baja.sys.Flags;
 import javax.baja.sys.Property;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
-
+/**
+ * used to convert the serial time from BAbsTimeToDateParts back to an AbsTime
+ * @author Mike Arnott, Kors Engineering
+ */
 public class BEpochToAbsTime extends BComponent 
 {
   public void changed(Property property, Context context){

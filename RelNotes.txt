@@ -116,4 +116,7 @@ V11.06.01 June 16 2011
 -added BRelTimeToStatusNumeric by Dean Mynott: rounds BrelTime into Hours, Minutes, Seconds
 
 V11.08.01 Aug 15, 2011
--added BSuperOr by Christopher Howard @ xen-com: This is an OrGate on steriods!  This OrGate can be generated to accommodate any number of points. 
+-added BSuperOr by Christopher Howard @ xen-com: This is an OrGate on steriods!  This OrGate can be generated to accommodate any number of points.
+
+V11.09.01 Sept 1, 2011
+-revised comments on Kors Engineering submitted objects 

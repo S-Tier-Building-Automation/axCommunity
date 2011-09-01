@@ -6,7 +6,12 @@ import javax.baja.control.*;
 import javax.baja.naming.*;
 import javax.baja.collection.*;
 import javax.baja.units.BUnit;
-
+/**
+ * Numeric values are stored in a stack of 33 values, on transition 
+ * of trigger from false to true the values 00 through 32 are shifted 
+ * by 1 and the value of the input written as the new value for 00
+ * @author Mike Arnott, Kors Engineering
+ */
 public class BStatusNumericFifo extends BComponent {
 	
 	boolean fire = false;

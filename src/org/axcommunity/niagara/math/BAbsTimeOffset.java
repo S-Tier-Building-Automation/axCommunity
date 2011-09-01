@@ -10,7 +10,11 @@ import javax.baja.sys.Flags;
 import javax.baja.sys.Property;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
-
+/**
+ * takes one abs time and one number as seconds, adds seconds 
+ * (positive or negative) to time input to create time output
+ * @author Mike Arnott, Kors Engineering
+ */
 
 public class BAbsTimeOffset extends BComponent{
 

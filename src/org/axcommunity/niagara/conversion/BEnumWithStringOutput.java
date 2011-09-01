@@ -13,6 +13,11 @@ import javax.baja.sys.Property;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
 
+/**
+ * to eliminate extraneous messages logged in system output
+ * @author Mike Arnott, Kors Engineering
+ */
+
 public class BEnumWithStringOutput extends BEnumWritable {
 	
 	

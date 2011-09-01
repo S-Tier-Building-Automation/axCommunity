@@ -2,7 +2,10 @@ package org.axcommunity.niagara.math;
 
 import javax.baja.sys.*;
 import javax.baja.status.*;
-
+/**
+ * Multiplies the multiplicand by the multiplier on the transition of the trigger from false to true
+ * @author Mike Arnott, Kors Engineering
+ */
 public class BTrMultiply extends BComponent{
 	
 	boolean fire = false;
