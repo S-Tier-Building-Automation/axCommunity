@@ -24,6 +24,7 @@
             <p n="EpochToAbsTime" m="w=axCommunity" t="w:EpochToAbsTime" />
             <p n="ChangeCase" m="w=axCommunity" t="w:ChangeCase" />
             <p n="RelTimeToStatusNumeric"  m="w=axCommunity" t="w:RelTimeToStatusNumeric"></p>
+            <p n="StatusStringToFormat"  m="w=axCommunity" t="w:StatusStringToFormat"></p>
         </p>
         <p m="b=baja" t="b:Folder" n="Math">
   	        <p n="RoundUp" m="k=axCommunity" t="k:RoundUp" />
@@ -65,6 +66,7 @@
  			<p n="SetNumericAction" m="k=axCommunity" t="k:SetNumericAction"/>
  			<p n="SetBooleanAction" m="k=axCommunity" t="k:SetBooleanAction"/>
  			<p n="SuperOr" m="k=axCommunity" t="k:SuperOr"/>
+ 			<p n="BooleanToggle" m="k=axCommunity" t="k:BooleanToggle"/>
        </p>
         <p m="b=baja" t="b:Folder" n="BQL">
  			<p n="BqlNumericRecap" m="k=axCommunity" t="k:BqlNumericRecap"/>
