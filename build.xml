@@ -35,9 +35,7 @@
   <package name="org.axcommunity.niagara.widgets" doc="true" />
   <package name="org.axcommunity.niagara.time" doc="true"/>
   <package name="org.axcommunity.niagara.extensions" doc="true"/>
-
-
-
+  <package name="org.axcommunity.niagara.hvac" doc="true"/>
 
   <resources name="doc/*.*" install="doc" />
   <resources name="org/axcommunity/niagara/graphics/*.*"/>
