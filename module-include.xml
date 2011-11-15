@@ -56,5 +56,6 @@
   <type name="StatusStringToFormat" class="org.axcommunity.niagara.conversion.BStatusStringToFormat" />
   <type name="BooleanToggle" class="org.axcommunity.niagara.logic.BBooleanToggle" />
   <type name="SimpleTstat" class="org.axcommunity.niagara.hvac.BSimpleTstat" />
-  
+  <type name="TstatA" class="org.axcommunity.niagara.hvac.BTstatA" />
+  <type name="TstatB" class="org.axcommunity.niagara.hvac.BTstatB" />  
 </types>

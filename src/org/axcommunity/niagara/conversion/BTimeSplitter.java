@@ -2,7 +2,6 @@ package org.axcommunity.niagara.conversion;
 
 import javax.baja.sys.*;
 import javax.baja.status.*;
-import javax.baja.control.*;
 
 /**
  * Executes every updateTime and displays the current time in seven different  

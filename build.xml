@@ -6,7 +6,7 @@
   preferredSymbol = "axc"
   description = "AX Community Objects"
   vendor = "org.axcommunity"
-  vendorVersion = "11.09.02"
+  vendorVersion = "11.11.01"
   edition="j2se"
 >
 
@@ -23,6 +23,7 @@
   <dependency name="alarm" /> 
   <dependency name="history" /> 
   <dependency name="gx" /> 
+  <dependency name="kitControl" />
 
   <!-- Packages -->
   <package name="org.axcommunity.niagara.conversion" doc="true" />

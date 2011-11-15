@@ -3,7 +3,6 @@ package org.axcommunity.niagara.logic;
 import javax.baja.status.BStatusBoolean;
 import javax.baja.sys.Action;
 import javax.baja.sys.BComponent;
-import javax.baja.sys.BDouble;
 import javax.baja.sys.BIcon;
 import javax.baja.sys.Context;
 import javax.baja.sys.Flags;

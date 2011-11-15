@@ -4,7 +4,6 @@
 package org.axcommunity.niagara.conversion;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.baja.status.*;
 import javax.baja.sys.*;

@@ -88,6 +88,9 @@
        </p>
         <p m="b=baja" t="b:Folder" n="Hvac">
           <p n="SimpleTstat" m="w=axCommunity" t="w:SimpleTstat" />
+          <p n="TstatA" m="w=axCommunity" t="w:TstatA" />
+          <p n="TstatB" m="w=axCommunity" t="w:TstatB" />
+          
         </p>
         <p m="b=baja" t="b:Folder" n="Widgets">
     <p n="RevolvingTextLabel" m="k=axCommunity" t="k:RevolvingTextLabel">

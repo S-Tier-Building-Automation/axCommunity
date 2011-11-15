@@ -125,5 +125,7 @@ V11.09.02 Sept 1, 2011
 -added BStatusStringToFormat by Dean Mynott @ Ronin: Great for bringing out Alarm Extension Text fields to Px Pages
 -added BBooleanToggle by Dean Mynott @ Ronin: Toggles ON/OFF via Trigger or Action input
 
-Nov 15, 2011
+V11.11.01 Nov 15, 2011
 -added BSimpleTStat by Murat Egrikavuk as discussed in forum topic 4832
+-added BTstatA by Dean Mynott: Tstat with SP and Diff. If Diff >=0 then DirectActing, If Diff < 0 then ReverseActing
+-added BTstatB by Dean Mynott: Tstat with onSP and offSP. If onSP >= offSP then DirectActing, If onSP < offSP then ReverseActing

@@ -1,7 +1,6 @@
 
 package org.axcommunity.niagara.logic;
 
-import java.util.*;
 import javax.baja.sys.*;
 import javax.baja.status.*;
 

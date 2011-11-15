@@ -19,7 +19,6 @@ import javax.baja.sys.Flags;
 import javax.baja.sys.Property;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
-import javax.baja.util.BNameMap;
 
 /**
  * Object executes a BQL query based on the Execute Period for one or more NumericPoint values.  

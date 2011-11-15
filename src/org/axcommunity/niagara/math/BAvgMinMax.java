@@ -1,6 +1,5 @@
 package org.axcommunity.niagara.math;
 
-import java.util.*;
 import javax.baja.sys.*;
 import javax.baja.status.*;
 

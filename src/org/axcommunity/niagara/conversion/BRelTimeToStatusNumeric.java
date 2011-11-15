@@ -1,11 +1,8 @@
 
 package org.axcommunity.niagara.conversion;
 
-import javax.baja.util.*;
 import javax.baja.status.*;
 import javax.baja.sys.*;
-import javax.baja.security.*;
-import java.util.*;
 
 /**
  * The BRelTimeToStatusNumeric takes a RelTime and turns it into Hour or Minutes or Seconds 
