@@ -124,3 +124,6 @@ V11.09.01 Sept 1, 2011
 V11.09.02 Sept 1, 2011
 -added BStatusStringToFormat by Dean Mynott @ Ronin: Great for bringing out Alarm Extension Text fields to Px Pages
 -added BBooleanToggle by Dean Mynott @ Ronin: Toggles ON/OFF via Trigger or Action input
+
+Nov 15, 2011
+-added BSimpleTStat by Murat Egrikavuk as discussed in forum topic 4832
