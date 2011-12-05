@@ -10,10 +10,9 @@
             <p n="CSVStringToStatusNumeric" m="w=axCommunity" t="w:CSVStringToStatusNumeric" />
             <p n="StatusStringToString" m="w=axCommunity" t="w:StatusStringToString" />
             <p n="TimeSplitter" m="w=axCommunity" t="w:TimeSplitter">
-      <p n="updateTime" f="s"/>
-      <p n="wsAnnotation" f="r" t="b:WsAnnotation" v="7,3,17"/>
-      
-    </p>
+      			<p n="updateTime" f="s"/>
+      			<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="7,3,17"/>     
+    		</p>
             <p n="PingHealthConverter" m="w=axCommunity" t="w:PingHealthConverter"/>
             <p n="StatusNumericToStatusStringNoPad" m="w=axCommunity" t="w:StatusNumericToStatusStringNoPad" />
             <p n="StatusBooleanToStatusEnum" m="w=axCommunity" t="w:StatusBooleanToStatusEnum" />
@@ -26,102 +25,120 @@
             <p n="RelTimeToStatusNumeric"  m="w=axCommunity" t="w:RelTimeToStatusNumeric"></p>
             <p n="StatusStringToFormat"  m="w=axCommunity" t="w:StatusStringToFormat"></p>
         </p>
+        
+        
         <p m="b=baja" t="b:Folder" n="Math">
-           <p n="RoundUp" m="k=axCommunity" t="k:RoundUp" />
-      <p n="Modulo" m="k=axCommunity" t="k:Modulo" />
-      <p n="TrAdd" m="k=axCommunity" t="k:TrAdd" />
-      <p n="TrCopy" m="k=axCommunity" t="k:TrCopy" />
-      <p n="TrDivide" m="k=axCommunity" t="k:TrDivide" />
-      <p n="TrMultiply" m="k=axCommunity" t="k:TrMultiply" />
-      <p n="TrSubtract" m="k=axCommunity" t="k:TrSubtract" />
-    <p n="AvgMinMax" m="w=axCommunity" t="w:AvgMinMax"/>
-    <p n="AvgMinMax_v1" m="w=axCommunity" t="w:AvgMinMax_v1"/>
-    <p n="StatusNumericFifo" m="w=axCommunity" t="w:StatusNumericFifo"/>
-    <p n="AbsTimeOffset" m="w=axCommunity" t="w:AbsTimeOffset"/>
-   </p>
+           	<p n="RoundUp" m="k=axCommunity" t="k:RoundUp" />
+ 		    <p n="Modulo" m="k=axCommunity" t="k:Modulo" />
+      		<p n="TrAdd" m="k=axCommunity" t="k:TrAdd" />
+      		<p n="TrCopy" m="k=axCommunity" t="k:TrCopy" />
+      		<p n="TrDivide" m="k=axCommunity" t="k:TrDivide" />
+      		<p n="TrMultiply" m="k=axCommunity" t="k:TrMultiply" />
+      		<p n="TrSubtract" m="k=axCommunity" t="k:TrSubtract" />
+    		<p n="AvgMinMax" m="w=axCommunity" t="w:AvgMinMax"/>
+    		<p n="AvgMinMax_v1" m="w=axCommunity" t="w:AvgMinMax_v1"/>
+    		<p n="StatusNumericFifo" m="w=axCommunity" t="w:StatusNumericFifo"/>
+    		<p n="AbsTimeOffset" m="w=axCommunity" t="w:AbsTimeOffset"/>
+   		</p>
+   		
         <p m="b=baja" t="b:Folder" n="Time">
             <p n="Stopwatch" m="w=axCommunity" t="w:Stopwatch" />
         </p>
+        
         <p m="b=baja" t="b:UnrestrictedFolder" n="Extensions">
             <p n="FilterExt" m="w=axCommunity" t="w:FilterExt" />
         </p>
         <p m="b=baja" t="b:Folder" n="Logic">
             <p n="ToggleSwitch" m="k=axCommunity" t="k:ToggleSwitch">
-      <p n="booleanCmd" f="s"/>
-      <p n="boolNormalOpen" f="s"/>
-      <p n="boolNormalClose" f="s"/>
-      <p n="boolOutput" f="s"/>
-      <p n="analogNormalOpen" f="s"/>
-      <p n="analogNormalClose" f="s"/>
-      <p n="analogOutput" f="s"/>
-      <p n="wsAnnotation" f="r" t="b:WsAnnotation" v="33,3,12"/>
-    </p>
-    <p n="ToggleLatch" m="k=axCommunity" t="k:ToggleLatch"/>
-    <p n="NumericLatchObject" m="k=axCommunity" t="k:NumericLatchObject"/>
-    <p n="NumericLatchCustom" m="k=axCommunity" t="k:NumericLatchCustom"/>
-     <p n="BooleanCompareCmdStatus" m="k=axCommunity" t="k:BooleanCompareCmdStatus"/>
-    <p n="FireOnChange" m="k=axCommunity" t="k:FireOnChange" />
-    <p n="BooleanRotateOnExecute" m="k=axCommunity" t="k:BooleanRotateOnExecute"/>
-    <p n="PeakValueAndTstamp" m="k=axCommunity" t="k:PeakValueAndTstamp"/>
-    <p n="SetNumericAction" m="k=axCommunity" t="k:SetNumericAction"/>
-    <p n="SetBooleanAction" m="k=axCommunity" t="k:SetBooleanAction"/>
-    <p n="SuperOr" m="k=axCommunity" t="k:SuperOr"/>
-    <p n="BooleanToggle" m="k=axCommunity" t="k:BooleanToggle"/>
-       </p>
+      			<p n="booleanCmd" f="s"/>
+      			<p n="boolNormalOpen" f="s"/>
+      			<p n="boolNormalClose" f="s"/>
+      			<p n="boolOutput" f="s"/>
+      			<p n="analogNormalOpen" f="s"/>
+      			<p n="analogNormalClose" f="s"/>
+      			<p n="analogOutput" f="s"/>
+      			<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="33,3,12"/>
+			</p>
+    		<p n="ToggleLatch" m="k=axCommunity" t="k:ToggleLatch"/>
+    		<p n="NumericLatchObject" m="k=axCommunity" t="k:NumericLatchObject"/>
+		    <p n="NumericLatchCustom" m="k=axCommunity" t="k:NumericLatchCustom"/>
+		    <p n="BooleanCompareCmdStatus" m="k=axCommunity" t="k:BooleanCompareCmdStatus"/>
+		    <p n="FireOnChange" m="k=axCommunity" t="k:FireOnChange" />
+		    <p n="BooleanRotateOnExecute" m="k=axCommunity" t="k:BooleanRotateOnExecute"/>
+		    <p n="PeakValueAndTstamp" m="k=axCommunity" t="k:PeakValueAndTstamp"/>
+		    <p n="SetNumericAction" m="k=axCommunity" t="k:SetNumericAction"/>
+		    <p n="SetBooleanAction" m="k=axCommunity" t="k:SetBooleanAction"/>
+		    <p n="SuperOr" m="k=axCommunity" t="k:SuperOr"/>
+		    <p n="BooleanToggle" m="k=axCommunity" t="k:BooleanToggle"/>
+   		</p>
         <p m="b=baja" t="b:Folder" n="BQL">
-    <p n="BqlNumericRecap" m="k=axCommunity" t="k:BqlNumericRecap"/>
-        <p n="TrendAnalyzer" m="k=axCommunity" t="k:TrendAnalyzer"/>
-        <p n="HistoryToCSV" m="k=axCommunity" t="k:HistoryToCSV"/>      
-        <p n="TrendDynamicAnalyzer" m="k=axCommunity" t="k:TrendDynamicAnalyzer"/>      
-       </p>
+	    	<p n="BqlNumericRecap" m="k=axCommunity" t="k:BqlNumericRecap"/>
+	        <p n="TrendAnalyzer" m="k=axCommunity" t="k:TrendAnalyzer"/>
+	        <p n="HistoryToCSV" m="k=axCommunity" t="k:HistoryToCSV"/>      
+	        <p n="TrendDynamicAnalyzer" m="k=axCommunity" t="k:TrendDynamicAnalyzer"/>      
+       	</p>
         
         <p m="b=baja" t="b:Folder" n="System">
-    <p n="SysInfo" m="k=axCommunity" t="k:SysInfo"/>
-    <p n="StringToFile" m="k=axCommunity" t="k:StringToFile"/>
-       </p>
+    		<p n="SysInfo" m="k=axCommunity" t="k:SysInfo"/>
+    		<p n="StringToFile" m="k=axCommunity" t="k:StringToFile"/>
+       	</p>
+       	
         <p m="b=baja" t="b:Folder" n="Web">
-    <p n="GetHTTP" m="k=axCommunity" t="k:GetHTTP"/>
-    <p n="StringToFile" m="k=axCommunity" t="k:StringToFile"/>
+    		<p n="GetHTTP" m="k=axCommunity" t="k:GetHTTP"/>
+    		<p n="StringToFile" m="k=axCommunity" t="k:StringToFile"/>
        </p>
+       
         <p m="b=baja" t="b:Folder" n="String">
-    <p n="ParentFolderInfo" m="k=axCommunity" t="k:ParentFolderInfo"/>
-       </p>
+    		<p n="ParentFolderInfo" m="k=axCommunity" t="k:ParentFolderInfo"/>
+       	</p>
+       	
         <p m="b=baja" t="b:Folder" n="Hvac">
           <p n="SimpleTstat" m="w=axCommunity" t="w:SimpleTstat" />
           <p n="TstatA" m="w=axCommunity" t="w:TstatA" />
           <p n="TstatB" m="w=axCommunity" t="w:TstatB" />
           
         </p>
+        
         <p m="b=baja" t="b:Folder" n="Widgets">
-    <p n="RevolvingTextLabel" m="k=axCommunity" t="k:RevolvingTextLabel">
-      <p n="layout" v="0.0,0.0,120.0,20.0"/>
-      <!-- /RevolvingTextLabel/bindText -->
-      <p n="bindText"  m="kitPx=kitPx" t="kitPx:SetPointBinding">
-         <p n="popupEnabled" v="false"/>
-     <p n="widgetProperty" v="text"/>
-      </p>
-      <!-- /RevolvingTextLabel/bindVisible -->
-      <p n="bindVisible" m="kitPx=kitPx" t="kitPx:SetPointBinding">
-        <p n="popupEnabled" v="false"/>
-        <p n="widgetProperty" v="visible"/>
-      </p>
-      <!-- /RevolvingTextLabel/bindFlash -->
-      <p n="bindFlash"  m="kitPx=kitPx" t="kitPx:SetPointBinding">
-      <p n="popupEnabled" v="false"/>
-        <p n="widgetProperty" v="flash"/>
-      </p>
-        </p>
-       </p>
-       
-       
-       
+		    <p n="RevolvingTextLabel" m="k=axCommunity" t="k:RevolvingTextLabel">
+		      	<p n="layout" v="0.0,0.0,120.0,20.0"/>
+		      	<!-- /RevolvingTextLabel/bindText -->
+		      	<p n="bindText"  m="kitPx=kitPx" t="kitPx:SetPointBinding">
+		         	<p n="popupEnabled" v="false"/>
+		    		<p n="widgetProperty" v="text"/>
+		      	</p>
+		      	<!-- /RevolvingTextLabel/bindVisible -->
+		      	<p n="bindVisible" m="kitPx=kitPx" t="kitPx:SetPointBinding">
+		        	<p n="popupEnabled" v="false"/>
+		        	<p n="widgetProperty" v="visible"/>
+		      	</p>
+		      	<!-- /RevolvingTextLabel/bindFlash -->
+		      	<p n="bindFlash"  m="kitPx=kitPx" t="kitPx:SetPointBinding">
+		      		<p n="popupEnabled" v="false"/>
+		        	<p n="widgetProperty" v="flash"/>
+		      	</p>
+    		</p>
+    		
+		  	<p n="DropDownList" m="k=axCommunity" t="k:DropDownList">
+   				<p n="layout" v="490.0,420.0,130.0,20.0"/>
+   				<p n="image" v="local:|module://axCommunity/org/axcommunity/niagara/graphics/BUTTON_PB_130X20.jpg"/>
+   				<p n="font" v="12.0pt Arial"/>
+			   	<p n="foreground" v="black"/>
+			   	<p n="textToIconAlign" v="center"/>
+			   	<p n="wsAnnotation" t="b:WsAnnotation" v="5,5,10"/>
+  			</p>
+    		<p n="BoundLabelHighlight" m="k=axCommunity" t="k:BoundLabelHighlight">
+   				<p n="layout" v="490.0,420.0,130.0,20.0"/>
+    		</p>
+ 		</p>
+ 
         <p m="b=baja" t="b:Folder" n="PxGraphics">
             <p n="boolean" t="b:UnrestrictedFolder">
                 <p n="small" t="b:Folder">
-    <!-- /boolean/bulbSmall -->
+    			<!-- /boolean/bulbSmall -->
                     <p n="bulbSmall" m="kitPx=kitPx" t="kitPx:BoundLabel">
                         <p n="layout" v="0,0,13,20" />
-       <!-- /boolean/bulbSmall/bnd -->
+       					<!-- /boolean/bulbSmall/bnd -->
                         <p n="bnd" m="ui=bajaui" t="ui:ValueBinding">
                             <p n="image" m="conv=converters" t="conv:IBooleanToSimple">
                                 <p n="trueValue" m="gx=gx" t="gx:Image" v="module://johnGraphics/boolean/bulbSmallTrue.gif" />

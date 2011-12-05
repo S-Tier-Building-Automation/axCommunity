@@ -129,3 +129,9 @@ V11.11.01 Nov 15, 2011
 -added BSimpleTStat by Murat Egrikavuk as discussed in forum topic 4832
 -added BTstatA by Dean Mynott: Tstat with SP and Diff. If Diff >=0 then DirectActing, If Diff < 0 then ReverseActing
 -added BTstatB by Dean Mynott: Tstat with onSP and offSP. If onSP >= offSP then DirectActing, If onSP < offSP then ReverseActing
+
+V11.12.01 Dec 05, 2011
+-added BBoundLabelHighlight by Dean Mynott: BoundLabel with adjustable highlight colour for mouseOver
+-added BDropDownList by Ron Lea @ Firefoxx Controls: A PX ONLY button that pops up a nav menu with up to 20 hyperlinks/labels
+
+

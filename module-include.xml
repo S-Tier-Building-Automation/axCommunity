@@ -58,4 +58,6 @@
   <type name="SimpleTstat" class="org.axcommunity.niagara.hvac.BSimpleTstat" />
   <type name="TstatA" class="org.axcommunity.niagara.hvac.BTstatA" />
   <type name="TstatB" class="org.axcommunity.niagara.hvac.BTstatB" />  
-</types>
+  <type name="DropDownList" class="org.axcommunity.niagara.widgets.BDropDownList" />  
+  <type name="BoundLabelHighlight" class="org.axcommunity.niagara.widgets.BBoundLabelHighlight" />  
+ </types>
