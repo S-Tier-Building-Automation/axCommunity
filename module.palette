@@ -47,7 +47,7 @@
         
         <p m="b=baja" t="b:UnrestrictedFolder" n="Extensions">
             <p n="FilterExt" m="w=axCommunity" t="w:FilterExt" />
-        </p>
+         </p>
         <p m="b=baja" t="b:Folder" n="Logic">
             <p n="ToggleSwitch" m="k=axCommunity" t="k:ToggleSwitch">
       			<p n="booleanCmd" f="s"/>
@@ -70,6 +70,10 @@
 		    <p n="SetBooleanAction" m="k=axCommunity" t="k:SetBooleanAction"/>
 		    <p n="SuperOr" m="k=axCommunity" t="k:SuperOr"/>
 		    <p n="BooleanToggle" m="k=axCommunity" t="k:BooleanToggle"/>
+            <p n="WhoWhenNumericSetpoint" m="w=axCommunity" t="w:WhoWhenNumericSetpoint" />
+            <p n="WhoWhenEnumSetpoint" m="w=axCommunity" t="w:WhoWhenEnumSetpoint" />
+            <p n="WhoWhenBooleanSetpoint" m="w=axCommunity" t="w:WhoWhenBooleanSetpoint" />
+            <p n="WhoWhenStringSetpoint" m="w=axCommunity" t="w:WhoWhenStringSetpoint" />
    		</p>
         <p m="b=baja" t="b:Folder" n="BQL">
 	    	<p n="BqlNumericRecap" m="k=axCommunity" t="k:BqlNumericRecap"/>

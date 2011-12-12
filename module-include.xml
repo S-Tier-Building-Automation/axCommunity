@@ -59,5 +59,11 @@
   <type name="TstatA" class="org.axcommunity.niagara.hvac.BTstatA" />
   <type name="TstatB" class="org.axcommunity.niagara.hvac.BTstatB" />  
   <type name="DropDownList" class="org.axcommunity.niagara.widgets.BDropDownList" />  
-  <type name="BoundLabelHighlight" class="org.axcommunity.niagara.widgets.BBoundLabelHighlight" />  
+  <type name="BoundLabelHighlight" class="org.axcommunity.niagara.widgets.BBoundLabelHighlight" />
+  <type name="WhoWhenNumericSetpoint" class="org.axcommunity.niagara.logic.BWhoWhenNumericSetpoint" />
+  <type name="WhoWhenBooleanSetpoint" class="org.axcommunity.niagara.logic.BWhoWhenBooleanSetpoint" />
+  <type name="WhoWhenEnumSetpoint" class="org.axcommunity.niagara.logic.BWhoWhenEnumSetpoint" />
+  <type name="WhoWhenStringSetpoint" class="org.axcommunity.niagara.logic.BWhoWhenStringSetpoint" />
+  
+    
  </types>

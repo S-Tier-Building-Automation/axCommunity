@@ -134,4 +134,9 @@ V11.12.01 Dec 05, 2011
 -added BBoundLabelHighlight by Dean Mynott: BoundLabel with adjustable highlight colour for mouseOver
 -added BDropDownList by Ron Lea @ Firefoxx Controls: A PX ONLY button that pops up a nav menu with up to 20 hyperlinks/labels
 
+V11.12.02 Dec 12, 2011
+-added BWhoWhenNumericSetpoint by Mike Arnott: A numeric setpoint object that remembers the username and time of the last change
+-added BWhoWhenBooleanSetpoint by Mike Arnott: A boolean setpoint object that remembers the username and time of the last change
+-added BWhoWhenStringSetpoint by Mike Arnott: A String setpoint object that remembers the username and time of the last change
+-added BWhoWhenEnumSetpoint by Mike Arnott: An enum setpoint object that remembers the username and time of the last change
 
