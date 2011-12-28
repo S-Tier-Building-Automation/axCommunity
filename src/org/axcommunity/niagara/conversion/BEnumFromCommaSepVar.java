@@ -10,9 +10,11 @@ import javax.baja.control.BEnumWritable;
 import javax.baja.log.Log;
 import javax.baja.naming.SlotPath;
 import javax.baja.status.BStatusString;
+import javax.baja.sys.BBoolean;
 import javax.baja.sys.BEnumRange;
 import javax.baja.sys.BFacets;
 import javax.baja.sys.BIcon;
+import javax.baja.sys.BValue;
 import javax.baja.sys.Context;
 import javax.baja.sys.Flags;
 import javax.baja.sys.Property;
@@ -38,7 +40,8 @@ public class BEnumFromCommaSepVar extends BEnumWritable
   }
   
   public void started(){
-    this.setFacets(BFacets.make("multiLine",true));    
+    //setFacets(BFacets.make("multiLine",true);
+   
   }
   
   

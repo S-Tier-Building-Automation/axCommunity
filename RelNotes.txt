@@ -140,3 +140,5 @@ V11.12.02 Dec 12, 2011
 -added BWhoWhenStringSetpoint by Mike Arnott: A String setpoint object that remembers the username and time of the last change
 -added BWhoWhenEnumSetpoint by Mike Arnott: An enum setpoint object that remembers the username and time of the last change
 
+V11.12.03 Dec 28, 2011
+-fixed a bug with the BEnumFromCommaSepVar that was resetting the facets on a restart
