@@ -46,25 +46,26 @@ public class BSysInfo extends BComponent
 	    
 	}
 	
-
-
+	
 	public void doTimerExpired() throws Exception 
 	{
 
-		getCpuUsage().setValue((double)sysObject.getCurrentCpuUsage());
-		getBajaHome().setValue( sysObject.getBajaHome());
-		getFreePhysicalMemory().setValue((double)sysObject.getFreePhysicalMemory());
-//		getStationHostId().setValue(sysObject.getHostId());
-		getJavaVmName().setValue(sysObject.getJavaVmName());
-		getJavaVmVersion().setValue(sysObject.getJavaVmVersion());
-		getLocale().setValue(sysObject.getLocale());
-		getNiagaraVersion().setValue(sysObject.getNiagaraVersion());
-		getOsArch().setValue(sysObject.getOsArch());
-		getOsVersion().setValue(sysObject.getOsVersion());
-		getOverallCpuUsage().setValue((double)sysObject.getOverallCpuUsage());
-		getPlatformServiceDescription().setValue(sysObject.getPlatformServiceDescription());
-		getStationName().setValue(sysObject.getStationName());
-		getTotalPhysicalMemory().setValue((double)sysObject.getTotalPhysicalMemory());
+		getCpuUsage().setValue((double)				sysObject.getCurrentCpuUsage());
+		getBajaHome().setValue( 					sysObject.getBajaHome());
+		getFreePhysicalMemory().setValue((double)	sysObject.getFreePhysicalMemory());
+		// getStationHostId().setValue(				sysObject.getHostId());
+		getJavaVmName().setValue(					sysObject.getJavaVmName());
+		getJavaVmVersion().setValue(				sysObject.getJavaVmVersion());
+		getLocale().setValue(						sysObject.getLocale());
+		getNiagaraVersion().setValue(				sysObject.getNiagaraVersion());
+		getOsArch().setValue(						sysObject.getOsArch());
+		getOsName().setValue(						sysObject.getOsName());
+		getOsVersion().setValue(					sysObject.getOsVersion());
+		getOverallCpuUsage().setValue((double)		sysObject.getOverallCpuUsage());
+		getPlatformServiceDescription().setValue(	sysObject.getPlatformServiceDescription());
+		getStationName().setValue(					sysObject.getStationName());
+		getTotalPhysicalMemory().setValue((double)	sysObject.getTotalPhysicalMemory());
+		
 		long totalMem = Runtime.getRuntime().totalMemory()/1024;
 		long freeMem = Runtime.getRuntime().freeMemory()/1024;
 		long usedMem = totalMem - freeMem;
@@ -82,7 +83,32 @@ public class BSysInfo extends BComponent
 
 	Clock.Ticket ticket;
 	long lastOnExecuteTicks;
-
+	
+	/** 
+	 * This will cause the station to restart just as if you did it from the application director.
+	 * The "CONFIRM_REQUIRED" flag is set by default but when used from logic this confirmation isn't required (that I can tell at least).
+	 */
+	public static final Action RestartStation = newAction(0|Flags.ASYNC|Flags.CONFIRM_REQUIRED, null, null);
+	public void RestartStation(){invoke(RestartStation,null,null);}
+	public void doRestartStation()
+	{
+		System.out.println("\r\nA Station Restart Has Been Invoked From:\r\n" + getSlotPath());
+		sysObject.lease(1);
+		sysObject.invoke(BSystemPlatformService.restartStation, null);
+	}
+	
+	/** 
+	 * This will cause the station to reboot (entire computer\platform) just as if you did it from the application director
+	 * The "CONFIRM_REQUIRED" flag is set by default but when used from logic this confirmation isn't required (that I can tell at least).
+	 */
+	public static final Action RebootStation = newAction(0|Flags.ASYNC|Flags.CONFIRM_REQUIRED, null, null);
+	public void RebootStation(){invoke(RebootStation,null,null);}
+	public void doRebootStation()
+	{
+		System.out.println("\r\nA Station Reboot Has Been Invoked From:\r\n" + getSlotPath());
+		sysObject.lease(1);
+		sysObject.invoke(BSystemPlatformService.reboot, null);
+	}
 
 	/***/
     public static final Property bajaHome = newProperty(Flags.SUMMARY, new BStatusString());
@@ -132,6 +158,13 @@ public class BSysInfo extends BComponent
     public void setOsArch(BStatusString v) { set(osArch, v); }
 	public BStatusString getOsArch() { 
 		return (BStatusString)get(osArch); 
+	}
+	
+	/***/
+    public static final Property osName = newProperty(Flags.SUMMARY, new BStatusString());
+    public void setOsName(BStatusString v) { set(osName, v); }
+	public BStatusString getOsName() { 
+		return (BStatusString)get(osName); 
 	}
 
 	/***/
