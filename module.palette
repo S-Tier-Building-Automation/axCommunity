@@ -24,6 +24,7 @@
             <p n="ChangeCase" m="w=axCommunity" t="w:ChangeCase" />
             <p n="RelTimeToStatusNumeric"  m="w=axCommunity" t="w:RelTimeToStatusNumeric"></p>
             <p n="StatusStringToFormat"  m="w=axCommunity" t="w:StatusStringToFormat"></p>
+            <p n="AsciiHexDecConversion"  m="w=axCommunity" t="w:AsciiHexDecConversion"></p>
         </p>
         
         
@@ -94,6 +95,7 @@
        
         <p m="b=baja" t="b:Folder" n="String">
     		<p n="ParentFolderInfo" m="k=axCommunity" t="k:ParentFolderInfo"/>
+    		<p n="SuperConcatPlus" m="k=axCommunity" t="k:SuperConcatPlus"/>
        	</p>
        	
         <p m="b=baja" t="b:Folder" n="Hvac">

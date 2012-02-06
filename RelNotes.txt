@@ -142,3 +142,8 @@ V11.12.02 Dec 12, 2011
 
 V11.12.03 Dec 28, 2011
 -fixed a bug with the BEnumFromCommaSepVar that was resetting the facets on a restart
+
+V12.02.01 Feb 05, 2012
+-added SuperConcatPlus by Justin Koffler: Allows you to set the number of Status String input slots and the character you want to use as a delimeter.
+-added AsciiHexDecConversion by Justin Koffler: Accepts Status String inputs representing a value in ASCII, Hex or Decimal format and will output its corresponding value in ASCII, Hex and Decimal format.
+-fixed a bug in ChangeCase that would cause an out of bounds error when input string was of zero length.
