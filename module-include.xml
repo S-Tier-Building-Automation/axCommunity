@@ -49,6 +49,7 @@
 	<type name="WhoWhenBooleanSetpoint" class="org.axcommunity.niagara.logic.BWhoWhenBooleanSetpoint" />
 	<type name="WhoWhenEnumSetpoint" class="org.axcommunity.niagara.logic.BWhoWhenEnumSetpoint" />
 	<type name="WhoWhenStringSetpoint" class="org.axcommunity.niagara.logic.BWhoWhenStringSetpoint" />
+	<type name="LatestNumber" class="org.axcommunity.niagara.logic.BLatestNumber" />
 	<type name="BqlNumericRecap" class="org.axcommunity.niagara.bql.BBqlNumericRecap"/> 
 	<type name="TrendAnalyzer" class="org.axcommunity.niagara.bql.BTrendAnalyzer"/>
 	<type name="HistoryToCSV" class="org.axcommunity.niagara.bql.BHistoryToCSV"/>

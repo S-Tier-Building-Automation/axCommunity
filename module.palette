@@ -75,6 +75,7 @@
             <p n="WhoWhenEnumSetpoint" m="w=axCommunity" t="w:WhoWhenEnumSetpoint" />
             <p n="WhoWhenBooleanSetpoint" m="w=axCommunity" t="w:WhoWhenBooleanSetpoint" />
             <p n="WhoWhenStringSetpoint" m="w=axCommunity" t="w:WhoWhenStringSetpoint" />
+            <p n="LatestNumber" m="w=axCommunity" t="w:LatestNumber" />
    		</p>
         <p m="b=baja" t="b:Folder" n="BQL">
 	    	<p n="BqlNumericRecap" m="k=axCommunity" t="k:BqlNumericRecap"/>

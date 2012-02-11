@@ -149,4 +149,9 @@ V12.02.01 Feb 05, 2012
 -fixed a bug in ChangeCase that would cause an out of bounds error when input string was of zero length.
 
 V12.02.02 Feb 05, 2012
--modified BSysInfo to include the "OsName" slot and I also added the action slots "RestartStation" and "RebootStation" which as the name suggests will restart or reboot the station. (modified by: Justin Koffler)
+-modified BSysInfo to include the "OsName" slot and I also added the action slots "RestartStation" and "RebootStation" 
+	which as the name suggests will restart or reboot the station. (modified by: Justin Koffler)
+
+V12.02.03 Feb 10, 2012
+-added LatestNumber by Justin Koffler: Accepts up to 24 Status Numeric inputs and will output the latest 
+	value if it meets the minimum required value as configured in the "inMinValue" slot.
