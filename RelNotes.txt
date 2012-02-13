@@ -155,3 +155,6 @@ V12.02.02 Feb 05, 2012
 V12.02.03 Feb 10, 2012
 -added LatestNumber by Justin Koffler: Accepts up to 24 Status Numeric inputs and will output the latest 
 	value if it meets the minimum required value as configured in the "inMinValue" slot.
+
+V12.02.03 Feb 10, 2012
+-modified BAsciiHexDecConversion to include option to delimit the decimal and hex output by a user chosen delimiter. (modified by: Justin Koffler)

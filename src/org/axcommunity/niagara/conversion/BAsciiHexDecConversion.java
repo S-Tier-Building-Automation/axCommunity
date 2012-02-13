@@ -1,6 +1,7 @@
 package org.axcommunity.niagara.conversion;
 
 import javax.baja.log.Log;
+import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
 import javax.baja.sys.BComponent;
@@ -35,21 +36,35 @@ import javax.baja.sys.Type;
 public class BAsciiHexDecConversion extends BComponent
 {
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//    CONFIG INPUTS   /////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**When "true" a delimiter as set in the "inDelimiter" slot will be place between individual hex or decimal pairs. */
+	public final static Property inUseDelimiter = newProperty(0, new BStatusBoolean(false));
+	public BStatusBoolean getInUseDelimiter() { return (BStatusBoolean)get(inUseDelimiter); }
+	public void setInUseDelimiter(BStatusBoolean v) { set(inUseDelimiter, v); }
+	
+	/**String to use as a delimiter between individual hex or decimal pairs. */
+	public static final Property inDelimiter = newProperty(0, new BStatusString(","));
+	public BStatusString getInDelimiter() { return (BStatusString)get(inDelimiter);}
+	public void setInDelimiter(BStatusString v) {set(inDelimiter,v);}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//	INPUTS   //////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	/**STATUS STRING MULTI-LINE INPUT, ASCII, THE ASCII VALUE IN STRING FORMAT YOU WANT TO CONVERT TO HEX AND DECIMAL FORMAT. */
-	public static final Property inAscii = newProperty(Flags.SUMMARY, new BStatusString(),BFacets.make("multiLine",true));
+	/** The ascii value in string format you want to convert to hex and decimal format. */
+	public static final Property inAscii = newProperty(0|Flags.SUMMARY, new BStatusString(),BFacets.make("multiLine",true));
 	public BStatusString getInAscii() { return (BStatusString)get(inAscii);}
 	public void setInAscii(BStatusString v) {set(inAscii,v);}
 	
-	/**STATUS STRING INPUT, Hex, THE HEX VALUE IN STRING FORMAT YOU WANT TO CONVERT TO ASCII AND DECIMAL FORMAT. */
-	public static final Property inHex = newProperty(Flags.SUMMARY, new BStatusString());
+	/**The hex value in string format you want to convert to ascii and decimal format. */
+	public static final Property inHex = newProperty(0|Flags.SUMMARY, new BStatusString());
 	public BStatusString getInHex() { return (BStatusString)get(inHex);}
 	public void setInHex(BStatusString v) {set(inHex,v);}
 	
-	/**STATUS STRING INPUT, Decimal, THE DECIMAL VALUE IN STRING FORMAT YOU WANT TO CONVERT TO ASCII AND HEX. */
-	public static final Property inDecimal = newProperty(Flags.SUMMARY, new BStatusString());
+	/**The decimal value in string format you want to convert to ascii and hex. */
+	public static final Property inDecimal = newProperty(0|Flags.SUMMARY, new BStatusString());
 	public BStatusString getInDecimal() { return (BStatusString)get(inDecimal);}
 	public void setInDecimal(BStatusString v) {set(inDecimal,v);}
 	
@@ -57,23 +72,23 @@ public class BAsciiHexDecConversion extends BComponent
 	//	OUTPUTS   /////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**STATUS STRING MULTI-LINE OUTPUT, Ascii, REPRESENTS THE ASCII VALUE IN STRING FORMAT AS CALCULATED FROM CHANGED INPUT VALUE. */
-	public static final Property outAscii = newProperty(Flags.SUMMARY, new BStatusString(),BFacets.make("multiLine",true));
+	/**The ascii value in string format as calculated from changed input value. */
+	public static final Property outAscii = newProperty(0|Flags.SUMMARY, new BStatusString(),BFacets.make("multiLine",true));
 	public BStatusString getOutAscii() { return (BStatusString)get(outAscii);}
 	public void setOutAscii(BStatusString v) {set(outAscii,v);}
 	
-	/**STATUS STRING OUTPUT, Hex, REPRESENTS THE HEX VALUE IN STRING FORMAT AS CALCULATED FROM CHANGED INPUT VALUE. */
-	public static final Property outHex = newProperty(Flags.SUMMARY, new BStatusString());
+	/**The hex value in string format as calculated from changed input value. */
+	public static final Property outHex = newProperty(0|Flags.SUMMARY, new BStatusString());
 	public BStatusString getOutHex() { return (BStatusString)get(outHex);}
 	public void setOutHex(BStatusString v) {set(outHex,v);}
 	
-	/**STATUS STRING OUTPUT, Decimal, REPRESENTS THE DECIMAL VALUE IN STRING FORMAT AS CALCULATED FROM CHANGED INPUT VALUE. */
-	public static final Property outDecimal = newProperty(Flags.SUMMARY, new BStatusString());
+	/**The decimal value in string format as calculated from changed input value. */
+	public static final Property outDecimal = newProperty(0|Flags.SUMMARY, new BStatusString());
 	public BStatusString getOutDecimal() { return (BStatusString)get(outDecimal);}
 	public void setOutDecimal(BStatusString v) {set(outDecimal,v);}
 	
-	/**STATUS NUMERIC OUTPUT, Length, REPRESENTS THE NUMBER OF CHARACTERS IN THE STRING VALUE. */
-	public static final Property outLength  = newProperty(Flags.SUMMARY, new BStatusNumeric(0), BFacets.makeNumeric(0));
+	/**The number of characters in the string value. */
+	public static final Property outLength  = newProperty(0, new BStatusNumeric(0), BFacets.makeNumeric(0));
 	public BStatusNumeric getOutLength() {return (BStatusNumeric) get(outLength); }
 	public void setOutLength(BStatusNumeric v) {set(outLength, v);}
 	
@@ -82,15 +97,15 @@ public class BAsciiHexDecConversion extends BComponent
 	//	TOPIC SLOTS   /////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**TOPIC SLOT OF STATUS STRING VALUE REPRESENTING THE ASCII VALUE IN STRING FORMAT AS CALCULATED FROM CHANGED INPUT VALUE. */
+	/**THE ASCII VALUE IN STRING FORMAT AS CALCULATED FROM CHANGED INPUT VALUE. */
 	public static final Topic SetAscii = newTopic(0);
 	public void fireSetAscii(BString event){fire(SetAscii,event,null);}
 	
-	/**TOPIC SLOT OF STATUS STRING VALUE REPRESENTING THE HEX VALUE IN STRING FORMAT AS CALCULATED FROM CHANGED INPUT VALUE. */
+	/**THE HEX VALUE IN STRING FORMAT AS CALCULATED FROM CHANGED INPUT VALUE. */
 	public static final Topic SetHex = newTopic(0);
 	public void fireSetHex(BString event){fire(SetHex,event,null);}
 	
-	/**TOPIC SLOT OF STATUS STRING VALUE REPRESENTING THE DECIMAL VALUE IN STRING FORMAT AS CALCULATED FROM CHANGED INPUT VALUE. */
+	/**THE DECIMAL VALUE IN STRING FORMAT AS CALCULATED FROM CHANGED INPUT VALUE. */
 	public static final Topic SetDecimal = newTopic(0);
 	public void fireSetDecimal(BString event){fire(SetDecimal,event,null);}
 
@@ -99,6 +114,8 @@ public class BAsciiHexDecConversion extends BComponent
 	//	SOURCE CODE BELOW HERE	-------------------------------------------------------------------------------
 	//---------------------------------------------------------------------------------------------------------
 	
+	private String strToHexD	= "";
+	private String hexToDecD	= "";
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/**    METHOD INVOKED WHEN ANY OF THE INPUTS CHANGES VALUES   *////////////////////////////////////////////
@@ -108,6 +125,7 @@ public class BAsciiHexDecConversion extends BComponent
 		if(!Sys.atSteadyState() || !isRunning())return;
 		if(isRunning())
 		{
+			boolean useDelim	= getInUseDelimiter().getValue();
 			String	strInAscii	= getInAscii().getValue();
 			String	strInHex	= getInHex().getValue();
 			String	strInDec	= getInDecimal().getValue();
@@ -126,17 +144,33 @@ public class BAsciiHexDecConversion extends BComponent
 				sAscii	= strInAscii;
 				sHex	= convertStringToHex(strInAscii);
 				sDec	= convertHexToDecimal(sHex);
-				
-				// SET OUTPUT VALUES
-				getOutAscii().setValue(sAscii);
-				getOutHex().setValue(sHex);
-				getOutDecimal().setValue(sDec);
-				getOutLength().setValue(sAscii.length());
-				
-				// FIRE TOPIC SLOTS
-				fireSetAscii(BString.make(sAscii));
-				fireSetHex(BString.make(sHex));
-				fireSetDecimal(BString.make(sDec));
+
+				if(useDelim==true)
+				{
+					// SET OUTPUT VALUES
+					getOutAscii().setValue(sAscii);
+					getOutHex().setValue(strToHexD);
+					getOutDecimal().setValue(hexToDecD);
+					getOutLength().setValue(sAscii.length());
+					
+					// FIRE TOPIC SLOTS
+					fireSetAscii(BString.make(sAscii));
+					fireSetHex(BString.make(strToHexD));
+					fireSetDecimal(BString.make(hexToDecD));
+				}
+				else
+				{
+					// SET OUTPUT VALUES
+					getOutAscii().setValue(sAscii);
+					getOutHex().setValue(sHex);
+					getOutDecimal().setValue(sDec);
+					getOutLength().setValue(sAscii.length());
+					
+					// FIRE TOPIC SLOTS
+					fireSetAscii(BString.make(sAscii));
+					fireSetHex(BString.make(sHex));
+					fireSetDecimal(BString.make(sDec));
+				}
 			}
 			
 			// CHECKS TO SEE IF INPUT "inHex" HAS CHANGED /////////////////////////////////////////////////////
@@ -152,17 +186,34 @@ public class BAsciiHexDecConversion extends BComponent
 				sAscii	= convertHexToString(strInHex);
 				sHex	= strInHex;
 				sDec	= convertHexToDecimal(sHex);
+
+				if(useDelim==true)
+				{
+					// SET OUTPUT VALUES
+					getOutAscii().setValue(sAscii);
+					getOutHex().setValue(strToHexD);
+					getOutDecimal().setValue(hexToDecD);
+					getOutLength().setValue(sAscii.length());
+					
+					// FIRE TOPIC SLOTS
+					fireSetAscii(BString.make(sAscii));
+					fireSetHex(BString.make(strToHexD));
+					fireSetDecimal(BString.make(hexToDecD));
+				}
+				else
+				{
+					// SET OUTPUT VALUES
+					getOutAscii().setValue(sAscii);
+					getOutHex().setValue(sHex);
+					getOutDecimal().setValue(sDec);
+					getOutLength().setValue(sAscii.length());
+					
+					// FIRE TOPIC SLOTS
+					fireSetAscii(BString.make(sAscii));
+					fireSetHex(BString.make(sHex));
+					fireSetDecimal(BString.make(sDec));
+				}
 				
-				// SET OUTPUT VALUES
-				getOutAscii().setValue(sAscii);
-				getOutHex().setValue(sHex);
-				getOutDecimal().setValue(sDec);
-				getOutLength().setValue(sAscii.length());
-				
-				// FIRE TOPIC SLOTS
-				fireSetAscii(BString.make(sAscii));
-				fireSetHex(BString.make(sHex));
-				fireSetDecimal(BString.make(sDec));
 			}
 			
 			// CHECKS TO SEE IF INPUT "inDecimal" HAS CHANGED /////////////////////////////////////////////////
@@ -179,16 +230,32 @@ public class BAsciiHexDecConversion extends BComponent
 				sHex	= convertStringToHex(sAscii);
 				sDec	= strInDec;
 				
-				// SET OUTPUT VALUES
-				getOutAscii().setValue(sAscii);
-				getOutHex().setValue(sHex);
-				getOutDecimal().setValue(sDec);
-				getOutLength().setValue(sAscii.length());
-				
-				// FIRE TOPIC SLOTS
-				fireSetAscii(BString.make(sAscii));
-				fireSetHex(BString.make(sHex));
-				fireSetDecimal(BString.make(sDec));
+				if(useDelim==true)
+				{
+					// SET OUTPUT VALUES
+					getOutAscii().setValue(sAscii);
+					getOutHex().setValue(strToHexD);
+					getOutDecimal().setValue(hexToDecD);
+					getOutLength().setValue(sAscii.length());
+					
+					// FIRE TOPIC SLOTS
+					fireSetAscii(BString.make(sAscii));
+					fireSetHex(BString.make(strToHexD));
+					fireSetDecimal(BString.make(hexToDecD));
+				}
+				else
+				{
+					// SET OUTPUT VALUES
+					getOutAscii().setValue(sAscii);
+					getOutHex().setValue(sHex);
+					getOutDecimal().setValue(sDec);
+					getOutLength().setValue(sAscii.length());
+					
+					// FIRE TOPIC SLOTS
+					fireSetAscii(BString.make(sAscii));
+					fireSetHex(BString.make(sHex));
+					fireSetDecimal(BString.make(sDec));
+				}
 			}
 		
 		
@@ -206,12 +273,16 @@ public class BAsciiHexDecConversion extends BComponent
 			char[] chars = str.toCharArray();
 
 			StringBuffer hex = new StringBuffer();
+			StringBuffer hexB = new StringBuffer();
 			for(int i = 0; i < chars.length; i++)
 			{
 				hex.append(Integer.toHexString((int)chars[i]));
+				hexB.append(Integer.toHexString((int)chars[i])+getInDelimiter().getValue());
 			}
-			String strToHex = hex.toString().toUpperCase();
-			if( strToHex.length() == 1 ) strToHex = "0" + strToHex;
+			String	strToHex	= hex.toString().toUpperCase();
+					strToHexD	= hexB.toString().toUpperCase().substring(0,hexB.toString().length()-1);
+			if( strToHex.length()	== 1 ) strToHex  = "0" + strToHex;
+			if( strToHexD.length()	== 1 ) strToHexD = "0" + strToHexD;
 			
 			logger.trace( "\r\n\t\t" + getSlotPath()	
 						+ "\r\n\t\t convertStringToHex() results..." 
@@ -244,18 +315,16 @@ public class BAsciiHexDecConversion extends BComponent
 		try
 		{
 			StringBuilder sb = new StringBuilder();
-			StringBuilder temp = new StringBuilder();
 
 			//49204c6f7665204a617661 split into two characters 49, 20, 4c...
 			for( int i=0; i<hex.length()-1; i+=2 )
 			{
-				//GRAB THE HEX IN PAIRS
+				//Grab the hex in pairs
 				String output = hex.substring(i, (i + 2));
-				//CONVERT HEX TO DECIMAL
+				//Convert hex to decimal
 				int decimal = Integer.parseInt(output, 16);
-				//convert the decimal to character
+				//Convert the decimal to character
 				sb.append((char)decimal);
-				temp.append(decimal);
 			}
 			String hexToString = sb.toString();
 			
@@ -290,19 +359,16 @@ public class BAsciiHexDecConversion extends BComponent
 		try
 		{
 			StringBuilder sb = new StringBuilder();
-			StringBuilder temp = new StringBuilder();
 
 			//49204c6f7665204a617661 split into two characters 49, 20, 4c...
 			for( int i=0; i<dec.length()-1; i+=2 )
 			{
-				//grab the dec in pairs
+				//Grab the dec in pairs
 				String output = dec.substring(i, (i + 2));
-				//convert string to integer
+				//Convert string to integer
 				int decimal = Integer.parseInt(output);
-				//convert the decimal to character
+				//Convert the decimal to character
 				sb.append((char)decimal);
-				temp.append(decimal);
-				
 			}
 			String decToString = sb.toString();
 			
@@ -337,21 +403,22 @@ public class BAsciiHexDecConversion extends BComponent
 	{
 		try
 		{
-			StringBuilder sb = new StringBuilder();
-			StringBuilder temp = new StringBuilder();
+			StringBuilder temp	= new StringBuilder();
+			StringBuilder tempB	= new StringBuilder();
 
 			//49204c6f7665204a617661 split into two characters 49, 20, 4c...
 			for( int i=0; i<hex.length()-1; i+=2 )
 			{
-				//grab the hex in pairs
+				//Grab the hex in pairs
 				String output = hex.substring(i, (i + 2));
-				//convert hex to decimal
+				//Convert hex to decimal
 				int decimal = Integer.parseInt(output, 16);
-				//convert the decimal to character
-				sb.append((char)decimal);
+				//Convert the decimal to character
 				temp.append(decimal);
+				tempB.append(decimal+getInDelimiter().getValue());
 			}
-			String hexToDec = temp.toString();
+			String	hexToDec	= temp.toString();
+					hexToDecD	= tempB.toString().substring(0,tempB.toString().length()-1);
 			
 			logger.trace( "\r\n\t\t" + getSlotPath()	
 						+ "\r\n\t\t convertHexToDecimal() results..." 
