@@ -61,8 +61,10 @@
 	
 	<type name="SysInfo"							class="org.axcommunity.niagara.system.BSysInfo"/> 
 	<type name="StringToFile"						class="org.axcommunity.niagara.system.BStringToFile"/>
+	
 	<type name="ParentFolderInfo"					class="org.axcommunity.niagara.string.BParentFolderInfo"/>
 	<type name="SuperConcatPlus"					class="org.axcommunity.niagara.string.BSuperConcatPlus"/>
+	<type name="ReplaceString"						class="org.axcommunity.niagara.string.BReplaceString"/>
 	
 	<type name="GetHTTP"							class="org.axcommunity.niagara.web.BGetHTTP"/>
 	
