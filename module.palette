@@ -2,55 +2,56 @@
 <bajaObjectGraph version="1.0">
     <p m="b=baja" t="b:Folder">
         <p m="b=baja" t="b:Folder" n="Conversion">
-            <p n="StatusNumericToStatusBoolean" m="axc=axCommunity" t="axc:StatusNumericToStatusBoolean" />
-            <p n="StatusNumericToRelTime" m="w=axCommunity" t="w:StatusNumericToRelTime" />
-            <p n="AbsTimeToDateParts" m="w=axCommunity" t="w:AbsTimeToDateParts" />
-            <p n="DatePartsToAbsTime" m="w=axCommunity" t="w:DatePartsToAbsTime" />
-            <p n="StatusEnumToStatusString" m="w=axCommunity" t="w:StatusEnumToStatusString" />
-            <p n="CSVStringToStatusNumeric" m="w=axCommunity" t="w:CSVStringToStatusNumeric" />
-            <p n="StatusStringToString" m="w=axCommunity" t="w:StatusStringToString" />
-            <p n="TimeSplitter" m="w=axCommunity" t="w:TimeSplitter">
-      			<p n="updateTime" f="s"/>
-      			<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="7,3,17"/>     
+            <p n="StatusNumericToStatusBoolean"		m="axc=axCommunity" t="axc:StatusNumericToStatusBoolean" />
+            <p n="StatusNumericToRelTime"			m="w=axCommunity" t="w:StatusNumericToRelTime" />
+            <p n="AbsTimeToDateParts"				m="w=axCommunity" t="w:AbsTimeToDateParts" />
+            <p n="DatePartsToAbsTime"				m="w=axCommunity" t="w:DatePartsToAbsTime" />
+            <p n="StatusEnumToStatusString"			m="w=axCommunity" t="w:StatusEnumToStatusString" />
+            <p n="CSVStringToStatusNumeric"			m="w=axCommunity" t="w:CSVStringToStatusNumeric" />
+            <p n="StatusStringToString"				m="w=axCommunity" t="w:StatusStringToString" />
+            <p n="TimeSplitter"						m="w=axCommunity" t="w:TimeSplitter">
+      			<p n="updateTime"	f="s"/>
+      			<p n="wsAnnotation"	f="r" t="b:WsAnnotation" v="7,3,17"/>     
     		</p>
-            <p n="PingHealthConverter" m="w=axCommunity" t="w:PingHealthConverter"/>
-            <p n="StatusNumericToStatusStringNoPad" m="w=axCommunity" t="w:StatusNumericToStatusStringNoPad" />
-            <p n="StatusBooleanToStatusEnum" m="w=axCommunity" t="w:StatusBooleanToStatusEnum" />
-            <p n="AbsTimesToAbsTimeRange" m="w=axCommunity" t="w:AbsTimesToAbsTimeRange" />
-            <p n="EnumWithStringOutput" m="w=axCommunity" t="w:EnumWithStringOutput" />
-            <p n="BitsToStatusNumeric" m="w=axCommunity" t="w:BitsToStatusNumeric" />
-            <p n="EnumFromCommaSepVar" m="w=axCommunity" t="w:EnumFromCommaSepVar" />
-            <p n="EpochToAbsTime" m="w=axCommunity" t="w:EpochToAbsTime" />
-            <p n="ChangeCase" m="w=axCommunity" t="w:ChangeCase" />
-            <p n="RelTimeToStatusNumeric"  m="w=axCommunity" t="w:RelTimeToStatusNumeric"></p>
-            <p n="StatusStringToFormat"  m="w=axCommunity" t="w:StatusStringToFormat"></p>
-            <p n="AsciiHexDecConversion"  m="w=axCommunity" t="w:AsciiHexDecConversion"></p>
+            <p n="PingHealthConverter"				m="w=axCommunity" t="w:PingHealthConverter"/>
+            <p n="StatusNumericToStatusStringNoPad"	m="w=axCommunity" t="w:StatusNumericToStatusStringNoPad" />
+            <p n="StatusBooleanToStatusEnum"		m="w=axCommunity" t="w:StatusBooleanToStatusEnum" />
+            <p n="AbsTimesToAbsTimeRange"			m="w=axCommunity" t="w:AbsTimesToAbsTimeRange" />
+            <p n="EnumWithStringOutput"				m="w=axCommunity" t="w:EnumWithStringOutput" />
+            <p n="BitsToStatusNumeric"				m="w=axCommunity" t="w:BitsToStatusNumeric" />
+            <p n="EnumFromCommaSepVar"				m="w=axCommunity" t="w:EnumFromCommaSepVar" />
+            <p n="EpochToAbsTime"					m="w=axCommunity" t="w:EpochToAbsTime" />
+            <p n="ChangeCase"						m="w=axCommunity" t="w:ChangeCase" />
+            <p n="RelTimeToStatusNumeric" 			m="w=axCommunity" t="w:RelTimeToStatusNumeric"></p>
+            <p n="StatusStringToFormat"  			m="w=axCommunity" t="w:StatusStringToFormat"></p>
+            <p n="AsciiHexDecConversion"			m="w=axCommunity" t="w:AsciiHexDecConversion"></p>
         </p>
         
         
         <p m="b=baja" t="b:Folder" n="Math">
-           	<p n="RoundUp" m="k=axCommunity" t="k:RoundUp" />
- 		    <p n="Modulo" m="k=axCommunity" t="k:Modulo" />
-      		<p n="TrAdd" m="k=axCommunity" t="k:TrAdd" />
-      		<p n="TrCopy" m="k=axCommunity" t="k:TrCopy" />
-      		<p n="TrDivide" m="k=axCommunity" t="k:TrDivide" />
-      		<p n="TrMultiply" m="k=axCommunity" t="k:TrMultiply" />
-      		<p n="TrSubtract" m="k=axCommunity" t="k:TrSubtract" />
-    		<p n="AvgMinMax" m="w=axCommunity" t="w:AvgMinMax"/>
-    		<p n="AvgMinMax_v1" m="w=axCommunity" t="w:AvgMinMax_v1"/>
-    		<p n="StatusNumericFifo" m="w=axCommunity" t="w:StatusNumericFifo"/>
-    		<p n="AbsTimeOffset" m="w=axCommunity" t="w:AbsTimeOffset"/>
+           	<p n="RoundUp"							m="k=axCommunity" t="k:RoundUp" />
+ 		    <p n="Modulo"							m="k=axCommunity" t="k:Modulo" />
+      		<p n="TrAdd"							m="k=axCommunity" t="k:TrAdd" />
+      		<p n="TrCopy"							m="k=axCommunity" t="k:TrCopy" />
+      		<p n="TrDivide"							m="k=axCommunity" t="k:TrDivide" />
+      		<p n="TrMultiply"						m="k=axCommunity" t="k:TrMultiply" />
+      		<p n="TrSubtract"						m="k=axCommunity" t="k:TrSubtract" />
+    		<p n="AvgMinMax"						m="w=axCommunity" t="w:AvgMinMax"/>
+    		<p n="AvgMinMax_v1"						m="w=axCommunity" t="w:AvgMinMax_v1"/>
+    		<p n="StatusNumericFifo"				m="w=axCommunity" t="w:StatusNumericFifo"/>
+    		<p n="AbsTimeOffset"					m="w=axCommunity" t="w:AbsTimeOffset"/>
    		</p>
    		
         <p m="b=baja" t="b:Folder" n="Time">
-            <p n="Stopwatch" m="w=axCommunity" t="w:Stopwatch" />
+            <p n="Stopwatch"						m="w=axCommunity" t="w:Stopwatch" />
         </p>
         
         <p m="b=baja" t="b:UnrestrictedFolder" n="Extensions">
-            <p n="FilterExt" m="w=axCommunity" t="w:FilterExt" />
+            <p n="FilterExt"						m="w=axCommunity" t="w:FilterExt" />
          </p>
-        <p m="b=baja" t="b:Folder" n="Logic">
-            <p n="ToggleSwitch" m="k=axCommunity" t="k:ToggleSwitch">
+        
+		<p m="b=baja" t="b:Folder" n="Logic">
+            <p n="ToggleSwitch"						m="k=axCommunity" t="k:ToggleSwitch">
       			<p n="booleanCmd" f="s"/>
       			<p n="boolNormalOpen" f="s"/>
       			<p n="boolNormalClose" f="s"/>
@@ -60,67 +61,69 @@
       			<p n="analogOutput" f="s"/>
       			<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="33,3,12"/>
 			</p>
-    		<p n="ToggleLatch" m="k=axCommunity" t="k:ToggleLatch"/>
-    		<p n="NumericLatchObject" m="k=axCommunity" t="k:NumericLatchObject"/>
-		    <p n="NumericLatchCustom" m="k=axCommunity" t="k:NumericLatchCustom"/>
-		    <p n="BooleanCompareCmdStatus" m="k=axCommunity" t="k:BooleanCompareCmdStatus"/>
-		    <p n="FireOnChange" m="k=axCommunity" t="k:FireOnChange" />
-		    <p n="BooleanRotateOnExecute" m="k=axCommunity" t="k:BooleanRotateOnExecute"/>
-		    <p n="PeakValueAndTstamp" m="k=axCommunity" t="k:PeakValueAndTstamp"/>
-		    <p n="SetNumericAction" m="k=axCommunity" t="k:SetNumericAction"/>
-		    <p n="SetBooleanAction" m="k=axCommunity" t="k:SetBooleanAction"/>
-		    <p n="SuperOr" m="k=axCommunity" t="k:SuperOr"/>
-		    <p n="BooleanToggle" m="k=axCommunity" t="k:BooleanToggle"/>
-            <p n="WhoWhenNumericSetpoint" m="w=axCommunity" t="w:WhoWhenNumericSetpoint" />
-            <p n="WhoWhenEnumSetpoint" m="w=axCommunity" t="w:WhoWhenEnumSetpoint" />
-            <p n="WhoWhenBooleanSetpoint" m="w=axCommunity" t="w:WhoWhenBooleanSetpoint" />
-            <p n="WhoWhenStringSetpoint" m="w=axCommunity" t="w:WhoWhenStringSetpoint" />
-            <p n="LatestNumber" m="w=axCommunity" t="w:LatestNumber" />
+    		<p n="ToggleLatch"						m="k=axCommunity" t="k:ToggleLatch"/>
+    		<p n="NumericLatchObject"				m="k=axCommunity" t="k:NumericLatchObject"/>
+		    <p n="NumericLatchCustom"				m="k=axCommunity" t="k:NumericLatchCustom"/>
+		    <p n="BooleanCompareCmdStatus"			m="k=axCommunity" t="k:BooleanCompareCmdStatus"/>
+		    <p n="FireOnChange"						m="k=axCommunity" t="k:FireOnChange" />
+		    <p n="BooleanRotateOnExecute"			m="k=axCommunity" t="k:BooleanRotateOnExecute"/>
+		    <p n="PeakValueAndTstamp"				m="k=axCommunity" t="k:PeakValueAndTstamp"/>
+		    <p n="SetNumericAction"					m="k=axCommunity" t="k:SetNumericAction"/>
+		    <p n="SetBooleanAction"					m="k=axCommunity" t="k:SetBooleanAction"/>
+		    <p n="SuperOr"							m="k=axCommunity" t="k:SuperOr"/>
+		    <p n="BooleanToggle"					m="k=axCommunity" t="k:BooleanToggle"/>
+            <p n="WhoWhenNumericSetpoint"			m="w=axCommunity" t="w:WhoWhenNumericSetpoint" />
+            <p n="WhoWhenEnumSetpoint"				m="w=axCommunity" t="w:WhoWhenEnumSetpoint" />
+            <p n="WhoWhenBooleanSetpoint"			m="w=axCommunity" t="w:WhoWhenBooleanSetpoint" />
+            <p n="WhoWhenStringSetpoint"			m="w=axCommunity" t="w:WhoWhenStringSetpoint" />
+            <p n="LatestNumber"						m="w=axCommunity" t="w:LatestNumber" />
+            <p n="LatestStringNotMatching"			m="w=axCommunity" t="w:LatestStringNotMatching" />
    		</p>
-        <p m="b=baja" t="b:Folder" n="BQL">
-	    	<p n="BqlNumericRecap" m="k=axCommunity" t="k:BqlNumericRecap"/>
-	        <p n="TrendAnalyzer" m="k=axCommunity" t="k:TrendAnalyzer"/>
-	        <p n="HistoryToCSV" m="k=axCommunity" t="k:HistoryToCSV"/>      
-	        <p n="TrendDynamicAnalyzer" m="k=axCommunity" t="k:TrendDynamicAnalyzer"/>      
+        
+		<p m="b=baja" t="b:Folder" n="BQL">
+	    	<p n="BqlNumericRecap"					m="k=axCommunity" t="k:BqlNumericRecap"/>
+	        <p n="TrendAnalyzer"					m="k=axCommunity" t="k:TrendAnalyzer"/>
+	        <p n="HistoryToCSV"						m="k=axCommunity" t="k:HistoryToCSV"/>      
+	        <p n="TrendDynamicAnalyzer"				m="k=axCommunity" t="k:TrendDynamicAnalyzer"/>      
        	</p>
         
         <p m="b=baja" t="b:Folder" n="System">
-    		<p n="SysInfo" m="k=axCommunity" t="k:SysInfo"/>
-    		<p n="StringToFile" m="k=axCommunity" t="k:StringToFile"/>
+    		<p n="SysInfo"							m="k=axCommunity" t="k:SysInfo"/>
+    		<p n="StringToFile"						m="k=axCommunity" t="k:StringToFile"/>
        	</p>
        	
         <p m="b=baja" t="b:Folder" n="Web">
-    		<p n="GetHTTP" m="k=axCommunity" t="k:GetHTTP"/>
-    		<p n="StringToFile" m="k=axCommunity" t="k:StringToFile"/>
+    		<p n="GetHTTP"							m="k=axCommunity" t="k:GetHTTP"/>
+    		<p n="StringToFile"						m="k=axCommunity" t="k:StringToFile"/>
        </p>
        
         <p m="b=baja" t="b:Folder" n="String">
-    		<p n="ParentFolderInfo" m="k=axCommunity" t="k:ParentFolderInfo"/>
-    		<p n="SuperConcatPlus" m="k=axCommunity" t="k:SuperConcatPlus"/>
+    		<p n="ParentFolderInfo"					m="k=axCommunity" t="k:ParentFolderInfo"/>
+    		<p n="SuperConcatPlus"					m="k=axCommunity" t="k:SuperConcatPlus"/>
        	</p>
        	
         <p m="b=baja" t="b:Folder" n="Hvac">
-          <p n="SimpleTstat" m="w=axCommunity" t="w:SimpleTstat" />
-          <p n="TstatA" m="w=axCommunity" t="w:TstatA" />
-          <p n="TstatB" m="w=axCommunity" t="w:TstatB" />
+          <p n="SimpleTstat"						m="w=axCommunity" t="w:SimpleTstat" />
+          <p n="TstatA"								m="w=axCommunity" t="w:TstatA" />
+          <p n="TstatB"								m="w=axCommunity" t="w:TstatB" />
           
         </p>
         
         <p m="b=baja" t="b:Folder" n="Widgets">
-		    <p n="RevolvingTextLabel" m="k=axCommunity" t="k:RevolvingTextLabel">
+		    <p n="RevolvingTextLabel"				m="k=axCommunity" t="k:RevolvingTextLabel">
 		      	<p n="layout" v="0.0,0.0,120.0,20.0"/>
 		      	<!-- /RevolvingTextLabel/bindText -->
-		      	<p n="bindText"  m="kitPx=kitPx" t="kitPx:SetPointBinding">
+		      	<p n="bindText"						m="kitPx=kitPx" t="kitPx:SetPointBinding">
 		         	<p n="popupEnabled" v="false"/>
 		    		<p n="widgetProperty" v="text"/>
 		      	</p>
 		      	<!-- /RevolvingTextLabel/bindVisible -->
-		      	<p n="bindVisible" m="kitPx=kitPx" t="kitPx:SetPointBinding">
+		      	<p n="bindVisible"					m="kitPx=kitPx" t="kitPx:SetPointBinding">
 		        	<p n="popupEnabled" v="false"/>
 		        	<p n="widgetProperty" v="visible"/>
 		      	</p>
 		      	<!-- /RevolvingTextLabel/bindFlash -->
-		      	<p n="bindFlash"  m="kitPx=kitPx" t="kitPx:SetPointBinding">
+		      	<p n="bindFlash"					m="kitPx=kitPx" t="kitPx:SetPointBinding">
 		      		<p n="popupEnabled" v="false"/>
 		        	<p n="widgetProperty" v="flash"/>
 		      	</p>

@@ -2,69 +2,79 @@
 
 <!-- Types -->
 <types>
-	<type name="CSVStringToStatusNumeric" class="org.axcommunity.niagara.conversion.BCSVStringToStatusNumeric" />
-	<type name="StatusEnumToStatusString" class="org.axcommunity.niagara.conversion.BStatusEnumToStatusString" />
-	<type name="StatusNumericToStatusBoolean" class="org.axcommunity.niagara.conversion.BStatusNumericToStatusBoolean" />
-	<type name="StatusNumericToRelTime" class="org.axcommunity.niagara.conversion.BStatusNumericToRelTime" />
-	<type name="AbsTimeToDateParts" class="org.axcommunity.niagara.conversion.BAbsTimeToDateParts"></type>
-	<type name="DatePartsToAbsTime" class="org.axcommunity.niagara.conversion.BDatePartsToAbsTime"></type>
-	<type name="StatusStringToString" class="org.axcommunity.niagara.conversion.BStatusStringToString"></type>
-	<type name="TimeSplitter" class="org.axcommunity.niagara.conversion.BTimeSplitter"/>
-	<type name="PingHealthConverter" class="org.axcommunity.niagara.conversion.BPingHealthConverter"/>
-	<type name="StatusNumericToStatusStringNoPad" class="org.axcommunity.niagara.conversion.BStatusNumericToStatusStringNoPad"/> 
-	<type name="StatusBooleanToStatusEnum" class="org.axcommunity.niagara.conversion.BStatusBooleanToStatusEnum" />
-	<type name="AbsTimesToAbsTimeRange" class="org.axcommunity.niagara.conversion.BAbsTimesToAbsTimeRange" />
-	<type name="EnumWithStringOutput" class="org.axcommunity.niagara.conversion.BEnumWithStringOutput"/>
-	<type name="BitsToStatusNumeric" class="org.axcommunity.niagara.conversion.BBitsToStatusNumeric"/>
-	<type name="EnumFromCommaSepVar" class="org.axcommunity.niagara.conversion.BEnumFromCommaSepVar"/>
-	<type name="EpochToAbsTime" class="org.axcommunity.niagara.conversion.BEpochToAbsTime"/>
-	<type name="ChangeCase" class="org.axcommunity.niagara.conversion.BChangeCase" />
-	<type name="RelTimeToStatusNumeric" class="org.axcommunity.niagara.conversion.BRelTimeToStatusNumeric" />
-	<type name="StatusStringToFormat" class="org.axcommunity.niagara.conversion.BStatusStringToFormat" />
-	<type name="AsciiHexDecConversion" class="org.axcommunity.niagara.conversion.BAsciiHexDecConversion" />
-	<type name="RoundUp" class="org.axcommunity.niagara.math.BRoundUp" /> 
-	<type name="Modulo" class="org.axcommunity.niagara.math.BModulo" /> 
-	<type name="TrAdd" class="org.axcommunity.niagara.math.BTrAdd" ></type> 
-	<type name="TrCopy" class="org.axcommunity.niagara.math.BTrCopy" ></type> 
-	<type name="TrDivide" class="org.axcommunity.niagara.math.BTrDivide" /> 
-	<type name="TrMultiply" class="org.axcommunity.niagara.math.BTrMultiply" /> 
-	<type name="TrSubtract" class="org.axcommunity.niagara.math.BTrSubtract" />
-	<type name="AvgMinMax" class="org.axcommunity.niagara.math.BAvgMinMax"/>
-	<type name="AvgMinMax_v1" class="org.axcommunity.niagara.math.BAvgMinMax_v1"/>
-	<type name="StatusNumericFifo" class="org.axcommunity.niagara.math.BStatusNumericFifo"/>
-	<type name="AbsTimeOffset" class="org.axcommunity.niagara.math.BAbsTimeOffset"/>
-	<type name="ToggleSwitch" class="org.axcommunity.niagara.logic.BToggleSwitch"/>
-	<type name="ToggleLatch" class="org.axcommunity.niagara.logic.BToggleLatch"/>
-	<type name="BooleanCompareCmdStatus" class="org.axcommunity.niagara.logic.BBooleanCompareCmdStatus"/>
-	<type name="NumericLatchObject" class="org.axcommunity.niagara.logic.BNumericLatchObject"/>
-	<type name="NumericLatchCustom" class="org.axcommunity.niagara.logic.BNumericLatchCustom"/> 
-	<type name="FireOnChange" class="org.axcommunity.niagara.logic.BFireOnChange" />
-	<type name="BooleanRotateOnExecute" class="org.axcommunity.niagara.logic.BBooleanRotateOnExecute"/>
-	<type name="PeakValueAndTstamp" class="org.axcommunity.niagara.logic.BPeakValueAndTstamp"/>
-	<type name="SetNumericAction" class="org.axcommunity.niagara.logic.BSetNumericAction"/>
-	<type name="SetBooleanAction" class="org.axcommunity.niagara.logic.BSetBooleanAction"/>
-	<type name="SuperOr" class="org.axcommunity.niagara.logic.BSuperOr" />  
-	<type name="BooleanToggle" class="org.axcommunity.niagara.logic.BBooleanToggle" />
-	<type name="WhoWhenNumericSetpoint" class="org.axcommunity.niagara.logic.BWhoWhenNumericSetpoint" />
-	<type name="WhoWhenBooleanSetpoint" class="org.axcommunity.niagara.logic.BWhoWhenBooleanSetpoint" />
-	<type name="WhoWhenEnumSetpoint" class="org.axcommunity.niagara.logic.BWhoWhenEnumSetpoint" />
-	<type name="WhoWhenStringSetpoint" class="org.axcommunity.niagara.logic.BWhoWhenStringSetpoint" />
-	<type name="LatestNumber" class="org.axcommunity.niagara.logic.BLatestNumber" />
-	<type name="BqlNumericRecap" class="org.axcommunity.niagara.bql.BBqlNumericRecap"/> 
-	<type name="TrendAnalyzer" class="org.axcommunity.niagara.bql.BTrendAnalyzer"/>
-	<type name="HistoryToCSV" class="org.axcommunity.niagara.bql.BHistoryToCSV"/>
-	<type name="TrendDynamicAnalyzer" class="org.axcommunity.niagara.bql.BTrendDynamicAnalyzer" />  
-	<type name="SysInfo" class="org.axcommunity.niagara.system.BSysInfo"/> 
-	<type name="StringToFile" class="org.axcommunity.niagara.system.BStringToFile"/>
-	<type name="ParentFolderInfo" class="org.axcommunity.niagara.string.BParentFolderInfo"/>
-	<type name="SuperConcatPlus" class="org.axcommunity.niagara.string.BSuperConcatPlus"/>
-	<type name="GetHTTP" class="org.axcommunity.niagara.web.BGetHTTP"/>
-	<type class="org.axcommunity.niagara.time.BStopwatch" name="Stopwatch"/>
-	<type name="FilterExt" class="org.axcommunity.niagara.extensions.BFilterExt" />
-	<type name="SimpleTstat" class="org.axcommunity.niagara.hvac.BSimpleTstat" />
-	<type name="TstatA" class="org.axcommunity.niagara.hvac.BTstatA" />
-	<type name="TstatB" class="org.axcommunity.niagara.hvac.BTstatB" />  
-	<type name="RevolvingTextLabel" class="org.axcommunity.niagara.widgets.BRevolvingTextLabel" />  
-	<type name="DropDownList" class="org.axcommunity.niagara.widgets.BDropDownList" />  
-	<type name="BoundLabelHighlight" class="org.axcommunity.niagara.widgets.BBoundLabelHighlight" />
+	<type name="CSVStringToStatusNumeric"			class="org.axcommunity.niagara.conversion.BCSVStringToStatusNumeric" />
+	<type name="StatusEnumToStatusString"			class="org.axcommunity.niagara.conversion.BStatusEnumToStatusString" />
+	<type name="StatusNumericToStatusBoolean"		class="org.axcommunity.niagara.conversion.BStatusNumericToStatusBoolean" />
+	<type name="StatusNumericToRelTime"				class="org.axcommunity.niagara.conversion.BStatusNumericToRelTime" />
+	<type name="AbsTimeToDateParts"					class="org.axcommunity.niagara.conversion.BAbsTimeToDateParts"></type>
+	<type name="DatePartsToAbsTime"					class="org.axcommunity.niagara.conversion.BDatePartsToAbsTime"></type>
+	<type name="StatusStringToString"				class="org.axcommunity.niagara.conversion.BStatusStringToString"></type>
+	<type name="TimeSplitter"						class="org.axcommunity.niagara.conversion.BTimeSplitter"/>
+	<type name="PingHealthConverter"				class="org.axcommunity.niagara.conversion.BPingHealthConverter"/>
+	<type name="StatusNumericToStatusStringNoPad"	class="org.axcommunity.niagara.conversion.BStatusNumericToStatusStringNoPad"/> 
+	<type name="StatusBooleanToStatusEnum"			class="org.axcommunity.niagara.conversion.BStatusBooleanToStatusEnum" />
+	<type name="AbsTimesToAbsTimeRange"				class="org.axcommunity.niagara.conversion.BAbsTimesToAbsTimeRange" />
+	<type name="EnumWithStringOutput"				class="org.axcommunity.niagara.conversion.BEnumWithStringOutput"/>
+	<type name="BitsToStatusNumeric"				class="org.axcommunity.niagara.conversion.BBitsToStatusNumeric"/>
+	<type name="EnumFromCommaSepVar"				class="org.axcommunity.niagara.conversion.BEnumFromCommaSepVar"/>
+	<type name="EpochToAbsTime"						class="org.axcommunity.niagara.conversion.BEpochToAbsTime"/>
+	<type name="ChangeCase"							class="org.axcommunity.niagara.conversion.BChangeCase" />
+	<type name="RelTimeToStatusNumeric"				class="org.axcommunity.niagara.conversion.BRelTimeToStatusNumeric" />
+	<type name="StatusStringToFormat"				class="org.axcommunity.niagara.conversion.BStatusStringToFormat" />
+	<type name="AsciiHexDecConversion"				class="org.axcommunity.niagara.conversion.BAsciiHexDecConversion" />
+	
+	<type name="RoundUp"							class="org.axcommunity.niagara.math.BRoundUp" /> 
+	<type name="Modulo"								class="org.axcommunity.niagara.math.BModulo" /> 
+	<type name="TrAdd"								class="org.axcommunity.niagara.math.BTrAdd" ></type> 
+	<type name="TrCopy"								class="org.axcommunity.niagara.math.BTrCopy" ></type> 
+	<type name="TrDivide"							class="org.axcommunity.niagara.math.BTrDivide" /> 
+	<type name="TrMultiply"							class="org.axcommunity.niagara.math.BTrMultiply" /> 
+	<type name="TrSubtract"							class="org.axcommunity.niagara.math.BTrSubtract" />
+	<type name="AvgMinMax"							class="org.axcommunity.niagara.math.BAvgMinMax"/>
+	<type name="AvgMinMax_v1"						class="org.axcommunity.niagara.math.BAvgMinMax_v1"/>
+	<type name="StatusNumericFifo"					class="org.axcommunity.niagara.math.BStatusNumericFifo"/>
+	<type name="AbsTimeOffset"						class="org.axcommunity.niagara.math.BAbsTimeOffset"/>
+	
+	<type name="ToggleSwitch"						class="org.axcommunity.niagara.logic.BToggleSwitch"/>
+	<type name="ToggleLatch"						class="org.axcommunity.niagara.logic.BToggleLatch"/>
+	<type name="BooleanCompareCmdStatus"			class="org.axcommunity.niagara.logic.BBooleanCompareCmdStatus"/>
+	<type name="NumericLatchObject"					class="org.axcommunity.niagara.logic.BNumericLatchObject"/>
+	<type name="NumericLatchCustom"					class="org.axcommunity.niagara.logic.BNumericLatchCustom"/> 
+	<type name="FireOnChange"						class="org.axcommunity.niagara.logic.BFireOnChange" />
+	<type name="BooleanRotateOnExecute"				class="org.axcommunity.niagara.logic.BBooleanRotateOnExecute"/>
+	<type name="PeakValueAndTstamp"					class="org.axcommunity.niagara.logic.BPeakValueAndTstamp"/>
+	<type name="SetNumericAction"					class="org.axcommunity.niagara.logic.BSetNumericAction"/>
+	<type name="SetBooleanAction"					class="org.axcommunity.niagara.logic.BSetBooleanAction"/>
+	<type name="SuperOr"							class="org.axcommunity.niagara.logic.BSuperOr" />  
+	<type name="BooleanToggle"						class="org.axcommunity.niagara.logic.BBooleanToggle" />
+	<type name="WhoWhenNumericSetpoint"				class="org.axcommunity.niagara.logic.BWhoWhenNumericSetpoint" />
+	<type name="WhoWhenBooleanSetpoint"				class="org.axcommunity.niagara.logic.BWhoWhenBooleanSetpoint" />
+	<type name="WhoWhenEnumSetpoint"				class="org.axcommunity.niagara.logic.BWhoWhenEnumSetpoint" />
+	<type name="WhoWhenStringSetpoint"				class="org.axcommunity.niagara.logic.BWhoWhenStringSetpoint" />
+	<type name="LatestNumber"						class="org.axcommunity.niagara.logic.BLatestNumber" />
+	<type name="LatestStringNotMatching"			class="org.axcommunity.niagara.logic.BLatestStringNotMatching" />
+	
+	<type name="BqlNumericRecap"					class="org.axcommunity.niagara.bql.BBqlNumericRecap"/> 
+	<type name="TrendAnalyzer"						class="org.axcommunity.niagara.bql.BTrendAnalyzer"/>
+	<type name="HistoryToCSV"						class="org.axcommunity.niagara.bql.BHistoryToCSV"/>
+	<type name="TrendDynamicAnalyzer"				class="org.axcommunity.niagara.bql.BTrendDynamicAnalyzer" />  
+	
+	<type name="SysInfo"							class="org.axcommunity.niagara.system.BSysInfo"/> 
+	<type name="StringToFile"						class="org.axcommunity.niagara.system.BStringToFile"/>
+	<type name="ParentFolderInfo"					class="org.axcommunity.niagara.string.BParentFolderInfo"/>
+	<type name="SuperConcatPlus"					class="org.axcommunity.niagara.string.BSuperConcatPlus"/>
+	
+	<type name="GetHTTP"							class="org.axcommunity.niagara.web.BGetHTTP"/>
+	
+	<type name="Stopwatch"							class="org.axcommunity.niagara.time.BStopwatch"/>
+	
+	<type name="FilterExt"							class="org.axcommunity.niagara.extensions.BFilterExt" />
+	
+	<type name="SimpleTstat"						class="org.axcommunity.niagara.hvac.BSimpleTstat" />
+	<type name="TstatA"								class="org.axcommunity.niagara.hvac.BTstatA" />
+	<type name="TstatB"								class="org.axcommunity.niagara.hvac.BTstatB" /> 
+	
+	<type name="RevolvingTextLabel"					class="org.axcommunity.niagara.widgets.BRevolvingTextLabel" />  
+	<type name="DropDownList"						class="org.axcommunity.niagara.widgets.BDropDownList" />  
+	<type name="BoundLabelHighlight"				class="org.axcommunity.niagara.widgets.BBoundLabelHighlight" />
  </types>

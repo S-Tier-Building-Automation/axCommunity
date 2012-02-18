@@ -2,10 +2,12 @@ package org.axcommunity.niagara.logic;
 
 import javax.baja.log.Log;
 import javax.baja.status.BStatusNumeric;
+import javax.baja.sys.Action;
+import javax.baja.sys.BAbsTime;
 import javax.baja.sys.BComponent;
 import javax.baja.sys.BDouble;
+import javax.baja.sys.BFacets;
 import javax.baja.sys.BIcon;
-import javax.baja.sys.BObject;
 import javax.baja.sys.Context;
 import javax.baja.sys.Flags;
 import javax.baja.sys.Property;
@@ -24,7 +26,7 @@ import javax.baja.sys.Type;
  * 
  *
  * @author		Justin Koffler, Texas Power Systems
- * @version		12.02.10
+ * @version		12.02.18
  */
 
 
@@ -32,11 +34,51 @@ import javax.baja.sys.Type;
 public class BLatestNumber extends BComponent
 {
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//	ACTION SLOTS   ////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public static final Action ClearOutput = newAction(0|Flags.ASYNC|Flags.DEFAULT_ON_CLONE,null);
+	public void ClearOutput(){invoke(ClearOutput,null,null);}
+	public void doClearOutput()
+	{
+		getOutLatestNumber().setValue(0);
+		fireLatestNumber(BDouble.make(0));
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//	OUTPUTS   /////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/** Latest number received from input slots greater or equal to the minimum allowed value. */
+	public static final Property outLatestNumber  = newProperty(0|Flags.SUMMARY, new BStatusNumeric(0));
+	public BStatusNumeric getOutLatestNumber() {return (BStatusNumeric) get(outLatestNumber); }
+	public void setOutLatestNumber(BStatusNumeric v) {set(outLatestNumber, v);}
+	
+	/** BONUS SLOT!! The sum of all input values. */
+	public static final Property outSum  = newProperty(0, new BStatusNumeric(0));
+	public BStatusNumeric getOutSum() {return (BStatusNumeric) get(outSum); }
+	public void setOutSum(BStatusNumeric v) {set(outSum, v);}
+	
+	/** Timestamp for when 'outLatestString' was last updated. */
+	public static final Property outLastOutputChange = newProperty(0, BAbsTime.make(), BFacets.make("showSeconds",true));
+	public BAbsTime getOutLastOutputChange() { return (BAbsTime)get(outLastOutputChange); }
+	public void setOutLastOutputChange(BAbsTime v) { set(outLastOutputChange, v); }
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//	TOPIC SLOTS   /////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	/**NUMERIC TOPIC FIRED*/
+	public static final Topic LatestNumber = newTopic(0);
+	public void fireLatestNumber(BDouble event){fire(LatestNumber,event,null);}
+	
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//	INPUTS   //////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	/** Minumun input value to be considered for output. */
-	public static final Property inMinValue  = newProperty(0|Flags.SUMMARY, new BStatusNumeric(0));
+	/** Minimum input value to be considered for output. */
+	public static final Property inMinValue  = newProperty(0, new BStatusNumeric(0));
 	public BStatusNumeric getInMinValue() {return (BStatusNumeric) get(inMinValue); }
 	public void setInMinValue(BStatusNumeric v) {set(inMinValue, v);}
 	
@@ -136,28 +178,7 @@ public class BLatestNumber extends BComponent
 	public BStatusNumeric getIn24() {return (BStatusNumeric) get(in24); }
 	public void setIn24(BStatusNumeric v) {set(in24, v);}
 	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//	OUTPUTS   /////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/** Latest number received from input slots greater or equal to the minimum allowed value. */
-	public static final Property outLatestNumber  = newProperty(0|Flags.SUMMARY, new BStatusNumeric(0));
-	public BStatusNumeric getOutLatestNumber() {return (BStatusNumeric) get(outLatestNumber); }
-	public void setOutLatestNumber(BStatusNumeric v) {set(outLatestNumber, v);}
-	
-	/** BONUS SLOT!! The sum of all input values. */
-	public static final Property outSum  = newProperty(0, new BStatusNumeric(0));
-	public BStatusNumeric getOutSum() {return (BStatusNumeric) get(outSum); }
-	public void setOutSum(BStatusNumeric v) {set(outSum, v);}
-	
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//	TOPIC SLOTS   /////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/**NUMERIC TOPIC FIRED*/
-	public static final Topic LatestNumber = newTopic(0|Flags.SUMMARY);
-	public void fireLatestNumber(BDouble event){fire(LatestNumber,event,null);}
 	
 	
 	//---------------------------------------------------------------------------------------------------------
@@ -225,6 +246,8 @@ public class BLatestNumber extends BComponent
 			if(p == in22 && (n22>=min)){getOutLatestNumber().setValue(n22);fireLatestNumber(BDouble.make(n22));sumAll();}
 			if(p == in23 && (n23>=min)){getOutLatestNumber().setValue(n23);fireLatestNumber(BDouble.make(n23));sumAll();}
 			if(p == in24 && (n24>=min)){getOutLatestNumber().setValue(n24);fireLatestNumber(BDouble.make(n24));sumAll();}
+			
+			if(p == outLatestNumber){ setOutLastOutputChange(BAbsTime.make()); }
 		}
 	}
 	

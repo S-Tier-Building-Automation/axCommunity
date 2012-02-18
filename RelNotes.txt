@@ -144,17 +144,27 @@ V11.12.03 Dec 28, 2011
 -fixed a bug with the BEnumFromCommaSepVar that was resetting the facets on a restart
 
 V12.02.01 Feb 05, 2012
--added SuperConcatPlus by Justin Koffler: Allows you to set the number of Status String input slots and the character you want to use as a delimeter.
--added AsciiHexDecConversion by Justin Koffler: Accepts Status String inputs representing a value in ASCII, Hex or Decimal format and will output its corresponding value in ASCII, Hex and Decimal format.
--fixed a bug in ChangeCase that would cause an out of bounds error when input string was of zero length.
+-added BSuperConcatPlus by Justin Koffler: Allows you to set the number of Status String input slots and the character you want to use as a delimiter.
+-added BAsciiHexDecConversion by Justin Koffler: Accepts Status String inputs representing a value in ASCII, Hex or Decimal format and will output its corresponding value in ASCII, Hex and Decimal format.
+-fixed a bug in BChangeCase that would cause an out of bounds error when input string was of zero length.
 
 V12.02.02 Feb 05, 2012
 -modified BSysInfo to include the "OsName" slot and I also added the action slots "RestartStation" and "RebootStation" 
 	which as the name suggests will restart or reboot the station. (modified by: Justin Koffler)
 
 V12.02.03 Feb 10, 2012
--added LatestNumber by Justin Koffler: Accepts up to 24 Status Numeric inputs and will output the latest 
+-added BLatestNumber by Justin Koffler: Accepts up to 24 Status Numeric inputs and will output the latest 
 	value if it meets the minimum required value as configured in the "inMinValue" slot.
 
-V12.02.03 Feb 10, 2012
+V12.02.04 Feb 13, 2012
 -modified BAsciiHexDecConversion to include option to delimit the decimal and hex output by a user chosen delimiter. (modified by: Justin Koffler)
+
+V12.02.05 Feb 18, 2012
+-added BLatestStringNotMatching by Justin Koffler: Accepts up to 24 Status Numeric inputs and will output the latest value if it 
+	meets the minimum required length as configured in the "inMinLength" slot and provided it does not match any values from 
+	the slot "inCsvExclusionList".
+-modified BLatestNumber by reordering slots so the output slot are at the top.
+-modified BLatestNumber to include new slot 'outLastOutputChange' which will display the last time the output slot was updated.
+
+
+
