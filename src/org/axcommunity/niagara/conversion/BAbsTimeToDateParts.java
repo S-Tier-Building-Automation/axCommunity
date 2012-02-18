@@ -40,6 +40,7 @@ public class BAbsTimeToDateParts extends BComponent {
 			setShortMonthOut(new BStatusString(stMonth.substring(0,3)));
 			BWeekday myDay = getTimeIn().getWeekday();
 			setLongDayOut(new BStatusString(myDay.toString()));
+			setDayOfTheWeek(new BStatusNumeric(toDayOfWeek(getLongDayOut().getValue())));
 			String stDay = myDay.toString().substring(0,3);
 			setShortDayOut(new BStatusString(stDay));
 			getJulianOut().setValue(toJulian(new int[]{(int)getYearOut().getValue(),(int)getMonthOut().getValue(),(int)getDayOut().getValue()}));
@@ -115,6 +116,11 @@ public class BAbsTimeToDateParts extends BComponent {
 	public final static Property longDayOut = newProperty(Flags.SUMMARY,new BStatusString());
 	public BStatusString getLongDayOut() { return (BStatusString)get(longDayOut); }
 	public void setLongDayOut(BStatusString v) { set(longDayOut, v); }
+	
+	/** Status Number Output representing the day of the week that was inputted. */
+	public static final Property dayOfTheWeek = newProperty(0|Flags.SUMMARY, new BStatusNumeric(0), BFacets.makeNumeric(0));
+	public BStatusNumeric getDayOfTheWeek() { return (BStatusNumeric)get(dayOfTheWeek); }
+	public void setDayOfTheWeek(BStatusNumeric v) { set(dayOfTheWeek, v, null); }
 
 	/**StatusString value out representing datetime*/
 	public final static Property stringDateOut = newProperty(Flags.SUMMARY,new BStatusString());
@@ -127,7 +133,6 @@ public class BAbsTimeToDateParts extends BComponent {
   public BStatusNumeric getOutSerialTime() { return (BStatusNumeric)get(outSerialTime); }
   public void setOutSerialTime(BStatusNumeric v) { set(outSerialTime, v); }
 
-	
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");
 
@@ -135,6 +140,19 @@ public class BAbsTimeToDateParts extends BComponent {
 	public Type getType() { return TYPE; }
 
 
+	private static double toDayOfWeek(String dow)
+	{
+		double dayNumber = 0;
+		if		(dow.equalsIgnoreCase("sun") || dow.equalsIgnoreCase("sunday"))		dayNumber = 1;
+		else if	(dow.equalsIgnoreCase("mon") || dow.equalsIgnoreCase("monday"))		dayNumber = 2;
+		else if	(dow.equalsIgnoreCase("tue") || dow.equalsIgnoreCase("tuesday"))	dayNumber = 3;
+		else if	(dow.equalsIgnoreCase("wed") || dow.equalsIgnoreCase("wednesday"))	dayNumber = 4;
+		else if	(dow.equalsIgnoreCase("thu") || dow.equalsIgnoreCase("thursday"))	dayNumber = 5;
+		else if	(dow.equalsIgnoreCase("fri") || dow.equalsIgnoreCase("friday"))		dayNumber = 6;
+		else if	(dow.equalsIgnoreCase("sat") || dow.equalsIgnoreCase("saturday"))	dayNumber = 7;
+		else																		dayNumber = 0;
+		return dayNumber;
+	}
 
 
 	//copied from internet
