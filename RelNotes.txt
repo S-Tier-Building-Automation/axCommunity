@@ -167,5 +167,7 @@ V12.02.05 Feb 18, 2012
 -modified BLatestNumber to include new slot 'outLastOutputChange' which will display the last time the output slot was updated.
 -added BReplaceString by Justin Koffler: Replaces string subset from input string with new value and outputs the results.
 
-
-
+V12.02.06 Feb 28, 2012
+-added BOneShotBooleanSelect by Justin Koffler: When 'trigger' input or 'fire' action slot are true the value set in the 'inTrue' 
+	slot will be represented in the 'out' slot for the amount of time configured in the 'time' slot. When the timer expires the 
+	value in the 'inFalse' slot will be represented in the 'out' slot.

@@ -78,6 +78,7 @@
             <p n="WhoWhenStringSetpoint"			m="w=axCommunity" t="w:WhoWhenStringSetpoint" />
             <p n="LatestNumber"						m="w=axCommunity" t="w:LatestNumber" />
             <p n="LatestStringNotMatching"			m="w=axCommunity" t="w:LatestStringNotMatching" />
+            <p n="OneShotBooleanSelect"				m="w=axCommunity" t="w:OneShotBooleanSelect" />
    		</p>
         
 		<p m="b=baja" t="b:Folder" n="BQL">

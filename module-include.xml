@@ -53,6 +53,7 @@
 	<type name="WhoWhenStringSetpoint"				class="org.axcommunity.niagara.logic.BWhoWhenStringSetpoint" />
 	<type name="LatestNumber"						class="org.axcommunity.niagara.logic.BLatestNumber" />
 	<type name="LatestStringNotMatching"			class="org.axcommunity.niagara.logic.BLatestStringNotMatching" />
+	<type name="OneShotBooleanSelect"				class="org.axcommunity.niagara.logic.BOneShotBooleanSelect" />
 	
 	<type name="BqlNumericRecap"					class="org.axcommunity.niagara.bql.BBqlNumericRecap"/> 
 	<type name="TrendAnalyzer"						class="org.axcommunity.niagara.bql.BTrendAnalyzer"/>
