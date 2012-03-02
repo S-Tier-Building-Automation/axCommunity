@@ -79,6 +79,11 @@
             <p n="LatestNumber"						m="w=axCommunity" t="w:LatestNumber" />
             <p n="LatestStringNotMatching"			m="w=axCommunity" t="w:LatestStringNotMatching" />
             <p n="OneShotBooleanSelect"				m="w=axCommunity" t="w:OneShotBooleanSelect" />
+            <p n="DynamicLinkNumeric" m="w=axCommunity" t="w:DynamicLinkNumeric" />
+            <p n="DynamicLinkBoolean" m="w=axCommunity" t="w:DynamicLinkBoolean" />
+            <p n="DynamicLinkString" m="w=axCommunity" t="w:DynamicLinkString" />
+
+
    		</p>
         
 		<p m="b=baja" t="b:Folder" n="BQL">
