@@ -177,3 +177,7 @@ V12.03.01 March 2, 2012
 -added 	DynamicLinkBoolean by Mike Arnott: A Simple Boolean in/out with an ordIn string - if the ordIn changes the object will try to create or change the in link source to the out slot of the object in ordIn
 -added 	DynamicLinkString by Mike Arnott: A Simple String in/out with an ordIn string - if the ordIn changes the object will try to create or change the in link source to the out slot of the object in ordIn
 
+V12.03.02 March 6, 2012
+-added BOneShotMultiSelect by Justin Koffler: When 'trigger' input or 'fire' action slot are true the value set in the 'inXTrue' 
+	slot will be represented in the 'out' slot for the amount of time configured in the 'time' slot. When the timer expires the 
+	value in the 'inXFalse' slot will be represented in the 'out' slot.

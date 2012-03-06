@@ -7,9 +7,9 @@ import javax.baja.sys.*;
 
 /**
  * When 'trigger' input or 'fire' action slot are true the value
- * set in the 'inTrue' slot will be represented in the 'out' slot
+ * set in the 'inXTrue' slot will be represented in the 'out' slot
  * for the amount of time configured in the 'time' slot.
- * When the timer expires the value in the 'inFalse' slot 
+ * When the timer expires the value in the 'inXFalse' slot 
  * will be represented in the 'out' slot.
  *
  *
