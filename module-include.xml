@@ -54,7 +54,7 @@
 	<type name="LatestNumber"						class="org.axcommunity.niagara.logic.BLatestNumber" />
 	<type name="LatestStringNotMatching"			class="org.axcommunity.niagara.logic.BLatestStringNotMatching" />
 	<type name="OneShotBooleanSelect"				class="org.axcommunity.niagara.logic.BOneShotBooleanSelect" />
-	<type name="OneShotBooleanSelect"				class="org.axcommunity.niagara.logic.BOneShotBooleanSelect" />
+	<type name="OneShotMultiSelect"					class="org.axcommunity.niagara.logic.BOneShotMultiSelect" />
 	<type name="DynamicLinkNumeric"					class="org.axcommunity.niagara.logic.BDynamicLinkNumeric" />
 	<type name="DynamicLinkBoolean"					class="org.axcommunity.niagara.logic.BDynamicLinkBoolean" />
 	<type name="DynamicLinkString"					class="org.axcommunity.niagara.logic.BDynamicLinkString" />
