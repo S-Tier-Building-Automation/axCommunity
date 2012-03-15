@@ -74,6 +74,7 @@
 	<type name="GetHTTP"							class="org.axcommunity.niagara.web.BGetHTTP"/>
 	
 	<type name="Stopwatch"							class="org.axcommunity.niagara.time.BStopwatch"/>
+	<type name="EventAtTime"						class="org.axcommunity.niagara.time.BEventAtTime" />
 	
 	<type name="FilterExt"							class="org.axcommunity.niagara.extensions.BFilterExt" />
 	

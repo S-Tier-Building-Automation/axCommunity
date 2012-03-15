@@ -181,3 +181,7 @@ V12.03.02 March 6, 2012
 -added BOneShotMultiSelect by Justin Koffler: When 'trigger' input or 'fire' action slot are true the value set in the 'inXTrue' 
 	slot will be represented in the 'out' slot for the amount of time configured in the 'time' slot. When the timer expires the 
 	value in the 'inXFalse' slot will be represented in the 'out' slot.
+	
+V12.03.03 March 15, 2012
+-added BEventAtTime by Mike Arnott: Object accepts time of day as hours, minutes, seconds or a time string.  Fires an event (topic) at that time. 
+	

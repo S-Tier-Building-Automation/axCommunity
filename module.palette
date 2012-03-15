@@ -44,6 +44,7 @@
    		
         <p m="b=baja" t="b:Folder" n="Time">
             <p n="Stopwatch"						m="w=axCommunity" t="w:Stopwatch" />
+            <p n="EventAtTime"						m="w=axCommunity" t="w:EventAtTime" />
         </p>
         
         <p m="b=baja" t="b:UnrestrictedFolder" n="Extensions">
