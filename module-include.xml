@@ -22,6 +22,8 @@
 	<type name="RelTimeToStatusNumeric"				class="org.axcommunity.niagara.conversion.BRelTimeToStatusNumeric" />
 	<type name="StatusStringToFormat"				class="org.axcommunity.niagara.conversion.BStatusStringToFormat" />
 	<type name="AsciiHexDecConversion"				class="org.axcommunity.niagara.conversion.BAsciiHexDecConversion" />
+	<type name="EnumFromMultiString"				class="org.axcommunity.niagara.conversion.BEnumFromMultiString" />
+	
 	
 	<type name="RoundUp"							class="org.axcommunity.niagara.math.BRoundUp" /> 
 	<type name="Modulo"								class="org.axcommunity.niagara.math.BModulo" /> 

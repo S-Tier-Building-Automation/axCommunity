@@ -25,6 +25,8 @@
             <p n="RelTimeToStatusNumeric" 			m="w=axCommunity" t="w:RelTimeToStatusNumeric"></p>
             <p n="StatusStringToFormat"  			m="w=axCommunity" t="w:StatusStringToFormat"></p>
             <p n="AsciiHexDecConversion"			m="w=axCommunity" t="w:AsciiHexDecConversion"></p>
+            <p n="EnumFromMultiString"				m="w=axCommunity" t="w:EnumFromMultiString"></p>
+
         </p>
         
         

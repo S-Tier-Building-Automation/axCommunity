@@ -9,7 +9,9 @@ import javax.baja.sys.BBoolean;
 import javax.baja.sys.BComponent;
 import javax.baja.sys.BFacets;
 import javax.baja.sys.BIcon;
+import javax.baja.sys.BRelTime;
 import javax.baja.sys.BTime;
+import javax.baja.sys.BValue;
 import javax.baja.sys.Clock;
 import javax.baja.sys.Context;
 import javax.baja.sys.Flags;
@@ -66,7 +68,11 @@ public class BEventAtTime extends BComponent
       catch(Exception e){
         System.out.println("Error in BEventAtTime: " + e.toString());
       }
-    }    
+      
+    }else if(property == timeOffset)    {
+      //just update the timer
+      updateTimer();
+    }
   }
   
   void updateTimer()
@@ -79,6 +85,7 @@ public class BEventAtTime extends BComponent
     if(nextEvent.isAfter(now))
     {
       //event not ready to fire, clear flag and schedule next for today
+      nextEvent = nextEvent.add(getTimeOffset());
       setNextEventAbsTimeOut(nextEvent);
       ticket = Clock.schedule(this, nextEvent, timerExpired, null); 
     }
@@ -93,6 +100,7 @@ public class BEventAtTime extends BComponent
         fireTimeOfDayEvent(BBoolean.TRUE);
       }
       nextEvent = nextEvent.nextDay();
+      nextEvent = nextEvent.add(getTimeOffset());
       setNextEventAbsTimeOut(nextEvent);
       ticket = Clock.schedule(this, nextEvent, timerExpired, null); 
     }
@@ -154,6 +162,12 @@ public class BEventAtTime extends BComponent
   public static final Property timeStringIn = newProperty(Flags.SUMMARY, new BStatusString("12:00:00"));
   public BStatusString getTimeStringIn()  {    return (BStatusString) get(timeStringIn);  }
   public void setTimeStringIn(BStatusString v)  {    set(timeStringIn, v);  }
+  
+  /**RelTime offset that can be used to correct or adjust the time of the event (for, say, timezone issues)*/
+  public static final Property timeOffset = newProperty(Flags.SUMMARY, BRelTime.make(0), null);
+  public BRelTime getTimeOffset() { return (BRelTime)get(timeOffset); }
+  public void setTimeOffset(BRelTime v) { set(timeOffset, v, null); }
+
 
   public BIcon getIcon() { return icon; }
   private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");

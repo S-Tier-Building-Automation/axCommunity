@@ -184,4 +184,9 @@ V12.03.02 March 6, 2012
 	
 V12.03.03 March 15, 2012
 -added BEventAtTime by Mike Arnott: Object accepts time of day as hours, minutes, seconds or a time string.  Fires an event (topic) at that time. 
+
+V12.03.04 March 16, 2012
+-modified BEventAtTime by Mike Arnott: Added timeOffset BRelTime to allow timezone or other offsets to the event time.
+-added BEnumFromMultiString by Mike Arnott: An Enum extension that lets you input a variable number of statusstrings that become the
+	enum facets.    
 	
