@@ -6,7 +6,7 @@
   preferredSymbol = "axc"
   description = "AX Community Objects"
   vendor = "org.axcommunity"
-  vendorVersion = "12.03.04"
+  vendorVersion = "12.03.05"
   edition="j2se"
 >
 
@@ -25,6 +25,7 @@
   <dependency name="gx" /> 
   <dependency name="kitControl" />
   <dependency name="kitPx" />
+  <dependency name="converters" />
 
   <!-- Packages -->
   <package name="org.axcommunity.niagara.conversion" doc="true" />

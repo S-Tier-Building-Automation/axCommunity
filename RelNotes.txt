@@ -190,3 +190,9 @@ V12.03.04 March 16, 2012
 -added BEnumFromMultiString by Mike Arnott: An Enum extension that lets you input a variable number of statusstrings that become the
 	enum facets.    
 	
+V12.03.05 March 28, 2012
+-added a new view for the BSysInfo object, BSysInfoView by Mike Arnott:  Learned how to create a custom workbench view for an object!
+	My graphics ability stinks - someone please, make it prettier!
+	Note: added new dependancy on the converters.jar <dependency name="converters" />
+	
+	

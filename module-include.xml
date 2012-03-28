@@ -67,6 +67,12 @@
 	<type name="TrendDynamicAnalyzer"				class="org.axcommunity.niagara.bql.BTrendDynamicAnalyzer" />  
 	
 	<type name="SysInfo"							class="org.axcommunity.niagara.system.BSysInfo"/> 
+	<type name="SysInfoView"						class="org.axcommunity.niagara.system.BSysInfoView"> 
+		<agent requiredPermissions="r">
+			<on type="axCommunity:SysInfo"/>
+		</agent>
+  	</type>  
+	
 	<type name="StringToFile"						class="org.axcommunity.niagara.system.BStringToFile"/>
 	
 	<type name="ParentFolderInfo"					class="org.axcommunity.niagara.string.BParentFolderInfo"/>
