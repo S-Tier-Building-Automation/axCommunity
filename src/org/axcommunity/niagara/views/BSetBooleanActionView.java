@@ -38,8 +38,8 @@ public class BSetBooleanActionView
   
     //create the background canvas the objects will show up on
     BCanvasPane canvas = new BCanvasPane();
-    canvas.setViewSize(BSize.make(80,20));
-    canvas.setScale(BScaleMode.fitRatio);
+    canvas.setViewSize(BSize.make(100,20));
+    canvas.setScale(BScaleMode.fit);
     
     //for now just use the object display name as the button label
     test.setText(sbAction.getDisplayName(cx));
