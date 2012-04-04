@@ -47,6 +47,13 @@
 	<type name="PeakValueAndTstamp"					class="org.axcommunity.niagara.logic.BPeakValueAndTstamp"/>
 	<type name="SetNumericAction"					class="org.axcommunity.niagara.logic.BSetNumericAction"/>
 	<type name="SetBooleanAction"					class="org.axcommunity.niagara.logic.BSetBooleanAction"/>
+	<type name="SetBooleanActionView"  				class="org.axcommunity.niagara.views.BSetBooleanActionView"> 
+		<agent requiredPermissions="i">
+			<on type="axCommunity:SetBooleanAction"/>
+		</agent>
+  	</type>  
+	
+	
 	<type name="SuperOr"							class="org.axcommunity.niagara.logic.BSuperOr" />  
 	<type name="BooleanToggle"						class="org.axcommunity.niagara.logic.BBooleanToggle" />
 	<type name="WhoWhenNumericSetpoint"				class="org.axcommunity.niagara.logic.BWhoWhenNumericSetpoint" />
@@ -67,7 +74,7 @@
 	<type name="TrendDynamicAnalyzer"				class="org.axcommunity.niagara.bql.BTrendDynamicAnalyzer" />  
 	
 	<type name="SysInfo"							class="org.axcommunity.niagara.system.BSysInfo"/> 
-	<type name="SysInfoView"						class="org.axcommunity.niagara.system.BSysInfoView"> 
+	<type name="SysInfoView"						class="org.axcommunity.niagara.views.BSysInfoView"> 
 		<agent requiredPermissions="r">
 			<on type="axCommunity:SysInfo"/>
 		</agent>

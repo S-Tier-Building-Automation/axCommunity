@@ -1,4 +1,4 @@
-package org.axcommunity.niagara.system;
+package org.axcommunity.niagara.views;
 
 import javax.baja.converters.BINumericToNumber;
 import javax.baja.converters.BObjectToString;
@@ -19,6 +19,8 @@ import javax.baja.ui.pane.BCanvasPane;
 import javax.baja.ui.pane.BGridPane;
 import javax.baja.util.BFormat;
 import javax.baja.workbench.view.*;
+
+import org.axcommunity.niagara.system.BSysInfo;
 
 import com.tridium.kitpx.BAnalogMeter;
 import com.tridium.kitpx.BBargraph;

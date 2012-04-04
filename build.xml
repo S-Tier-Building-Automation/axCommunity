@@ -6,7 +6,7 @@
   preferredSymbol = "axc"
   description = "AX Community Objects"
   vendor = "org.axcommunity"
-  vendorVersion = "12.03.05"
+  vendorVersion = "12.04.01"
   edition="j2se"
 >
 
@@ -39,6 +39,7 @@
   <package name="org.axcommunity.niagara.time" doc="true"/>
   <package name="org.axcommunity.niagara.extensions" doc="true"/>
   <package name="org.axcommunity.niagara.hvac" doc="true"/>
+  <package name="org.axcommunity.niagara.views" doc="true"/>
 
   <resources name="doc/*.*" install="doc" />
   <resources name="org/axcommunity/niagara/graphics/*.*"/>

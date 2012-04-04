@@ -195,4 +195,12 @@ V12.03.05 March 28, 2012
 	My graphics ability stinks - someone please, make it prettier!
 	Note: added new dependancy on the converters.jar <dependency name="converters" />
 	
+V12.03.06 March 30, 2012
+-modified BStringToFile by Mike Arnott: added threading to file write to avoid possible network share causing WD Timeout
+
+V12.04.01 April 4, 2012
+-moved the BSysInfoView to new package, org.axcommunity.niagara.views
+-added BSetBooleanActionView by Mike Arnott: a workbench view of the BSetBooleanAction button that works like a momentary pushbutton.  Finally, a momentary PB in Niagara!
+
+
 	

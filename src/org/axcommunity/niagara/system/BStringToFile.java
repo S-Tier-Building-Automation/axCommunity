@@ -8,6 +8,7 @@ import java.io.*;
  *
  * Borrowed heavily from the BHistoryToCSV from CMH, thanks!
  * @author  MLA, Kors Engineering, 04/13/2010
+ * 03/30/2012 added threading to avoid watchdog timeouts caused by network share path failures
  */
 public class BStringToFile extends BComponent
 {
@@ -18,25 +19,33 @@ public class BStringToFile extends BComponent
     invoke(execute, null);
   }
   public void doExecute(){
-    try{
-      String filename = getFileName().getValue();
-      String attachment = getInStringToSave().getValue();
-      if(filename.length()>3&&attachment.length()>0)
-      {
-        
-        FileWriter fstream = new FileWriter(getPath().getValue() + filename, getInAppendToFile().getValue());
-        BufferedWriter out = new BufferedWriter(fstream);
-        out.write(attachment);
-        //Close the output stream
-        out.close();
-
-      }
-    }
-    catch(Exception e){
-      System.out.println(e.toString());
-    }
+    new FileThread().start();
   }
   
+  class FileThread extends Thread{
+    public void run(){
+      try {
+        String filename = getFileName().getValue();
+        String attachment = getInStringToSave().getValue();
+        if(filename.length()>3&&attachment.length()>0)
+        {
+          
+          FileWriter fstream = new FileWriter(getPath().getValue() + filename, getInAppendToFile().getValue());
+          BufferedWriter out = new BufferedWriter(fstream);
+          out.write(attachment);
+          //Close the output stream
+          out.close();
+
+        }
+      }
+      catch (Exception e) {
+        //logger.warning( e.getClass().getName() + " : " + e.getMessage() + "\n");
+        System.out.println(e.toString());
+        throw new RuntimeException(e);
+      }
+
+    }
+  }
   
   /**
    * String input
