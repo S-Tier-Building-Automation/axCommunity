@@ -38,6 +38,7 @@ public class BOneShotMultiSelect extends BComponent
 		getOutNum().setValue(		getInNumTrue().getValue());
 		getOutString().setValue(	getInStringTrue().getValue());
 
+		getOutTimerActive().setValue(true);
 		setLastTrigger(BAbsTime.now());
 		updateTimer();
 	}
@@ -50,8 +51,18 @@ public class BOneShotMultiSelect extends BComponent
 		getOutNum().setValue(		getInNumFalse().getValue());
 		getOutString().setValue(	getInStringFalse().getValue());
 		
+		getOutTimerActive().setValue(false);
 		fired = false;
 	}
+	
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/**	TRACKS THE TIMER	*//////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	void updateTimer()
+	{            
+		if (ticket != null) ticket.cancel();
+		ticket = Clock.schedule(this, getTime(), timerExpired, null);
+	}  
 	
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,8 +102,7 @@ public class BOneShotMultiSelect extends BComponent
 	public static final Property inStringFalse = newProperty(0|Flags.SUMMARY, new BStatusString());
 	public BStatusString getInStringFalse() { return (BStatusString)get(inStringFalse);}
 	public void setInStringFalse(BStatusString v) {set(inStringFalse,v);}
-	
-	
+
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//	OUTPUTS   /////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,7 +119,6 @@ public class BOneShotMultiSelect extends BComponent
 	public static final Property outString = newProperty(Flags.SUMMARY, new BStatusString());
 	public BStatusString getOutString() { return (BStatusString)get(outString);}
 	public void setOutString(BStatusString v) {set(outString,v);}
-
 	
 	/** Time of last trigger input*/
 	public static final Property lastTrigger = newProperty(0|Flags.READONLY, BAbsTime.make(), BFacets.make("showSeconds",true));
@@ -121,11 +130,6 @@ public class BOneShotMultiSelect extends BComponent
 	public BStatusBoolean getOutTimerActive() { return (BStatusBoolean)get(outTimerActive); }
 	public void setOutTimerActive(BStatusBoolean v) { set(outTimerActive, v); }
 	
-	
-	
-	
-
-	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/**    METHOD INVOKED WHEN ANY OF THE INPUTS CHANGES VALUES   *////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,67 +138,37 @@ public class BOneShotMultiSelect extends BComponent
 		if(!Sys.atSteadyState() || !isRunning())return;
 		if(isRunning())
 		{
-			if (prop == trigger)
+			try
 			{
-				triggered = getTrigger().getValue();
-				if(triggered && !last)
+				if (prop == trigger)
 				{
-					last = triggered;
-					getOutBool().setValue(		getInBoolTrue().getValue());
-					getOutNum().setValue(		getInNumTrue().getValue());
-					getOutString().setValue(	getInStringTrue().getValue());
+					triggered = getTrigger().getValue();
+					if(triggered && !last)
+					{
+						last = triggered;
+						getOutBool().setValue(		getInBoolTrue().getValue());
+						getOutNum().setValue(		getInNumTrue().getValue());
+						getOutString().setValue(	getInStringTrue().getValue());
 
-					setLastTrigger(BAbsTime.now());
-					updateTimer();
-				}
-				else
-				{
-					last = triggered;
+						getOutTimerActive().setValue(true);
+						setLastTrigger(BAbsTime.now());
+						updateTimer();
+					}
+					else
+					{
+						last = triggered;
+					}
 				}
 			}
-			
-			if (ticket.isExpired())
+			catch (Exception e) 
 			{
-				getOutTimerActive().setValue(false);
-			}
-			else
-			{
-				getOutTimerActive().setValue(true);
+				logger.error("\r\n\t\t" + getSlotPath()	+ "\r\n\t\t" + e.getMessage() + "\r\n\t\t" + e.getStackTrace());
 			}
 		}
 	}
 
-	
-
-	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/**	TRACKS THE TIMER	*//////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	void updateTimer()
-	{            
-		if (ticket != null) ticket.cancel();
-		ticket = Clock.schedule(this, getTime(), timerExpired, null);
-	}   
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// BComponent Overrides	///////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public void started() throws Exception { try { onStart(); } catch(Throwable t) { throw new Exception(t); } }
-	public void stopped() throws Exception { try { onStop(); } catch(Throwable t) { throw new Exception(t); } }
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/**	STEPS TO PERFORM UPON OBJECT STARTUP	*//////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public void onStart() throws Exception{	}
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/**	STEPS TO PERFORM UPON OBJECT SHUTDOWN	*//////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public void onStop() throws Exception{	}
-
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public static final Log logger = Log.getLog("axCommunity.OneShotMultiSelect");
+	public static final Log logger = Log.getLog("axCommunity.OneShotBooleanSelect");
 	
 	public Type getType() { return TYPE; }
 	public static final Type TYPE = Sys.loadType(BOneShotMultiSelect.class);

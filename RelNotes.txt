@@ -202,5 +202,7 @@ V12.04.01 April 4, 2012
 -moved the BSysInfoView to new package, org.axcommunity.niagara.views
 -added BSetBooleanActionView by Mike Arnott: a workbench view of the BSetBooleanAction button that works like a momentary pushbutton.  Finally, a momentary PB in Niagara!
 
+V12.04.02 April 15, 2012
+-Minor tweaks to eliminate some unused code in the following objects: BLatestNumber, BLatestStringNotMatching, BOneShotBooleanSelect, BOneShotMultiSelect, BReplaceString, BSuperConcatPlus.
 
 	

@@ -276,15 +276,6 @@ public class BLatestNumber extends BComponent
 		}
 	}
 
-
-	// ON START AND ON STOP RELATED STUFF. //////////////////////////////////////////////////////////////////
-	public void started() throws Exception { try { onStart(); } catch(Throwable t) { throw new Exception(t); } }
-	public void stopped() throws Exception { try { onStop(); } catch(Throwable t) { throw new Exception(t); } }
-	
-	public void onStart() throws Exception{	}
-	public void onStop() throws Exception{ }
-	
-
 	public static final Log logger = Log.getLog("axCommunity.LatestNumber");
 	
 	public Type getType() { return TYPE; }
