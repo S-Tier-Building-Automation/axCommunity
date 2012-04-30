@@ -208,4 +208,8 @@ V12.04.02 April 15, 2012
 V12.04.03 April 24, 2012
 -Added status boolean slots "outSuccess" and "outFail" to BStringToFile.
 
-	
+V12.04.04 April 29, 2012
+-Added logging to BSuperOr to find cause of null exception errors I was getting on station restarts. - Justin Koffler
+-Modified logic of BSuperOr to eliminate the infinite 1 second delay loop upon first execution. - Justin Koffler
+-Moved the onExecute processes in BSuperOr to a new method named onCalculate to help with the infinite loop issue. - Justin Koffler
+-Modified logic of BSuperOr to NOT allow the onCalculate processes to take place if the system was not in a running state (this is where I was getting the null exception errors before I added this).  - Justin Koffler
