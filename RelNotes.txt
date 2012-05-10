@@ -213,3 +213,6 @@ V12.04.04 April 29, 2012
 -Modified logic of BSuperOr to eliminate the infinite 1 second delay loop upon first execution. - Justin Koffler
 -Moved the onExecute processes in BSuperOr to a new method named onCalculate to help with the infinite loop issue. - Justin Koffler
 -Modified logic of BSuperOr to NOT allow the onCalculate processes to take place if the system was not in a running state (this is where I was getting the null exception errors before I added this).  - Justin Koffler
+
+V12.05.01 May 10, 2012
+- Modified 'BLatestStringNotMatching' to include new slot 'inUseExclusionList' with a default value of true. - Justin Koffler

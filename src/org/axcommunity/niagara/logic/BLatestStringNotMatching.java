@@ -54,6 +54,11 @@ public class BLatestStringNotMatching extends BComponent
 	public BStatusBoolean getInIgnoreCase() { return (BStatusBoolean)get(inIgnoreCase); }
 	public void setInIgnoreCase(BStatusBoolean v) { set(inIgnoreCase, v); }
 	
+	/** When TRUE the exclusion list will be utilized otheewise it will be ignored.*/
+	public final static Property inUseExclusionList = newProperty(0|Flags.SUMMARY, new BStatusBoolean(true));
+	public BStatusBoolean getInUseExclusionList() { return (BStatusBoolean)get(inUseExclusionList); }
+	public void setInUseExclusionList(BStatusBoolean v) { set(inUseExclusionList, v); }
+	
 	/** Minimum length input value must have before being eligible for latest output. */
 	public static final Property inMinLength  = newProperty(0, new BStatusNumeric(0), BFacets.makeNumeric(0));
 	public BStatusNumeric getInMinLength() {return (BStatusNumeric) get(inMinLength); }
@@ -65,27 +70,27 @@ public class BLatestStringNotMatching extends BComponent
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/** Latest string received from input slots not matching any values from input slot 'inCsvExclusionList'. */
-	public static final Property outLatestString  = newProperty(0|Flags.SUMMARY, new BStatusString());
+	public static final Property outLatestString  = newProperty(0|Flags.SUMMARY|Flags.READONLY, new BStatusString());
 	public BStatusString getOutLatestString() {return (BStatusString) get(outLatestString); }
 	public void setOutLatestString(BStatusString v) {set(outLatestString, v);}
 	
 	/** Length of string currently in output slot. */
-	public static final Property outStringLength  = newProperty(0, new BStatusNumeric(0), BFacets.makeNumeric(0));
+	public static final Property outStringLength  = newProperty(0|Flags.READONLY, new BStatusNumeric(0), BFacets.makeNumeric(0));
 	public BStatusNumeric getOutStringLength() {return (BStatusNumeric) get(outStringLength); }
 	public void setOutStringLength(BStatusNumeric v) {set(outStringLength, v);}
 	
 	/** Number of string values to exclude from output. */
-	public static final Property outNumberOfExcludedStrings  = newProperty(0, new BStatusNumeric(0), BFacets.makeNumeric(0));
+	public static final Property outNumberOfExcludedStrings  = newProperty(0|Flags.READONLY, new BStatusNumeric(0), BFacets.makeNumeric(0));
 	public BStatusNumeric getOutNumberOfExcludedStrings() {return (BStatusNumeric) get(outNumberOfExcludedStrings); }
 	public void setOutNumberOfExcludedStrings(BStatusNumeric v) {set(outNumberOfExcludedStrings, v);}
 	
 	/** True if the latest input matched a value in the exclusion list. */
-	public final static Property outLatestInputWasExcluded = newProperty(0, new BStatusBoolean(false));
+	public final static Property outLatestInputWasExcluded = newProperty(0|Flags.READONLY, new BStatusBoolean(false));
 	public BStatusBoolean getOutLatestInputWasExcluded() { return (BStatusBoolean)get(outLatestInputWasExcluded); }
 	public void setOutLatestInputWasExcluded(BStatusBoolean v) { set(outLatestInputWasExcluded, v); }
 	
 	/** Timestamp for when 'outLatestString' was last updated. */
-	public static final Property outLastOutputChange = newProperty(0, BAbsTime.make(), BFacets.make("showSeconds",true));
+	public static final Property outLastOutputChange = newProperty(0|Flags.READONLY, BAbsTime.make(), BFacets.make("showSeconds",true));
 	public BAbsTime getOutLastOutputChange() { return (BAbsTime)get(outLastOutputChange); }
 	public void setOutLastOutputChange(BAbsTime v) { set(outLastOutputChange, v); }
 	
@@ -271,78 +276,77 @@ public class BLatestStringNotMatching extends BComponent
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public boolean excluded(String inVal)
 	{
-		getOutLatestInputWasExcluded().setValue(false);
-		
-		try
+		if(getInUseExclusionList().getValue()==true)
 		{
-			String	csv		= getInCsvExclusionList().getValue();
+			getOutLatestInputWasExcluded().setValue(false);
 			
-			if(csv.trim().length()<1)
+			try
 			{
+				String	csv		= getInCsvExclusionList().getValue();
+				
+				if(csv.trim().length()<1)
+				{
+					return false;
+				}
+				else if(getInIgnoreCase().getValue()==true)
+				{
+					inVal	= inVal.toLowerCase();
+					csv		= csv.toLowerCase();
+				}
+			
+				//Create an array using a ',' as the split delimiter.
+				String[] arrExcluded	= csv.split(",");
+
+				getOutNumberOfExcludedStrings().setValue(arrExcluded.length);
+				
+				for (int i = 0;i<arrExcluded.length;i++)
+				{
+					switch(getInMatchMode().getOrdinal())
+					{
+						case 0:
+							if(inVal.trim().equals(arrExcluded[i].trim()))
+							{
+								getOutLatestInputWasExcluded().setValue(true);
+								return true;
+							}
+							break;
+						
+						case 1:
+							if(inVal.trim().startsWith(arrExcluded[i].trim()))
+							{
+								getOutLatestInputWasExcluded().setValue(true);
+								return true;
+							}
+							break;
+						
+						case 2:
+							if(inVal.trim().endsWith(arrExcluded[i].trim()))
+							{
+								getOutLatestInputWasExcluded().setValue(true);
+								return true;
+							}
+							break;
+						
+						case 3:
+							if(inVal.trim().indexOf(arrExcluded[i].trim()) >= 0)
+							{
+								getOutLatestInputWasExcluded().setValue(true);
+								return true;
+							}
+							break;
+					}
+				}
 				return false;
 			}
-			else if(getInIgnoreCase().getValue()==true)
+			catch (Exception e) 
 			{
-				inVal	= inVal.toLowerCase();
-				csv		= csv.toLowerCase();
+				logger.error("\r\n\t\t" + getSlotPath()	+ "\r\n\t\t" + e.getMessage() + "\r\n\t\t" + e.getStackTrace());
+				return false;
 			}
-		
-			//Create an array using a ',' as the split delimiter.
-			String[] arrExcluded	= csv.split(",");
-
-			getOutNumberOfExcludedStrings().setValue(arrExcluded.length);
-			
-			for (int i = 0;i<arrExcluded.length;i++)
-			{
-				switch(getInMatchMode().getOrdinal())
-				{
-					case 0:
-						if(inVal.trim().equals(arrExcluded[i].trim()))
-						{
-							getOutLatestInputWasExcluded().setValue(true);
-							return true;
-						}
-						break;
-						
-					// case 1:
-						// if(inVal.trim().equalsIgnoreCase(arrExcluded[i].trim()))
-						// {
-							// getOutLatestInputWasExcluded().setValue(true);
-							// return true;
-						// }
-						// break;
-					
-					case 1:
-						if(inVal.trim().startsWith(arrExcluded[i].trim()))
-						{
-							getOutLatestInputWasExcluded().setValue(true);
-							return true;
-						}
-						break;
-					
-					case 2:
-						if(inVal.trim().endsWith(arrExcluded[i].trim()))
-						{
-							getOutLatestInputWasExcluded().setValue(true);
-							return true;
-						}
-						break;
-					
-					case 3:
-						if(inVal.trim().indexOf(arrExcluded[i].trim()) >= 0)
-						{
-							getOutLatestInputWasExcluded().setValue(true);
-							return true;
-						}
-						break;
-				}
-			}
-			return false;
 		}
-		catch (Exception e) 
+		else //Exclusion list was not used.
 		{
-			logger.error("\r\n\t\t" + getSlotPath()	+ "\r\n\t\t" + e.getMessage() + "\r\n\t\t" + e.getStackTrace());
-			return false;
+		return false;
 		}
 	}
 
