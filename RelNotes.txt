@@ -216,3 +216,4 @@ V12.04.04 April 29, 2012
 
 V12.05.01 May 10, 2012
 - Modified 'BLatestStringNotMatching' to include new slot 'inUseExclusionList' with a default value of true. - Justin Koffler
+- Modified 'BBooleanRotateOnExecute' by removing the TRANSIENT flag on the 'out' slot so it would retain its value upon station restart.

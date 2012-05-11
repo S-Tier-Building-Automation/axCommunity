@@ -55,7 +55,7 @@ public class BLatestStringNotMatching extends BComponent
 	public void setInIgnoreCase(BStatusBoolean v) { set(inIgnoreCase, v); }
 	
 	/** When TRUE the exclusion list will be utilized otheewise it will be ignored.*/
-	public final static Property inUseExclusionList = newProperty(0|Flags.SUMMARY, new BStatusBoolean(true));
+	public final static Property inUseExclusionList = newProperty(0, new BStatusBoolean(true));
 	public BStatusBoolean getInUseExclusionList() { return (BStatusBoolean)get(inUseExclusionList); }
 	public void setInUseExclusionList(BStatusBoolean v) { set(inUseExclusionList, v); }
 	

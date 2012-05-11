@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.axcommunity.niagara.logic;
 
 import javax.baja.sys.Action;
@@ -20,67 +17,50 @@ import javax.baja.status.*;
  */
 public class BBooleanRotateOnExecute extends BComponent
 { 
-////////////////////////////////////////////////////////////////
-//Action "execute"
-////////////////////////////////////////////////////////////////
- 
- /**
-  * Slot for the <code>execute</code> action.
-  */
- public static final Action execute = newAction(Flags.ASYNC|Flags.DEFAULT_ON_CLONE,null);
- 
- /**
-  * Invoke the <code>execute</code> action.
-  */
- public void execute() { invoke(execute,null,null); }
+	////////////////////////////////////////////////////////////////
+	//Action "execute"
+	////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////
-//Property "out"
-////////////////////////////////////////////////////////////////
+	public static final Action execute = newAction(Flags.ASYNC|Flags.DEFAULT_ON_CLONE,null);
+	public void execute() { invoke(execute,null,null); }
 
-/**
- * Slot for the <code>out</code> property.
- */
-public static final Property out = newProperty(Flags.TRANSIENT|Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusBoolean(false),null);
+	////////////////////////////////////////////////////////////////
+	//Property "out"
+	////////////////////////////////////////////////////////////////
 
-/**
- * Get the <code>out</code> property.
- */
-public BStatusBoolean getOut() { return (BStatusBoolean)get(out); }
+	public static final Property out = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusBoolean(false),null);
+	public BStatusBoolean getOut() { return (BStatusBoolean)get(out); }
+	public void setOut(BStatusBoolean v) { set(out,v,null); }
 
-/**
- * Set the <code>out</code> property.
- */
-public void setOut(BStatusBoolean v) { set(out,v,null); }
+	////////////////////////////////////////////////////////////////
+	//Type
+	////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////
-//Type
-////////////////////////////////////////////////////////////////
+	public Type getType() { return TYPE; }
+	public static final Type TYPE = Sys.loadType(BBooleanRotateOnExecute.class);
 
- public Type getType() { return TYPE; }
- public static final Type TYPE = Sys.loadType(BBooleanRotateOnExecute.class);
+	public BIcon getIcon() { return icon; }
+	private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/pctechs4u.png");
 
- public BIcon getIcon() { return icon; }
- private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/pctechs4u.png");
- 
-/////////////////////////////////////////////////////////////////
-//Begin main code
-/////////////////////////////////////////////////////////////////
- public void doExecute() throws Exception
- {
-   if(!Sys.atSteadyState()|| !isRunning()){
-     return;
-   }
-   if (getOut().getValue()== true)
-   { 
-     getOut().setValue(false);
-   }
-   else
-   {
-     getOut().setValue(true);
-   }   
- }
-/////////////////////////////////////////////////////////////////
-//End main code
-/////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////
+	//Begin main code
+	/////////////////////////////////////////////////////////////////
+	public void doExecute() throws Exception
+	{
+		if(!Sys.atSteadyState()|| !isRunning())
+		{
+			return;
+		}
+		if (getOut().getValue()== true)
+		{
+			getOut().setValue(false);
+		}
+		else
+		{
+			getOut().setValue(true);
+		}
+	}
+	/////////////////////////////////////////////////////////////////
+	//End main code
+	/////////////////////////////////////////////////////////////////
 }
