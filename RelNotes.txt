@@ -218,6 +218,6 @@ V12.05.01 May 10, 2012
 - Modified 'BLatestStringNotMatching' to include new slot 'inUseExclusionList' with a default value of true. - Justin Koffler
 - Modified 'BBooleanRotateOnExecute' by removing the TRANSIENT flag on the 'out' slot so it would retain its value upon station restart. - Justin Koffler
 
-V12.05.02 May 10, 2012
+V12.05.02 May 14, 2012
 - Modified 'BAvgMinMax_v1' to include new slot 'sum' that is the sum of all the 'in' slots within the min/max range. - Justin Koffler
 - Modified 'BAvgMinMax' to include new slot 'sum' that is the sum of all the 'in' slots. - Justin Koffler
