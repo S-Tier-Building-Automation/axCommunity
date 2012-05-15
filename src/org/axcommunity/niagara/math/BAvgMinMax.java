@@ -88,6 +88,26 @@ public class BAvgMinMax extends BComponent
    * Set the <code>avg</code> property.
    */
   public void setAvg(BStatusNumeric v) { set(avg,v,null); }
+  
+////////////////////////////////////////////////////////////////
+// Property "sum"
+////////////////////////////////////////////////////////////////
+  
+  /**
+   * Slot for the <code>sum</code> property.
+   */
+  public static final Property sum = newProperty(Flags.SUMMARY, new BStatusNumeric(),null);
+
+  /**
+   * Get the <code>sum</code> property.
+   */
+  public BStatusNumeric getSum() { return (BStatusNumeric)get(sum); }
+  
+  /**
+   * Set the <code>sum</code> property.
+   */
+  public void setSum(BStatusNumeric v) { set(sum,v,null); }
+  
 
 ////////////////////////////////////////////////////////////////
 // Type
@@ -158,6 +178,7 @@ public class BAvgMinMax extends BComponent
      double min = Double.POSITIVE_INFINITY;
      double max = Double.NEGATIVE_INFINITY;
      double avg = (double)0.0;
+	 double sum = (double)0.0;
      double avgCount = 0;
      for(int i = 0; i < getInCount().getValue(); i++)
      {
@@ -172,10 +193,12 @@ public class BAvgMinMax extends BComponent
      }
      if(min == Double.POSITIVE_INFINITY) min = Double.NaN;
      if(max == Double.NEGATIVE_INFINITY) max = Double.NaN;
+	 sum = avg;
      avg = avg / avgCount;
      getMin().setValue(min);
      getMax().setValue(max);
      getAvg().setValue(avg);
+	 getSum().setValue(sum);
   } 
 }
 

@@ -147,6 +147,25 @@ public class BAvgMinMax_v1 extends BComponent
   public void setAvg(BStatusNumeric v) { set(avg,v,null); }
   
 ////////////////////////////////////////////////////////////////
+// Property "sum"
+////////////////////////////////////////////////////////////////
+  
+  /**
+   * Slot for the <code>sum</code> property.
+   */
+  public static final Property sum = newProperty(Flags.SUMMARY, new BStatusNumeric(),null);
+
+  /**
+   * Get the <code>sum</code> property.
+   */
+  public BStatusNumeric getSum() { return (BStatusNumeric)get(sum); }
+  
+  /**
+   * Set the <code>sum</code> property.
+   */
+  public void setSum(BStatusNumeric v) { set(sum,v,null); }
+  
+////////////////////////////////////////////////////////////////
 //Action "SetMinimumInput"
 ////////////////////////////////////////////////////////////////
    
@@ -320,6 +339,7 @@ public BValue getActionParameterDefault(Action paramAction)
      double min = Double.POSITIVE_INFINITY;
      double max = Double.NEGATIVE_INFINITY;
      double avg = (double)0.0;
+     double sum = (double)0.0;
      double avgCount = 0;
      double inMin = getInMinimum().getValue();
      double inMax = getInMaximum().getValue();
@@ -337,10 +357,12 @@ public BValue getActionParameterDefault(Action paramAction)
      }
      if(min == Double.POSITIVE_INFINITY) min = Double.NaN;
      if(max == Double.NEGATIVE_INFINITY) max = Double.NaN;
+	 sum = avg;
      avg = avg / avgCount;
      getMin().setValue(min);
      getMax().setValue(max);
      getAvg().setValue(avg);
+     getSum().setValue(sum);
   } 
   
  
