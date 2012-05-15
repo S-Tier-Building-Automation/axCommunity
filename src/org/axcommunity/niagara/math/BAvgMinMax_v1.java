@@ -76,7 +76,7 @@ public class BAvgMinMax_v1 extends BComponent
   
   /**
    * number of numeric inputs, resources determine the limits
-    */
+	*/
   public static final Property inCount = newProperty(Flags.SUMMARY, new BStatusNumeric(),null);
   
   /**
@@ -124,7 +124,7 @@ public class BAvgMinMax_v1 extends BComponent
   
   /**
    * Set the <code>max</code> property.
-    */
+	*/
   public void setMax(BStatusNumeric v) { set(max,v,null); }
 
 ////////////////////////////////////////////////////////////////
@@ -180,8 +180,8 @@ public class BAvgMinMax_v1 extends BComponent
   public static final Action SetMinimumInput = newAction(0,_MinSP);
   
  /**
-    * Invoke the <code>SetMinimumInput</code> action.
-    */
+	* Invoke the <code>SetMinimumInput</code> action.
+	*/
  
  public BDouble SetMinimumInput(BDouble _MinSP) 
  {
@@ -236,6 +236,12 @@ public BInteger SetInCount(BInteger _InCountSP)
   return (BInteger)invoke(SetInCount,_InCountSP,null); 
 }
 
+
+/**Fires 'TRUE' when createOutput method completes signifying calculations are complete*/
+public static final Topic Calculated = newTopic(0);
+public void fireCalculated(BBoolean event){fire(Calculated,event,null);}
+	
+	
 ////////////////////////////////////////////////////////////////
 //Gets Action parameter defaults
 ////////////////////////////////////////////////////////////////
@@ -253,14 +259,14 @@ public BValue getActionParameterDefault(Action paramAction)
   
   if (paramAction == SetInCount)
   {
-    Double inValue;
-    int outValue = 0;
+	Double inValue;
+	int outValue = 0;
 
-    inValue = new Double(getInCount().getValue());
-    outValue = inValue.intValue();
-    BInteger b = BInteger.make(outValue);
+	inValue = new Double(getInCount().getValue());
+	outValue = inValue.intValue();
+	BInteger b = BInteger.make(outValue);
 
-    return b;
+	return b;
   }
   
   //if (paramAction == SetInCount) return getInteger(BInteger);
@@ -283,120 +289,124 @@ public BValue getActionParameterDefault(Action paramAction)
   
   public void changed( Property prop, Context cx )
   {
-    if ( !isRunning() ) return;
+	if(!Sys.atSteadyState() || !isRunning())return;
 
-    if ( prop == inCount )
-    {
-      Property[] properties = getDynamicPropertiesArray();
-      int currentInCount = 0;
-                        
-      for( int i = 0; i < properties.length; i++ )
-      {
-         if( properties[ i ].getName().startsWith( inPrefix ) )
-            currentInCount++;
-      }
-      
-      int newInCount = ( int ) getInCount().getValue();
-      
-      try 
-      {
-         if( currentInCount > newInCount )
-         {                                
-            for( int i = currentInCount - 1; i >= newInCount; i-- )
-            {                                                     
-               remove( inPrefix + i );
-            }
-         } 
-         else if( currentInCount < newInCount )
-         {                                   
-            for( int i = currentInCount; i < newInCount; i++ )
-            {                                               
-               if( getProperty( inPrefix + i ) == null )
-               {                                      
-                  add( inPrefix + i, new BStatusNumeric() );
-                  setFlags( getSlot( inPrefix + i ), 8 );
-                  
-               }
-            }
-         }
-         
-         createOutput();
-      }
-      catch( DuplicateSlotException e )
-      {
-         System.out.println( "Messed Up" );
-      }
-    }
-    else
-    {
-      super.changed( prop, cx );
-      createOutput();
-    }
+	if ( prop == inCount )
+	{
+	  Property[] properties = getDynamicPropertiesArray();
+	  int currentInCount = 0;
+						
+	  for( int i = 0; i < properties.length; i++ )
+	  {
+		 if( properties[ i ].getName().startsWith( inPrefix ) )
+			currentInCount++;
+	  }
+	  
+	  int newInCount = ( int ) getInCount().getValue();
+	  
+	  try 
+	  {
+		 if( currentInCount > newInCount )
+		 {								
+			for( int i = currentInCount - 1; i >= newInCount; i-- )
+			{													 
+			   remove( inPrefix + i );
+			}
+		 } 
+		 else if( currentInCount < newInCount )
+		 {								   
+			for( int i = currentInCount; i < newInCount; i++ )
+			{											   
+			   if( getProperty( inPrefix + i ) == null )
+			   {									  
+				  add( inPrefix + i, new BStatusNumeric() );
+				  setFlags( getSlot( inPrefix + i ), 8 );
+				  
+			   }
+			}
+		 }
+		 
+		 createOutput();
+		 fireCalculated(BBoolean.make(true));
+	  }
+	  catch( DuplicateSlotException e )
+	  {
+		 System.out.println( "Messed Up" );
+	  }
+	}
+	else
+	{
+		super.changed( prop, cx );
+		if(prop.toString().startsWith(inPrefix))
+		{
+			createOutput();
+			fireCalculated(BBoolean.make(true));
+		}
+	}
   }
   
   public void createOutput()
   {
-     double min = Double.POSITIVE_INFINITY;
-     double max = Double.NEGATIVE_INFINITY;
-     double avg = (double)0.0;
-     double sum = (double)0.0;
-     double avgCount = 0;
-     double inMin = getInMinimum().getValue();
-     double inMax = getInMaximum().getValue();
-     
-     for(int i = 0; i < getInCount().getValue(); i++)
-     {
-       BStatusNumeric value = (BStatusNumeric) get( inPrefix + i );
-       if( value.getStatus().isValid() && value.getValue() > inMin && value.getValue() < inMax)
-       {
-         if(value.getValue() < min) min = value.getValue();
-         if(value.getValue() > max) max = value.getValue();
-         avg = avg + value.getValue();
-         avgCount++;
-       }
-     }
-     if(min == Double.POSITIVE_INFINITY) min = Double.NaN;
-     if(max == Double.NEGATIVE_INFINITY) max = Double.NaN;
-	 sum = avg;
-     avg = avg / avgCount;
-     getMin().setValue(min);
-     getMax().setValue(max);
-     getAvg().setValue(avg);
-     getSum().setValue(sum);
+	 double min = Double.POSITIVE_INFINITY;
+	 double max = Double.NEGATIVE_INFINITY;
+	 double avg = (double)0.0;
+	 double sum = (double)0.0;
+	 double avgCount = 0;
+	 double inMin = getInMinimum().getValue();
+	 double inMax = getInMaximum().getValue();
+	 
+	 for(int i = 0; i < getInCount().getValue(); i++)
+	 {
+	   BStatusNumeric value = (BStatusNumeric) get( inPrefix + i );
+	   if( value.getStatus().isValid() && value.getValue() > inMin && value.getValue() < inMax)
+	   {
+		 if(value.getValue() < min) min = value.getValue();
+		 if(value.getValue() > max) max = value.getValue();
+		 sum = sum + value.getValue();
+		 avgCount++;
+	   }
+	 }
+	 if(min == Double.POSITIVE_INFINITY) min = Double.NaN;
+	 if(max == Double.NEGATIVE_INFINITY) max = Double.NaN;
+	 avg = sum / avgCount;
+	 getMin().setValue(min);
+	 getMax().setValue(max);
+	 getAvg().setValue(avg);
+	 getSum().setValue(sum);
   } 
   
  
   public BDouble doSetMinimumInput(BDouble v)  
   {
-    //Sets _MinSP = v (double arg0)
-    _MinSP = v;
-    
-    //Sets inMinimum = _MinSP
-    getInMinimum().setValue(_MinSP.getDouble());
-    
-    return _MinSP;
+	//Sets _MinSP = v (double arg0)
+	_MinSP = v;
+	
+	//Sets inMinimum = _MinSP
+	getInMinimum().setValue(_MinSP.getDouble());
+	
+	return _MinSP;
   }
 
   public BDouble doSetMaximumInput(BDouble v)  
   {
-    //Sets _MaxSP = v (double arg0)
-    _MaxSP = v;
-    
-    //Sets inMaximum = _MaxSP
-    getInMaximum().setValue(_MaxSP.getDouble());
-    
-    return _MaxSP;
+	//Sets _MaxSP = v (double arg0)
+	_MaxSP = v;
+	
+	//Sets inMaximum = _MaxSP
+	getInMaximum().setValue(_MaxSP.getDouble());
+	
+	return _MaxSP;
   }  
   
   public BInteger doSetInCount(BInteger v)  
   {
-    //Sets _InCountSP = v (double arg0)
-    _InCountSP = v;
-    
-    //Sets inCount = _InCountSP
-    getInCount().setValue(_InCountSP.getDouble());
-    
-    return _InCountSP;
+	//Sets _InCountSP = v (double arg0)
+	_InCountSP = v;
+	
+	//Sets inCount = _InCountSP
+	getInCount().setValue(_InCountSP.getDouble());
+	
+	return _InCountSP;
   } 
 
 }
