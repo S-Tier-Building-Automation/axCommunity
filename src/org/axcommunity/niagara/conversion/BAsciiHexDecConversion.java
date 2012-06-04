@@ -49,6 +49,24 @@ public class BAsciiHexDecConversion extends BComponent
 	public BStatusString getInDelimiter() { return (BStatusString)get(inDelimiter);}
 	public void setInDelimiter(BStatusString v) {set(inDelimiter,v);}
 	
+	/**
+	  * Number of Bytes the length of the Decimal output should be.
+	  * If input shorter than byte length output will be padded with zeros.
+	  * If input longer than byte length output will be truncated.
+	*/
+	public static final Property inBytesLong  = newProperty(0|Flags.SUMMARY, new BStatusNumeric(0), BFacets.makeNumeric(0));
+	public BStatusNumeric getInBytesLong() {return (BStatusNumeric) get(inBytesLong); }
+	public void setInBytesLong(BStatusNumeric v) {set(inBytesLong, v);}
+	
+	/**When true the decimal byte length value is hornored.*/
+	public final static Property inUseBytesLong = newProperty(0|Flags.SUMMARY, new BStatusBoolean(false));
+	public BStatusBoolean getInUseBytesLong() { return (BStatusBoolean)get(inUseBytesLong); }
+	public void setInUseBytesLong(BStatusBoolean v) { set(inUseBytesLong, v); }
+	
+	
+	
+	
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//	INPUTS   //////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,6 +110,13 @@ public class BAsciiHexDecConversion extends BComponent
 	public BStatusNumeric getOutLength() {return (BStatusNumeric) get(outLength); }
 	public void setOutLength(BStatusNumeric v) {set(outLength, v);}
 	
+	/**If input exceeds the allowed number of bytes this value will be true.*/
+	public final static Property outByteLengthExceeded = newProperty(0|Flags.SUMMARY, new BStatusBoolean(false));
+	public BStatusBoolean getOutByteLengthExceeded() { return (BStatusBoolean)get(outByteLengthExceeded); }
+	public void setOutByteLengthExceeded(BStatusBoolean v) { set(outByteLengthExceeded, v); }
+	
+	
+	
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//	TOPIC SLOTS   /////////////////////////////////////////////////////////////////////////////////////////
@@ -133,11 +158,11 @@ public class BAsciiHexDecConversion extends BComponent
 			String	sAscii		= "";
 			String	sHex		= "";
 			String	sDec		= "";
-				
+			
 			// CHECKS TO SEE IF INPUT "inAscii" HAS CHANGED ///////////////////////////////////////////////////
 			if(prop==inAscii && strInAscii.length()>0)
 			{
-				// getInAscii().setValue("");
+				getOutByteLengthExceeded().setValue(false);
 				getInHex().setValue("");
 				getInDecimal().setValue("");
 				
@@ -176,12 +201,12 @@ public class BAsciiHexDecConversion extends BComponent
 			// CHECKS TO SEE IF INPUT "inHex" HAS CHANGED /////////////////////////////////////////////////////
 			if(prop==inHex && strInHex.length()>0)
 			{
+				getOutByteLengthExceeded().setValue(false);
 				getInAscii().setValue("");
-				// getInHex().setValue("");
 				getInDecimal().setValue("");
 				
-				strInHex	= removeSpaces(strInHex);
-				// strInDec	= removeSpaces(strInDec);
+				strInHex	= removeChar(strInHex," ");
+				strInHex	= removeChar(strInHex,",");
 				
 				sAscii	= convertHexToString(strInHex);
 				sHex	= strInHex;
@@ -213,18 +238,17 @@ public class BAsciiHexDecConversion extends BComponent
 					fireSetHex(BString.make(sHex));
 					fireSetDecimal(BString.make(sDec));
 				}
-				
 			}
 			
 			// CHECKS TO SEE IF INPUT "inDecimal" HAS CHANGED /////////////////////////////////////////////////
 			if(prop==inDecimal && strInDec.length()>0)
 			{
+				getOutByteLengthExceeded().setValue(false);
 				getInAscii().setValue("");
 				getInHex().setValue("");
-				// getInDecimal().setValue("");
 				
-				// strInHex	= removeSpaces(strInHex);
-				strInDec	= removeSpaces(strInDec);
+				strInDec	= removeChar(strInDec," ");
+				strInDec	= removeChar(strInDec,",");
 				
 				sAscii	= convertDecToString(strInDec);
 				sHex	= convertStringToHex(sAscii);
@@ -258,8 +282,40 @@ public class BAsciiHexDecConversion extends BComponent
 				}
 			}
 		
-		
-		
+			if(strInAscii.length()==0 && strInHex.length()==0 && strInDec.length()==0)
+			{
+				getOutByteLengthExceeded().setValue(false);
+				int		bytes	= (int)getInBytesLong().getValue();
+				String	delim	= getInDelimiter().getValue();
+				String	zero	= "";
+				
+				if(getInUseBytesLong().getValue()==true)
+				{
+					for(int i=0; i<bytes; i++)
+					{
+						if(useDelim==true)
+						{
+							if(zero.length()==0)
+							{
+								zero	= "0";
+							}
+							else
+							{
+								zero = zero + delim + "0";
+							}
+						}
+						else
+						{
+							zero = zero + "0";
+						}
+					}
+				}
+				
+				getOutAscii().setValue("");
+				getOutHex().setValue(zero);
+				getOutDecimal().setValue(zero);
+				getOutLength().setValue(sAscii.length());
+			}
 		}
 	}
 	
@@ -270,10 +326,12 @@ public class BAsciiHexDecConversion extends BComponent
 	{
 		try
 		{
-			char[] chars = str.toCharArray();
+			int		bytes	= (int)getInBytesLong().getValue();
+			String	delim	= getInDelimiter().getValue();
+			char[]	chars	= str.toCharArray();
 
-			StringBuffer hex = new StringBuffer();
-			StringBuffer hexB = new StringBuffer();
+			StringBuffer	hex		= new StringBuffer();
+			StringBuffer	hexB	= new StringBuffer();
 			for(int i = 0; i < chars.length; i++)
 			{
 				hex.append(Integer.toHexString((int)chars[i]));
@@ -283,6 +341,31 @@ public class BAsciiHexDecConversion extends BComponent
 					strToHexD	= hexB.toString().toUpperCase().substring(0,hexB.toString().length()-1);
 			if( strToHex.length()	== 1 ) strToHex  = "0" + strToHex;
 			if( strToHexD.length()	== 1 ) strToHexD = "0" + strToHexD;
+			
+			if(getInUseBytesLong().getValue()==true)
+			{
+				if((strToHex.length()/2)<bytes)
+				{
+					for(int i=0; i<(bytes-(strToHex.length()/2)); i++)
+					{
+						strToHex	= strToHex + "0";
+						strToHexD	= strToHexD + delim + "0";
+					}
+				}
+				if((strToHex.length()/2)>bytes)
+				{
+								strToHex		= strToHex.substring(0,(bytes*2));
+					String[]	spltHex			= strToHexD.split(delim);
+					String		TEMPstrToHexD	= "";
+					
+					for(int x=0; x<bytes; x++)
+					{
+						TEMPstrToHexD = TEMPstrToHexD + delim + spltHex[x];
+					}
+					strToHexD	= TEMPstrToHexD.substring(delim.length());
+					getOutByteLengthExceeded().setValue(true);
+				}
+			}
 			
 			logger.trace( "\r\n\t\t" + getSlotPath()	
 						+ "\r\n\t\t convertStringToHex() results..." 
@@ -403,8 +486,10 @@ public class BAsciiHexDecConversion extends BComponent
 	{
 		try
 		{
-			StringBuilder temp	= new StringBuilder();
-			StringBuilder tempB	= new StringBuilder();
+			int 			bytes	= (int)getInBytesLong().getValue();
+			String 			delim	= getInDelimiter().getValue();
+			StringBuilder	temp	= new StringBuilder();
+			StringBuilder	tempB	= new StringBuilder();
 
 			//49204c6f7665204a617661 split into two characters 49, 20, 4c...
 			for( int i=0; i<hex.length()-1; i+=2 )
@@ -415,10 +500,36 @@ public class BAsciiHexDecConversion extends BComponent
 				int decimal = Integer.parseInt(output, 16);
 				//Convert the decimal to character
 				temp.append(decimal);
-				tempB.append(decimal+getInDelimiter().getValue());
+				tempB.append(decimal + delim);
 			}
 			String	hexToDec	= temp.toString();
-					hexToDecD	= tempB.toString().substring(0,tempB.toString().length()-1);
+					hexToDecD	= tempB.toString().substring(0,tempB.toString().length()-delim.length());
+			
+			
+			if(getInUseBytesLong().getValue()==true)
+			{
+				if((hex.length()/2)<bytes)
+				{
+					for(int i=0; i<(bytes-(hex.length()/2)); i++)
+					{
+						hexToDec	= hexToDec + "0";
+						hexToDecD	= hexToDecD + delim + "0";
+					}
+				}
+				if((hex.length()/2)>bytes)
+				{
+								hexToDec		= hexToDec.substring(0,(bytes*2));
+					String[]	spltDec			= hexToDecD.split(delim);
+					String		TEMPhexToDecD	= "";
+					
+					for(int x=0; x<bytes; x++)
+					{
+						TEMPhexToDecD = TEMPhexToDecD + delim + spltDec[x];
+					}
+					hexToDecD	= TEMPhexToDecD.substring(delim.length());
+					getOutByteLengthExceeded().setValue(true);
+				}
+			}
 			
 			logger.trace( "\r\n\t\t" + getSlotPath()	
 						+ "\r\n\t\t convertHexToDecimal() results..." 
@@ -445,17 +556,15 @@ public class BAsciiHexDecConversion extends BComponent
 	
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/**	"removeSpaces" ACCEPTS A STRING INPUT AND RETURNS THE SAME STRING MINUS ANY SPACES *///////////////////
+	/**	"removeChar" ACCEPTS A STRING INPUT AND RETURNS THE SAME STRING MINUS ANY SPACES *///////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public String removeSpaces(String strIn)
+	public String removeChar(String strIn, String stringToReplace)
 	{
 		try
 		{
-			String	stringToReplace		= " "; //SPACE
 			String	replacementString	= ""; // NO SPACE
 			String	newString			= ""; 
 
-			
 			int idx = strIn.lastIndexOf( stringToReplace );
 			if ( idx != -1 ) 
 			{
@@ -473,7 +582,7 @@ public class BAsciiHexDecConversion extends BComponent
 			}
 			
 			logger.trace( "\r\n\t\t" + getSlotPath()	
-						+ "\r\n\t\t removeSpaces() results..." 
+						+ "\r\n\t\t removeChar() results..." 
 						+ "\r\n\t\t FROM:"
 						+ "\r\n\t\t '" + strIn + "'"
 						+ "\r\n\t\t TO:"
@@ -484,7 +593,7 @@ public class BAsciiHexDecConversion extends BComponent
 		catch (Exception e) 
 		{
 			logger.error(		"\r\n\t\t" + getSlotPath()	
-							+	"\r\n\t\t" + "ERROR IN removeSpaces() METHOD!"
+							+	"\r\n\t\t" + "ERROR IN removeChar() METHOD!"
 							+	"\r\n\t\t" + e.getMessage() 
 							+	"\r\n\t\t" + e.getStackTrace());
 			getOutAscii().setValue("");
