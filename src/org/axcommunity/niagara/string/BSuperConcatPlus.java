@@ -354,7 +354,10 @@ public class BSuperConcatPlus extends BComponent
 					}
 					else
 					{
-						strOutDelimitValuesOnly = strOutDelimitValuesOnly.substring(0,(strOutDelimitValuesOnly.length()-delim.length()));
+						if(strOutDelimitValuesOnly.length()>0)
+						{
+							strOutDelimitValuesOnly = strOutDelimitValuesOnly.substring(0,(strOutDelimitValuesOnly.length()-delim.length()));
+						}
 						strOutDelimitValuesOnlyPlusTimestamp = strOutDelimitValuesOnlyPlusTimestamp + currentTime();
 						strOutDelimitAllPlusTimestamp = strOutDelimitAllPlusTimestamp + delim + currentTime();
 					}
