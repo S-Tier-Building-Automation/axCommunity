@@ -92,6 +92,7 @@
 	<type name="EventAtTime"						class="org.axcommunity.niagara.time.BEventAtTime" />
 	
 	<type name="FilterExt"							class="org.axcommunity.niagara.extensions.BFilterExt" />
+	<type name="UnAckAlarmState"					class="org.axcommunity.niagara.extensions.BUnAckAlarmState" />	
 	
 	<type name="SimpleTstat"						class="org.axcommunity.niagara.hvac.BSimpleTstat" />
 	<type name="TstatA"								class="org.axcommunity.niagara.hvac.BTstatA" />

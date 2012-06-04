@@ -51,6 +51,7 @@
         
         <p m="b=baja" t="b:UnrestrictedFolder" n="Extensions">
             <p n="FilterExt"						m="w=axCommunity" t="w:FilterExt" />
+            <p n="UnAckAlarmState"					m="w=axCommunity" t="w:UnAckAlarmState" />
          </p>
         
 		<p m="b=baja" t="b:Folder" n="Logic">

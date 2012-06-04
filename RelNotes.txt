@@ -240,3 +240,6 @@ V12.06.01 June 3, 2012
 	the decimal and hex output to a specified byte length. Also when used the outputs of the decimal and hex slots will contain zeros 
 	to null the byte. - Justin Koffler
 - Modified 'BSuperConcatPlus' to eliminate error thrown if all input slots are blank and the 'concatenate' action is triggered.
+- Added BUnAckAlarmState extension - provides Alarm Ack on parent point of Unacked Alarm - Dean Mynott 
+
+
