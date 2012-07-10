@@ -242,4 +242,6 @@ V12.06.01 June 3, 2012
 - Modified 'BSuperConcatPlus' to eliminate error thrown if all input slots are blank and the 'concatenate' action is triggered.
 - Added BUnAckAlarmState extension - provides Alarm Ack on parent point of Unacked Alarm - Dean Mynott 
 
-
+V12.07.01 July 10, 2012
+- MODIFIED BTstatA extension – reverse acting version. Goes ‘on’ at Setpoint - differential, and ‘off’ at Setpoint - Dean Mynott
+- ADDED    BLimitOutput – takes StatusNumeric input and applies high and  low limits. Ignores limits if they are null - Dean Mynott

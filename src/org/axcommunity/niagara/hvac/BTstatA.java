@@ -126,8 +126,8 @@ public class BTstatA extends BLogic
     }
     else
     {
-      over  = ( v <= s );
-      under = ( v > s - d ) ;    
+      over  = ( v <= s + d);      // changed 2012-06-17
+      under = ( v > s ) ;         // changed 2012-06-17   
 
       if(over)
         returnValue = true;

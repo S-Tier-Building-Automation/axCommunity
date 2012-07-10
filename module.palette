@@ -42,6 +42,7 @@
     		<p n="AvgMinMax_v1"						m="w=axCommunity" t="w:AvgMinMax_v1"/>
     		<p n="StatusNumericFifo"				m="w=axCommunity" t="w:StatusNumericFifo"/>
     		<p n="AbsTimeOffset"					m="w=axCommunity" t="w:AbsTimeOffset"/>
+    		<p n="LimitOutput"					    m="w=axCommunity" t="w:LimitOutput"/>
    		</p>
    		
         <p m="b=baja" t="b:Folder" n="Time">
