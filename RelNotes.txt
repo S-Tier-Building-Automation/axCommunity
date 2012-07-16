@@ -242,6 +242,14 @@ V12.06.01 June 3, 2012
 - Modified 'BSuperConcatPlus' to eliminate error thrown if all input slots are blank and the 'concatenate' action is triggered.
 - Added BUnAckAlarmState extension - provides Alarm Ack on parent point of Unacked Alarm - Dean Mynott 
 
+V12.06.02 June 29, 2012
+- Modified 'BFireOnChange' by adding try|catch block to changed method and added error level logging when exception is caught.
+
 V12.07.01 July 10, 2012
 - MODIFIED BTstatA extension – reverse acting version. Goes ‘on’ at Setpoint - differential, and ‘off’ at Setpoint - Dean Mynott
 - ADDED    BLimitOutput – takes StatusNumeric input and applies high and  low limits. Ignores limits if they are null - Dean Mynott
+
+V12.07.02 July 14, 2012
+- Added new object BStopwatch_v2 as a replacement for BStopwatch. The first version didn't seem to work very well but in case anyone 
+	is actively using it I didn't want to make drastic modifications and screw up any of their logic so I made a new one. - Justin Koffler
+- Alphabetized most of the palette, sorry this was driving me nuts but hope this doesn't confuse anyone. - Justin Koffler

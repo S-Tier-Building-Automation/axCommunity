@@ -54,12 +54,12 @@ public class BAsciiHexDecConversion extends BComponent
 	  * If input shorter than byte length output will be padded with zeros.
 	  * If input longer than byte length output will be truncated.
 	*/
-	public static final Property inBytesLong  = newProperty(0|Flags.SUMMARY, new BStatusNumeric(0), BFacets.makeNumeric(0));
+	public static final Property inBytesLong  = newProperty(0, new BStatusNumeric(0), BFacets.makeNumeric(0));
 	public BStatusNumeric getInBytesLong() {return (BStatusNumeric) get(inBytesLong); }
 	public void setInBytesLong(BStatusNumeric v) {set(inBytesLong, v);}
 	
-	/**When true the decimal byte length value is hornored.*/
-	public final static Property inUseBytesLong = newProperty(0|Flags.SUMMARY, new BStatusBoolean(false));
+	/**When true the decimal byte length value is honored.*/
+	public final static Property inUseBytesLong = newProperty(0, new BStatusBoolean(false));
 	public BStatusBoolean getInUseBytesLong() { return (BStatusBoolean)get(inUseBytesLong); }
 	public void setInUseBytesLong(BStatusBoolean v) { set(inUseBytesLong, v); }
 	
@@ -71,17 +71,17 @@ public class BAsciiHexDecConversion extends BComponent
 	//	INPUTS   //////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	/** The ascii value in string format you want to convert to hex and decimal format. */
+	/** The ASCII value in string format you want to convert to hex and decimal format. */
 	public static final Property inAscii = newProperty(0|Flags.SUMMARY, new BStatusString(),BFacets.make("multiLine",true));
 	public BStatusString getInAscii() { return (BStatusString)get(inAscii);}
 	public void setInAscii(BStatusString v) {set(inAscii,v);}
 	
-	/**The hex value in string format you want to convert to ascii and decimal format. */
+	/**The hex value in string format you want to convert to ASCII and decimal format. */
 	public static final Property inHex = newProperty(0|Flags.SUMMARY, new BStatusString());
 	public BStatusString getInHex() { return (BStatusString)get(inHex);}
 	public void setInHex(BStatusString v) {set(inHex,v);}
 	
-	/**The decimal value in string format you want to convert to ascii and hex. */
+	/**The decimal value in string format you want to convert to ASCII and hex. */
 	public static final Property inDecimal = newProperty(0|Flags.SUMMARY, new BStatusString());
 	public BStatusString getInDecimal() { return (BStatusString)get(inDecimal);}
 	public void setInDecimal(BStatusString v) {set(inDecimal,v);}
@@ -90,7 +90,7 @@ public class BAsciiHexDecConversion extends BComponent
 	//	OUTPUTS   /////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	/**The ascii value in string format as calculated from changed input value. */
+	/**The ASCII value in string format as calculated from changed input value. */
 	public static final Property outAscii = newProperty(0|Flags.SUMMARY, new BStatusString(),BFacets.make("multiLine",true));
 	public BStatusString getOutAscii() { return (BStatusString)get(outAscii);}
 	public void setOutAscii(BStatusString v) {set(outAscii,v);}

@@ -1,5 +1,6 @@
 package org.axcommunity.niagara.logic;
 
+import javax.baja.log.Log;
 import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
@@ -37,35 +38,41 @@ public class BFireOnChange extends BComponent {
        	if(!Sys.atSteadyState()|| !isRunning()){
     		return;
     	}
-       	if(property == stringIn)
-       	{
-       		if(getStringIn().getValue().compareTo(lastString)!=0)
-       		{
-       			//new value, fire output
-       			lastString = getStringIn().getValue();
-       			this.fireNewStringInput(BString.make(lastString));
-       		}
-       	}
-       	if(property == numericIn)
-       	{
-       		if(getNumericIn().getValue()!=lastNumber)
-       		{
-       			//new value, fire output
-       			lastNumber = getNumericIn().getValue();
-       			this.fireNewNumericInput(BDouble.make(lastNumber));
-       		}
-       	}
-       	
-       	if(property == booleanIn)
-       	{
-       		if(getBooleanIn().getValue()==true&&lastBoolean==false)
-       		{
-       			//new value, fire output
-       			this.fireNewBooleanInput(BBoolean.make(true));
-       		}
-   			lastBoolean = getBooleanIn().getValue();
-
-       	}
+		try
+		{
+			if(property == stringIn)
+			{
+				if(getStringIn().getValue().compareTo(lastString)!=0)
+				{
+					//new value, fire output
+					lastString = getStringIn().getValue();
+					this.fireNewStringInput(BString.make(lastString));
+				}
+			}
+			if(property == numericIn)
+			{
+				if(getNumericIn().getValue()!=lastNumber)
+				{
+					//new value, fire output
+					lastNumber = getNumericIn().getValue();
+					this.fireNewNumericInput(BDouble.make(lastNumber));
+				}
+			}
+			
+			if(property == booleanIn)
+			{
+				if(getBooleanIn().getValue()==true&&lastBoolean==false)
+				{
+					//new value, fire output
+					this.fireNewBooleanInput(BBoolean.make(true));
+				}
+				lastBoolean = getBooleanIn().getValue();
+			}
+		}
+		catch (Exception e) 
+		{
+			logger.error("\n\n" + getSlotPath()	+ "\n\n" + e.getMessage() +	"\n\n" + e.getStackTrace());
+		}
 
     }
 
@@ -99,6 +106,9 @@ public class BFireOnChange extends BComponent {
     public void fireNewBooleanInput(BBoolean event){
     	fire(newBooleanInput,event,null);
     }
+	
+	public static final Log logger = Log.getLog("axCommunity.FireOnChange");
+	
     public BIcon getIcon() { return icon; }
     private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");
 	    
