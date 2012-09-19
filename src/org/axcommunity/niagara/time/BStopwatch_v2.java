@@ -54,6 +54,11 @@ public class BStopwatch_v2 extends BComponent
 	// USER CONTROLS ******************************************************************************************
 	//*********************************************************************************************************
 
+	/** IF VALUE EQUALS FALSE THE TIMER WILL NOT RUN.*/
+	public final static Property inEnable = newProperty(0, new BStatusBoolean(true));
+	public BStatusBoolean getInEnable() { return (BStatusBoolean)get(inEnable); }
+	public void setInEnable(BStatusBoolean v) { set(inEnable, v); }
+	
 	/** FREQUENCY THE CLOCK VALUES WILL BE UPDATED. */
 	public static final Property inUpdateRate = newProperty(0, BRelTime.make(500l),BFacets.make(BFacets.SHOW_MILLISECONDS, true));
 	public BRelTime getInUpdateRate() { return (BRelTime)get(inUpdateRate); }
@@ -444,7 +449,14 @@ public class BStopwatch_v2 extends BComponent
 	public void timerExpired() {invoke(timerExpired,null,null);}
 	public void doTimerExpired() throws Exception 
 	{
-		setTime();
+		if(getInEnable().getValue()==true)
+		{
+			setTime();
+		}
+		else
+		{
+			doStop();
+		}
 	}
 	
 	Clock.Ticket updateTicket;
@@ -489,6 +501,16 @@ public class BStopwatch_v2 extends BComponent
 				
 
 			//*****************************************************************************************************
+			if (p == inEnable) 
+			{
+				if(getInEnable().getValue()==false)
+				{
+					doStop();
+				}
+				return;
+			}
+			
+			//*****************************************************************************************************
 			if (p == inTriggerOnOneshot) 
 			{
 				return;
@@ -508,7 +530,7 @@ public class BStopwatch_v2 extends BComponent
 						}
 					}
 				}
-				else if(getInStart().getValue()==true)
+				else if(getInStart().getValue()==true && getInEnable().getValue()==true)
 				{
 					//Do nothing if already running or the stop input is true when the allow oneshot trigger bool is false
 					if(running || (!allowOneShot && getInStop().getValue()==true))
