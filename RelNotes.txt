@@ -253,3 +253,7 @@ V12.07.02 July 14, 2012
 - Added new object BStopwatch_v2 as a replacement for BStopwatch. The first version didn't seem to work very well but in case anyone 
 	is actively using it I didn't want to make drastic modifications and screw up any of their logic so I made a new one. - Justin Koffler
 - Alphabetized most of the palette, sorry this was driving me nuts but hope this doesn't confuse anyone. - Justin Koffler
+
+V12.09.01 September 23, 2012
+- Modified 'BBqlNumericRecap' to include a few new slots and logic to support them. 
+	New slots include: queryAndCalculate, calculating, lastQuery, error, calculated, errorOccured.
