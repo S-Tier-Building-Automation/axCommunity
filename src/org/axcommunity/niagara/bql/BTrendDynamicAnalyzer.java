@@ -20,7 +20,7 @@ public class BTrendDynamicAnalyzer extends BComponent
 {
   public static final Property history = newProperty(0, BOrd.NULL, null);
   public static final Property dateRange = newProperty(0, new BAbsTimeRange(BAbsTime.make(2000, BMonth.make(0), 0, 0, 0), BAbsTime.make()), null);
-  public static final Property timeRange = newProperty(10, BDynamicTimeRange.make("lastMonth"), null);
+  public static final Property timeRange = newProperty(8, BDynamicTimeRange.make("lastMonth"), null);
   public static final Property timeRangeDelta = newProperty(10, false, null);
   public static final Property count = newProperty(8, new BStatusNumeric(0.0D), null);
   public static final Property min = newProperty(8, new BStatusNumeric(0.0D), null);

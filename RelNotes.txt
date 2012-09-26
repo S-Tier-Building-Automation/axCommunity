@@ -249,6 +249,11 @@ V12.07.01 July 10, 2012
 - MODIFIED BTstatA extension – reverse acting version. Goes ‘on’ at Setpoint - differential, and ‘off’ at Setpoint - Dean Mynott
 - ADDED    BLimitOutput – takes StatusNumeric input and applies high and  low limits. Ignores limits if they are null - Dean Mynott
 
+V12.09.01 Sept 26, 2012
+- MODIFIED BDynamicTrendAnalyzer - made the TimeRange property non-transient. - Mike Arnott
+- ADDED    BFilterLogMeanExt - new filter using a LogMean method to approach an average. Low filter values have an excellent step response.
+           Higher values offer very smoot out put at the expense of response time... but still great. - Dean Mynott=======
+
 V12.07.02 July 14, 2012
 - Added new object BStopwatch_v2 as a replacement for BStopwatch. The first version didn't seem to work very well but in case anyone 
 	is actively using it I didn't want to make drastic modifications and screw up any of their logic so I made a new one. - Justin Koffler
@@ -256,4 +261,9 @@ V12.07.02 July 14, 2012
 
 V12.09.01 September 23, 2012
 - Modified 'BBqlNumericRecap' to include a few new slots and logic to support them. 
-	New slots include: queryAndCalculate, calculating, lastQuery, error, calculated, errorOccured.
+	New slots include: queryAndCalculate, calculating, lastQuery, error, calculated, errorOccured.>>>>>>> .r131
+
+V12.09.02 Sept 26, 2012
+- MODIFIED BDynamicTrendAnalyzer - made the TimeRange property non-transient. - Mike Arnott
+- ADDED    BFilterLogMeanExt - new filter using a LogMean method to approach an average. Low filter values have an excellent step response.
+           Higher values offer very smoot out put at the expense of response time... but still great. - Dean Mynott
