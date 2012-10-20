@@ -24,6 +24,13 @@ public class BSysInfo extends BComponent
 {
 
 	private BSystemPlatformService sysObject = new BSystemPlatformService();
+	
+	public static final Action Update = newAction(Flags.SUMMARY|Flags.ASYNC|Flags.DEFAULT_ON_CLONE,null);
+	public void Update(){invoke(Update,null,null);}
+	public void doUpdate()
+	{
+		calculate();
+	}
 
 
 	public static final Property executePeriod = newProperty(Flags.SUMMARY,  BRelTime.make(60000));
@@ -49,7 +56,19 @@ public class BSysInfo extends BComponent
 	
 	public void doTimerExpired() throws Exception 
 	{
+		calculate();
+	}
+	void updateTimer()
+	{            
+		if (ticket != null) ticket.cancel();
+		ticket = Clock.schedulePeriodically(this, getExecutePeriod(), timerExpired, null);
+	}    
 
+	Clock.Ticket ticket;
+	long lastOnExecuteTicks;
+	
+	public void calculate()
+	{
 		getCpuUsage().setValue((double)				sysObject.getCurrentCpuUsage());
 		getBajaHome().setValue( 					sysObject.getBajaHome());
 		getFreePhysicalMemory().setValue((double)	sysObject.getFreePhysicalMemory());
@@ -73,16 +92,8 @@ public class BSysInfo extends BComponent
 		getTotalHeap().setValue(totalMem);
 		getUsedHeap().setValue(usedMem);
 		getFreeHeap().setValue(freeMem);
-
 	}
-	void updateTimer()
-	{            
-		if (ticket != null) ticket.cancel();
-		ticket = Clock.schedulePeriodically(this, getExecutePeriod(), timerExpired, null);
-	}    
-
-	Clock.Ticket ticket;
-	long lastOnExecuteTicks;
+	
 	
 	/** 
 	 * This will cause the station to restart just as if you did it from the application director.
@@ -113,9 +124,7 @@ public class BSysInfo extends BComponent
 	/***/
     public static final Property bajaHome = newProperty(Flags.SUMMARY, new BStatusString());
     public void setBajaHome(BStatusString v) { set(bajaHome, v); }
-	public BStatusString getBajaHome() { 
-		return (BStatusString)get(bajaHome); 
-	}
+	public BStatusString getBajaHome() {return (BStatusString)get(bajaHome);}
 	
 	/***/
 //    public static final Property stationHostID = newProperty(Flags.SUMMARY, new BStatusString());
@@ -127,95 +136,69 @@ public class BSysInfo extends BComponent
 	/***/
     public static final Property javaVmName = newProperty(Flags.SUMMARY, new BStatusString());
     public void setJavaVmName(BStatusString v) { set(javaVmName, v); }
-	public BStatusString getJavaVmName() { 
-		return (BStatusString)get(javaVmName); 
-	}
+	public BStatusString getJavaVmName() {return (BStatusString)get(javaVmName);}
 	
 	/***/
     public static final Property javaVmVersion = newProperty(Flags.SUMMARY, new BStatusString());
     public void setJavaVmVersion(BStatusString v) { set(javaVmVersion, v); }
-	public BStatusString getJavaVmVersion() { 
-		return (BStatusString)get(javaVmVersion); 
-	}
+	public BStatusString getJavaVmVersion() {return (BStatusString)get(javaVmVersion);}
 
 	
 	/***/
     public static final Property locale = newProperty(Flags.SUMMARY, new BStatusString());
     public void setLocale(BStatusString v) { set(locale, v); }
-	public BStatusString getLocale() { 
-		return (BStatusString)get(locale); 
-	}
+	public BStatusString getLocale() {return (BStatusString)get(locale);}
 
 	/***/
     public static final Property niagaraVersion = newProperty(Flags.SUMMARY, new BStatusString());
     public void setNiagaraVersion(BStatusString v) { set(niagaraVersion, v); }
-	public BStatusString getNiagaraVersion() { 
-		return (BStatusString)get(niagaraVersion); 
-	}
+	public BStatusString getNiagaraVersion() {return (BStatusString)get(niagaraVersion);}
 
 	/***/
     public static final Property osArch = newProperty(Flags.SUMMARY, new BStatusString());
     public void setOsArch(BStatusString v) { set(osArch, v); }
-	public BStatusString getOsArch() { 
-		return (BStatusString)get(osArch); 
-	}
+	public BStatusString getOsArch() {return (BStatusString)get(osArch);}
 	
 	/***/
     public static final Property osName = newProperty(Flags.SUMMARY, new BStatusString());
     public void setOsName(BStatusString v) { set(osName, v); }
-	public BStatusString getOsName() { 
-		return (BStatusString)get(osName); 
-	}
+	public BStatusString getOsName() {return (BStatusString)get(osName);}
 
 	/***/
     public static final Property osVersion = newProperty(Flags.SUMMARY, new BStatusString());
     public void setOsVersion(BStatusString v) { set(osVersion, v); }
-	public BStatusString getOsVersion() { 
-		return (BStatusString)get(osVersion); 
-	}
+	public BStatusString getOsVersion() {return (BStatusString)get(osVersion);}
 
 	/***/
     public static final Property platformServiceDescription = newProperty(Flags.SUMMARY, new BStatusString());
     public void setPlatformServiceDescription(BStatusString v) { set(platformServiceDescription, v); }
-	public BStatusString getPlatformServiceDescription() { 
-		return (BStatusString)get(platformServiceDescription); 
-	}
+	public BStatusString getPlatformServiceDescription() {return (BStatusString)get(platformServiceDescription);}
 	
 	/***/
     public static final Property stationName = newProperty(Flags.SUMMARY, new BStatusString());
     public void setStationName(BStatusString v) { set(stationName, v); }
-	public BStatusString getStationName() { 
-		return (BStatusString)get(stationName); 
-	}
+	public BStatusString getStationName() {return (BStatusString)get(stationName);}
 
 	/***/
     public static final Property cpuUsage = newProperty(Flags.SUMMARY, new BStatusNumeric());
     public void setCpuUsage(BStatusNumeric v) { set(cpuUsage, v); }
-	public BStatusNumeric getCpuUsage() { 
-		return (BStatusNumeric)get(cpuUsage); 
-	}
+	public BStatusNumeric getCpuUsage() {return (BStatusNumeric)get(cpuUsage);}
 
 	/***/
     public static final Property totalPhysicalMemory = newProperty(Flags.SUMMARY, new BStatusNumeric());
     public void setTotalPhysicalMemory(BStatusNumeric v) { set(totalPhysicalMemory, v); }
-	public BStatusNumeric getTotalPhysicalMemory() { 
-		return (BStatusNumeric)get(totalPhysicalMemory); 
-	}
+	public BStatusNumeric getTotalPhysicalMemory() {return (BStatusNumeric)get(totalPhysicalMemory);}
 
 	/***/
     public static final Property freePhysicalMemory = newProperty(Flags.SUMMARY, new BStatusNumeric());
     public void setFreePhysicalMemory(BStatusNumeric v) { set(freePhysicalMemory, v); }
-	public BStatusNumeric getFreePhysicalMemory() { 
-		return (BStatusNumeric)get(freePhysicalMemory); 
-	}
+	public BStatusNumeric getFreePhysicalMemory() {return (BStatusNumeric)get(freePhysicalMemory);}
 
 	
 	/***/
     public static final Property overallCpuUsage = newProperty(Flags.SUMMARY, new BStatusNumeric());
     public void setOverallCpuUsage(BStatusNumeric v) { set(overallCpuUsage, v); }
-	public BStatusNumeric getOverallCpuUsage() { 
-		return (BStatusNumeric)get(overallCpuUsage); 
-	}
+	public BStatusNumeric getOverallCpuUsage() {return (BStatusNumeric)get(overallCpuUsage);}
 
 	public static final Property usedHeap = newProperty(Flags.SUMMARY, new BStatusNumeric()); 
 	public BStatusNumeric getUsedHeap() { return (BStatusNumeric)get(usedHeap); }

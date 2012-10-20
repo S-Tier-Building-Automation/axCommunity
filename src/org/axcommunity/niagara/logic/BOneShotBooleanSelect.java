@@ -71,7 +71,7 @@ public class BOneShotBooleanSelect extends BComponent
 	public void setTrigger(BStatusBoolean v) { set(trigger,v,null); }
 
 	/** Time output should hold its triggered value*/
-	public static final Property time = newProperty(0, BRelTime.make(500l),null);
+	public static final Property time = newProperty(0, BRelTime.make(500l),BFacets.make(BFacets.SHOW_MILLISECONDS, true));
 	public BRelTime getTime() { return (BRelTime)get(time); }
 	public void setTime(BRelTime v) { set(time,v,null); }
 	
@@ -97,7 +97,7 @@ public class BOneShotBooleanSelect extends BComponent
 
 	
 	/** Time of last trigger input*/
-	public static final Property lastTrigger = newProperty(0|Flags.READONLY, BAbsTime.make(), BFacets.make("showSeconds",true));
+	public static final Property lastTrigger = newProperty(0|Flags.READONLY, BAbsTime.make(), BFacets.make("showMilliseconds",true));
 	public BAbsTime getLastTrigger() { return (BAbsTime)get(lastTrigger); }
 	public void setLastTrigger(BAbsTime v) { set(lastTrigger, v); }
 	

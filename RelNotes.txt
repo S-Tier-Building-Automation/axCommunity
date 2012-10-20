@@ -262,3 +262,8 @@ V12.09.02 Sept 26, 2012
 - MODIFIED BDynamicTrendAnalyzer - made the TimeRange property non-transient. - Mike Arnott
 - ADDED    BFilterLogMeanExt - new filter using a LogMean method to approach an average. Low filter values have an excellent step response.
            Higher values offer very smoot out put at the expense of response time... but still great. - Dean Mynott
+
+V12.09.03 October 19, 2012		   
+- MODIFIED BOneShotMultiSelect & BOneShotBooleanSelect changed facets on 'lastTrigger' to 'showMilliseconds'
+- MODIFIED BStatusStringToString removed the transient flag from the 'in' and 'out' slots.
+- MODIFIED BSystemPlatformService to include new action slot 'Update' to force an update of the information. - Justin Koffler
