@@ -51,29 +51,6 @@
 			<p n="TstatB"							m="w=axCommunity" t="w:TstatB" />
 		</p>
 		
-		
-		<p m="b=baja" t="b:Folder" n="Math">
-			<p n="AbsTimeOffset"					m="w=axCommunity" t="w:AbsTimeOffset"/>
-			<p n="AvgMinMax"						m="w=axCommunity" t="w:AvgMinMax"/>
-			<p n="AvgMinMax_v1"						m="w=axCommunity" t="w:AvgMinMax_v1"/>
-			<p n="LimitOutput"						m="w=axCommunity" t="w:LimitOutput"/>
-			<p n="Modulo"							m="k=axCommunity" t="k:Modulo" />
-			<p n="RoundUp"							m="k=axCommunity" t="k:RoundUp" />
-			<p n="StatusNumericFifo"				m="w=axCommunity" t="w:StatusNumericFifo"/>
-			<p n="TrAdd"							m="k=axCommunity" t="k:TrAdd" />
-			<p n="TrCopy"							m="k=axCommunity" t="k:TrCopy" />
-			<p n="TrDivide"							m="k=axCommunity" t="k:TrDivide" />
-			<p n="TrMultiply"						m="k=axCommunity" t="k:TrMultiply" />
-			<p n="TrSubtract"						m="k=axCommunity" t="k:TrSubtract" />
-		</p>
-
-		<p m="b=baja" t="b:Folder" n="Time">
-			<p n="EventAtTime"						m="w=axCommunity" t="w:EventAtTime" />
-			<p n="Stopwatch"						m="w=axCommunity" t="w:Stopwatch" />
-			<p n="Stopwatch_v2"						m="w=axCommunity" t="w:Stopwatch_v2" />
-		</p>
-		
-		
 		<p m="b=baja" t="b:Folder" n="Logic">
 			<p n="BooleanCompareCmdStatus"			m="k=axCommunity" t="k:BooleanCompareCmdStatus"/>
 			<p n="BooleanRotateOnExecute"			m="k=axCommunity" t="k:BooleanRotateOnExecute"/>
@@ -110,15 +87,19 @@
 		</p>
 		
 		
-		<p m="b=baja" t="b:Folder" n="System">
-			<p n="StringToFile"						m="k=axCommunity" t="k:StringToFile"/>
-			<p n="SysInfo"							m="k=axCommunity" t="k:SysInfo"/>
-		</p>
-
-		
-		<p m="b=baja" t="b:Folder" n="Web">
-			<p n="GetHTTP"							m="k=axCommunity" t="k:GetHTTP"/>
-			<p n="StringToFile"						m="k=axCommunity" t="k:StringToFile"/>
+		<p m="b=baja" t="b:Folder" n="Math">
+			<p n="AbsTimeOffset"					m="w=axCommunity" t="w:AbsTimeOffset"/>
+			<p n="AvgMinMax"						m="w=axCommunity" t="w:AvgMinMax"/>
+			<p n="AvgMinMax_v1"						m="w=axCommunity" t="w:AvgMinMax_v1"/>
+			<p n="LimitOutput"						m="w=axCommunity" t="w:LimitOutput"/>
+			<p n="Modulo"							m="k=axCommunity" t="k:Modulo" />
+			<p n="RoundUp"							m="k=axCommunity" t="k:RoundUp" />
+			<p n="StatusNumericFifo"				m="w=axCommunity" t="w:StatusNumericFifo"/>
+			<p n="TrAdd"							m="k=axCommunity" t="k:TrAdd" />
+			<p n="TrCopy"							m="k=axCommunity" t="k:TrCopy" />
+			<p n="TrDivide"							m="k=axCommunity" t="k:TrDivide" />
+			<p n="TrMultiply"						m="k=axCommunity" t="k:TrMultiply" />
+			<p n="TrSubtract"						m="k=axCommunity" t="k:TrSubtract" />
 		</p>
 
 		
@@ -128,6 +109,25 @@
 				<p n="wsAnnotation"	f="r" t="b:WsAnnotation" v="5,5,20"/>
 			</p>
 			<p n="SuperConcatPlus"					m="k=axCommunity" t="k:SuperConcatPlus"/>
+		</p>
+		
+		
+		<p m="b=baja" t="b:Folder" n="System">
+			<p n="StringToFile"						m="k=axCommunity" t="k:StringToFile"/>
+			<p n="SysInfo"							m="k=axCommunity" t="k:SysInfo"/>
+		</p>
+		
+		
+		<p m="b=baja" t="b:Folder" n="Time">
+			<p n="EventAtTime"						m="w=axCommunity" t="w:EventAtTime" />
+			<p n="Stopwatch"						m="w=axCommunity" t="w:Stopwatch" />
+			<p n="Stopwatch_v2"						m="w=axCommunity" t="w:Stopwatch_v2" />
+		</p>
+		
+		
+		<p m="b=baja" t="b:Folder" n="Web">
+			<p n="GetHTTP"							m="k=axCommunity" t="k:GetHTTP"/>
+			<p n="StringToFile"						m="k=axCommunity" t="k:StringToFile"/>
 		</p>
 
 		
