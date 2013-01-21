@@ -14,6 +14,10 @@ import javax.baja.sys.Type;
 
 import com.tridium.platform.BSystemPlatformService;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+
 /**
  * Executes every executePeriod and displays current system information.
  *
@@ -85,6 +89,19 @@ public class BSysInfo extends BComponent
 		getStationName().setValue(					sysObject.getStationName());
 		getTotalPhysicalMemory().setValue((double)	sysObject.getTotalPhysicalMemory());
 		
+		try
+		{
+			getHostName().setValue(		InetAddress.getLocalHost().getHostName());
+			getFqdn().setValue(			InetAddress.getLocalHost().getCanonicalHostName());
+			getDomain().setValue(		InetAddress.getLocalHost().getCanonicalHostName().substring(InetAddress.getLocalHost().getHostName().length() + 1));
+			getIpAddress().setValue(	InetAddress.getLocalHost().getHostAddress());
+		}
+		catch (UnknownHostException e)
+		{
+			e.printStackTrace();
+		}
+		
+		
 		long totalMem = Runtime.getRuntime().totalMemory()/1024;
 		long freeMem = Runtime.getRuntime().freeMemory()/1024;
 		long usedMem = totalMem - freeMem;
@@ -103,7 +120,7 @@ public class BSysInfo extends BComponent
 	public void RestartStation(){invoke(RestartStation,null,null);}
 	public void doRestartStation()
 	{
-		System.out.println("\r\nA Station Restart Has Been Invoked From:\r\n" + getSlotPath());
+		System.out.println("\r\nA Station Restart Has Been Invoked From:\t\t" + getSlotPath());
 		sysObject.lease(1);
 		sysObject.invoke(BSystemPlatformService.restartStation, null);
 	}
@@ -116,7 +133,7 @@ public class BSysInfo extends BComponent
 	public void RebootStation(){invoke(RebootStation,null,null);}
 	public void doRebootStation()
 	{
-		System.out.println("\r\nA Station Reboot Has Been Invoked From:\r\n" + getSlotPath());
+		System.out.println("\r\nA Station Reboot Has Been Invoked From:\t\t" + getSlotPath());
 		sysObject.lease(1);
 		sysObject.invoke(BSystemPlatformService.reboot, null);
 	}
@@ -180,6 +197,26 @@ public class BSysInfo extends BComponent
 	public BStatusString getStationName() {return (BStatusString)get(stationName);}
 
 	/***/
+    public static final Property ipAddress = newProperty(Flags.SUMMARY, new BStatusString());
+    public void setIpAddress(BStatusString v) { set(ipAddress, v); }
+	public BStatusString getIpAddress() {return (BStatusString)get(ipAddress);}
+	
+	/***/
+    public static final Property hostName = newProperty(Flags.SUMMARY, new BStatusString());
+    public void setHostName(BStatusString v) { set(hostName, v); }
+	public BStatusString getHostName() {return (BStatusString)get(hostName);}
+	
+	/***/
+    public static final Property domain = newProperty(Flags.SUMMARY, new BStatusString());
+    public void setDomain(BStatusString v) { set(domain, v); }
+	public BStatusString getDomain() {return (BStatusString)get(domain);}
+	
+	/***/
+    public static final Property fqdn = newProperty(Flags.SUMMARY, new BStatusString());
+    public void setFqdn(BStatusString v) { set(fqdn, v); }
+	public BStatusString getFqdn() {return (BStatusString)get(fqdn);}
+	
+	/***/
     public static final Property cpuUsage = newProperty(Flags.SUMMARY, new BStatusNumeric());
     public void setCpuUsage(BStatusNumeric v) { set(cpuUsage, v); }
 	public BStatusNumeric getCpuUsage() {return (BStatusNumeric)get(cpuUsage);}
@@ -193,7 +230,6 @@ public class BSysInfo extends BComponent
     public static final Property freePhysicalMemory = newProperty(Flags.SUMMARY, new BStatusNumeric());
     public void setFreePhysicalMemory(BStatusNumeric v) { set(freePhysicalMemory, v); }
 	public BStatusNumeric getFreePhysicalMemory() {return (BStatusNumeric)get(freePhysicalMemory);}
-
 	
 	/***/
     public static final Property overallCpuUsage = newProperty(Flags.SUMMARY, new BStatusNumeric());
