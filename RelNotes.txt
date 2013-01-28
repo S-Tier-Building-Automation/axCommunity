@@ -266,5 +266,12 @@ V12.09.02 Sept 26, 2012
 V13.01.01 January 20, 2013
 - MODIFIED 'BSysInfo' to include four new slots: 'ipAddress', 'hostName', 'domain' and 'fqdn'. - Justin Koffler
 
+V13.01.02 January 28, 2013
+- MODIFIED 'BWhoWhenBooleanSetpoint' to include new slots: 'SetTrue' (action), 'SetFalse' (action), 
+	'outLogString' (status string), 'Value' (topic), 'LogString' (topic) and   'absTimeFacets' (facet) 
+	and fixed logic so that facets are applied. - Justin Koffler
+- MODIFIED 'BWhoWhenStringSetpoint' to include new slots: 'outLogString' (status string), 'Value' (topic), 'LogString' (topic) and 'absTimeFacets' (facet) - Justin Koffler
+
+
 
 
