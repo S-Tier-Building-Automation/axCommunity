@@ -162,6 +162,28 @@
 			<p n="BoundLabelHighlight" m="k=axCommunity" t="k:BoundLabelHighlight">
 				<p n="layout" v="490.0,420.0,130.0,20.0"/>
 			</p>
+			
+			
+			<p n="RevolvingTextLabel2"				m="k=axCommunity" t="k:RevolvingTextLabel2">
+				<p n="layout" v="0.0,0.0,120.0,20.0"/>
+				<!-- /RevolvingTextLabel2/bindText -->
+				<p n="bindText"						m="kitPx=kitPx" t="kitPx:SetPointBinding">
+					<p n="popupEnabled" v="false"/>
+					<p n="widgetProperty" v="text"/>
+				</p>
+				<!-- /RevolvingTextLabel2/bindVisible -->
+				<p n="bindVisible"					m="kitPx=kitPx" t="kitPx:SetPointBinding">
+					<p n="popupEnabled" v="false"/>
+					<p n="widgetProperty" v="visible"/>
+				</p>
+				<!-- /RevolvingTextLabel2/bindFlash -->
+				<p n="bindFlash"					m="kitPx=kitPx" t="kitPx:SetPointBinding">
+					<p n="popupEnabled" v="false"/>
+					<p n="widgetProperty" v="flash"/>
+				</p>
+			</p>
+			
+			
 		</p>
 
 		<p m="b=baja" t="b:Folder" n="PxGraphics">

@@ -102,6 +102,7 @@
 	<type name="TstatB"								class="org.axcommunity.niagara.hvac.BTstatB" /> 
 	
 	<type name="RevolvingTextLabel"					class="org.axcommunity.niagara.widgets.BRevolvingTextLabel" />  
+	<type name="RevolvingTextLabel2"					class="org.axcommunity.niagara.widgets.BRevolvingTextLabel2" />  
 	<type name="DropDownList"						class="org.axcommunity.niagara.widgets.BDropDownList" />  
 	<type name="BoundLabelHighlight"				class="org.axcommunity.niagara.widgets.BBoundLabelHighlight" />
  </types>

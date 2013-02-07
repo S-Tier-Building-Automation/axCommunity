@@ -272,6 +272,13 @@ V13.01.02 January 28, 2013
 	and fixed logic so that facets are applied. - Justin Koffler
 - MODIFIED 'BWhoWhenStringSetpoint' to include new slots: 'outLogString' (status string), 'Value' (topic), 'LogString' (topic) and 'absTimeFacets' (facet) - Justin Koffler
 
+V13.02.01 Feb 7, 2013
+- ADDED BRevolvingTextLabel2 as an ehnanced version of the BRevolvingTextLabel by Eric Bishop, TMT:
+	-	Fixed the default height so that it defaults to the height of the font
+	-	Removed the default colors, so it doesn’t constantly revert to a green background.
+	-	Added scroll speed setting.
+	-	Added an optional pause at the beginning of the string.
+	-	Added end-of-string input (to change from the default “…”).
 
 
 
