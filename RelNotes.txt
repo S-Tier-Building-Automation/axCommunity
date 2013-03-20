@@ -280,5 +280,13 @@ V13.02.01 Feb 7, 2013
 	-	Added an optional pause at the beginning of the string.
 	-	Added end-of-string input (to change from the default “…”).
 
+V13.03.20 March 20, 2013
+- ADDED BScale - Numeric point extension which scales the output
+- ADDED BBrushSwitch - Switches between two brushes using a boolean input
+- ADDED BSetBrushAction - Fires a brush event
+- ADDED BSetFontAction - Fires a brush event
+- ADDED BFontSwitch - Switches between two fonts using a boolean input
+- ADDED BWhoWhenBrushSetpoint - Brush setpoint that monitors when the last change was made and who made it
+- ADDED BWhoWhenFontSetpoint - Font setpoint that monitors when the last change was made and who made it
 
 
