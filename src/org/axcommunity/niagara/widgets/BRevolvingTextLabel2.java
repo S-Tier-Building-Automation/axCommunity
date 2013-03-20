@@ -22,6 +22,16 @@ import javax.baja.ui.BWidget;
 *
 * @authors   Peter Tiagunov, Kors Engineering
 *            Eric Bishop, Texas Machining Technologies
+*            
+* Added features:
+*       Variable scroll speed
+*       Custom text at end of string
+*       Enable/disable pause at begining of string
+*       
+* Fixes:
+*       Sets prefered font size properly
+*       Sets default font properly
+*       Removed custom default background & foregound
 */
 public class BRevolvingTextLabel2 extends BWidget
 {
