@@ -38,6 +38,8 @@
 	<type name="AbsTimeOffset"						class="org.axcommunity.niagara.math.BAbsTimeOffset"/>
 	<type name="LimitOutput"						class="org.axcommunity.niagara.math.BLimitOutput"/>
 	
+	<type name="BrushSwitch"						class="org.axcommunity.niagara.logic.BBrushSwitch"/>
+	<type name="FontSwitch"							class="org.axcommunity.niagara.logic.BFontSwitch"/>
 	<type name="ToggleSwitch"						class="org.axcommunity.niagara.logic.BToggleSwitch"/>
 	<type name="ToggleLatch"						class="org.axcommunity.niagara.logic.BToggleLatch"/>
 	<type name="BooleanCompareCmdStatus"			class="org.axcommunity.niagara.logic.BBooleanCompareCmdStatus"/>
@@ -46,8 +48,10 @@
 	<type name="FireOnChange"						class="org.axcommunity.niagara.logic.BFireOnChange" />
 	<type name="BooleanRotateOnExecute"				class="org.axcommunity.niagara.logic.BBooleanRotateOnExecute"/>
 	<type name="PeakValueAndTstamp"					class="org.axcommunity.niagara.logic.BPeakValueAndTstamp"/>
-	<type name="SetNumericAction"					class="org.axcommunity.niagara.logic.BSetNumericAction"/>
 	<type name="SetBooleanAction"					class="org.axcommunity.niagara.logic.BSetBooleanAction"/>
+	<type name="SetBrushAction"						class="org.axcommunity.niagara.logic.BSetBrushAction"/>
+	<type name="SetFontAction"						class="org.axcommunity.niagara.logic.BSetFontAction"/>
+	<type name="SetNumericAction"					class="org.axcommunity.niagara.logic.BSetNumericAction"/>
 	<type name="SetBooleanActionView"  				class="org.axcommunity.niagara.views.BSetBooleanActionView"> 
 		<agent requiredPermissions="i">
 			<on type="axCommunity:SetBooleanAction"/>
@@ -57,8 +61,10 @@
 	
 	<type name="SuperOr"							class="org.axcommunity.niagara.logic.BSuperOr" />  
 	<type name="BooleanToggle"						class="org.axcommunity.niagara.logic.BBooleanToggle" />
-	<type name="WhoWhenNumericSetpoint"				class="org.axcommunity.niagara.logic.BWhoWhenNumericSetpoint" />
 	<type name="WhoWhenBooleanSetpoint"				class="org.axcommunity.niagara.logic.BWhoWhenBooleanSetpoint" />
+	<type name="WhoWhenBrushSetpoint"				class="org.axcommunity.niagara.logic.BWhoWhenBrushSetpoint" />
+	<type name="WhoWhenNumericSetpoint"				class="org.axcommunity.niagara.logic.BWhoWhenNumericSetpoint" />
+	<type name="WhoWhenFontSetpoint"				class="org.axcommunity.niagara.logic.BWhoWhenFontSetpoint" />
 	<type name="WhoWhenEnumSetpoint"				class="org.axcommunity.niagara.logic.BWhoWhenEnumSetpoint" />
 	<type name="WhoWhenStringSetpoint"				class="org.axcommunity.niagara.logic.BWhoWhenStringSetpoint" />
 	<type name="LatestNumber"						class="org.axcommunity.niagara.logic.BLatestNumber" />
@@ -95,6 +101,7 @@
 	
 	<type name="FilterExt"							class="org.axcommunity.niagara.extensions.BFilterExt" />
 	<type name="FilterLogMeanExt"					class="org.axcommunity.niagara.extensions.BFilterLogMeanExt" />	
+	<type name="Scale"								class="org.axcommunity.niagara.extensions.BScale" />
 	<type name="UnAckAlarmState"					class="org.axcommunity.niagara.extensions.BUnAckAlarmState" />	
 	
 	<type name="SimpleTstat"						class="org.axcommunity.niagara.hvac.BSimpleTstat" />
