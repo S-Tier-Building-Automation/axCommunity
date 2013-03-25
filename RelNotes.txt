@@ -280,7 +280,7 @@ V13.02.01 Feb 7, 2013
 	-	Added an optional pause at the beginning of the string.
 	-	Added end-of-string input (to change from the default “…”).
 
-V13.03.20 March 20, 2013
+V13.03.01 March 20, 2013
 - ADDED BScale - Numeric point extension which scales the output
 - ADDED BBrushSwitch - Switches between two brushes using a boolean input
 - ADDED BSetBrushAction - Fires a brush event
