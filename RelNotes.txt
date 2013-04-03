@@ -290,3 +290,7 @@ V13.03.01 March 20, 2013
 - ADDED BWhoWhenFontSetpoint - Font setpoint that monitors when the last change was made and who made it
 
 
+V13.04.01 April 3, 2013
+- MODIFIED BSysInfo to better handle errors thrown by getLocalHost() based commands
+- ADDED BFireFoxxWeather - a new weather object that uses the Yahoo weather API.  The weather module is accessing Yahoo weather, there is a drop down list for western Canada.  
+	For those people in the rest of the world, they will have to lookup the city code and enter it manually.  By Ron Lea (FireFoxx).

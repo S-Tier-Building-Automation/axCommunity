@@ -89,17 +89,41 @@ public class BSysInfo extends BComponent
 		getStationName().setValue(					sysObject.getStationName());
 		getTotalPhysicalMemory().setValue((double)	sysObject.getTotalPhysicalMemory());
 		
+		try 
+		{
+	    getHostName().setValue(InetAddress.getLocalHost().getHostName());
+		} 
+		catch (Exception e)
+		{
+		  getHostName().setValue("");
+		 } 
+
 		try
 		{
-			getHostName().setValue(		InetAddress.getLocalHost().getHostName());
-			getFqdn().setValue(			InetAddress.getLocalHost().getCanonicalHostName());
-			getDomain().setValue(		InetAddress.getLocalHost().getCanonicalHostName().substring(InetAddress.getLocalHost().getHostName().length() + 1));
-			getIpAddress().setValue(	InetAddress.getLocalHost().getHostAddress());
-		}
-		catch (UnknownHostException e)
+		  getFqdn().setValue(InetAddress.getLocalHost().getCanonicalHostName());
+		} 
+		catch (Exception e)
 		{
-			e.printStackTrace();
-		}
+	    getFqdn().setValue("");
+    } 
+
+		try 
+		{
+		  getDomain().setValue(InetAddress.getLocalHost().getCanonicalHostName().substring(InetAddress.getLocalHost().getHostName().length() + 1));
+	  } 
+		catch (Exception e)
+		{
+		  getDomain().setValue("");
+	  } 
+
+		try 
+		{
+		  getIpAddress().setValue(InetAddress.getLocalHost().getHostAddress());
+	  } 
+		catch (Exception e)
+		{
+		  getIpAddress().setValue("");
+		} 
 		
 		
 		long totalMem = Runtime.getRuntime().totalMemory()/1024;

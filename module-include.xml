@@ -109,7 +109,18 @@
 	<type name="TstatB"								class="org.axcommunity.niagara.hvac.BTstatB" /> 
 	
 	<type name="RevolvingTextLabel"					class="org.axcommunity.niagara.widgets.BRevolvingTextLabel" />  
-	<type name="RevolvingTextLabel2"					class="org.axcommunity.niagara.widgets.BRevolvingTextLabel2" />  
+	<type name="RevolvingTextLabel2"				class="org.axcommunity.niagara.widgets.BRevolvingTextLabel2" />  
 	<type name="DropDownList"						class="org.axcommunity.niagara.widgets.BDropDownList" />  
 	<type name="BoundLabelHighlight"				class="org.axcommunity.niagara.widgets.BBoundLabelHighlight" />
+	
+	
+	<type name="FireFoxxWeather" 					class="org.axcommunity.niagara.weather.BFireFoxxWeather"/>
+  	<type name="LocationStorage" 					class="org.axcommunity.niagara.weather.BLocationStorage"/>
+  	<type name="SiteLocation" 						class="org.axcommunity.niagara.weather.BSiteLocation"/>
+  	<type name="FoxxWeatherState" 					class="org.axcommunity.niagara.weather.BFoxxWeatherState"/>
+  	<type name="WindDirection" 						class="org.axcommunity.niagara.weather.BWindDirection"/>
+  	<type name="PressureState" 						class="org.axcommunity.niagara.weather.BPressureState"/>
+	
+	
+	
  </types>
