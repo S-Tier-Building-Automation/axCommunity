@@ -22,6 +22,7 @@ extends BFrozenEnum
       public static final int VICTORIA = 5;
       public static final int WINNIPEG = 6;
       public static final int SASKATOON = 7;
+      public static final int OTHER = 8;
 
       
       public static final BSiteLocation Whistler = new BSiteLocation(WHISTLER);
@@ -32,6 +33,7 @@ extends BFrozenEnum
       public static final BSiteLocation Victoria = new BSiteLocation(VICTORIA);
       public static final BSiteLocation Winnipeg = new BSiteLocation(WINNIPEG);
       public static final BSiteLocation Saskatoon = new BSiteLocation(SASKATOON);
+      public static final BSiteLocation Other = new BSiteLocation(OTHER);
       
 ////////////////////////////////////////////////////////////////
 //Main/////////////////////////////////////////////////////////
