@@ -297,5 +297,7 @@ V13.04.01 April 3, 2013
 	
 	
 V13.04.02 April 3, 2013
-- FIXED BFireFoxx always reverted to the N. Canada location selected in the dropdown listbox.  Added a new choice for "Other" - you have to use that to manually put in other locations.	
+- FIXED BFireFoxxWeather always reverted to the N. Canada location selected in the dropdown listbox.  Added a new choice for "Other" - you have to use that to manually put in other locations.	
 	
+V13.04.03 April 17, 2013
+- FIXED BFireFoxxWeather now works in a versions < 3.5

@@ -40,7 +40,7 @@ extends BFrozenEnum
 
       public static final BWindDirection variable = new BWindDirection(8);
       
-      public static final BWindDirection DEFAULT = north;
+      //public static final BWindDirection DEFAULT = north;
       
       String windDirection = "";
 

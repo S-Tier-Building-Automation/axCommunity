@@ -26,7 +26,7 @@ extends BFrozenEnum
         
         public static final BPressureState variable = new BPressureState(3);
         
-        public static final BPressureState DEFAULT = steady;
+        //public static final BPressureState DEFAULT = steady;
         
         String pressureState = "";
 

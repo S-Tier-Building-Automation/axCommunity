@@ -39,22 +39,22 @@ extends BFrozenEnum
 //Main/////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
       
-      public static BSiteLocation make(int ordinal)
-      {
-        return (BSiteLocation)NorthVancouver.getRange().get(ordinal, false);
-      }
-  
-      public static BSiteLocation make(String tag)
-      {
-        return (BSiteLocation)NorthVancouver.getRange().get(tag);
-      }
-  
+//      public static BSiteLocation make(int ordinal)
+//      {
+//        return (BSiteLocation)NorthVancouver.getRange().get(ordinal, false);
+//      }
+//  
+//      public static BSiteLocation make(String tag)
+//      {
+//        return (BSiteLocation)NorthVancouver.getRange().get(tag);
+//      }
+//  
       private BSiteLocation(int ordinal)
       {
         super(ordinal);
       }
   
-      public static final BSiteLocation DEFAULT = BSiteLocation.NorthVancouver;
+      //public static final BSiteLocation DEFAULT = BSiteLocation.NorthVancouver;
   
 ////////////////////////////////////////////////////////////////
 //Final

@@ -8,6 +8,7 @@ import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
 import javax.baja.sys.Action;
 import javax.baja.sys.BComponent;
+import javax.baja.sys.BEnumRange;
 import javax.baja.sys.BFacets;
 import javax.baja.sys.BIcon;
 import javax.baja.sys.BInteger;
@@ -29,6 +30,18 @@ extends BComponent
   
       protected static Log log1 = Log.getLog("BFireFoxxWeather");
   
+      
+      public static int[] stateInt = new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,3200}; 
+      public static String[] stateTag = new String[] {"Tornado","Tropical_Storm","Hurricane","Severe_Thunderstorms","Thunderstorms","Mixed_Rain_And_Snow","Mixed_Rain_And_Sleet","Mixed_Snow_And_Sleet",
+          "Freezing_Drizzle","Drizzle","Freezing_Rain","Showers","Showers_","Snow_Flurries","Light_Snow_Showers","Blowing_Snow","Snow","Hail","Sleet","Dust","Foggy","Haze","Smoky","Blustery","Windy",
+          "Cold","Cloudy","Mostly_Cloudy_Night","Mostly_Cloudy_Day","Partly_Cloudy_Night","Partly_Cloudy_Day","Clear_Night","Sunny","Fair_Night","Fair_Day","Mixed_Rain_And_Hail","Hot",
+          "Isolated_Thunderstorms","Scattered_Thunderstorms","Scattered_Thunderstorms_","Scattered_Showers","Heavy_Snow","Scattered_Snow_Showers","Heavy_Snow_","Partly_Cloudy","Thundershowers",
+          "Snow_Showers","Isolated_Thundershowers","Not_Available"};
+      public static BEnumRange statesEnum = BEnumRange.make(stateInt,stateTag); 
+   
+      
+      
+      
 ////////////////////////////////////////////////////////////////
 //StartUp
 ////////////////////////////////////////////////////////////////
@@ -323,11 +336,7 @@ extends BComponent
       public BStatusString getWeatherSummary(){return (BStatusString)get(weatherSummary);}
       public void setWeatherSummary(BStatusString paramBStatusString){set(weatherSummary, paramBStatusString, null);}
 
-      public static final Property state = newProperty(8|Flags.READONLY, new BStatusEnum(), BFacets.tryMake("range=E:{Tornado=0,Tropical_Storm=1,Hurricane=2,Severe_Thunderstorms=3,Thunderstorms=4,Mixed_Rain_And_Snow=5,Mixed_Rain_And_Sleet=6,Mixed_Snow_And_Sleet=7,Freezing_Drizzle=8,Drizzle=9,Freezing_Rain=10," +
-      "Showers=11,Showers=12,Snow_Flurries=13,Light_Snow_Showers=14,Blowing_Snow=15,Snow=16,Hail=17,Sleet=18,Dust=19,Foggy=20," +
-      "Haze=21,Smoky=22,Blustery=23,Windy=24,Cold=25,Cloudy=26,Mostly_Cloudy_Night=27,Mostly_Cloudy_Day=28,Partly_Cloudy_Night=29,Partly_Cloudy_Day=30," +
-      "Clear_Night=31,Sunny=32,Fair_Night=33,Fair_Day=34,Mixed_Rain_And_Hail=35,Hot=36,Isolated_Thunderstorms=37,Scattered_Thunderstorms=38,Scattered_Thunderstorms=39,Scattered_Showers=40," +
-      "Heavy_Snow=41,Scattered_Snow_Showers=42,Heavy_Snow=43,Partly_Cloudy=44,Thundershowers=45,Snow_Showers=46,Isolated_Thundershowers=47,Not_Available=3200}"));
+      public static final Property state = newProperty(8|Flags.READONLY, new BStatusEnum(), BFacets.makeEnum(statesEnum) );
       
       public BStatusEnum getState(){return (BStatusEnum)get(state);}
       public void setState(BStatusEnum paramBStatusEnum){set(state, paramBStatusEnum, null);}
@@ -336,7 +345,11 @@ extends BComponent
       public BStatusNumeric getHumidity(){return (BStatusNumeric)get(humidity);}
       public void setHumidity(BStatusNumeric paramBStatusNumeric){set(humidity, paramBStatusNumeric, null);}
       
-      public static final Property windDirection = newProperty(8|Flags.READONLY, new BStatusEnum(), BFacets.tryMake("range=E:{North=0,NorthEast=1,East=2,SouthEast=3,South=4,SouthWest=5,West=6,NorthWest=7,Variable=8}")); 
+
+      
+      
+
+      public static final Property windDirection = newProperty(8|Flags.READONLY, new BStatusEnum(), BFacets.makeEnum(BEnumRange.make(BWindDirection.TYPE))); 
       public BStatusEnum getWindDirection() { return (BStatusEnum)get(windDirection); } 
       public void setWindDirection(BStatusEnum v) { set(windDirection,v,null); }
 
@@ -352,7 +365,7 @@ extends BComponent
       public BStatusNumeric getBarometricPressure(){return (BStatusNumeric)get(barometricPressure);}
       public void setBarometricPressure(BStatusNumeric paramBStatusNumeric){set(barometricPressure, paramBStatusNumeric, null);}
       
-      public static final Property barometricPressureState = newProperty(8|Flags.READONLY, new BStatusEnum(), BFacets.tryMake("range=E:{Steady=0,Rising=1,Falling=2,NotValid=3}")); 
+      public static final Property barometricPressureState = newProperty(8|Flags.READONLY, new BStatusEnum(), BFacets.makeEnum(BEnumRange.make(BPressureState.TYPE))); 
       public BStatusEnum getBarometricPressureState() { return (BStatusEnum)get(barometricPressureState); } 
       public void setBarometricPressureState(BStatusEnum v) { set(barometricPressureState,v,null); }
       
