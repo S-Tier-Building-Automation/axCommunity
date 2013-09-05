@@ -68,9 +68,6 @@ public class BTstatA extends BLogic
   public void onExecute(BStatusValue o, Context cx)
  // public void onExecute()
   {
-    double v     = getCv().getValue();
-    double s     = getSp().getValue();
-    double d     = getDiff().getValue();
     BStatusBoolean out   = (BStatusBoolean)o;
 
     BStatus sa = getCv().getStatus();

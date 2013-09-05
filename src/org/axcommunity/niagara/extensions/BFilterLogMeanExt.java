@@ -1,16 +1,16 @@
 package org.axcommunity.niagara.extensions;
 
-import java.util.*;
+//import java.util.*;
 
-import java.io.*;
+//import java.io.*;
 import javax.baja.sys.*;
 import javax.baja.status.*;
 import javax.baja.control.*;
-import javax.baja.control.enums.*;
-import javax.baja.units.*;
-import javax.baja.util.*;
-import java.util.*;
-import com.tridium.kitControl.math.*;
+//import javax.baja.control.enums.*;
+//import javax.baja.units.*;
+//import javax.baja.util.*;
+//import java.util.*;
+//import com.tridium.kitControl.math.*;
 
 /**
  * The BFilter is a standard point extension

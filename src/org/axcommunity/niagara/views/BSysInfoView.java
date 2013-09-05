@@ -14,9 +14,7 @@ import javax.baja.ui.BLayout;
 import javax.baja.ui.BValueBinding;
 import javax.baja.ui.enums.BHalign;
 import javax.baja.ui.enums.BScaleMode;
-import javax.baja.ui.enums.BValign;
 import javax.baja.ui.pane.BCanvasPane;
-import javax.baja.ui.pane.BGridPane;
 import javax.baja.util.BFormat;
 import javax.baja.workbench.view.*;
 
@@ -24,7 +22,6 @@ import org.axcommunity.niagara.system.BSysInfo;
 
 import com.tridium.kitpx.BAnalogMeter;
 import com.tridium.kitpx.BBargraph;
-import com.tridium.kitpx.BBoundLabel;
 
 /**
  * Did this as a learning exercise.  Wanted to learn how to create custom

@@ -301,3 +301,7 @@ V13.04.02 April 3, 2013
 	
 V13.04.03 April 17, 2013
 - FIXED BFireFoxxWeather now works in a versions < 3.5
+
+V13.09.01 September 5, 2013
+- MODIFIED BSysInfo to separate inet calls into new thread - was causing issues with some systems
+- MODIFIED several objects to remove unused imports

@@ -1,8 +1,5 @@
 package org.axcommunity.niagara.extensions;
 
-import java.util.*;
-
-import java.io.*;
 import javax.baja.sys.*;
 import javax.baja.status.*;
 import javax.baja.control.*;
@@ -111,7 +108,7 @@ public class BUnAckAlarmState extends BPointExtension implements Runnable
     if (a == null)     
       {
          //System.out.println("Parent has NO acknowlege slot: adding one ... " ) ;
-         Property pr = parent.add ("acknowlege", (BValue)Sys.getType("program:ProgramAction").getInstance()); 
+         parent.add ("acknowlege", (BValue)Sys.getType("program:ProgramAction").getInstance()); 
          
          //add link
          BLink link = makeLink(parent, parent.getSlot("acknowlege"), getSlot("acknowlege") , null);
@@ -121,7 +118,7 @@ public class BUnAckAlarmState extends BPointExtension implements Runnable
       
     BStatus status = o.getStatus();
     boolean unacked = status.isUnackedAlarm();    
-    int fl = getFlags(a);
+    //int fl = getFlags(a);
        
     if (unacked)
       {

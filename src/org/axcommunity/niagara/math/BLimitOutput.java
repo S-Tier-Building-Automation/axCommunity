@@ -2,7 +2,6 @@ package org.axcommunity.niagara.math;
 
 import javax.baja.sys.*;
 import javax.baja.status.*;
-import com.tridium.kitControl.math.*;
 
 
 /**
