@@ -35,6 +35,10 @@
 				<p n="updateTime"	f="s"/>
 				<p n="wsAnnotation"	f="r" t="b:WsAnnotation" v="7,3,17"/>	
 			</p>
+			<p n="FileToImage"						m="w=axCommunity" t="w:FileToImage" />
+			
+			
+			
 		</p>
 
 		
@@ -105,6 +109,7 @@
 			<p n="TrDivide"							m="k=axCommunity" t="k:TrDivide" />
 			<p n="TrMultiply"						m="k=axCommunity" t="k:TrMultiply" />
 			<p n="TrSubtract"						m="k=axCommunity" t="k:TrSubtract" />
+			<p n="NumericConstantAdjustable"		m="k=axCommunity" t="k:NumericConstantAdjustable" />
 		</p>
 
 		

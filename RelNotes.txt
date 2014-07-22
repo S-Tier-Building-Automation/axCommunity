@@ -305,3 +305,7 @@ V13.04.03 April 17, 2013
 V13.09.01 September 5, 2013
 - MODIFIED BSysInfo to separate inet calls into new thread - was causing issues with some systems
 - MODIFIED several objects to remove unused imports
+
+V14.07.02 July 22, 2014
+- ADDED BFileTOImage - input is a string containing a file ord, output is a BImage that can be used to animate px objects
+- ADDED BNumericConstantAdjustable - an extension of the NumbericConstant that has math actions that can be used to adjust the output (add, sub, mult, div) by an entered double

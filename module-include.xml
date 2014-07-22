@@ -23,6 +23,7 @@
 	<type name="StatusStringToFormat"				class="org.axcommunity.niagara.conversion.BStatusStringToFormat" />
 	<type name="AsciiHexDecConversion"				class="org.axcommunity.niagara.conversion.BAsciiHexDecConversion" />
 	<type name="EnumFromMultiString"				class="org.axcommunity.niagara.conversion.BEnumFromMultiString" />
+	<type name="FileToImage"						class="org.axcommunity.niagara.conversion.BFileToImage" />
 	
 	
 	<type name="RoundUp"							class="org.axcommunity.niagara.math.BRoundUp" /> 
@@ -37,6 +38,8 @@
 	<type name="StatusNumericFifo"					class="org.axcommunity.niagara.math.BStatusNumericFifo"/>
 	<type name="AbsTimeOffset"						class="org.axcommunity.niagara.math.BAbsTimeOffset"/>
 	<type name="LimitOutput"						class="org.axcommunity.niagara.math.BLimitOutput"/>
+	<type name="NumericConstantAdjustable"			class="org.axcommunity.niagara.math.BNumericConstantAdjustable"/>
+	
 	
 	<type name="BrushSwitch"						class="org.axcommunity.niagara.logic.BBrushSwitch"/>
 	<type name="FontSwitch"							class="org.axcommunity.niagara.logic.BFontSwitch"/>
