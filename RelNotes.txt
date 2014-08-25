@@ -309,3 +309,7 @@ V13.09.01 September 5, 2013
 V14.07.02 July 22, 2014
 - ADDED BFileTOImage - input is a string containing a file ord, output is a BImage that can be used to animate px objects
 - ADDED BNumericConstantAdjustable - an extension of the NumbericConstant that has math actions that can be used to adjust the output (add, sub, mult, div) by an entered double
+
+V14.08.24 August 24, 2014
+- MODIFIED BStatusEnumToStatusString to include new slot 'inputMustBeEnumWritable' and when true the link to slot 'enumIn' will not be required to be a EnumWritable - Justin Koffler
+- MODIFIED BDynamicLinkString, BDynamicLinkNumeric and BDynamicLinkBoolean to include new action slot 'UpdateLink' that when triggered will force the dynamic link to update. I also added trace and error level console logging. - Justin Koffler
