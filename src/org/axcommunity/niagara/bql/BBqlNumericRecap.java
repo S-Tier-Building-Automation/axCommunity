@@ -18,6 +18,7 @@ import javax.baja.sys.BComponent;
 import javax.baja.sys.BDouble;
 import javax.baja.sys.BFacets;
 import javax.baja.sys.BIcon;
+import javax.baja.sys.BObject;
 import javax.baja.sys.BRelTime;
 import javax.baja.sys.Clock;
 import javax.baja.sys.Flags;
@@ -195,7 +196,15 @@ public class BBqlNumericRecap extends BComponent {
 			while (c.next())										// walk bql rows
 			{
 				Column valueColumn = columns.get(0);				// data is in 1st col
-				Value = (BStatusNumeric) c.get(valueColumn);		// get BStatusNumeric from table
+				//is BSimple?
+				if(((BObject)c.get(valueColumn)).isSimple())  //handle result columns that are not complex type (aggregates for example)
+				{			  
+				  Value = new BStatusNumeric((BDouble.make(c.get(valueColumn).toString()).getDouble()));
+				}
+				else	
+			  {
+				  Value = (BStatusNumeric) c.get(valueColumn);		// get BStatusNumeric from table
+			  }
 				if ( BDouble.make(Value.getValue()) != BDouble.NaN)	// check to see if value=NaN, if yes then omit from calculation
 					if (Value.getStatus().isValid()) {				// get Status of point, check valid
 						if (first != 0) {							// 1st valid point, use it for everything
