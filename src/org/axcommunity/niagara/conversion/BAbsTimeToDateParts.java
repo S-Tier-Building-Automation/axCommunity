@@ -3,6 +3,8 @@
  */
 package org.axcommunity.niagara.conversion;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javax.baja.status.*;
@@ -48,7 +50,8 @@ public class BAbsTimeToDateParts extends BComponent {
 		  Calendar cal = Calendar.getInstance();
 	    cal.set(dtNow.getYear(),dtNow.getMonth().getMonthOfYear() - 1,dtNow.getDay(),dtNow.getHour(),dtNow.getMinute(),dtNow.getSecond());
 	    getOutSerialTime().setValue(cal.getTimeInMillis());
-	    
+	    DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+	    getOutGMTTime().setValue(df.format(cal.getTime()));
 		}
 	}    
 	/**Absolute Time Input*/
@@ -132,6 +135,12 @@ public class BAbsTimeToDateParts extends BComponent {
   public final static Property outSerialTime = newProperty(Flags.SUMMARY, new BStatusNumeric(),BFacets.makeNumeric(0));
   public BStatusNumeric getOutSerialTime() { return (BStatusNumeric)get(outSerialTime); }
   public void setOutSerialTime(BStatusNumeric v) { set(outSerialTime, v); }
+  
+  /**StatusString value out representing GMT time string*/
+ public final static Property outGMTTime = newProperty(Flags.SUMMARY, new BStatusString());
+ public BStatusString getOutGMTTime() { return (BStatusString)get(outGMTTime); }
+ public void setOutGMTTime(BStatusString v) { set(outGMTTime, v); }
+
 
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");
