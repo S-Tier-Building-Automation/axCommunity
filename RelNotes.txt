@@ -234,7 +234,7 @@ V12.05.02 May 14, 2012
 
 V12.06.01 June 3, 2012
 - Modified 'BAsciiHexDecConversion' to fix an error that would occur if the decimal or Hex input included commas. 
-- Modified 'BAsciiHexDecConversion' to fix an issue that when the ascii, decimal and hex inputs were blank the outputs would not change. 
+- Modified 'BAsciiHexDecConversion' to fix an issue that when the ASCII, decimal and hex inputs were blank the outputs would not change. 
 	The outputs will not reflect the inputs when the inputs are blank.
 - Modified 'BAsciiHexDecConversion' by adding two slots 'inBytesLong' and 'inUseBytesLong' which can be used to set pad or truncate 
 	the decimal and hex output to a specified byte length. Also when used the outputs of the decimal and hex slots will contain zeros 
@@ -273,7 +273,7 @@ V13.01.02 January 28, 2013
 - MODIFIED 'BWhoWhenStringSetpoint' to include new slots: 'outLogString' (status string), 'Value' (topic), 'LogString' (topic) and 'absTimeFacets' (facet) - Justin Koffler
 
 V13.02.01 Feb 7, 2013
-- ADDED BRevolvingTextLabel2 as an ehnanced version of the BRevolvingTextLabel by Eric Bishop, TMT:
+- ADDED BRevolvingTextLabel2 as an enhanced version of the BRevolvingTextLabel by Eric Bishop, TMT:
 	-	Fixed the default height so that it defaults to the height of the font
 	-	Removed the default colors, so it doesn’t constantly revert to a green background.
 	-	Added scroll speed setting.
@@ -316,3 +316,6 @@ V14.08.24 August 24, 2014
 
 V14.09.01 September 25, 2014
 - MODIFIED BBqlNumericRecap to support queries where the datatype of the column to be analyzed is a BSimple (aggregates for example)
+
+V15.01.07 January 7, 2015
+- MODIFIED BEventAtTime to correctly factor in the 'timeOffset' slot when calculating the next trigger time. - Justin Koffler
