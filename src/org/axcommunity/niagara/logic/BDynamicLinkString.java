@@ -8,6 +8,10 @@ package org.axcommunity.niagara.logic;
 * Proper formatting for the ordIn is "station:|slot:/ind/Ouput01"
 * 
 * @author Mike Arnott, Kors Engineering
+* 
+* <br><br>Updates:<br>
+* 2015-01-26 - Added started and atSteadyState overrides, which force an update after the<br>
+*              object is created, copied, and when the station is started.
 */
 import javax.baja.log.Log;
 import javax.baja.naming.BOrd;
@@ -17,6 +21,22 @@ import javax.baja.sys.*;
 public class BDynamicLinkString
 extends BComponent
 {
+  public void started()
+  {
+    if(!Sys.atSteadyState() || !isRunning()) return;
+    
+    //object just created/copied.
+    doUpdateLink();
+  }
+  
+  public void atSteadyState() throws Exception
+  {
+    if(!Sys.atSteadyState() || !isRunning()) return;
+    
+    //Station just restarted.
+    doUpdateLink();
+  }
+  
 	public void changed(Property property, Context context)
 	{
 		super.changed(property, context);

@@ -319,3 +319,7 @@ V14.09.01 September 25, 2014
 
 V15.01.07 January 7, 2015
 - MODIFIED BEventAtTime to correctly factor in the 'timeOffset' slot when calculating the next trigger time. - Justin Koffler
+
+V15.01.08 January 26, 2015
+- MODIFIED BDynamicLinkString, BDynamicLinkNumeric and BDynamicLinkBoolean - Out slots were not updated properly after startup when
+	the linked value was changed while the station was not running. Added started and atSteadyState overrides. - Eric Bishop
