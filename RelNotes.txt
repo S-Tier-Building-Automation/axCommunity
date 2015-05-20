@@ -323,3 +323,9 @@ V15.01.07 January 7, 2015
 V15.01.08 January 26, 2015
 - MODIFIED BDynamicLinkString, BDynamicLinkNumeric and BDynamicLinkBoolean - Out slots were not updated properly after startup when
 	the linked value was changed while the station was not running. Added started and atSteadyState overrides. - Eric Bishop
+	
+V15.05.20 May 20, 2015
+- MODIFIED BSuperConcatPlus to fix bug when only one input slot existed. - Justin Koffler
+- MODIFIED BAbsTimeToDateParts to include debug logging output. - Justin Koffler
+
+	

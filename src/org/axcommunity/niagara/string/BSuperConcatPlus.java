@@ -328,29 +328,29 @@ public class BSuperConcatPlus extends BComponent
 			{
 					if (temp.length() > 0) //CONTAINS DATA
 					{
-						strOutNoDelimeters						= strOutNoDelimeters + inValue.getValue();
-						strOutDelimitValuesOnly					= strOutDelimitValuesOnly + inValue.getValue() + delim;
-						strOutDelimitAll						= strOutDelimitAll + inValue.getValue() + delim;
-						strOutDelimitValuesOnlyPlusTimestamp	= strOutDelimitValuesOnlyPlusTimestamp + inValue.getValue() + delim;
-						strOutDelimitAllPlusTimestamp			= strOutDelimitAllPlusTimestamp + inValue.getValue() + delim;
+						strOutNoDelimeters						= strOutNoDelimeters					+ inValue.getValue();
+						strOutDelimitValuesOnly					= strOutDelimitValuesOnly				+ inValue.getValue() + delim;
+						strOutDelimitAll						= strOutDelimitAll						+ inValue.getValue() + delim;
+						strOutDelimitValuesOnlyPlusTimestamp	= strOutDelimitValuesOnlyPlusTimestamp	+ inValue.getValue() + delim;
+						strOutDelimitAllPlusTimestamp			= strOutDelimitAllPlusTimestamp			+ inValue.getValue() + delim;
 					}
 					else
 					{
-						strOutDelimitAll				= strOutDelimitAll.trim() + delim;
-						strOutDelimitAllPlusTimestamp	= strOutDelimitAllPlusTimestamp.trim() + delim;
+						strOutDelimitAll				= strOutDelimitAll.trim()				+ delim;
+						strOutDelimitAllPlusTimestamp	= strOutDelimitAllPlusTimestamp.trim()	+ delim;
 					}
 			}
 
 			/** HANDLER FOR THE LAST SLOT *////////////////////////////////////////////////////////////////////
-			if( i==slotCount ) ////////////////////////////////////////////////////////////////////////////////
+			if( i==slotCount && slotCount>1  ) ////////////////////////////////////////////////////////////////
 			{
 					if (temp.length() > 0) //CONTAINS DATA
 					{
-						strOutNoDelimeters						= strOutNoDelimeters + inValue.getValue();
-						strOutDelimitValuesOnly					= strOutDelimitValuesOnly + inValue.getValue();
-						strOutDelimitAll						= strOutDelimitAll + inValue.getValue();
-						strOutDelimitValuesOnlyPlusTimestamp	= strOutDelimitValuesOnlyPlusTimestamp + inValue.getValue() + delim + currentTime();
-						strOutDelimitAllPlusTimestamp			= strOutDelimitAllPlusTimestamp + inValue.getValue() + delim + currentTime();
+						strOutNoDelimeters						= strOutNoDelimeters					+ inValue.getValue();
+						strOutDelimitValuesOnly					= strOutDelimitValuesOnly				+ inValue.getValue();
+						strOutDelimitAll						= strOutDelimitAll						+ inValue.getValue();
+						strOutDelimitValuesOnlyPlusTimestamp	= strOutDelimitValuesOnlyPlusTimestamp	+ inValue.getValue() + delim + currentTime();
+						strOutDelimitAllPlusTimestamp			= strOutDelimitAllPlusTimestamp			+ inValue.getValue() + delim + currentTime();
 					}
 					else
 					{
@@ -358,8 +358,8 @@ public class BSuperConcatPlus extends BComponent
 						{
 							strOutDelimitValuesOnly = strOutDelimitValuesOnly.substring(0,(strOutDelimitValuesOnly.length()-delim.length()));
 						}
-						strOutDelimitValuesOnlyPlusTimestamp = strOutDelimitValuesOnlyPlusTimestamp + currentTime();
-						strOutDelimitAllPlusTimestamp = strOutDelimitAllPlusTimestamp + delim + currentTime();
+						strOutDelimitValuesOnlyPlusTimestamp	= strOutDelimitValuesOnlyPlusTimestamp	+ currentTime();
+						strOutDelimitAllPlusTimestamp			= strOutDelimitAllPlusTimestamp			+ delim + currentTime();
 					}
 			}
 			logger.trace("\r\n\t\t" + getSlotPath()	+ "\r\n\t\tEND OF FOR LOOP..."
