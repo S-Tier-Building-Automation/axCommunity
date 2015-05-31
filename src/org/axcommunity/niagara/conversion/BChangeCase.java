@@ -29,64 +29,65 @@ extends BComponent
 
 		if(isRunning())
 		{
-			if (property == inString && getInString().getValue().length()>0) 
+			if (property == inString) 
 			{
-				try
+				if(getInString().getValue().length()>0)
 				{
-					String temp = getInString().getValue(); 
-					String upper = temp.toUpperCase();
-					String lower = temp.toLowerCase();
-
-					String firstLetter = "";
-					firstLetter = lower.substring(0, 1).toUpperCase();
-
-					StringBuffer sb = new StringBuffer(temp);
-
-					// GO THROUGH THE STRING, EVERY TIME YOU COME ACROSS A NEW WORD SET THE FIRST LETTER TO UPPER CASE
-					boolean haveSeenSpace = true; // SET IT INITIALLY TO TRUE SO THAT WE SET THE FIRST LETTER
-					for(int i = 0; i < sb.length();i++)
+					try
 					{
-						if(sb.charAt(i) == ' ')
+						String temp = getInString().getValue(); 
+						String upper = temp.toUpperCase();
+						String lower = temp.toLowerCase();
+
+						String firstLetter = "";
+						firstLetter = lower.substring(0, 1).toUpperCase();
+
+						StringBuffer sb = new StringBuffer(temp);
+
+						// GO THROUGH THE STRING, EVERY TIME YOU COME ACROSS A NEW WORD SET THE FIRST LETTER TO UPPER CASE
+						boolean haveSeenSpace = true; // SET IT INITIALLY TO TRUE SO THAT WE SET THE FIRST LETTER
+						for(int i = 0; i < sb.length();i++)
 						{
-							haveSeenSpace = true;
-						}
-						else
-						{
-							// MUST BE A LETTER SO CHECK TO SEE IF THE LAST ITEM WAS A SPACE TO SET TO UPPER CASE
-							if(haveSeenSpace)
+							if(sb.charAt(i) == ' ')
 							{
-								sb.setCharAt(i, Character.toUpperCase(sb.charAt(i)));
-								haveSeenSpace = false;
+								haveSeenSpace = true;
 							}
 							else
 							{
-								// MUST BE A LETTER SO PUSH TO LOWER
-								sb.setCharAt(i, Character.toLowerCase(sb.charAt(i)));
+								// MUST BE A LETTER SO CHECK TO SEE IF THE LAST ITEM WAS A SPACE TO SET TO UPPER CASE
+								if(haveSeenSpace)
+								{
+									sb.setCharAt(i, Character.toUpperCase(sb.charAt(i)));
+									haveSeenSpace = false;
+								}
+								else
+								{
+									// MUST BE A LETTER SO PUSH TO LOWER
+									sb.setCharAt(i, Character.toLowerCase(sb.charAt(i)));
+								}
 							}
 						}
+						String title = (sb.toString());
+
+						getOutUppercase().setValue(upper);   
+						getOutLowercase().setValue(lower); 
+						getOutTitlecase().setValue(title); 
+
 					}
-					String title = (sb.toString());
-
-					getOutUppercase().setValue(upper);   
-					getOutLowercase().setValue(lower); 
-					getOutTitlecase().setValue(title); 
-
+					catch (Exception e) 
+					{
+						logger.error("\r\n\r\n" + getSlotPath() + "\r\n" + e.getMessage() + "\r\n" + e.getStackTrace() + "\r\n");
+					}
 				}
-				catch (Exception e) 
+				else
 				{
-					logger.error("\r\n\r\n" + getSlotPath() + "\r\n" + e.getMessage() + "\r\n" + e.getStackTrace() + "\r\n");
-				}	
-			}
-			else
-			{
-				logger.trace("\r\n\r\n" + getSlotPath() + "\r\n#########  String Input Length Not Greater Than Zero  #########\r\n");
+					getOutUppercase().setValue("");   
+					getOutLowercase().setValue(""); 
+					getOutTitlecase().setValue("");
+					logger.trace("\r\n\r\n" + getSlotPath() + "\r\n#########  String Input Length Not Greater Than Zero  #########\r\n");
+				}
 			}
 		}
-
-
-
-			
-
 	}
 
 	/**Status String value in representing string to convert*/

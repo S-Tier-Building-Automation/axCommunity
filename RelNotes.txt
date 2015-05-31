@@ -15,7 +15,7 @@ v09.01.03 Jan 13, 2009
 -added from Kevin Crabill, Cochrane Supply:
 	AvgMinMax: Determines the minimum, maximum and average based on variable amount of inputs.
 	NumericLatchCustom:	This is a modification to the existing latch object.  Currently you can only store one value for latching.  
-						This object can store the previous X values.  A good example is monthly metering that istriggered at the end of the month.
+						This object can store the previous X values.  A good example is monthly metering that is triggered at the end of the month.
 	NumericLatchObject:	Same as Tridium's Latch object except the out property doesn't have transient flag set so value is maintained through a reboot.
 	PingHealthConverter: Takes a BPingHealth input from a driver device and splits it into three different outputs.
 	BTimeSplitter: Executes every updateTime and displays the current time in seven different outputs out, hours, minutes, seconds, day, month and year.
@@ -27,7 +27,7 @@ v09.01.04 Jan 21, 2009
 
 V09.02.02 Feb 16, 2009
 -added 	BBqlNumericRecap from B. Collins,Electro Controls, Inc.  Executes a BQL query based on the Execute Period for one or more NumericPoint values.  
- 					 Object calculates the Count, Average, Minimum, Maxium and Sum of the values returned by the BQL query 
+ 					 Object calculates the Count, Average, Minimum, Maximum and Sum of the values returned by the BQL query 
 -added BSysInfo, gets system information every X time period.  Linkable!
 
 V09.02.03 Feb 22, 2009
@@ -36,7 +36,7 @@ V09.02.03 Feb 22, 2009
   - BTrendAnalyzer - Displays min,max,avg,count for selected trend/history
   
  V09.03.01 Mar 12, 2009
- -added BStatusNumericFifo, takes a status numeric input and puts it into a fifo that shifts with a trigger input.  calculates min/max/avg of buffered values.
+ -added BStatusNumericFifo, takes a status numeric input and puts it into a FIFO that shifts with a trigger input.  calculates min/max/avg of buffered values.
  
  V09.04.01 Apr 17, 2009
  - added from Vance Hensley, PCTECHS4U 
@@ -118,7 +118,7 @@ V11.06.01 June 16 2011
 -added BRelTimeToStatusNumeric by Dean Mynott: rounds BrelTime into Hours, Minutes, Seconds
 
 V11.08.01 Aug 15, 2011
--added BSuperOr by Christopher Howard @ xen-com: This is an OrGate on steriods!  This OrGate can be generated to accommodate any number of points.
+-added BSuperOr by Christopher Howard @ xen-com: This is an OrGate on steroids!  This OrGate can be generated to accommodate any number of points.
 
 V11.09.01 Sept 1, 2011
 -revised comments on Kors Engineering submitted objects 
@@ -188,21 +188,21 @@ V12.03.03 March 15, 2012
 -added BEventAtTime by Mike Arnott: Object accepts time of day as hours, minutes, seconds or a time string.  Fires an event (topic) at that time. 
 
 V12.03.04 March 16, 2012
--modified BEventAtTime by Mike Arnott: Added timeOffset BRelTime to allow timezone or other offsets to the event time.
+-modified BEventAtTime by Mike Arnott: Added timeOffset BRelTime to allow time-zone or other offsets to the event time.
 -added BEnumFromMultiString by Mike Arnott: An Enum extension that lets you input a variable number of statusstrings that become the
 	enum facets.    
 	
 V12.03.05 March 28, 2012
 -added a new view for the BSysInfo object, BSysInfoView by Mike Arnott:  Learned how to create a custom workbench view for an object!
 	My graphics ability stinks - someone please, make it prettier!
-	Note: added new dependancy on the converters.jar <dependency name="converters" />
+	Note: added new dependency on the converters.jar <dependency name="converters" />
 	
 V12.03.06 March 30, 2012
 -modified BStringToFile by Mike Arnott: added threading to file write to avoid possible network share causing WD Timeout
 
 V12.04.01 April 4, 2012
 -moved the BSysInfoView to new package, org.axcommunity.niagara.views
--added BSetBooleanActionView by Mike Arnott: a workbench view of the BSetBooleanAction button that works like a momentary pushbutton.  
+-added BSetBooleanActionView by Mike Arnott: a workbench view of the BSetBooleanAction button that works like a momentary push-button.  
 	Finally, a momentary PB in Niagara!
 
 V12.04.02 April 15, 2012
@@ -246,7 +246,7 @@ V12.06.02 June 29, 2012
 - Modified 'BFireOnChange' by adding try|catch block to changed method and added error level logging when exception is caught.
 
 V12.07.01 July 10, 2012
-- MODIFIED BTstatA extension – reverse acting version. Goes ‘on’ at Setpoint - differential, and ‘off’ at Setpoint - Dean Mynott
+- MODIFIED BTstatA extension – reverse acting version. Goes 'on' at Setpoint - differential, and 'off' at Setpoint - Dean Mynott
 - ADDED    BLimitOutput – takes StatusNumeric input and applies high and  low limits. Ignores limits if they are null - Dean Mynott
 
 V12.07.02 July 14, 2012
@@ -327,5 +327,8 @@ V15.01.08 January 26, 2015
 V15.05.20 May 20, 2015
 - MODIFIED BSuperConcatPlus to fix bug when only one input slot existed. - Justin Koffler
 - MODIFIED BAbsTimeToDateParts to include debug logging output. - Justin Koffler
+
+V15.05.31 May 31, 2015
+- MODIFIED BChangeCase to fix bug when input length is zero it would not clear the output slots. - Justin Koffler
 
 	
