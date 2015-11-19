@@ -21,7 +21,7 @@ import javax.baja.ui.BWidget;
 * set the parseindex, it will retrieve the requested index field of the delim separated string input.
 *
 * @authors   Peter Tiagunov, Kors Engineering
-*            Eric Bishop, Texas Machining Technologies
+*            Eric Bishop
 *            
 * Added features:
 *       Variable scroll speed

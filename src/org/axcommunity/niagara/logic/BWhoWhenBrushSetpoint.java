@@ -16,7 +16,7 @@ import javax.baja.sys.Type;
 /**
  * Brush setpoint that monitors when the last change was made and who made it.
  *
- * @author Eric Bishop, Texas Machining Technologies
+ * @author Eric Bishop
  * @creation Mar 20, 2013
  */
 
@@ -43,7 +43,7 @@ public class BWhoWhenBrushSetpoint extends BComponent
   public static final Type TYPE = Sys.loadType(BWhoWhenBrushSetpoint.class);
   
   public BIcon getIcon() { return icon; }
-  private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/TMT.png");
+  private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/EB.png");
   
   public BValue getActionParameterDefault(Action action)
   {

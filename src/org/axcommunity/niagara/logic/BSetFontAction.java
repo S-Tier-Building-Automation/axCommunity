@@ -15,7 +15,7 @@ import javax.baja.sys.Type;
 /**
  * Fires a font event.
  *
- * @author Eric Bishop, Texas Machining Technologies
+ * @author Eric Bishop
  * @creation Mar 20, 2013
  *
  */
@@ -41,7 +41,7 @@ public class BSetFontAction extends BComponent
   public static final Type TYPE = Sys.loadType(BSetFontAction.class);
 
   public BIcon getIcon() { return icon; }
-  private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/TMT.png");
+  private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/EB.png");
 
   private boolean lastBoolean = false;
 

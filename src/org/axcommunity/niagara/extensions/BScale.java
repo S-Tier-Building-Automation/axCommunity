@@ -7,7 +7,7 @@ import javax.baja.control.*;
 /**
  *  Scales the output of a numeric point.
  *
- * @author Eric Bishop, Texas Machining Technologies
+ * @author Eric Bishop
  * @creation Mar 20, 2013
  */
 
@@ -68,7 +68,7 @@ public class BScale extends BPointExtension implements Runnable
   }
 
   public BIcon getIcon() { return icon; }
-  private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/TMT.png");
+  private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/EB.png");
 
   double myTempDouble;
 }

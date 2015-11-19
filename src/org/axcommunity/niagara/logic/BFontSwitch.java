@@ -3,7 +3,7 @@ package org.axcommunity.niagara.logic;
 /**
  * Switches between two fonts using a boolean input.
  *
- * @author Eric Bishop, Texas Machining Technologies
+ * @author Eric Bishop
  * @creation Mar 20, 2013
  */
 
@@ -39,7 +39,7 @@ public class BFontSwitch extends BComponent
   public static final Type TYPE = Sys.loadType(BFontSwitch.class);
   
   public BIcon getIcon() { return icon; }
-  private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/TMT.png");
+  private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/EB.png");
   
   public void started() throws Exception
   {

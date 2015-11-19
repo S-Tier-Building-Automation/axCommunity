@@ -24,6 +24,9 @@
 	<type name="AsciiHexDecConversion"				class="org.axcommunity.niagara.conversion.BAsciiHexDecConversion" />
 	<type name="EnumFromMultiString"				class="org.axcommunity.niagara.conversion.BEnumFromMultiString" />
 	<type name="FileToImage"						class="org.axcommunity.niagara.conversion.BFileToImage" />
+	<type name="SpecialHtmlCharStringToString"		class="org.axcommunity.niagara.conversion.BSpecialHtmlCharStringToString" />
+	<type name="OrdToPxView"						class="org.axcommunity.niagara.conversion.BOrdToPxView" />
+	
 	
 	
 	<type name="RoundUp"							class="org.axcommunity.niagara.math.BRoundUp" /> 
@@ -39,6 +42,7 @@
 	<type name="AbsTimeOffset"						class="org.axcommunity.niagara.math.BAbsTimeOffset"/>
 	<type name="LimitOutput"						class="org.axcommunity.niagara.math.BLimitOutput"/>
 	<type name="NumericConstantAdjustable"			class="org.axcommunity.niagara.math.BNumericConstantAdjustable"/>
+	<type name="ProductionCounter"					class="org.axcommunity.niagara.math.BProductionCounter"/>
 	
 	
 	<type name="BrushSwitch"						class="org.axcommunity.niagara.logic.BBrushSwitch"/>
@@ -92,9 +96,14 @@
 	
 	<type name="StringToFile"						class="org.axcommunity.niagara.system.BStringToFile"/>
 	
+	<type name="ConcatLogData"						class="org.axcommunity.niagara.string.BConcatLogData"/>
 	<type name="ParentFolderInfo"					class="org.axcommunity.niagara.string.BParentFolderInfo"/>
-	<type name="SuperConcatPlus"					class="org.axcommunity.niagara.string.BSuperConcatPlus"/>
+	<type name="ReplaceNullOrBlankString"			class="org.axcommunity.niagara.string.BReplaceNullOrBlankString"/>
 	<type name="ReplaceString"						class="org.axcommunity.niagara.string.BReplaceString"/>
+	<type name="RetainLastValidString"				class="org.axcommunity.niagara.string.BRetainLastValidString"/>
+	<type name="StringBufferAndSelect"				class="org.axcommunity.niagara.string.BStringBufferAndSelect"/>
+	<type name="SuperConcatPlus"					class="org.axcommunity.niagara.string.BSuperConcatPlus"/>
+	<type name="SuperStringTest"					class="org.axcommunity.niagara.string.BSuperStringTest"/>
 	
 	<type name="GetHTTP"							class="org.axcommunity.niagara.web.BGetHTTP"/>
 	
