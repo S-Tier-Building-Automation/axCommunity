@@ -22,8 +22,10 @@
 			<p n="EnumFromMultiString"				m="w=axCommunity" t="w:EnumFromMultiString"></p>
 			<p n="EnumWithStringOutput"				m="w=axCommunity" t="w:EnumWithStringOutput" />
 			<p n="EpochToAbsTime"					m="w=axCommunity" t="w:EpochToAbsTime" />
+			<p n="OrdToPxView"						m="w=axCommunity" t="w:OrdToPxView"/>
 			<p n="PingHealthConverter"				m="w=axCommunity" t="w:PingHealthConverter"/>
 			<p n="RelTimeToStatusNumeric" 			m="w=axCommunity" t="w:RelTimeToStatusNumeric"></p>
+			<p n="SpecialHtmlCharStringToString"	m="w=axCommunity" t="w:SpecialHtmlCharStringToString"/>
 			<p n="StatusBooleanToStatusEnum"		m="w=axCommunity" t="w:StatusBooleanToStatusEnum" />
 			<p n="StatusEnumToStatusString"			m="w=axCommunity" t="w:StatusEnumToStatusString" />
 			<p n="StatusNumericToRelTime"			m="w=axCommunity" t="w:StatusNumericToRelTime" />
@@ -102,6 +104,7 @@
 			<p n="AvgMinMax_v1"						m="w=axCommunity" t="w:AvgMinMax_v1"/>
 			<p n="LimitOutput"						m="w=axCommunity" t="w:LimitOutput"/>
 			<p n="Modulo"							m="k=axCommunity" t="k:Modulo" />
+			<p n="ProductionCounter"				m="k=axCommunity" t="k:ProductionCounter" />
 			<p n="RoundUp"							m="k=axCommunity" t="k:RoundUp" />
 			<p n="StatusNumericFifo"				m="w=axCommunity" t="w:StatusNumericFifo"/>
 			<p n="TrAdd"							m="k=axCommunity" t="k:TrAdd" />
@@ -114,11 +117,16 @@
 
 		
 		<p m="b=baja" t="b:Folder" n="String">
+			<p n="ConcatLogData"					m="k=axCommunity" t="k:ConcatLogData"/>
 			<p n="ParentFolderInfo"					m="k=axCommunity" t="k:ParentFolderInfo"/>
+			<p n="ReplaceNullOrBlankString"			m="k=axCommunity" t="k:ReplaceNullOrBlankString"/>
 			<p n="ReplaceString"					m="k=axCommunity" t="k:ReplaceString">
 				<p n="wsAnnotation"	f="r" t="b:WsAnnotation" v="5,5,20"/>
 			</p>
+			<p n="RetainLastValidString"			m="k=axCommunity" t="k:RetainLastValidString"/>
+			<p n="StringBufferAndSelect"			m="k=axCommunity" t="k:StringBufferAndSelect"/>
 			<p n="SuperConcatPlus"					m="k=axCommunity" t="k:SuperConcatPlus"/>
+			<p n="SuperStringTest"					m="k=axCommunity" t="k:SuperStringTest"/>
 		</p>
 		
 		
