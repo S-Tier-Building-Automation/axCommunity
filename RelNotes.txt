@@ -331,4 +331,12 @@ V15.05.20 May 20, 2015
 V15.05.31 May 31, 2015
 - MODIFIED BChangeCase to fix bug when input length is zero it would not clear the output slots. - Justin Koffler
 
-	
+V15.11.19.02 Nov 19, 2015 - Eric Bishop
+- Added BSpecialHtmlCharStringToString - Converts a string containing HTML character codes (ex: &amp; &lt; &gt;) to the correct characters.
+- Added BOrdToPxView - Sets a PXView slot using an ord input.  Allows the user to programmatically specify a custom view for each folder or object.
+- Added BProductionCounter - This object tracks part counts and based on shift and break schedules, provides parts per shift as well as calculate parts per hour and cycle time.  Also outputs total breaks and total time on break. For more information, see this object's documentation.  
+- Added BConcatLogData - Concatenate 0 to 60 strings together, use prefixes and suffixes for each string, specify a delimiter, line up the results using spaces, enable & disable individual inputs, and specify a global prefix and suffix.   
+- Added BReplaceNullOrBlankString - Replaces the input string with another string if the input is null of blank
+- Added BRetainLastValidString - Retains the last valid, non-blank string.
+- Added BStringBufferAndSelect - Buffers a multi-dimensional array of strings and select outputs. Inputs and outputs function independently from each other, so an input can be written while a different output is selected.
+- Added BSuperStringTest - Tests a string against any number of strings (up to 60).  Different compare options are available.
