@@ -2,842 +2,856 @@
 <bajaObjectGraph version="1.0">
 	<p m="b=baja" t="b:Folder">
 	
-		<p m="b=baja" t="b:Folder" n="BQL">
-			<p n="BqlNumericRecap"					m="k=axCommunity" t="k:BqlNumericRecap"/>
-			<p n="HistoryToCSV"						m="k=axCommunity" t="k:HistoryToCSV"/>	 
-			<p n="TrendAnalyzer"					m="k=axCommunity" t="k:TrendAnalyzer"/>
-			<p n="TrendDynamicAnalyzer"				m="k=axCommunity" t="k:TrendDynamicAnalyzer"/>	 
-		</p>
-	
-	
-		<p m="b=baja" t="b:Folder" n="Conversion">
-			<p n="AbsTimeToDateParts"				m="w=axCommunity" t="w:AbsTimeToDateParts" />
-			<p n="AbsTimesToAbsTimeRange"			m="w=axCommunity" t="w:AbsTimesToAbsTimeRange" />
-			<p n="AsciiHexDecConversion"			m="w=axCommunity" t="w:AsciiHexDecConversion"></p>
-			<p n="BitsToStatusNumeric"				m="w=axCommunity" t="w:BitsToStatusNumeric" />
-			<p n="ChangeCase"						m="w=axCommunity" t="w:ChangeCase" />
-			<p n="CSVStringToStatusNumeric"			m="w=axCommunity" t="w:CSVStringToStatusNumeric" />
-			<p n="DatePartsToAbsTime"				m="w=axCommunity" t="w:DatePartsToAbsTime" />
-			<p n="EnumFromCommaSepVar"				m="w=axCommunity" t="w:EnumFromCommaSepVar" />
-			<p n="EnumFromMultiString"				m="w=axCommunity" t="w:EnumFromMultiString"></p>
-			<p n="EnumWithStringOutput"				m="w=axCommunity" t="w:EnumWithStringOutput" />
-			<p n="EpochToAbsTime"					m="w=axCommunity" t="w:EpochToAbsTime" />
-			<p n="OrdToPxView"						m="w=axCommunity" t="w:OrdToPxView"/>
-			<p n="PingHealthConverter"				m="w=axCommunity" t="w:PingHealthConverter"/>
-			<p n="RelTimeToStatusNumeric" 			m="w=axCommunity" t="w:RelTimeToStatusNumeric"></p>
-			<p n="SpecialHtmlCharStringToString"	m="w=axCommunity" t="w:SpecialHtmlCharStringToString"/>
-			<p n="StatusBooleanToStatusEnum"		m="w=axCommunity" t="w:StatusBooleanToStatusEnum" />
-			<p n="StatusEnumToStatusString"			m="w=axCommunity" t="w:StatusEnumToStatusString" />
-			<p n="StatusNumericToRelTime"			m="w=axCommunity" t="w:StatusNumericToRelTime" />
-			<p n="StatusNumericToStatusBoolean"		m="axc=axCommunity" t="axc:StatusNumericToStatusBoolean" />
-			<p n="StatusNumericToStatusStringNoPad"	m="w=axCommunity" t="w:StatusNumericToStatusStringNoPad" />
-			<p n="StatusStringToFormat"				m="w=axCommunity" t="w:StatusStringToFormat"></p>
-			<p n="StatusStringToString"				m="w=axCommunity" t="w:StatusStringToString" />
-			<p n="TimeSplitter"						m="w=axCommunity" t="w:TimeSplitter">
-				<p n="updateTime"	f="s"/>
-				<p n="wsAnnotation"	f="r" t="b:WsAnnotation" v="7,3,17"/>	
+			<p m="b=baja" t="b:Folder" n="BQL">
+				<p n="BqlNumericRecap"					m="k=axCommunity" t="k:BqlNumericRecap"/>
+				<p n="HistoryToCSV"						m="k=axCommunity" t="k:HistoryToCSV"/>	 
+				<p n="TrendAnalyzer"					m="k=axCommunity" t="k:TrendAnalyzer"/>
+				<p n="TrendDynamicAnalyzer"				m="k=axCommunity" t="k:TrendDynamicAnalyzer"/>	 
 			</p>
-			<p n="FileToImage"						m="w=axCommunity" t="w:FileToImage" />
 			
 			
-			
-		</p>
+			<p m="b=baja" t="b:Folder" n="Conversion">
+				<p n="AbsTimeToDateParts"				m="w=axCommunity" t="w:AbsTimeToDateParts" />
+				<p n="AbsTimesToAbsTimeRange"			m="w=axCommunity" t="w:AbsTimesToAbsTimeRange" />
+				<p n="AsciiHexDecConversion"			m="w=axCommunity" t="w:AsciiHexDecConversion"></p>
+				<p n="BitsToStatusNumeric"				m="w=axCommunity" t="w:BitsToStatusNumeric" />
+				<p n="ChangeCase"						m="w=axCommunity" t="w:ChangeCase" />
+				<p n="CSVStringToStatusNumeric"			m="w=axCommunity" t="w:CSVStringToStatusNumeric" />
+				<p n="DatePartsToAbsTime"				m="w=axCommunity" t="w:DatePartsToAbsTime" />
+				<p n="EnumFromCommaSepVar"				m="w=axCommunity" t="w:EnumFromCommaSepVar" />
+				<p n="EnumFromMultiString"				m="w=axCommunity" t="w:EnumFromMultiString"></p>
+				<p n="EnumWithStringOutput"				m="w=axCommunity" t="w:EnumWithStringOutput" />
+				<p n="EpochToAbsTime"					m="w=axCommunity" t="w:EpochToAbsTime" />
+				<p n="OrdToPxView"						m="w=axCommunity" t="w:OrdToPxView"/>
+				<p n="PingHealthConverter"				m="w=axCommunity" t="w:PingHealthConverter"/>
+				<p n="RelTimeToStatusNumeric" 			m="w=axCommunity" t="w:RelTimeToStatusNumeric"></p>
+				<p n="SpecialHtmlCharStringToString"	m="w=axCommunity" t="w:SpecialHtmlCharStringToString"/>
+				<p n="StatusBooleanToStatusEnum"		m="w=axCommunity" t="w:StatusBooleanToStatusEnum" />
+				<p n="StatusEnumToStatusString"			m="w=axCommunity" t="w:StatusEnumToStatusString" />
+				<p n="StatusNumericToRelTime"			m="w=axCommunity" t="w:StatusNumericToRelTime" />
+				<p n="StatusNumericToStatusBoolean"		m="axc=axCommunity" t="axc:StatusNumericToStatusBoolean" />
+				<p n="StatusNumericToStatusStringNoPad"	m="w=axCommunity" t="w:StatusNumericToStatusStringNoPad" />
+				<p n="StatusStringToFormat"				m="w=axCommunity" t="w:StatusStringToFormat"></p>
+				<p n="StatusStringToString"				m="w=axCommunity" t="w:StatusStringToString" />
+				<p n="TimeSplitter"						m="w=axCommunity" t="w:TimeSplitter">
+							<p n="updateTime"	f="s"/>
+							<p n="wsAnnotation"	f="r" t="b:WsAnnotation" v="7,3,17"/>	
+				</p>
+				<p n="FileToImage"						m="w=axCommunity" t="w:FileToImage" />
+			</p>
 
-		
-		<p m="b=baja" t="b:UnrestrictedFolder" n="Extensions">
-			<p n="FilterExt"						m="w=axCommunity" t="w:FilterExt" />
-			<p n="FilterLogMeanExt"					m="w=axCommunity" t="w:FilterLogMeanExt" />
-			<p n="Scale"							m="k=axCommunity" t="k:Scale" />
-			<p n="UnAckAlarmState"					m="w=axCommunity" t="w:UnAckAlarmState" />
-		</p>
-		
-		
-		<p m="b=baja" t="b:Folder" n="Hvac">
-			<p n="SimpleTstat"						m="w=axCommunity" t="w:SimpleTstat" />
-			<p n="TstatA"							m="w=axCommunity" t="w:TstatA" />
-			<p n="TstatB"							m="w=axCommunity" t="w:TstatB" />
-		</p>
-		
-		<p m="b=baja" t="b:Folder" n="Logic">
-			<p n="BooleanCompareCmdStatus"			m="k=axCommunity" t="k:BooleanCompareCmdStatus"/>
-			<p n="BooleanRotateOnExecute"			m="k=axCommunity" t="k:BooleanRotateOnExecute"/>
-			<p n="BooleanToggle"					m="k=axCommunity" t="k:BooleanToggle"/>
-			<p n="BrushSwitch"						m="k=axCommunity" t="k:BrushSwitch"/>
-			<p n="DynamicLinkBoolean"				m="w=axCommunity" t="w:DynamicLinkBoolean" />
-			<p n="DynamicLinkNumeric"				m="w=axCommunity" t="w:DynamicLinkNumeric" />
-			<p n="DynamicLinkString"				m="w=axCommunity" t="w:DynamicLinkString" />
-			<p n="FireOnChange"						m="k=axCommunity" t="k:FireOnChange" />
-			<p n="FontSwitch"						m="k=axCommunity" t="k:FontSwitch"/>
-			<p n="LatestNumber"						m="w=axCommunity" t="w:LatestNumber" />
-			<p n="LatestStringNotMatching"			m="w=axCommunity" t="w:LatestStringNotMatching" />
-			<p n="NumericLatchCustom"				m="k=axCommunity" t="k:NumericLatchCustom"/>
-			<p n="NumericLatchObject"				m="k=axCommunity" t="k:NumericLatchObject"/>
-			<p n="OneShotBooleanSelect"				m="w=axCommunity" t="w:OneShotBooleanSelect" />
-			<p n="OneShotMultiSelect"				m="w=axCommunity" t="w:OneShotMultiSelect" />
-			<p n="PeakValueAndTstamp"				m="k=axCommunity" t="k:PeakValueAndTstamp"/>
-			<p n="SetBooleanAction"					m="k=axCommunity" t="k:SetBooleanAction"/>
-			<p n="SetBrushAction"					m="k=axCommunity" t="k:SetBrushAction"/>
-			<p n="SetFontAction"					m="k=axCommunity" t="k:SetFontAction"/>
-			<p n="SetNumericAction"					m="k=axCommunity" t="k:SetNumericAction"/>
-			<p n="SuperOr"							m="k=axCommunity" t="k:SuperOr"/>
-			<p n="ToggleLatch"						m="k=axCommunity" t="k:ToggleLatch"/>
-			<p n="ToggleSwitch"						m="k=axCommunity" t="k:ToggleSwitch">
-				<p n="booleanCmd" f="s"/>
-				<p n="boolNormalOpen" f="s"/>
-				<p n="boolNormalClose" f="s"/>
-				<p n="boolOutput" f="s"/>
-				<p n="analogNormalOpen" f="s"/>
-				<p n="analogNormalClose" f="s"/>
-				<p n="analogOutput" f="s"/>
-				<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="33,3,12"/>
+				
+			<p m="b=baja" t="b:UnrestrictedFolder" n="Extensions">
+				<p n="FilterExt"						m="w=axCommunity" t="w:FilterExt" />
+				<p n="FilterLogMeanExt"					m="w=axCommunity" t="w:FilterLogMeanExt" />
+				<p n="Scale"							m="k=axCommunity" t="k:Scale" />
+				<p n="UnAckAlarmState"					m="w=axCommunity" t="w:UnAckAlarmState" />
 			</p>
-			<p n="WhoWhenBooleanSetpoint"			m="w=axCommunity" t="w:WhoWhenBooleanSetpoint" />
-			<p n="WhoWhenEnumSetpoint"				m="w=axCommunity" t="w:WhoWhenEnumSetpoint" />
-			<p n="WhoWhenNumericSetpoint"			m="w=axCommunity" t="w:WhoWhenNumericSetpoint" />
-			<p n="WhoWhenStringSetpoint"			m="w=axCommunity" t="w:WhoWhenStringSetpoint" />
-		</p>
-		
-		
-		<p m="b=baja" t="b:Folder" n="Math">
-			<p n="AbsTimeOffset"					m="w=axCommunity" t="w:AbsTimeOffset"/>
-			<p n="AvgMinMax"						m="w=axCommunity" t="w:AvgMinMax"/>
-			<p n="AvgMinMax_v1"						m="w=axCommunity" t="w:AvgMinMax_v1"/>
-			<p n="LimitOutput"						m="w=axCommunity" t="w:LimitOutput"/>
-			<p n="Modulo"							m="k=axCommunity" t="k:Modulo" />
-			<p n="ProductionCounter"				m="k=axCommunity" t="k:ProductionCounter" />
-			<p n="RoundUp"							m="k=axCommunity" t="k:RoundUp" />
-			<p n="StatusNumericFifo"				m="w=axCommunity" t="w:StatusNumericFifo"/>
-			<p n="TrAdd"							m="k=axCommunity" t="k:TrAdd" />
-			<p n="TrCopy"							m="k=axCommunity" t="k:TrCopy" />
-			<p n="TrDivide"							m="k=axCommunity" t="k:TrDivide" />
-			<p n="TrMultiply"						m="k=axCommunity" t="k:TrMultiply" />
-			<p n="TrSubtract"						m="k=axCommunity" t="k:TrSubtract" />
-			<p n="NumericConstantAdjustable"		m="k=axCommunity" t="k:NumericConstantAdjustable" />
-		</p>
+				
+				
+			<p m="b=baja" t="b:Folder" n="Hvac">
+				<p n="SimpleTstat"						m="w=axCommunity" t="w:SimpleTstat" />
+				<p n="TstatA"							m="w=axCommunity" t="w:TstatA" />
+				<p n="TstatB"							m="w=axCommunity" t="w:TstatB" />
+			</p>
+				
+			<p m="b=baja" t="b:Folder" n="Logic">
+				<p n="BooleanCompareCmdStatus"			m="k=axCommunity" t="k:BooleanCompareCmdStatus"/>
+				<p n="BooleanRotateOnExecute"			m="k=axCommunity" t="k:BooleanRotateOnExecute"/>
+				<p n="BooleanToggle"					m="k=axCommunity" t="k:BooleanToggle"/>
+				<p n="BrushSwitch"						m="k=axCommunity" t="k:BrushSwitch"/>
+				<p n="DynamicLinkBoolean"				m="w=axCommunity" t="w:DynamicLinkBoolean" />
+				<p n="DynamicLinkNumeric"				m="w=axCommunity" t="w:DynamicLinkNumeric" />
+				<p n="DynamicLinkString"				m="w=axCommunity" t="w:DynamicLinkString" />
+				<p n="FireOnChange"						m="k=axCommunity" t="k:FireOnChange" />
+				<p n="FontSwitch"						m="k=axCommunity" t="k:FontSwitch"/>
+				<p n="LatestNumber"						m="w=axCommunity" t="w:LatestNumber" />
+				<p n="LatestStringNotMatching"			m="w=axCommunity" t="w:LatestStringNotMatching" />
+				<p n="NumericLatchCustom"				m="k=axCommunity" t="k:NumericLatchCustom"/>
+				<p n="NumericLatchObject"				m="k=axCommunity" t="k:NumericLatchObject"/>
+				<p n="OneShotBooleanSelect"				m="w=axCommunity" t="w:OneShotBooleanSelect" />
+				<p n="OneShotMultiSelect"				m="w=axCommunity" t="w:OneShotMultiSelect" />
+				<p n="PeakValueAndTstamp"				m="k=axCommunity" t="k:PeakValueAndTstamp"/>
+				<p n="SetBooleanAction"					m="k=axCommunity" t="k:SetBooleanAction"/>
+				<p n="SetBrushAction"					m="k=axCommunity" t="k:SetBrushAction"/>
+				<p n="SetFontAction"					m="k=axCommunity" t="k:SetFontAction"/>
+				<p n="SetNumericAction"					m="k=axCommunity" t="k:SetNumericAction"/>
+				<p n="SuperOr"							m="k=axCommunity" t="k:SuperOr"/>
+				<p n="ToggleLatch"						m="k=axCommunity" t="k:ToggleLatch"/>
+				<p n="ToggleSwitch"						m="k=axCommunity" t="k:ToggleSwitch">
+							<p n="booleanCmd" f="s"/>
+							<p n="boolNormalOpen" f="s"/>
+							<p n="boolNormalClose" f="s"/>
+							<p n="boolOutput" f="s"/>
+							<p n="analogNormalOpen" f="s"/>
+							<p n="analogNormalClose" f="s"/>
+							<p n="analogOutput" f="s"/>
+							<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="33,3,12"/>
+				</p>
+				<p n="WhoWhenBooleanSetpoint"			m="w=axCommunity" t="w:WhoWhenBooleanSetpoint" />
+				<p n="WhoWhenEnumSetpoint"				m="w=axCommunity" t="w:WhoWhenEnumSetpoint" />
+				<p n="WhoWhenNumericSetpoint"			m="w=axCommunity" t="w:WhoWhenNumericSetpoint" />
+				<p n="WhoWhenStringSetpoint"			m="w=axCommunity" t="w:WhoWhenStringSetpoint" />
+			</p>
+				
+				
+			<p m="b=baja" t="b:Folder" n="Math">
+				<p n="AbsTimeOffset"					m="w=axCommunity" t="w:AbsTimeOffset"/>
+				<p n="AvgMinMax"						m="w=axCommunity" t="w:AvgMinMax"/>
+				<p n="AvgMinMax_v1"						m="w=axCommunity" t="w:AvgMinMax_v1"/>
+				<p n="LimitOutput"						m="w=axCommunity" t="w:LimitOutput"/>
+				<p n="Modulo"							m="k=axCommunity" t="k:Modulo" />
+				<p n="ProductionCounter"				m="k=axCommunity" t="k:ProductionCounter" />
+				<p n="RoundUp"							m="k=axCommunity" t="k:RoundUp" />
+				<p n="StatusNumericFifo"				m="w=axCommunity" t="w:StatusNumericFifo"/>
+				<p n="TrAdd"							m="k=axCommunity" t="k:TrAdd" />
+				<p n="TrCopy"							m="k=axCommunity" t="k:TrCopy" />
+				<p n="TrDivide"							m="k=axCommunity" t="k:TrDivide" />
+				<p n="TrMultiply"						m="k=axCommunity" t="k:TrMultiply" />
+				<p n="TrSubtract"						m="k=axCommunity" t="k:TrSubtract" />
+				<p n="NumericConstantAdjustable"		m="k=axCommunity" t="k:NumericConstantAdjustable" />
+			</p>
 
-		
-		<p m="b=baja" t="b:Folder" n="String">
-			<p n="ConcatLogData"					m="k=axCommunity" t="k:ConcatLogData"/>
-			<p n="ParentFolderInfo"					m="k=axCommunity" t="k:ParentFolderInfo"/>
-			<p n="ReplaceNullOrBlankString"			m="k=axCommunity" t="k:ReplaceNullOrBlankString"/>
-			<p n="ReplaceString"					m="k=axCommunity" t="k:ReplaceString">
-				<p n="wsAnnotation"	f="r" t="b:WsAnnotation" v="5,5,20"/>
+				
+			<p m="b=baja" t="b:Folder" n="String">
+				<p n="ConcatLogData"					m="k=axCommunity" t="k:ConcatLogData"/>
+				<p n="ParentFolderInfo"					m="k=axCommunity" t="k:ParentFolderInfo"/>
+				<p n="ReplaceNullOrBlankString"			m="k=axCommunity" t="k:ReplaceNullOrBlankString"/>
+				<p n="ReplaceString"					m="k=axCommunity" t="k:ReplaceString">
+							<p n="wsAnnotation"	f="r" t="b:WsAnnotation" v="5,5,20"/>
+				</p>
+				<p n="RetainLastValidString"			m="k=axCommunity" t="k:RetainLastValidString"/>
+				<p n="StringBufferAndSelect"			m="k=axCommunity" t="k:StringBufferAndSelect"/>
+				<p n="SuperConcatPlus"					m="k=axCommunity" t="k:SuperConcatPlus"/>
+				<p n="SuperStringTest"					m="k=axCommunity" t="k:SuperStringTest"/>
 			</p>
-			<p n="RetainLastValidString"			m="k=axCommunity" t="k:RetainLastValidString"/>
-			<p n="StringBufferAndSelect"			m="k=axCommunity" t="k:StringBufferAndSelect"/>
-			<p n="SuperConcatPlus"					m="k=axCommunity" t="k:SuperConcatPlus"/>
-			<p n="SuperStringTest"					m="k=axCommunity" t="k:SuperStringTest"/>
-		</p>
-		
-		
-		<p m="b=baja" t="b:Folder" n="System">
-			<p n="StringToFile"						m="k=axCommunity" t="k:StringToFile"/>
-			<p n="SysInfo"							m="k=axCommunity" t="k:SysInfo"/>
-		</p>
-		
-		
-		<p m="b=baja" t="b:Folder" n="Time">
-			<p n="EventAtTime"						m="w=axCommunity" t="w:EventAtTime" />
-			<p n="Stopwatch"						m="w=axCommunity" t="w:Stopwatch" />
-			<p n="Stopwatch_v2"						m="w=axCommunity" t="w:Stopwatch_v2" />
-		</p>
-		
-		
-		<p m="b=baja" t="b:Folder" n="Web">
-			<p n="GetHTTP"							m="k=axCommunity" t="k:GetHTTP"/>
-			<p n="StringToFile"						m="k=axCommunity" t="k:StringToFile"/>
-		</p>	
-		
-		<p m="b=baja" t="b:Folder" n="Weather">
-			<!-- /FireFoxxWeather -->
- 			<p n="FireFoxxWeather" m="ffc=axCommunity" t="ffc:FireFoxxWeather">
-  				<p n="tempFacets" v="units=u:celsius;&#xb0;C;(K);+273.15;|precision=i:1"/>
-  				<p n="wsAnnotation" t="b:WsAnnotation" v="15,9,15"/>
- 			</p>
-		</p>
-		
-		
-		
-		
-		
-		
-		
-		<p m="b=baja" t="b:Folder" n="Widgets">
-			<p n="RevolvingTextLabel"				m="k=axCommunity" t="k:RevolvingTextLabel">
-				<p n="layout" v="0.0,0.0,120.0,20.0"/>
-				<!-- /RevolvingTextLabel/bindText -->
-				<p n="bindText"						m="kitPx=kitPx" t="kitPx:SetPointBinding">
-					<p n="popupEnabled" v="false"/>
-					<p n="widgetProperty" v="text"/>
+				
+				
+			<p m="b=baja" t="b:Folder" n="System">
+				<p n="StringToFile"						m="k=axCommunity" t="k:StringToFile"/>
+				<p n="SysInfo"							m="k=axCommunity" t="k:SysInfo"/>
+			</p>
+				
+				
+			<p m="b=baja" t="b:Folder" n="Time">
+				<p n="EventAtTime"						m="w=axCommunity" t="w:EventAtTime" />
+				<p n="Stopwatch"						m="w=axCommunity" t="w:Stopwatch" />
+				<p n="Stopwatch_v2"						m="w=axCommunity" t="w:Stopwatch_v2" />
+			</p>
+				
+				
+			<p m="b=baja" t="b:Folder" n="Web">
+				<p n="GetHTTP"							m="k=axCommunity" t="k:GetHTTP"/>
+				<p n="StringToFile"						m="k=axCommunity" t="k:StringToFile"/>
+			</p>	
+				
+			<p m="b=baja" t="b:Folder" n="Weather">
+				<!-- /FireFoxxWeather -->
+				<p n="FireFoxxWeather"	m="ffc=axCommunity" t="ffc:FireFoxxWeather">
+					<p n="tempFacets" v="units=u:celsius;&#xb0;C;(K);+273.15;|precision=i:1"/>
+					<p n="wsAnnotation" t="b:WsAnnotation" v="15,9,15"/>
 				</p>
-				<!-- /RevolvingTextLabel/bindVisible -->
-				<p n="bindVisible"					m="kitPx=kitPx" t="kitPx:SetPointBinding">
-					<p n="popupEnabled" v="false"/>
-					<p n="widgetProperty" v="visible"/>
+			</p>
+				
+				
+				
+				
+				
+				
+				
+			<p m="b=baja" t="b:Folder" n="Widgets">
+				<p n="RevolvingTextLabel"				m="k=axCommunity" t="k:RevolvingTextLabel">
+					<p n="layout" v="0.0,0.0,120.0,20.0"/>
+					<!-- /RevolvingTextLabel/bindText -->
+					<p n="bindText"						m="kitPx=kitPx" t="kitPx:SetPointBinding">
+						<p n="popupEnabled" v="false"/>
+						<p n="widgetProperty" v="text"/>
+					</p>
+					<!-- /RevolvingTextLabel/bindVisible -->
+					<p n="bindVisible"					m="kitPx=kitPx" t="kitPx:SetPointBinding">
+						<p n="popupEnabled" v="false"/>
+						<p n="widgetProperty" v="visible"/>
+					</p>
+					<!-- /RevolvingTextLabel/bindFlash -->
+					<p n="bindFlash"					m="kitPx=kitPx" t="kitPx:SetPointBinding">
+						<p n="popupEnabled" v="false"/>
+						<p n="widgetProperty" v="flash"/>
+					</p>
 				</p>
-				<!-- /RevolvingTextLabel/bindFlash -->
-				<p n="bindFlash"					m="kitPx=kitPx" t="kitPx:SetPointBinding">
-					<p n="popupEnabled" v="false"/>
-					<p n="widgetProperty" v="flash"/>
+						
+				<p n="DropDownList"						m="k=axCommunity" t="k:DropDownList">
+					<p n="layout" v="490.0,420.0,130.0,20.0"/>
+					<p n="image" v="local:|module://axCommunity/org/axcommunity/niagara/graphics/BUTTON_PB_130X20.jpg"/>
+					<p n="font" v="12.0pt Arial"/>
+					<p n="foreground" v="black"/>
+					<p n="textToIconAlign" v="center"/>
+					<p n="wsAnnotation" t="b:WsAnnotation" v="5,5,10"/>
 				</p>
+				
+				<p n="BoundLabelHighlight"				m="k=axCommunity" t="k:BoundLabelHighlight">
+					<p n="layout" v="490.0,420.0,130.0,20.0"/>
+				</p>
+						
+						
+				<p n="RevolvingTextLabel2"				m="k=axCommunity" t="k:RevolvingTextLabel2">
+					<p n="layout" v="0.0,0.0,120.0,20.0"/>
+					<!-- /RevolvingTextLabel2/bindText -->
+					<p n="bindText"						m="kitPx=kitPx" t="kitPx:SetPointBinding">
+						<p n="popupEnabled" v="false"/>
+						<p n="widgetProperty" v="text"/>
+					</p>
+					<!-- /RevolvingTextLabel2/bindVisible -->
+					<p n="bindVisible"					m="kitPx=kitPx" t="kitPx:SetPointBinding">
+						<p n="popupEnabled" v="false"/>
+						<p n="widgetProperty" v="visible"/>
+					</p>
+					<!-- /RevolvingTextLabel2/bindFlash -->
+					<p n="bindFlash"					m="kitPx=kitPx" t="kitPx:SetPointBinding">
+						<p n="popupEnabled" v="false"/>
+						<p n="widgetProperty" v="flash"/>
+					</p>
+				</p>
+						
+					
 			</p>
 			
-			<p n="DropDownList" m="k=axCommunity" t="k:DropDownList">
-				<p n="layout" v="490.0,420.0,130.0,20.0"/>
-				<p n="image" v="local:|module://axCommunity/org/axcommunity/niagara/graphics/BUTTON_PB_130X20.jpg"/>
-				<p n="font" v="12.0pt Arial"/>
-				<p n="foreground" v="black"/>
-				<p n="textToIconAlign" v="center"/>
-				<p n="wsAnnotation" t="b:WsAnnotation" v="5,5,10"/>
-			</p>
-			<p n="BoundLabelHighlight" m="k=axCommunity" t="k:BoundLabelHighlight">
-				<p n="layout" v="490.0,420.0,130.0,20.0"/>
-			</p>
 			
-			
-			<p n="RevolvingTextLabel2"				m="k=axCommunity" t="k:RevolvingTextLabel2">
-				<p n="layout" v="0.0,0.0,120.0,20.0"/>
-				<!-- /RevolvingTextLabel2/bindText -->
-				<p n="bindText"						m="kitPx=kitPx" t="kitPx:SetPointBinding">
-					<p n="popupEnabled" v="false"/>
-					<p n="widgetProperty" v="text"/>
-				</p>
-				<!-- /RevolvingTextLabel2/bindVisible -->
-				<p n="bindVisible"					m="kitPx=kitPx" t="kitPx:SetPointBinding">
-					<p n="popupEnabled" v="false"/>
-					<p n="widgetProperty" v="visible"/>
-				</p>
-				<!-- /RevolvingTextLabel2/bindFlash -->
-				<p n="bindFlash"					m="kitPx=kitPx" t="kitPx:SetPointBinding">
-					<p n="popupEnabled" v="false"/>
-					<p n="widgetProperty" v="flash"/>
-				</p>
-			</p>
-			
-			
-		</p>
-
-		<p m="b=baja" t="b:Folder" n="PxGraphics">
-			<p n="boolean" t="b:UnrestrictedFolder">
-				<p n="small" t="b:Folder">
-				<!-- /boolean/bulbSmall -->
-					<p n="bulbSmall" m="kitPx=kitPx" t="kitPx:BoundLabel">
-						<p n="layout" v="0,0,13,20" />
-						<!-- /boolean/bulbSmall/bnd -->
-						<p n="bnd" m="ui=bajaui" t="ui:ValueBinding">
-							<p n="image" m="conv=converters" t="conv:IBooleanToSimple">
-								<p n="trueValue" m="gx=gx" t="gx:Image" v="module://johnGraphics/boolean/bulbSmallTrue.gif" />
-								<p n="falseValue" t="gx:Image" v="module://johnGraphics/boolean/bulbSmallFalse.gif" />
+			<p m="b=baja" t="b:Folder" n="PxGraphics">
+				<p n="boolean" t="b:UnrestrictedFolder">
+					<p n="small" t="b:Folder">
+					<!-- /boolean/bulbSmall -->
+						<p n="bulbSmall" m="kitPx=kitPx" t="kitPx:BoundLabel">
+							<p n="layout" v="0,0,13,20" />
+							<!-- /boolean/bulbSmall/bnd -->
+							<p n="bnd" m="ui=bajaui" t="ui:ValueBinding">
+								<p n="image" m="conv=converters" t="conv:IBooleanToSimple">
+									<p n="trueValue" m="gx=gx" t="gx:Image" v="module://johnGraphics/boolean/bulbSmallTrue.gif" />
+									<p n="falseValue" t="gx:Image" v="module://johnGraphics/boolean/bulbSmallFalse.gif" />
+								</p>
 							</p>
 						</p>
-					</p>
-	<!-- /boolean/occupiedSmall -->
-					<p n="occupiedSmall" t="kitPx:BoundLabel">
-						<p n="layout" v="0,0,21,22" />
-	 <!-- /boolean/occupiedSmall/bnd -->
-						<p n="bnd" t="ui:ValueBinding">
-							<p n="image" t="conv:IBooleanToSimple">
-								<p n="trueValue" t="gx:Image" v="module://johnGraphics/boolean/occupiedSmallTrue.gif" />
-								<p n="falseValue" t="gx:Image" v="module://johnGraphics/boolean/occupiedSmallFalse.gif" />
+						<!-- /boolean/occupiedSmall -->
+						<p n="occupiedSmall" t="kitPx:BoundLabel">
+							<p n="layout" v="0,0,21,22" />
+							<!-- /boolean/occupiedSmall/bnd -->
+							<p n="bnd" t="ui:ValueBinding">
+								<p n="image" t="conv:IBooleanToSimple">
+									<p n="trueValue" t="gx:Image" v="module://johnGraphics/boolean/occupiedSmallTrue.gif" />
+									<p n="falseValue" t="gx:Image" v="module://johnGraphics/boolean/occupiedSmallFalse.gif" />
+								</p>
 							</p>
 						</p>
-					</p>
-					<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="2,2,8" />
-				</p>
-			</p>
-			<p n="coils" t="b:UnrestrictedFolder">
-	<!-- /coils/small -->
-				<p n="small" t="b:Folder">
-	<!-- /coils/small/coolingCoil -->
-					<p n="coolingCoil" t="kitPx:BoundLabel">
-						<p n="layout" v="120,30,26,68" />
-	 <!-- /coils/small/coolingCoil/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:IBooleanToSimple">
-								<p n="trueValue" t="gx:Image" v="module://johnGraphics/coils/small/coolingCoilOn.gif" />
-								<p n="falseValue" t="gx:Image" v="module://johnGraphics/coils/small/coolingCoilOff.gif" />
-							</p>
-						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="5,3,8" />
-					</p>
-	<!-- /coils/small/coolingCoil2wL -->
-					<p n="coolingCoil2wL" t="kitPx:BoundLabel">
-						<p n="layout" v="120,60,61,101" />
-	 <!-- /coils/small/coolingCoil2wL/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:INumericToSimple">
-								<p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/coolingCoilOffv2wL.png;10:20=module://johnGraphics/coils/small/coolingCoilOnv2wL.png;20:40=module://johnGraphics/coils/small/coolingCoilOnv2wL.png;40:60=module://johnGraphics/coils/small/coolingCoilOnv2wL.png;60:80=module://johnGraphics/coils/small/coolingCoilOnv2wL.png;80:100=module://johnGraphics/coils/small/coolingCoilOnv2wL.png;default=null;" />
-							</p>
-						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
-					</p>
-	<!-- /coils/small/coolingCoilv2wR -->
-					<p n="coolingCoilv2wR" t="kitPx:BoundLabel">
-						<p n="layout" v="10,60,77,101" />
-	 <!-- /coils/small/coolingCoilv2wR/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:INumericToSimple">
-								<p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/coolingCoilOffv2wR.png;10:20=module://johnGraphics/coils/small/coolingCoilOnv2wR.png;20:40=module://johnGraphics/coils/small/coolingCoilOnv2wR.png;40:60=module://johnGraphics/coils/small/coolingCoilOnv2wR.png;60:80=module://johnGraphics/coils/small/coolingCoilOnv2wR.png;80:100=module://johnGraphics/coils/small/coolingCoilOnv2wR.png;default=null;" />
-							</p>
-						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
-					</p>
-	<!-- /coils/small/coolingCoilv3wL -->
-					<p n="coolingCoilv3wL" t="kitPx:BoundLabel">
-						<p n="layout" v="230,60,61,101" />
-	 <!-- /coils/small/coolingCoilv3wL/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:INumericToSimple">
-								<p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/coolingCoilOffv3wL.png;10:20=module://johnGraphics/coils/small/coolingCoilOnv3wL.png;20:40=module://johnGraphics/coils/small/coolingCoilOnv3wL.png;40:60=module://johnGraphics/coils/small/coolingCoilOnv3wL.png;60:80=module://johnGraphics/coils/small/coolingCoilOnv3wL.png;80:100=module://johnGraphics/coils/small/coolingCoilOnv3wL.png;default=null;" />
-							</p>
-						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
-					</p>
-	<!-- /coils/small/coolingCoilv3wR -->
-					<p n="coolingCoilv3wR" t="kitPx:BoundLabel">
-						<p n="layout" v="330,60,77,101" />
-	 <!-- /coils/small/coolingCoilv3wR/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:INumericToSimple">
-								<p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/coolingCoilOffv3wR.png;10:20=module://johnGraphics/coils/small/coolingCoilOnv3wR.png;20:40=module://johnGraphics/coils/small/coolingCoilOnv3wR.png;40:60=module://johnGraphics/coils/small/coolingCoilOnv3wR.png;60:80=module://johnGraphics/coils/small/coolingCoilOnv3wR.png;80:100=module://johnGraphics/coils/small/coolingCoilOnv3wR.png;default=null;" />
-							</p>
-						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
-					</p>
-	<!-- /coils/small/electricHeatingCoil -->
-					<p n="electricHeatingCoil" t="kitPx:BoundLabel">
-						<p n="layout" v="290,20,26,68" />
-	 <!-- /coils/small/electricHeatingCoil/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:IBooleanToSimple">
-								<p n="trueValue" t="gx:Image" v="module://johnGraphics/coils/small/electricHeatingCoilOn.gif" />
-								<p n="falseValue" t="gx:Image" v="module://johnGraphics/coils/small/electricHeatingCoilOff.gif" />
-							</p>
-						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="25,23,8" />
-					</p>
-	<!-- /coils/small/filterV -->
-					<p n="filterV" t="kitPx:BoundLabel">
-						<p n="layout" v="120,80,26,68" />
-	 <!-- /coils/small/filterV/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:INumericToSimple">
-								<p n="map" v="gx:Image -inf:0.5=module://johnGraphics/coils/small/filterVa.gif;0.5:1=module://johnGraphics/coils/small/filterVb.gif;1:1.5=module://johnGraphics/coils/small/filterVc.gif;1.5:2=module://johnGraphics/coils/small/filterVd.gif;2:+inf=module://johnGraphics/coils/small/filterVe.gif;default=null;" />
-							</p>
-						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
-					</p>
-	<!-- /coils/small/heatingCoil -->
-					<p n="heatingCoil" t="kitPx:BoundLabel">
-						<p n="layout" v="420,30,26,68" />
-	 <!-- /coils/small/heatingCoil/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:IBooleanToSimple">
-								<p n="trueValue" t="gx:Image" v="module://johnGraphics/coils/small/heatingCoilOn.gif" />
-								<p n="falseValue" t="gx:Image" v="module://johnGraphics/coils/small/heatingCoilOff.gif" />
-							</p>
-						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="5,3,8" />
-					</p>
-	<!-- /coils/small/heatingCoilv2wL -->
-					<p n="heatingCoilv2wL" t="kitPx:BoundLabel">
-						<p n="layout" v="530,360,61,101" />
-	 <!-- /coils/small/heatingCoilv2wL/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:INumericToSimple">
-								<p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/heatingCoilOffv2wL.png;10:20=module://johnGraphics/coils/small/heatingCoilOnv2wL.png;20:40=module://johnGraphics/coils/small/heatingCoilOnv2wL.png;40:60=module://johnGraphics/coils/small/heatingCoilOnv2wL.png;60:80=module://johnGraphics/coils/small/heatingCoilOnv2wL.png;80:100=module://johnGraphics/coils/small/heatingCoilOnv2wL.png;default=null;" />
-							</p>
-						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
-					</p>
-	<!-- /coils/small/heatingCoilv2wR -->
-					<p n="heatingCoilv2wR" t="kitPx:BoundLabel">
-						<p n="layout" v="620,360,77,101" />
-	 <!-- /coils/small/heatingCoilv2wR/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:INumericToSimple">
-								<p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/heatingCoilOffv2wR.png;10:20=module://johnGraphics/coils/small/heatingCoilOnv2wR.png;20:40=module://johnGraphics/coils/small/heatingCoilOnv2wR.png;40:60=module://johnGraphics/coils/small/heatingCoilOnv2wR.png;60:80=module://johnGraphics/coils/small/heatingCoilOnv2wR.png;80:100=module://johnGraphics/coils/small/heatingCoilOnv2wR.png;default=null;" />
-							</p>
-						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
-					</p>
-	<!-- /coils/small/heatingCoilv3wL -->
-					<p n="heatingCoilv3wL" t="kitPx:BoundLabel">
-						<p n="layout" v="540,470,61,101" />
-	 <!-- /coils/small/heatingCoilv3wL/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:INumericToSimple">
-								<p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/heatingCoilOffv3wL.png;10:20=module://johnGraphics/coils/small/heatingCoilOnv3wL.png;20:40=module://johnGraphics/coils/small/heatingCoilOnv3wL.png;40:60=module://johnGraphics/coils/small/heatingCoilOnv3wL.png;60:80=module://johnGraphics/coils/small/heatingCoilOnv3wL.png;80:100=module://johnGraphics/coils/small/heatingCoilOnv3wL.png;default=null;" />
-							</p>
-						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
-					</p>
-	<!-- /coils/small/heatingCoilv3wR -->
-					<p n="heatingCoilv3wR" t="kitPx:BoundLabel">
-						<p n="layout" v="640,470,77,101" />
-	 <!-- /coils/small/heatingCoilv3wR/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:INumericToSimple">
-								<p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/heatingCoilOffv3wR.png;10:20=module://johnGraphics/coils/small/heatingCoilOnv3wR.png;20:40=module://johnGraphics/coils/small/heatingCoilOnv3wR.png;40:60=module://johnGraphics/coils/small/heatingCoilOnv3wR.png;60:80=module://johnGraphics/coils/small/heatingCoilOnv3wR.png;80:100=module://johnGraphics/coils/small/heatingCoilOnv3wR.png;default=null;" />
-							</p>
-						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
+						<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="2,2,8" />
 					</p>
 				</p>
-				<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="60,16,8" />
-			</p>
-   <!-- /dampers -->
-			<p n="dampers" t="b:UnrestrictedFolder">
-   <!-- /dampers/small -->
-				<p n="small" t="b:Folder">
-	<!-- /dampers/small/damperH_NC -->
-					<p n="damperH_NC" t="kitPx:BoundLabel">
-						<p n="layout" v="620,490,68,30" />
-	 <!-- /dampers/small/damperH_NC/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:INumericToSimple">
-								<p n="map" v="gx:Image -inf:20=module://johnGraphics/dampers/small/damperH1a.gif;20:40=module://johnGraphics/dampers/small/damperH1b.gif;40:60=module://johnGraphics/dampers/small/damperH1c.gif;60:80=module://johnGraphics/dampers/small/damperH1d.gif;80:+inf=module://johnGraphics/dampers/small/damperH1e.gif;default=null;" />
+				<p n="coils" t="b:UnrestrictedFolder">
+					<!-- /coils/small -->
+					<p n="small" t="b:Folder">
+						<!-- /coils/small/coolingCoil -->
+						<p n="coolingCoil" t="kitPx:BoundLabel">
+							<p n="layout" v="120,30,26,68" />
+							<!-- /coils/small/coolingCoil/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:IBooleanToSimple">
+									<p n="trueValue" t="gx:Image" v="module://johnGraphics/coils/small/coolingCoilOn.gif" />
+									<p n="falseValue" t="gx:Image" v="module://johnGraphics/coils/small/coolingCoilOff.gif" />
+								</p>
 							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="5,3,8" />
 						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="14,11,8" />
-					</p>
-	<!-- /dampers/small/damperH_NO -->
-					<p n="damperH_NO" t="kitPx:BoundLabel">
-						<p n="layout" v="90,120,68,30" />
-	 <!-- /dampers/small/damperH_NO/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:INumericToSimple">
-								<p n="map" v="gx:Image -inf:20=module://johnGraphics/dampers/small/damperH1e.gif;20:40=module://johnGraphics/dampers/small/damperH1d.gif;40:60=module://johnGraphics/dampers/small/damperH1c.gif;60:80=module://johnGraphics/dampers/small/damperH1b.gif;80:+inf=module://johnGraphics/dampers/small/damperH1a.gif;default=null;" />
+						<!-- /coils/small/coolingCoil2wL -->
+						<p n="coolingCoil2wL" t="kitPx:BoundLabel">
+							<p n="layout" v="120,60,61,101" />
+							<!-- /coils/small/coolingCoil2wL/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:INumericToSimple">
+									<p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/coolingCoilOffv2wL.png;10:20=module://johnGraphics/coils/small/coolingCoilOnv2wL.png;20:40=module://johnGraphics/coils/small/coolingCoilOnv2wL.png;40:60=module://johnGraphics/coils/small/coolingCoilOnv2wL.png;60:80=module://johnGraphics/coils/small/coolingCoilOnv2wL.png;80:100=module://johnGraphics/coils/small/coolingCoilOnv2wL.png;default=null;" />
+								</p>
 							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
 						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="14,11,8" />
-					</p>
-	<!-- /dampers/small/damperV_NC -->
-					<p n="damperV_NC" ht="kitPx:BoundLabel">
-						<p n="layout" v="200,200,30,68" />
-	 <!-- /dampers/small/damperV_NC/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:INumericToSimple">
-								<p n="map" v="gx:Image -inf:20=module://johnGraphics/dampers/small/damperV1a.gif;20:40=module://johnGraphics/dampers/small/damperV1b.gif;40:60=module://johnGraphics/dampers/small/damperV1c.gif;60:80=module://johnGraphics/dampers/small/damperV1d.gif;80:+inf=module://johnGraphics/dampers/small/damperV1e.gif;default=null;" />
+						<!-- /coils/small/coolingCoilv2wR -->
+						<p n="coolingCoilv2wR" t="kitPx:BoundLabel">
+							<p n="layout" v="10,60,77,101" />
+							<!-- /coils/small/coolingCoilv2wR/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:INumericToSimple">
+									<p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/coolingCoilOffv2wR.png;10:20=module://johnGraphics/coils/small/coolingCoilOnv2wR.png;20:40=module://johnGraphics/coils/small/coolingCoilOnv2wR.png;40:60=module://johnGraphics/coils/small/coolingCoilOnv2wR.png;60:80=module://johnGraphics/coils/small/coolingCoilOnv2wR.png;80:100=module://johnGraphics/coils/small/coolingCoilOnv2wR.png;default=null;" />
+								</p>
 							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
 						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="18,15,8" />
-					</p>
-	<!-- /dampers/small/damperV_NO -->
-					<p n="damperV_NO" t="kitPx:BoundLabel">
-						<p n="layout" v="730,400,30,68" />
-	 <!-- /dampers/small/damperV_NO/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:INumericToSimple">
-								<p n="map" v="gx:Image -inf:20=module://johnGraphics/dampers/small/damperV1e.gif;20:40=module://johnGraphics/dampers/small/damperV1d.gif;40:60=module://johnGraphics/dampers/small/damperV1c.gif;60:80=module://johnGraphics/dampers/small/damperV1b.gif;80:+inf=module://johnGraphics/dampers/small/damperV1a.gif;default=null;" />
+						<!-- /coils/small/coolingCoilv3wL -->
+						<p n="coolingCoilv3wL" t="kitPx:BoundLabel">
+							<p n="layout" v="230,60,61,101" />
+							<!-- /coils/small/coolingCoilv3wL/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:INumericToSimple">
+									<p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/coolingCoilOffv3wL.png;10:20=module://johnGraphics/coils/small/coolingCoilOnv3wL.png;20:40=module://johnGraphics/coils/small/coolingCoilOnv3wL.png;40:60=module://johnGraphics/coils/small/coolingCoilOnv3wL.png;60:80=module://johnGraphics/coils/small/coolingCoilOnv3wL.png;80:100=module://johnGraphics/coils/small/coolingCoilOnv3wL.png;default=null;" />
+								</p>
 							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
 						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="18,15,8" />
-					</p>
-	<!-- /dampers/small/vavDamperS -->
-					<p n="vavDamperS" t="kitPx:BoundLabel">
-						<p n="layout" v="190,290,70,68" />
-	 <!-- /dampers/small/vavDamperS/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:INumericToSimple">
-								<p n="map" v="gx:Image -inf:20=module://johnGraphics/dampers/small/vavDamper1a.gif;20:40=module://johnGraphics/dampers/small/vavDamper1b.gif;40:60=module://johnGraphics/dampers/small/vavDamper1c.gif;60:80=module://johnGraphics/dampers/small/vavDamper1d.gif;80:+inf=module://johnGraphics/dampers/small/vavDamper1e.gif;default=null;" />
+						<!-- /coils/small/coolingCoilv3wR -->
+						<p n="coolingCoilv3wR" t="kitPx:BoundLabel">
+							<p n="layout" v="330,60,77,101" />
+							<!-- /coils/small/coolingCoilv3wR/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:INumericToSimple">
+									<p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/coolingCoilOffv3wR.png;10:20=module://johnGraphics/coils/small/coolingCoilOnv3wR.png;20:40=module://johnGraphics/coils/small/coolingCoilOnv3wR.png;40:60=module://johnGraphics/coils/small/coolingCoilOnv3wR.png;60:80=module://johnGraphics/coils/small/coolingCoilOnv3wR.png;80:100=module://johnGraphics/coils/small/coolingCoilOnv3wR.png;default=null;" />
+								</p>
 							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
 						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="22,19,8" />
+						<!-- /coils/small/electricHeatingCoil -->
+						<p n="electricHeatingCoil" t="kitPx:BoundLabel">
+							<p n="layout" v="290,20,26,68" />
+							<!-- /coils/small/electricHeatingCoil/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:IBooleanToSimple">
+									<p n="trueValue" t="gx:Image" v="module://johnGraphics/coils/small/electricHeatingCoilOn.gif" />
+									<p n="falseValue" t="gx:Image" v="module://johnGraphics/coils/small/electricHeatingCoilOff.gif" />
+								</p>
+							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="25,23,8" />
+						</p>
+						<!-- /coils/small/filterV -->
+						<p n="filterV" t="kitPx:BoundLabel">
+							<p n="layout" v="120,80,26,68" />
+							<!-- /coils/small/filterV/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:INumericToSimple">
+									<p n="map" v="gx:Image -inf:0.5=module://johnGraphics/coils/small/filterVa.gif;0.5:1=module://johnGraphics/coils/small/filterVb.gif;1:1.5=module://johnGraphics/coils/small/filterVc.gif;1.5:2=module://johnGraphics/coils/small/filterVd.gif;2:+inf=module://johnGraphics/coils/small/filterVe.gif;default=null;" />
+								</p>
+							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
+						</p>
+						<!-- /coils/small/heatingCoil -->
+						<p n="heatingCoil" t="kitPx:BoundLabel">
+							<p n="layout" v="420,30,26,68" />
+							<!-- /coils/small/heatingCoil/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:IBooleanToSimple">
+									<p n="trueValue" t="gx:Image" v="module://johnGraphics/coils/small/heatingCoilOn.gif" />
+									<p n="falseValue" t="gx:Image" v="module://johnGraphics/coils/small/heatingCoilOff.gif" />
+								</p>
+							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="5,3,8" />
+						</p>
+						<!-- /coils/small/heatingCoilv2wL -->
+						<p n="heatingCoilv2wL" t="kitPx:BoundLabel">
+							<p n="layout" v="530,360,61,101" />
+							<!-- /coils/small/heatingCoilv2wL/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:INumericToSimple">
+									<p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/heatingCoilOffv2wL.png;10:20=module://johnGraphics/coils/small/heatingCoilOnv2wL.png;20:40=module://johnGraphics/coils/small/heatingCoilOnv2wL.png;40:60=module://johnGraphics/coils/small/heatingCoilOnv2wL.png;60:80=module://johnGraphics/coils/small/heatingCoilOnv2wL.png;80:100=module://johnGraphics/coils/small/heatingCoilOnv2wL.png;default=null;" />
+								</p>
+							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
+						</p>
+						<!-- /coils/small/heatingCoilv2wR -->
+						<p n="heatingCoilv2wR" t="kitPx:BoundLabel">
+							<p n="layout" v="620,360,77,101" />
+							<!-- /coils/small/heatingCoilv2wR/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:INumericToSimple">
+									<p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/heatingCoilOffv2wR.png;10:20=module://johnGraphics/coils/small/heatingCoilOnv2wR.png;20:40=module://johnGraphics/coils/small/heatingCoilOnv2wR.png;40:60=module://johnGraphics/coils/small/heatingCoilOnv2wR.png;60:80=module://johnGraphics/coils/small/heatingCoilOnv2wR.png;80:100=module://johnGraphics/coils/small/heatingCoilOnv2wR.png;default=null;" />
+								</p>
+							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
+						</p>
+						<!-- /coils/small/heatingCoilv3wL -->
+						<p n="heatingCoilv3wL" t="kitPx:BoundLabel">
+							<p n="layout" v="540,470,61,101" />
+							<!-- /coils/small/heatingCoilv3wL/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:INumericToSimple">
+									<p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/heatingCoilOffv3wL.png;10:20=module://johnGraphics/coils/small/heatingCoilOnv3wL.png;20:40=module://johnGraphics/coils/small/heatingCoilOnv3wL.png;40:60=module://johnGraphics/coils/small/heatingCoilOnv3wL.png;60:80=module://johnGraphics/coils/small/heatingCoilOnv3wL.png;80:100=module://johnGraphics/coils/small/heatingCoilOnv3wL.png;default=null;" />
+								</p>
+							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
+						</p>
+						<!-- /coils/small/heatingCoilv3wR -->
+						<p n="heatingCoilv3wR" t="kitPx:BoundLabel">
+							<p n="layout" v="640,470,77,101" />
+							<!-- /coils/small/heatingCoilv3wR/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:INumericToSimple">
+									<p n="map" v="gx:Image -inf:10=module://johnGraphics/coils/small/heatingCoilOffv3wR.png;10:20=module://johnGraphics/coils/small/heatingCoilOnv3wR.png;20:40=module://johnGraphics/coils/small/heatingCoilOnv3wR.png;40:60=module://johnGraphics/coils/small/heatingCoilOnv3wR.png;60:80=module://johnGraphics/coils/small/heatingCoilOnv3wR.png;80:100=module://johnGraphics/coils/small/heatingCoilOnv3wR.png;default=null;" />
+								</p>
+							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="29,27,8" />
+						</p>
 					</p>
-					<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="41,25,8" />
+					<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="60,16,8" />
 				</p>
-				<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="10,10,8" />
-			</p>
-	<!-- /devices -->
-			<p n="devices" t="b:UnrestrictedFolder">
-	<!-- /devices/small -->
-				<p n="small" t="b:Folder">
-					<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="41,25,8" />
-	<!-- /devices/small/dpsLongBtmAlarm -->
-					<p n="dpsLongBtmAlarm" t="kitPx:BoundLabel">
-						<p n="layout" v="60,30,110,50" />
-						<p n="image" v="module://johnGraphics/devices/small/dpsLongBtmAlarm.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="68,76,8" />
-					</p>
-	<!-- /devices/small/dpsLongBtmNorm -->
-					<p n="dpsLongBtmNorm" t="kitPx:BoundLabel">
-						<p n="layout" v="60,90,110,50" />
-						<p n="image" v="module://johnGraphics/devices/small/dpsLongBtmNorm.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="68,74,8" />
-					</p>
-	<!-- /devices/small/dpsLongTopAlarm -->
-					<p n="dpsLongTopAlarm" t="kitPx:BoundLabel">
-						<p n="layout" v="60,160,110,50" />
-						<p n="image" v="module://johnGraphics/devices/small/dpsLongTopAlarm.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="68,70,8" />
-					</p>
-	<!-- /devices/small/dpsLongTopNorm -->
-					<p n="dpsLongTopNorm" t="kitPx:BoundLabel">
-						<p n="layout" v="60,230,110,50" />
-						<p n="image" v="module://johnGraphics/devices/small/dpsLongTopNorm.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="64,66,8" />
-					</p>
-	<!-- /devices/small/dpsShortBtmAlarm -->
-					<p n="dpsShortBtmAlarm" t="kitPx:BoundLabel">
-						<p n="layout" v="60,310,44,50" />
-						<p n="image" v="module://johnGraphics/devices/small/dpsShortBtmAlarm.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="60,62,8" />
-					</p>
-	<!-- /devices/small/dpsShortBtmNorm -->
-					<p n="dpsShortBtmNorm" t="kitPx:BoundLabel">
-						<p n="layout" v="60,380,44,50" />
-						<p n="image" v="module://johnGraphics/devices/small/dpsShortBtmNorm.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="56,58,8" />
-					</p>
-	<!-- /devices/small/dpsShortTopAlarm -->
-					<p n="dpsShortTopAlarm" t="kitPx:BoundLabel">
-						<p n="layout" v="70,440,44,50" />
-						<p n="image" v="module://johnGraphics/devices/small/dpsShortTopAlarm.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="52,54,8" />
-					</p>
-	<!-- /devices/small/dpsShortTopNorm -->
-					<p n="dpsShortTopNorm" t="kitPx:BoundLabel">
-						<p n="layout" v="70,500,44,50" />
-						<p n="image" v="module://johnGraphics/devices/small/dpsShortTopNorm.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="48,50,8" />
-					</p>
-	<!-- /devices/small/pipe$2dpsiH -->
-					<p n="pipe$2dpsiH" t="kitPx:BoundLabel">
-						<p n="layout" v="220,30,100,14" />
-						<p n="image" v="module://johnGraphics/devices/small/pipe-psiH.png" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="68,76,8" />
-					</p>
-	<!-- /devices/small/pipe$2dpsiV -->
-					<p n="pipe$2dpsiV" t="ui:Label">
-						<p n="layout" v="260,50,9,100" />
-						<p n="image" v="module://johnGraphics/devices/small/pipe-psiV.png" />
-					</p>
-	<!-- /devices/small/Press$2dSw$2dSide -->
-					<p n="Press$2dSw$2dSide" t="ui:Label">
-						<p n="layout" v="260,180,16,32" />
-						<p n="image" v="module://johnGraphics/devices/small/Press-Sw-Side.png" />
-					</p>
-	<!-- /devices/small/Press$2dSw$2dTop -->
-					<p n="Press$2dSw$2dTop" t="ui:Label">
-						<p n="layout" v="260,230,32,16" />
-						<p n="image" v="module://johnGraphics/devices/small/Press-Sw-Top.png" />
-					</p>
-	<!-- /devices/small/Sensor$2dHorz$2dFreezestat -->
-					<p n="Sensor$2dHorz$2dFreezestat" t="ui:Label">
-						<p n="layout" v="260,260,25,69" />
-						<p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-Freezestat.gif" />
-					</p>
-	<!-- /devices/small/Sensor$2dHorz$2dHiPressCutOut -->
-					<p n="Sensor$2dHorz$2dHiPressCutOut" t="ui:Label">
-						<p n="layout" v="260,350,25,52" />
-						<p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-HiPressCutOut.gif" />
-					</p>
-	<!-- /devices/small/Sensor$2dHorz$2dLoPressCutOut -->
-					<p n="Sensor$2dHorz$2dLoPressCutOut" t="ui:Label">
-						<p n="layout" v="260,410,25,52" />
-						<p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-LoPressCutOut.gif" />
-					</p>
-	<!-- /devices/small/Sensor$2dMixedAir$2dTop -->
-					<p n="Sensor$2dMixedAir$2dTop" t="ui:Label">
-						<p n="layout" v="260,470,25,68" />
-						<p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-MixedAir.gif" />
-					</p>
-	<!-- /devices/small/Sensor$2dStaticPressTop -->
-					<p n="Sensor$2dStaticPressTop" t="ui:Label">
-						<p n="layout" v="370,30,25,52" />
-						<p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-StaticPress.gif" />
-					</p>
-	<!-- /devices/small/Sensor$2dStaticPressBot -->
-					<p n="Sensor$2dStaticPressBot" t="ui:Label">
-						<p n="layout" v="370,100,25,52" />
-						<p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-StaticPressBot.gif" />
-					</p>
-	<!-- /devices/small/Sensor$2dSmoDetector$2dTop -->
-					<p n="Sensor$2dSmoDetector$2dTop" t="ui:Label">
-						<p n="layout" v="370,170,32,54" />
-						<p n="image" v="module://johnGraphics/devices/small/Sensor-Left-SmoDetector.gif" />
-					</p>
-	<!-- /devices/small/Sensor$2dMixedAir$2dBottom -->
-					<p n="Sensor$2dMixedAir$2dBottom" t="ui:Label">
-						<p n="layout" v="370,230,25,68" />
-						<p n="image" v="module://johnGraphics/devices/small/Sensor-MixedAir.gif" />
-					</p>
-	<!-- /devices/small/Sensor$2dSmoDetector$2dBottom -->
-					<p n="Sensor$2dSmoDetector$2dBottom" t="ui:Label">
-						<p n="layout" v="370,310,32,54" />
-						<p n="image" v="module://johnGraphics/devices/small/Sensor-Right-Bot-SmoDetector.gif" />
-					</p>
-	<!-- /devices/small/Sensor$2dStaticPressRight -->
-					<p n="Sensor$2dStaticPressRight" t="ui:Label">
-						<p n="layout" v="360,390,52,25" />
-						<p n="image" v="module://johnGraphics/devices/small/Sensor-Vert-StaticPressBot.gif" />
-					</p>
-	<!-- /devices/small/Sensor$2dSmoDetector$2dAni -->
-					<p n="Sensor$2dSmoDetector$2dAni" t="kitPx:BoundLabel">
-						<p n="layout" v="360,430,35,65" />
-	<!-- /devices/small/Sensor$2dSmoDetector$2dAni/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="ord" v="station:|slot:/Drivers/NiagaraNetwork/Kaiser_3701_PH/Playground/BWTrue" />
-							<p n="image" t="conv:IBooleanToSimple">
-								<p n="trueValue" t="gx:Image" v="module://johnGraphics/devices/small/smokeDetectorOn.png" />
-								<p n="falseValue" t="gx:Image" v="module://johnGraphics/devices/small/smokeDetectorOff.png" />
+				
+				
+				
+				<!-- /dampers -->
+				<p n="dampers" t="b:UnrestrictedFolder">
+					<!-- /dampers/small -->
+					<p n="small" t="b:Folder">
+						<!-- /dampers/small/damperH_NC -->
+						<p n="damperH_NC" t="kitPx:BoundLabel">
+							<p n="layout" v="620,490,68,30" />
+							<!-- /dampers/small/damperH_NC/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:INumericToSimple">
+									<p n="map" v="gx:Image -inf:20=module://johnGraphics/dampers/small/damperH1a.gif;20:40=module://johnGraphics/dampers/small/damperH1b.gif;40:60=module://johnGraphics/dampers/small/damperH1c.gif;60:80=module://johnGraphics/dampers/small/damperH1d.gif;80:+inf=module://johnGraphics/dampers/small/damperH1e.gif;default=null;" />
+								</p>
 							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="14,11,8" />
 						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="5,3,8" />
+						<!-- /dampers/small/damperH_NO -->
+						<p n="damperH_NO" t="kitPx:BoundLabel">
+							<p n="layout" v="90,120,68,30" />
+							<!-- /dampers/small/damperH_NO/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:INumericToSimple">
+									<p n="map" v="gx:Image -inf:20=module://johnGraphics/dampers/small/damperH1e.gif;20:40=module://johnGraphics/dampers/small/damperH1d.gif;40:60=module://johnGraphics/dampers/small/damperH1c.gif;60:80=module://johnGraphics/dampers/small/damperH1b.gif;80:+inf=module://johnGraphics/dampers/small/damperH1a.gif;default=null;" />
+								</p>
+							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="14,11,8" />
+						</p>
+						<!-- /dampers/small/damperV_NC -->
+						<p n="damperV_NC" ht="kitPx:BoundLabel">
+							<p n="layout" v="200,200,30,68" />
+							<!-- /dampers/small/damperV_NC/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:INumericToSimple">
+									<p n="map" v="gx:Image -inf:20=module://johnGraphics/dampers/small/damperV1a.gif;20:40=module://johnGraphics/dampers/small/damperV1b.gif;40:60=module://johnGraphics/dampers/small/damperV1c.gif;60:80=module://johnGraphics/dampers/small/damperV1d.gif;80:+inf=module://johnGraphics/dampers/small/damperV1e.gif;default=null;" />
+								</p>
+							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="18,15,8" />
+						</p>
+						<!-- /dampers/small/damperV_NO -->
+						<p n="damperV_NO" t="kitPx:BoundLabel">
+							<p n="layout" v="730,400,30,68" />
+							<!-- /dampers/small/damperV_NO/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:INumericToSimple">
+									<p n="map" v="gx:Image -inf:20=module://johnGraphics/dampers/small/damperV1e.gif;20:40=module://johnGraphics/dampers/small/damperV1d.gif;40:60=module://johnGraphics/dampers/small/damperV1c.gif;60:80=module://johnGraphics/dampers/small/damperV1b.gif;80:+inf=module://johnGraphics/dampers/small/damperV1a.gif;default=null;" />
+								</p>
+							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="18,15,8" />
+						</p>
+						<!-- /dampers/small/vavDamperS -->
+						<p n="vavDamperS" t="kitPx:BoundLabel">
+							<p n="layout" v="190,290,70,68" />
+							<!-- /dampers/small/vavDamperS/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:INumericToSimple">
+									<p n="map" v="gx:Image -inf:20=module://johnGraphics/dampers/small/vavDamper1a.gif;20:40=module://johnGraphics/dampers/small/vavDamper1b.gif;40:60=module://johnGraphics/dampers/small/vavDamper1c.gif;60:80=module://johnGraphics/dampers/small/vavDamper1d.gif;80:+inf=module://johnGraphics/dampers/small/vavDamper1e.gif;default=null;" />
+								</p>
+							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="22,19,8" />
+						</p>
+						<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="41,25,8" />
 					</p>
-	<!-- /devices/small/tempSensorBottom -->
-					<p n="tempSensorBottom" t="kitPx:BoundLabel">
-						<p n="layout" v="510,380,14,51" />
-						<p n="image" v="module://johnGraphics/devices/small/tempSensorBottom.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="12,14,8" />
-					</p>
-	<!-- /devices/small/tempSensorBottomSmall -->
-					<p n="tempSensorBottomSmall" t="ui:Label">
-						<p n="layout" v="340,500,14,51" />
-						<p n="image" v="module://johnGraphics/devices/small/tempSensorBottomSmall.GIF" />
-					</p>
-	<!-- /devices/small/tempSensorLeft -->
-					<p n="tempSensorLeft" t="kitPx:BoundLabel">
-						<p n="layout" v="550,490,51,14" />
-						<p n="image" v="module://johnGraphics/devices/small/tempSensorLeft.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="8,10,8" />
-					</p>
-	<!-- /devices/small/tempSensorLeftSmall -->
-					<p n="tempSensorLeftSmall" t="ui:Label">
-						<p n="layout" v="380,530,51,14" />
-						<p n="image" v="module://johnGraphics/devices/small/tempSensorLeftSmall.gif" />
-					</p>
-	<!-- /devices/small/tempSensorRight -->
-					<p n="tempSensorRight" t="kitPx:BoundLabel">
-						<p n="layout" v="620,500,51,14" />
-						<p n="image" v="module://johnGraphics/devices/small/tempSensorRight.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="8,10,8" />
-					</p>
-	<!-- /devices/small/tempSensorRightSmall -->
-					<p n="tempSensorRightSmall" t="ui:Label">
-						<p n="layout" v="430,530,51,14" />
-						<p n="image" v="module://johnGraphics/devices/small/tempSensorRightSmall.gif" />
-					</p>
-	<!-- /devices/small/tempSensorTop -->
-					<p n="tempSensorTop" t="kitPx:BoundLabel">
-						<p n="layout" v="500,460,14,51" />
-						<p n="image" v="module://johnGraphics/devices/small/tempSensorTop.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="4,6,8" />
-					</p>
-	<!-- /devices/small/tempSensorTopSmall -->
-					<p n="tempSensorTopSmall" t="ui:Label">
-						<p n="layout" v="460,570,14,51" />
-						<p n="image" v="module://johnGraphics/devices/small/tempSensorTopSmall.GIF" />
+					<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="10,10,8" />
+				</p>
+				
+				
+				
+				<!-- /devices -->
+				<p n="devices" t="b:UnrestrictedFolder">
+					<!-- /devices/small -->
+					<p n="small" t="b:Folder">
+						<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="41,25,8" />
+						<!-- /devices/small/dpsLongBtmAlarm -->
+						<p n="dpsLongBtmAlarm" t="kitPx:BoundLabel">
+							<p n="layout" v="60,30,110,50" />
+							<p n="image" v="module://johnGraphics/devices/small/dpsLongBtmAlarm.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="68,76,8" />
+						</p>
+						<!-- /devices/small/dpsLongBtmNorm -->
+						<p n="dpsLongBtmNorm" t="kitPx:BoundLabel">
+							<p n="layout" v="60,90,110,50" />
+							<p n="image" v="module://johnGraphics/devices/small/dpsLongBtmNorm.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="68,74,8" />
+						</p>
+						<!-- /devices/small/dpsLongTopAlarm -->
+						<p n="dpsLongTopAlarm" t="kitPx:BoundLabel">
+							<p n="layout" v="60,160,110,50" />
+							<p n="image" v="module://johnGraphics/devices/small/dpsLongTopAlarm.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="68,70,8" />
+						</p>
+						<!-- /devices/small/dpsLongTopNorm -->
+						<p n="dpsLongTopNorm" t="kitPx:BoundLabel">
+							<p n="layout" v="60,230,110,50" />
+							<p n="image" v="module://johnGraphics/devices/small/dpsLongTopNorm.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="64,66,8" />
+						</p>
+						<!-- /devices/small/dpsShortBtmAlarm -->
+						<p n="dpsShortBtmAlarm" t="kitPx:BoundLabel">
+							<p n="layout" v="60,310,44,50" />
+							<p n="image" v="module://johnGraphics/devices/small/dpsShortBtmAlarm.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="60,62,8" />
+						</p>
+						<!-- /devices/small/dpsShortBtmNorm -->
+						<p n="dpsShortBtmNorm" t="kitPx:BoundLabel">
+							<p n="layout" v="60,380,44,50" />
+							<p n="image" v="module://johnGraphics/devices/small/dpsShortBtmNorm.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="56,58,8" />
+						</p>
+						<!-- /devices/small/dpsShortTopAlarm -->
+						<p n="dpsShortTopAlarm" t="kitPx:BoundLabel">
+							<p n="layout" v="70,440,44,50" />
+							<p n="image" v="module://johnGraphics/devices/small/dpsShortTopAlarm.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="52,54,8" />
+						</p>
+						<!-- /devices/small/dpsShortTopNorm -->
+						<p n="dpsShortTopNorm" t="kitPx:BoundLabel">
+							<p n="layout" v="70,500,44,50" />
+							<p n="image" v="module://johnGraphics/devices/small/dpsShortTopNorm.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="48,50,8" />
+						</p>
+						<!-- /devices/small/pipe$2dpsiH -->
+						<p n="pipe$2dpsiH" t="kitPx:BoundLabel">
+							<p n="layout" v="220,30,100,14" />
+							<p n="image" v="module://johnGraphics/devices/small/pipe-psiH.png" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="68,76,8" />
+						</p>
+						<!-- /devices/small/pipe$2dpsiV -->
+						<p n="pipe$2dpsiV" t="ui:Label">
+							<p n="layout" v="260,50,9,100" />
+							<p n="image" v="module://johnGraphics/devices/small/pipe-psiV.png" />
+						</p>
+						<!-- /devices/small/Press$2dSw$2dSide -->
+						<p n="Press$2dSw$2dSide" t="ui:Label">
+							<p n="layout" v="260,180,16,32" />
+							<p n="image" v="module://johnGraphics/devices/small/Press-Sw-Side.png" />
+						</p>
+						<!-- /devices/small/Press$2dSw$2dTop -->
+						<p n="Press$2dSw$2dTop" t="ui:Label">
+							<p n="layout" v="260,230,32,16" />
+							<p n="image" v="module://johnGraphics/devices/small/Press-Sw-Top.png" />
+						</p>
+						<!-- /devices/small/Sensor$2dHorz$2dFreezestat -->
+						<p n="Sensor$2dHorz$2dFreezestat" t="ui:Label">
+							<p n="layout" v="260,260,25,69" />
+							<p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-Freezestat.gif" />
+						</p>
+						<!-- /devices/small/Sensor$2dHorz$2dHiPressCutOut -->
+						<p n="Sensor$2dHorz$2dHiPressCutOut" t="ui:Label">
+							<p n="layout" v="260,350,25,52" />
+							<p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-HiPressCutOut.gif" />
+						</p>
+						<!-- /devices/small/Sensor$2dHorz$2dLoPressCutOut -->
+						<p n="Sensor$2dHorz$2dLoPressCutOut" t="ui:Label">
+							<p n="layout" v="260,410,25,52" />
+							<p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-LoPressCutOut.gif" />
+						</p>
+						<!-- /devices/small/Sensor$2dMixedAir$2dTop -->
+						<p n="Sensor$2dMixedAir$2dTop" t="ui:Label">
+							<p n="layout" v="260,470,25,68" />
+							<p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-MixedAir.gif" />
+						</p>
+						<!-- /devices/small/Sensor$2dStaticPressTop -->
+						<p n="Sensor$2dStaticPressTop" t="ui:Label">
+							<p n="layout" v="370,30,25,52" />
+							<p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-StaticPress.gif" />
+						</p>
+						<!-- /devices/small/Sensor$2dStaticPressBot -->
+						<p n="Sensor$2dStaticPressBot" t="ui:Label">
+							<p n="layout" v="370,100,25,52" />
+							<p n="image" v="module://johnGraphics/devices/small/Sensor-Horz-StaticPressBot.gif" />
+						</p>
+						<!-- /devices/small/Sensor$2dSmoDetector$2dTop -->
+						<p n="Sensor$2dSmoDetector$2dTop" t="ui:Label">
+							<p n="layout" v="370,170,32,54" />
+							<p n="image" v="module://johnGraphics/devices/small/Sensor-Left-SmoDetector.gif" />
+						</p>
+						<!-- /devices/small/Sensor$2dMixedAir$2dBottom -->
+						<p n="Sensor$2dMixedAir$2dBottom" t="ui:Label">
+							<p n="layout" v="370,230,25,68" />
+							<p n="image" v="module://johnGraphics/devices/small/Sensor-MixedAir.gif" />
+						</p>
+						<!-- /devices/small/Sensor$2dSmoDetector$2dBottom -->
+						<p n="Sensor$2dSmoDetector$2dBottom" t="ui:Label">
+							<p n="layout" v="370,310,32,54" />
+							<p n="image" v="module://johnGraphics/devices/small/Sensor-Right-Bot-SmoDetector.gif" />
+						</p>
+						<!-- /devices/small/Sensor$2dStaticPressRight -->
+						<p n="Sensor$2dStaticPressRight" t="ui:Label">
+							<p n="layout" v="360,390,52,25" />
+							<p n="image" v="module://johnGraphics/devices/small/Sensor-Vert-StaticPressBot.gif" />
+						</p>
+						<!-- /devices/small/Sensor$2dSmoDetector$2dAni -->
+						<p n="Sensor$2dSmoDetector$2dAni" t="kitPx:BoundLabel">
+							<p n="layout" v="360,430,35,65" />
+							<!-- /devices/small/Sensor$2dSmoDetector$2dAni/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="ord" v="station:|slot:/Drivers/NiagaraNetwork/Kaiser_3701_PH/Playground/BWTrue" />
+								<p n="image" t="conv:IBooleanToSimple">
+									<p n="trueValue" t="gx:Image" v="module://johnGraphics/devices/small/smokeDetectorOn.png" />
+									<p n="falseValue" t="gx:Image" v="module://johnGraphics/devices/small/smokeDetectorOff.png" />
+								</p>
+							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="5,3,8" />
+						</p>
+						<!-- /devices/small/tempSensorBottom -->
+						<p n="tempSensorBottom" t="kitPx:BoundLabel">
+							<p n="layout" v="510,380,14,51" />
+							<p n="image" v="module://johnGraphics/devices/small/tempSensorBottom.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="12,14,8" />
+						</p>
+						<!-- /devices/small/tempSensorBottomSmall -->
+						<p n="tempSensorBottomSmall" t="ui:Label">
+							<p n="layout" v="340,500,14,51" />
+							<p n="image" v="module://johnGraphics/devices/small/tempSensorBottomSmall.GIF" />
+						</p>
+						<!-- /devices/small/tempSensorLeft -->
+						<p n="tempSensorLeft" t="kitPx:BoundLabel">
+							<p n="layout" v="550,490,51,14" />
+							<p n="image" v="module://johnGraphics/devices/small/tempSensorLeft.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="8,10,8" />
+						</p>
+						<!-- /devices/small/tempSensorLeftSmall -->
+						<p n="tempSensorLeftSmall" t="ui:Label">
+							<p n="layout" v="380,530,51,14" />
+							<p n="image" v="module://johnGraphics/devices/small/tempSensorLeftSmall.gif" />
+						</p>
+						<!-- /devices/small/tempSensorRight -->
+						<p n="tempSensorRight" t="kitPx:BoundLabel">
+							<p n="layout" v="620,500,51,14" />
+							<p n="image" v="module://johnGraphics/devices/small/tempSensorRight.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="8,10,8" />
+						</p>
+						<!-- /devices/small/tempSensorRightSmall -->
+						<p n="tempSensorRightSmall" t="ui:Label">
+							<p n="layout" v="430,530,51,14" />
+							<p n="image" v="module://johnGraphics/devices/small/tempSensorRightSmall.gif" />
+						</p>
+						<!-- /devices/small/tempSensorTop -->
+						<p n="tempSensorTop" t="kitPx:BoundLabel">
+							<p n="layout" v="500,460,14,51" />
+							<p n="image" v="module://johnGraphics/devices/small/tempSensorTop.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="4,6,8" />
+						</p>
+						<!-- /devices/small/tempSensorTopSmall -->
+						<p n="tempSensorTopSmall" t="ui:Label">
+							<p n="layout" v="460,570,14,51" />
+							<p n="image" v="module://johnGraphics/devices/small/tempSensorTopSmall.GIF" />
+						</p>
 					</p>
 				</p>
-			</p>
-   <!-- /ducts -->
-			<p n="ducts" t="b:UnrestrictedFolder">
-	<!-- /ducts/small -->
-				<p n="small" t="b:Folder">
-	<!-- /ducts/small/NE -->
-					<p n="NE" t="kitPx:BoundLabel">
-						<p n="layout" v="570,340,84,84" />
-						<p n="image" v="module://johnGraphics/ducts/small/NE.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
+				
+				
+				
+				
+				
+				
+				<!-- /ducts -->
+				<p n="ducts" t="b:UnrestrictedFolder">
+					<!-- /ducts/small -->
+					<p n="small" t="b:Folder">
+						<!-- /ducts/small/NE -->
+						<p n="NE" t="kitPx:BoundLabel">
+							<p n="layout" v="570,340,84,84" />
+							<p n="image" v="module://johnGraphics/ducts/small/NE.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
+						</p>
+						<!-- /ducts/small/NW -->
+						<p n="NW" t="kitPx:BoundLabel">
+							<p n="layout" v="450,310,84,84" />
+							<p n="image" v="module://johnGraphics/ducts/small/NW.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
+						</p>
+						<!-- /ducts/small/SE -->
+						<p n="SE" t="kitPx:BoundLabel">
+							<p n="layout" v="540,310,84,84" />
+							<p n="image" v="module://johnGraphics/ducts/small/SE.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
+						</p>
+						<!-- /ducts/small/SW -->
+						<p n="SW" t="kitPx:BoundLabel">
+							<p n="layout" v="660,310,84,84" />
+							<p n="image" v="module://johnGraphics/ducts/small/SW.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
+						</p>
+						<!-- /ducts/small/ductA -->
+						<p n="ductA" t="kitPx:BoundLabel">
+							<p n="layout" v="20,10,434,208" />
+							<p n="image" v="module://johnGraphics/ducts/small/duct1.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="102,103,8" />
+						</p>
+						<!-- /ducts/small/ductB -->
+						<p n="ductB" t="kitPx:BoundLabel">
+							<p n="layout" v="70,20,434,208" />
+							<p n="image" v="module://johnGraphics/ducts/small/duct2.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="98,99,8" />
+						</p>
+						<!-- /ducts/small/ductC -->
+						<p n="ductC" t="kitPx:BoundLabel">
+							<p n="layout" v="40,80,434,135" />
+							<p n="image" v="module://johnGraphics/ducts/small/duct3.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="94,95,8" />
+						</p>
+						<!-- /ducts/small/ductD -->
+						<p n="ductD" t="kitPx:BoundLabel">
+							<p n="layout" v="60,30,434,135" />
+							<p n="image" v="module://johnGraphics/ducts/small/duct4.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="90,91,8" />
+						</p>
+						<!-- /ducts/small/hlbreak -->
+						<p n="hlbreak" t="kitPx:BoundLabel">
+							<p n="layout" v="100,20,50,68" />
+							<p n="image" v="module://johnGraphics/ducts/small/hlbreak.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="86,87,8" />
+						</p>
+						<!-- /ducts/small/hlend -->
+						<p n="hlend" t="kitPx:BoundLabel">
+							<p n="layout" v="100,100,50,68" />
+							<p n="image" v="module://johnGraphics/ducts/small/hlend.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="82,83,8" />
+						</p>
+						<!-- /ducts/small/hmid -->
+						<p n="hmid" t="kitPx:BoundLabel">
+							<p n="layout" v="40,190,150,68" />
+							<p n="image" v="module://johnGraphics/ducts/small/hmid.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="78,79,8" />
+						</p>
+						<!-- /ducts/small/hmidSmall -->
+						<p n="hmidSmall" t="kitPx:BoundLabel">
+							<p n="layout" v="100,280,50,68" />
+							<p n="image" v="module://johnGraphics/ducts/small/hmidSmall.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="74,75,8" />
+						</p>
+						<!-- /ducts/small/hrbreak -->
+						<p n="hrbreak" t="kitPx:BoundLabel">
+							<p n="layout" v="100,360,60,68" />
+							<p n="image" v="module://johnGraphics/ducts/small/hrbreak.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="70,71,8" />
+						</p>
+						<!-- /ducts/small/hrend -->
+						<p n="hrend" t="kitPx:BoundLabel">
+							<p n="layout" v="110,440,50,68" />
+							<p n="image" v="module://johnGraphics/ducts/small/hrend.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="66,67,8" />
+						</p>
+						<!-- /ducts/small/hrendGrate -->
+						<p n="hrendGrate" t="kitPx:BoundLabel">
+							<p n="layout" v="110,520,34,68" />
+							<p n="image" v="module://johnGraphics/ducts/small/hrendGrate.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="62,63,8" />
+						</p>
+						<!-- /ducts/small/hrendHole -->
+						<p n="hrendHole" t="kitPx:BoundLabel">
+							<p n="layout" v="280,20,34,68" />
+							<p n="image" v="module://johnGraphics/ducts/small/hrendHole.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="58,59,8" />
+						</p>
+						<!-- /ducts/small/hrendSolid -->
+						<p n="hrendSolid" t="kitPx:BoundLabel">
+							<p n="layout" v="280,100,34,68" />
+							<p n="image" v="module://johnGraphics/ducts/small/hrendSolid.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="54,55,8" />
+						</p>
+						<!-- /ducts/small/hrwhy3wayL -->
+						<p n="hrwhy3wayL" t="kitPx:BoundLabel">
+							<p n="layout" v="260,310,81,169" />
+							<p n="image" v="module://johnGraphics/ducts/small/hrwhy3wayL.png" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="46,47,8" />
+						</p>
+						<!-- /ducts/small/hrwhy3wayR -->
+						<p n="hrwhy3wayR" t="kitPx:BoundLabel">
+							<p n="layout" v="370,310,81,169" />
+							<p n="image" v="module://johnGraphics/ducts/small/hrwhy3wayR.png" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="42,43,8" />
+						</p>
+						<!-- /ducts/small/hrwhyL -->
+						<p n="hrwhyL" t="kitPx:BoundLabel">
+							<p n="layout" v="270,180,67,118" />
+							<p n="image" v="module://johnGraphics/ducts/small/hrwhySmall.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="50,51,8" />
+						</p>
+						<!-- /ducts/small/hrwhyR -->
+						<p n="hrwhyR" t="kitPx:BoundLabel">
+							<p n="layout" v="370,180,67,118" />
+							<p n="image" v="module://johnGraphics/ducts/small/hrwhySmallOut.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="50,51,8" />
+						</p>
+						<!-- /ducts/small/teast -->
+						<p n="teast" t="kitPx:BoundLabel">
+							<p n="layout" v="580,430,84,101" />
+							<p n="image" v="module://johnGraphics/ducts/small/teast.png" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
+						</p>
+						<!-- /ducts/small/tnorth -->
+						<p n="tnorth" t="kitPx:BoundLabel">
+							<p n="layout" v="520,30,101,84" />
+							<p n="image" v="module://johnGraphics/ducts/small/tnorth.png" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="18,19,8" />
+						</p>
+						<!-- /ducts/small/tsouth -->
+						<p n="tsouth" t="kitPx:BoundLabel">
+							<p n="layout" v="520,130,101,84" />
+							<p n="image" v="module://johnGraphics/ducts/small/tsouth.png" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="14,15,8" />
+						</p>
+						<!-- /ducts/small/twest -->
+						<p n="twest" t="kitPx:BoundLabel">
+							<p n="layout" v="710,420,84,101" />
+							<p n="image" v="module://johnGraphics/ducts/small/twest.png" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
+						</p>
+						<!-- /ducts/small/vbend -->
+						<p n="vbend" t="kitPx:BoundLabel">
+							<p n="layout" v="540,240,68,50" />
+							<p n="image" v="module://johnGraphics/ducts/small/vbend.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="10,11,8" />
+						</p>
+						<!-- /ducts/small/vmid -->
+						<p n="vmid" t="kitPx:BoundLabel">
+							<p n="layout" v="540,310,68,150" />
+							<p n="image" v="module://johnGraphics/ducts/small/vmid.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
+						</p>
+						<!-- /ducts/small/vtend -->
+						<p n="vtend" t="kitPx:BoundLabel">
+							<p n="layout" v="540,480,68,50" />
+							<p n="image" v="module://johnGraphics/ducts/small/vtend.gif" />
+							<p n="wsAnnotation" t="b:WsAnnotation" v="2,3,8" />
+						</p>
+						<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="41,25,8" />
 					</p>
-	<!-- /ducts/small/NW -->
-					<p n="NW" t="kitPx:BoundLabel">
-						<p n="layout" v="450,310,84,84" />
-						<p n="image" v="module://johnGraphics/ducts/small/NW.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
-					</p>
-	<!-- /ducts/small/SE -->
-					<p n="SE" t="kitPx:BoundLabel">
-						<p n="layout" v="540,310,84,84" />
-						<p n="image" v="module://johnGraphics/ducts/small/SE.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
-					</p>
-	<!-- /ducts/small/SW -->
-					<p n="SW" t="kitPx:BoundLabel">
-						<p n="layout" v="660,310,84,84" />
-						<p n="image" v="module://johnGraphics/ducts/small/SW.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
-					</p>
-	<!-- /ducts/small/ductA -->
-					<p n="ductA" t="kitPx:BoundLabel">
-						<p n="layout" v="20,10,434,208" />
-						<p n="image" v="module://johnGraphics/ducts/small/duct1.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="102,103,8" />
-					</p>
-	<!-- /ducts/small/ductB -->
-					<p n="ductB" t="kitPx:BoundLabel">
-						<p n="layout" v="70,20,434,208" />
-						<p n="image" v="module://johnGraphics/ducts/small/duct2.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="98,99,8" />
-					</p>
-	<!-- /ducts/small/ductC -->
-					<p n="ductC" t="kitPx:BoundLabel">
-						<p n="layout" v="40,80,434,135" />
-						<p n="image" v="module://johnGraphics/ducts/small/duct3.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="94,95,8" />
-					</p>
-	<!-- /ducts/small/ductD -->
-					<p n="ductD" t="kitPx:BoundLabel">
-						<p n="layout" v="60,30,434,135" />
-						<p n="image" v="module://johnGraphics/ducts/small/duct4.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="90,91,8" />
-					</p>
-	<!-- /ducts/small/hlbreak -->
-					<p n="hlbreak" t="kitPx:BoundLabel">
-						<p n="layout" v="100,20,50,68" />
-						<p n="image" v="module://johnGraphics/ducts/small/hlbreak.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="86,87,8" />
-					</p>
-	<!-- /ducts/small/hlend -->
-					<p n="hlend" t="kitPx:BoundLabel">
-						<p n="layout" v="100,100,50,68" />
-						<p n="image" v="module://johnGraphics/ducts/small/hlend.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="82,83,8" />
-					</p>
-	<!-- /ducts/small/hmid -->
-					<p n="hmid" t="kitPx:BoundLabel">
-						<p n="layout" v="40,190,150,68" />
-						<p n="image" v="module://johnGraphics/ducts/small/hmid.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="78,79,8" />
-					</p>
-	<!-- /ducts/small/hmidSmall -->
-					<p n="hmidSmall" t="kitPx:BoundLabel">
-						<p n="layout" v="100,280,50,68" />
-						<p n="image" v="module://johnGraphics/ducts/small/hmidSmall.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="74,75,8" />
-					</p>
-	<!-- /ducts/small/hrbreak -->
-					<p n="hrbreak" t="kitPx:BoundLabel">
-						<p n="layout" v="100,360,60,68" />
-						<p n="image" v="module://johnGraphics/ducts/small/hrbreak.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="70,71,8" />
-					</p>
-	<!-- /ducts/small/hrend -->
-					<p n="hrend" t="kitPx:BoundLabel">
-						<p n="layout" v="110,440,50,68" />
-						<p n="image" v="module://johnGraphics/ducts/small/hrend.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="66,67,8" />
-					</p>
-	<!-- /ducts/small/hrendGrate -->
-					<p n="hrendGrate" t="kitPx:BoundLabel">
-						<p n="layout" v="110,520,34,68" />
-						<p n="image" v="module://johnGraphics/ducts/small/hrendGrate.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="62,63,8" />
-					</p>
-	<!-- /ducts/small/hrendHole -->
-					<p n="hrendHole" t="kitPx:BoundLabel">
-						<p n="layout" v="280,20,34,68" />
-						<p n="image" v="module://johnGraphics/ducts/small/hrendHole.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="58,59,8" />
-					</p>
-	<!-- /ducts/small/hrendSolid -->
-					<p n="hrendSolid" t="kitPx:BoundLabel">
-						<p n="layout" v="280,100,34,68" />
-						<p n="image" v="module://johnGraphics/ducts/small/hrendSolid.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="54,55,8" />
-					</p>
-	<!-- /ducts/small/hrwhy3wayL -->
-					<p n="hrwhy3wayL" t="kitPx:BoundLabel">
-						<p n="layout" v="260,310,81,169" />
-						<p n="image" v="module://johnGraphics/ducts/small/hrwhy3wayL.png" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="46,47,8" />
-					</p>
-	<!-- /ducts/small/hrwhy3wayR -->
-					<p n="hrwhy3wayR" t="kitPx:BoundLabel">
-						<p n="layout" v="370,310,81,169" />
-						<p n="image" v="module://johnGraphics/ducts/small/hrwhy3wayR.png" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="42,43,8" />
-					</p>
-	<!-- /ducts/small/hrwhyL -->
-					<p n="hrwhyL" t="kitPx:BoundLabel">
-						<p n="layout" v="270,180,67,118" />
-						<p n="image" v="module://johnGraphics/ducts/small/hrwhySmall.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="50,51,8" />
-					</p>
-	<!-- /ducts/small/hrwhyR -->
-					<p n="hrwhyR" t="kitPx:BoundLabel">
-						<p n="layout" v="370,180,67,118" />
-						<p n="image" v="module://johnGraphics/ducts/small/hrwhySmallOut.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="50,51,8" />
-					</p>
-	<!-- /ducts/small/teast -->
-					<p n="teast" t="kitPx:BoundLabel">
-						<p n="layout" v="580,430,84,101" />
-						<p n="image" v="module://johnGraphics/ducts/small/teast.png" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
-					</p>
-	<!-- /ducts/small/tnorth -->
-					<p n="tnorth" t="kitPx:BoundLabel">
-						<p n="layout" v="520,30,101,84" />
-						<p n="image" v="module://johnGraphics/ducts/small/tnorth.png" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="18,19,8" />
-					</p>
-	<!-- /ducts/small/tsouth -->
-					<p n="tsouth" t="kitPx:BoundLabel">
-						<p n="layout" v="520,130,101,84" />
-						<p n="image" v="module://johnGraphics/ducts/small/tsouth.png" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="14,15,8" />
-					</p>
-	<!-- /ducts/small/twest -->
-					<p n="twest" t="kitPx:BoundLabel">
-						<p n="layout" v="710,420,84,101" />
-						<p n="image" v="module://johnGraphics/ducts/small/twest.png" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
-					</p>
-	<!-- /ducts/small/vbend -->
-					<p n="vbend" t="kitPx:BoundLabel">
-						<p n="layout" v="540,240,68,50" />
-						<p n="image" v="module://johnGraphics/ducts/small/vbend.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="10,11,8" />
-					</p>
-	<!-- /ducts/small/vmid -->
-					<p n="vmid" t="kitPx:BoundLabel">
-						<p n="layout" v="540,310,68,150" />
-						<p n="image" v="module://johnGraphics/ducts/small/vmid.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="6,7,8" />
-					</p>
-	<!-- /ducts/small/vtend -->
-					<p n="vtend" t="kitPx:BoundLabel">
-						<p n="layout" v="540,480,68,50" />
-						<p n="image" v="module://johnGraphics/ducts/small/vtend.gif" />
-						<p n="wsAnnotation" t="b:WsAnnotation" v="2,3,8" />
-					</p>
-					<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="41,25,8" />
 				</p>
-			</p>
-	<!-- /equipment -->
-			<p n="equipment" t="b:UnrestrictedFolder">
-	<!-- /equipment/small -->
-				<p n="small" t="b:Folder">
-					<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="41,25,8" />
-	<!-- /equipment/small/fanLeft -->
-					<p n="fanLeft" t="kitPx:BoundLabel">
-						<p n="layout" v="140,90,101,68" />
-	<!-- /equipment/small/fanLeft/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:IBooleanToSimple">
-								<p n="trueValue" t="gx:Image" v="module://johnGraphics/equipment/small/fanLeftAnimated.gif" />
-								<p n="falseValue" t="gx:Image" v="module://johnGraphics/equipment/small/fanLeft.gif" />
+				
+				
+				
+				<!-- /equipment -->
+				<p n="equipment" t="b:UnrestrictedFolder">
+					<!-- /equipment/small -->
+					<p n="small" t="b:Folder">
+						<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="41,25,8" />
+						<!-- /equipment/small/fanLeft -->
+						<p n="fanLeft" t="kitPx:BoundLabel">
+							<p n="layout" v="140,90,101,68" />
+							<!-- /equipment/small/fanLeft/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:IBooleanToSimple">
+									<p n="trueValue" t="gx:Image" v="module://johnGraphics/equipment/small/fanLeftAnimated.gif" />
+									<p n="falseValue" t="gx:Image" v="module://johnGraphics/equipment/small/fanLeft.gif" />
+								</p>
 							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="18,16,8" />
 						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="18,16,8" />
-					</p>
-	<!-- /equipment/small/fanRight -->
-					<p n="fanRight" t="kitPx:BoundLabel">
-						<p n="layout" v="120,190,101,68" />
-	<!-- /equipment/small/fanRight/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="image" t="conv:IBooleanToSimple">
-								<p n="trueValue" t="gx:Image" v="module://johnGraphics/equipment/small/fanRightAnimated.gif" />
-								<p n="falseValue" t="gx:Image" v="module://johnGraphics/equipment/small/fanRight.gif" />
+						<!-- /equipment/small/fanRight -->
+						<p n="fanRight" t="kitPx:BoundLabel">
+							<p n="layout" v="120,190,101,68" />
+							<!-- /equipment/small/fanRight/ValueBinding -->
+							<p n="ValueBinding" t="ui:ValueBinding">
+								<p n="image" t="conv:IBooleanToSimple">
+									<p n="trueValue" t="gx:Image" v="module://johnGraphics/equipment/small/fanRightAnimated.gif" />
+									<p n="falseValue" t="gx:Image" v="module://johnGraphics/equipment/small/fanRight.gif" />
+								</p>
 							</p>
+							<p n="wsAnnotation" t="b:WsAnnotation" v="19,17,8" />
 						</p>
-						<p n="wsAnnotation" t="b:WsAnnotation" v="19,17,8" />
 					</p>
 				</p>
 			</p>
-		</p>
 	</p>
 </bajaObjectGraph>
