@@ -50,67 +50,84 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 		
 		if (property == inCommaSepVar)
 		{
-			//PARSE CARRIAGE RETURN DELIMITED RECORDS
-			StringTokenizer	tokzer		= new StringTokenizer(getInCommaSepVar().getValue(),"\r\n");
-			int				tokCount	= tokzer.countTokens();
-			
-			if(tokCount>=0)
+			try
 			{
-				String[]	tokVals	= new String[tokzer.countTokens()];
-				int[]		tokKeys	= new int[tokzer.countTokens()];
+				//PARSE CARRIAGE RETURN DELIMITED RECORDS
+				StringTokenizer	tokzer		= new StringTokenizer(getInCommaSepVar().getValue(),"\r\n");
+				int				tokCount	= tokzer.countTokens();
 				
-				for (int i = 0;i<tokCount;i++)
+				if(tokCount>=0)
 				{
-					String		tmp	= tokzer.nextToken();
+					String[]	tokVals	= new String[tokzer.countTokens()];
+					int[]		tokKeys	= new int[tokzer.countTokens()];
 					
-					//PARSE EACH LINE FOR THE COMMAS
-					String[]	row	= TextUtil.split(tmp, ',');
-					tokKeys[i]		= Integer.parseInt(row[0]);
-					tokVals[i]		= SlotPath.escape(row[1]);
-				}
-				
-				//CREATE ENUM RANGE FACETS
-				BEnumRange	range	= BEnumRange.make(tokKeys, tokVals);
-				BFacets		bf		= BFacets.makeEnum(range);
-				
-				//ADD MULTILINE BACK IN TO THE FACETS
-				bf = BFacets.make(bf,BFacets.make("multiLine",true));
+					for (int i = 0;i<tokCount;i++)
+					{
+						String		tmp	= tokzer.nextToken();
+						
+						//PARSE EACH LINE FOR THE COMMAS
+						String[]	row	= TextUtil.split(tmp, ',');
+						tokKeys[i]		= Integer.parseInt(row[0]);
+						tokVals[i]		= SlotPath.escape(row[1]);
+						
+						logger.trace("\t" + getSlotPath()	+ "\t KEY: " + tokKeys[i] + "\t VAL: " + tokVals[i]);
+					}
+					
+					//CREATE ENUM RANGE FACETS
+					BEnumRange	range	= BEnumRange.make(tokKeys, tokVals);
+					BFacets		bf		= BFacets.makeEnum(range);
+					
+					//ADD MULTILINE BACK IN TO THE FACETS
+					bf = BFacets.make(bf,BFacets.make("multiLine",true));
 
-				this.setFacets(bf);
+					this.setFacets(bf);
+				}
+			}
+			catch (Exception e) 
+			{
+				logger.error("\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
 			}
 		}
 		
 		
 		if (property == inCsvWithNoIndex)
 		{
-			//PARSE COMMA DELIMITED RECORDS
-			StringTokenizer	tokzer		= new StringTokenizer(getInCsvWithNoIndex().getValue(),",");
-			int				tokCount	= tokzer.countTokens();
-			
-			if(tokCount>=0)
+			try
 			{
-				String[]	tokVals	= new String[tokzer.countTokens()];
-				int[]		tokKeys	= new int[tokzer.countTokens()];
+				//PARSE COMMA DELIMITED RECORDS
+				StringTokenizer	tokzer		= new StringTokenizer(getInCsvWithNoIndex().getValue(),",");
+				int				tokCount	= tokzer.countTokens();
 				
-				for (int i = 0;i<tokCount;i++)
+				if(tokCount>=0)
 				{
-					String		tmp	= tokzer.nextToken();
+					String[]	tokVals	= new String[tokzer.countTokens()];
+					int[]		tokKeys	= new int[tokzer.countTokens()];
 					
-					tokKeys[i]		= i;
-					tokVals[i]		= tmp;
-				}
-				
-				//CREATE ENUM RANGE FACETS
-				BEnumRange	range	= BEnumRange.make(tokKeys, tokVals);
-				BFacets		bf		= BFacets.makeEnum(range);
-				
-				//ADD MULTILINE BACK IN TO THE FACETS
-				bf = BFacets.make(bf,BFacets.make("multiLine",true));
+					for (int i = 0;i<tokCount;i++)
+					{
+						String		tmp	= tokzer.nextToken();
+						
+						tokKeys[i]		= i;
+						// tokVals[i]		= tmp;
+						tokVals[i]		= SlotPath.escape(tmp);
+						
+						logger.trace("\t" + getSlotPath()	+ "\t KEY: " + tokKeys[i] + "\t VAL: " + tokVals[i]);
+					}
+					
+					//CREATE ENUM RANGE FACETS
+					BEnumRange	range	= BEnumRange.make(tokKeys, tokVals);
+					BFacets		bf		= BFacets.makeEnum(range);
+					
+					//ADD MULTILINE BACK IN TO THE FACETS
+					bf = BFacets.make(bf,BFacets.make("multiLine",true));
 
-				this.setFacets(bf);
+					this.setFacets(bf);
+				}
 			}
-			
-			
+			catch (Exception e) 
+			{
+				logger.error("\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
+			}
 		}
 	}
 
