@@ -6,7 +6,7 @@
 	preferredSymbol	= "axc"
 	description		= "AX Community Objects"
 	vendor			= "org.axcommunity"
-	vendorVersion	= "15.12.30.01"
+	vendorVersion	= "16.01.06.01"
 	edition			= "j2se-headless"
 	>
 
