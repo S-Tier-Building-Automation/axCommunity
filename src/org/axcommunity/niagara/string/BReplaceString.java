@@ -110,7 +110,7 @@ public class BReplaceString extends BComponent
 			// if(prop == inString || prop == inStringToReplace || prop == inReplacementString) 
 			if(prop.getName().startsWith("in"))
 			{
-				logger.trace("\t" + getSlotPath()	+ "\tCAHNGED: " + prop.getName() + "\t" +  getInString().getValue());
+				logger.trace("\t" + getSlotPath()	+ "\tCHANGED: " + prop.getName() + "\t" +  getInString().getValue());
 				doExecute();
 			}
 		}
