@@ -351,4 +351,5 @@ V16.01.06.01 January 06, 2016 - Justin Koffler
 V16.02.18.01 February 18, 2016 - Justin Koffler
 - MODIFIED BSuperOr to include new Topic slots 'True' and 'False' and new BRelTime slot 'time'. 
 	The 'True' slot if fired with true value when 'Out' is true and 'False' is fired with true value when 'OutRev' is true.
-	The 'time' slot allows you to control the calculated delay time. This used to be hard coded to 1 second. I left the default value at 1 second as not to change the default behavior.
+	The 'time' slot allows you to control the calculated delay time. This used to be hard coded to 1 second. 
+	I left the default value at 1 second as not to change the default behavior.
