@@ -18,6 +18,13 @@ extends BComponent implements Runnable
 	public void setToNull(boolean v) { setBoolean(toNull, v, null); }
 
 	////////////////////////////////////////////////////////////////
+	// Property "time"
+	////////////////////////////////////////////////////////////////
+	public static final Property time = newProperty(0, BRelTime.make(1000l),BFacets.make(BFacets.SHOW_MILLISECONDS, true));
+	public BRelTime getTime() { return (BRelTime)get(time); }
+	public void setTime(BRelTime v) { set(time,v,null); }
+	
+	////////////////////////////////////////////////////////////////
 	// Property "numberOfValues"
 	////////////////////////////////////////////////////////////////
 	public static final Property numberOfValues = newProperty(0|Flags.HIDDEN|Flags.READONLY, new BStatusNumeric(), null);
@@ -70,6 +77,20 @@ extends BComponent implements Runnable
 		try { onVariableCount(v); }
 		catch (Throwable t) { throw new Exception(t); }
 	}
+	
+	////////////////////////////////////////////////////////////////
+	// Topic 'True'
+	////////////////////////////////////////////////////////////////
+	public static final Topic True = newTopic(0);
+	public void fireTrue(BBoolean event){fire(True,event,null);}
+	
+	////////////////////////////////////////////////////////////////
+	// Topic 'False'
+	////////////////////////////////////////////////////////////////
+	public static final Topic False = newTopic(0);
+	public void fireFalse(BBoolean event){fire(False,event,null);}
+	
+	
 
 	////////////////////////////////////////////////////////////////
 	// BComponent Overrides
@@ -209,9 +230,11 @@ extends BComponent implements Runnable
 				getOut().setValue(true);
 				getOut().setStatusNull(false);
 				if(getToNull()) {getOutRev().setStatusNull(true);}
-				else getOutRev().setStatusNull(false);
+				else{getOutRev().setStatusNull(false);}
 				getOutRev().setValue(false);
 
+				fireTrue(BBoolean.make(true));
+				
 				ValFlag1=false;      
 			}
 			/** Turns Output Off **/
@@ -219,15 +242,20 @@ extends BComponent implements Runnable
 			{
 				if(!getToNull())
 				{
-					getOut().setValue(false); getOutRev().setValue(true);
-					getOut().setStatusNull(false); getOutRev().setStatusNull(false);
+					getOut().setValue(false); 
+					getOutRev().setValue(true);
+
+					getOut().setStatusNull(false); 
+					getOutRev().setStatusNull(false);
 				}
 				else 
 				{
 					getOut().setStatusNull(true);
 					getOutRev().setValue(true);
 					getOutRev().setStatusNull(false);
+					
 				}
+				fireFalse(BBoolean.make(true));
 			}
 
 			ValFlag1=false;  
@@ -257,7 +285,16 @@ extends BComponent implements Runnable
 	void updateTimer()
 	{        
 		if (ticket != null)ticket.cancel();
-		ticket = Clock.schedule(getProgram(), BRelTime.makeSeconds(1), BSuperOr.calculate, null);
+		// ticket = Clock.schedule(getProgram(), BRelTime.makeSeconds(1), BSuperOr.calculate, null);
+		
+		if(getTime().getMillis()>0)
+		{
+		  ticket = Clock.schedule(getProgram(), getTime(), BSuperOr.calculate, null);
+		}
+		else
+		{
+		  calculate();
+		}
 	}    
 
 	Clock.Ticket ticket;      /** Used to manage the current timer **/
