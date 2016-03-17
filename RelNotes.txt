@@ -353,3 +353,14 @@ V16.02.18.01 February 18, 2016 - Justin Koffler
 	The 'True' slot if fired with true value when 'Out' is true and 'False' is fired with true value when 'OutRev' is true.
 	The 'time' slot allows you to control the calculated delay time. This used to be hard coded to 1 second. 
 	I left the default value at 1 second as not to change the default behavior.
+	
+V16.03.09.01 March 09, 2016 - Justin Koffler	
+- MODIFIED BSuperOr, added started() and atSteadyState() methods to better handle calculating results at station startup or object creation.	
+
+V16.03.17.01 March 09, 2016 - Justin Koffler	
+- MODIFIED BDynamicLinkBoolean, BDynamicLinkString and BDynamicLinkNumeric, added new action slot 'RemoveThenUpdateLink' that will force the link to update by first removing the link then relinking it. Be aware this will result in a change of value on the 'out' slot.
+		
+				
+		
+		
+		

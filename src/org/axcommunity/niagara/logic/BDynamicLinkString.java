@@ -111,11 +111,23 @@ extends BComponent
 		}
 	}
 
-	/**Action Input force link to update*/
+	/**Action to update link to component.*/
 	public static final Action UpdateLink = newAction(0|Flags.ASYNC|Flags.DEFAULT_ON_CLONE,null);
 	public void UpdateLink(){invoke(UpdateLink,null,null);}
 	public void doUpdateLink()
 	{
+		execute();
+		getOut().setValue(getIn().getValue());
+	}
+	
+	/**Action that will force the link to update by first removing the link then relinking it. 
+	   Be aware this will result in a change of value on the 'out' slot.*/
+	public static final Action RemoveThenUpdateLink = newAction(0|Flags.ASYNC|Flags.DEFAULT_ON_CLONE,null);
+	public void RemoveThenUpdateLink(){invoke(RemoveThenUpdateLink,null,null);}
+	public void doRemoveThenUpdateLink()
+	{
+		BLink[] links = this.getLinks(this.getSlot("in"));
+		this.remove(links[0]);
 		execute();
 		getOut().setValue(getIn().getValue());
 	}

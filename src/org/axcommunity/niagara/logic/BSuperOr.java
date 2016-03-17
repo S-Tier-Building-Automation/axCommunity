@@ -92,25 +92,45 @@ extends BComponent implements Runnable
 	
 	
 
-	////////////////////////////////////////////////////////////////
-	// BComponent Overrides
-	////////////////////////////////////////////////////////////////
-	public void started() throws Exception { try { onStart(); } catch(Throwable t) { throw new Exception(t); } }
+	//----------------------------------------------------------------------------------------------------------
+	public void started()
+	{
+		logger.trace("\t" + getSlotPath()	+ "\t'started()' method  called");
+		
+		if(!Sys.atSteadyState() || !isRunning()){return;}
+
+		updateTimer();
+	}
+
+	//----------------------------------------------------------------------------------------------------------
+	public void atSteadyState() throws Exception
+	{
+		logger.trace("\t" + getSlotPath()	+ "\t'atSteadyState()' method  called");
+		
+		if(!Sys.atSteadyState() || !isRunning()){return;}
+
+		updateTimer();
+	}
+
+	//----------------------------------------------------------------------------------------------------------
 	public void stopped() throws Exception { try { onStop(); } catch(Throwable t) { throw new Exception(t); } }
+	
+	
+	//----------------------------------------------------------------------------------------------------------
 	public void changed(Property prop, Context cx)
 	{
 		// super.changed(prop, cx);
-		if(!Sys.atSteadyState() || !isRunning())return;
+		if(!Sys.atSteadyState() || !isRunning()){return;}
 		if(prop.toString().startsWith("In") || prop.toString().startsWith("toNull")) 
 		{
 			try
 			{
-				logger.trace("\n\t\t" + getSlotPath()	+ "\n\t\t'" + prop.toString() + "'    value has changed.\n");
+				logger.trace("\t" + getSlotPath()	+ "\t'" + prop.toString() + "'    value has changed.");
 				execute();
 			}
 			catch (Exception e) 
 			{
-				logger.error("\n\t\t" + getSlotPath()	+ "\n\t\t'changed()' method had an error.\n\t\t" + e.getMessage() + "\n\t\t" + e.getStackTrace());
+				logger.error("\t" + getSlotPath()	+ "\n'changed()' method had an error.\n" + e.getMessage() + "\n" + e.getStackTrace());
 			}
 		}
 		// if (Flags.isExecuteOnChange(this, prop)) execute();
@@ -146,7 +166,7 @@ extends BComponent implements Runnable
 	////////////////////////////////////////////////////////////////
 
 	/**   
-	This is an OrGate on steriods.  Created 02/02/11 By: CMH (XENCOM Energy Management)
+	This is an OrGate on steroids.  Created 02/02/11 By: CMH (XENCOM Energy Management)
 	This OrGate can be generated to accommodate any number of points. 
 
 	1. Right Click on the program and Select "Action" then "VariableCount". Choose how many
@@ -161,67 +181,118 @@ extends BComponent implements Runnable
 	Note2:  If the linked point becomes inValid, it will not be used by the logic.
 	Note3:  The Max number of variables you can add is 60.
 
+	Revisions:
+	April 29, 2012 - Justin Koffler
+		Added logging to find cause of null exception errors I was getting on station restarts.
+		Modified logic to eliminate the infinite 1 second delay loop upon first execution.
+		Moved the onExecute processes to a new method named onCalculate to help with the infinite loop issue.
+		Modified logic to NOT allow the onCalculate processes to take place if the system was not in a running 
+			state (this is where I was getting the null exception errors before I added this).  
+	
+	February 18, 2016 - Justin Koffler
+		Added new Topic slots 'True' and 'False' and new BRelTime slot 'time'. 
+		The 'True' slot if fired with true value when 'Out' is true and 'False' is fired with true value when 'OutRev' is true.
+		The 'time' slot allows you to control the calculated delay time. This used to be hard coded to 1 second. 
+			I left the default value at 1 second as not to change the default behavior.
+	
+	March 09, 2016 - Justin Koffler	
+		Added started() and atSteadyState() methods to better handle calculating results at station startup or object creation.
+			
+	
 	**/
 
-	private int count = 1;      
-	private boolean ValFlag1;
-	private BStatusBoolean InVal;
+	private int				count = 1;      
+	private boolean			ValFlag1;
+	private BStatusBoolean	InVal;
 
 
+	//----------------------------------------------------------------------------------------------------------
 	public void onStart() throws Exception
 	{
-		updateTimer();  
+		logger.trace("\t" + getSlotPath()	+ "\t'onStart()' method  called");
+		updateTimer();
+	}
+	
+	
+	//----------------------------------------------------------------------------------------------------------
+	public void onStop() throws Exception
+	{
+		try
+		{
+			logger.trace("\t" + getSlotPath()	+ "\t'onStop()' method  called");
+			/** If we have a ticket, then cancel it  **/
+			if (ticket != null) ticket.cancel();
+		}
+		catch (Exception e) 
+		{
+			logger.error("\t" + getSlotPath()	+ "\n'onStop()' method had an error.\n" + e.getMessage() + "\n" + e.getStackTrace());
+		}
+	}  
+	
+	
+
+	//----------------------------------------------------------------------------------------------------------
+	public void onVariableCount(BDouble NV) throws Exception
+	{
+		if(NV.getDouble() > 60.0)
+		{
+			getNumberOfValues().setValue(60.0);
+		}
+		else
+		{
+			getNumberOfValues().setValue(NV.getDouble());
+		}
+		
+		slots(getNumberOfValues().getValue());
 	}
 
-	public void onVariableCount(BDouble NV) throws Exception
-	{                                              
-		if(NV.getDouble() > 60.0) getNumberOfValues().setValue(60.0);
-		else getNumberOfValues().setValue(NV.getDouble());      
-		slots(getNumberOfValues().getValue());
-	}                                         
-
+	
+	//----------------------------------------------------------------------------------------------------------
 	public void onExecute() throws Exception
-	{              
+	{
 		try
 		{
 			if(!Sys.atSteadyState() || !isRunning())
 			{
-				logger.trace("\n\t\t" + getSlotPath()	+ "'onExecute()' method  --  'if(!Sys.atSteadyState() || !isRunning())' == true.\n");
+				logger.trace("\t" + getSlotPath()	+ "\t'onExecute()' method  --  'if(!Sys.atSteadyState() || !isRunning())' == true.");
 				return;
 			}
 			updateTimer();
 		}
 		catch (Exception e) 
 		{
-			logger.error("\n\t\t" + getSlotPath()	+ "\n\t\t'onExecute()' method had an error.\n\t\t" + e.getMessage() + "\n\t\t" + e.getStackTrace());
+			logger.error("\t" + getSlotPath()	+ "\n'onExecute()' method had an error.\n" + e.getMessage() + "\n" + e.getStackTrace());
 		}
 	}
 	
-	
+	//----------------------------------------------------------------------------------------------------------
 	public void onCalculate() throws Exception
 	{
 		try
 		{
 			if(!Sys.atSteadyState() || !isRunning())
 			{
-				logger.trace("\n\t\t" + getSlotPath()	+ "'onCalculate()' method  --  'if(!Sys.atSteadyState() || !isRunning())' == true.\n");
+				logger.trace("\t" + getSlotPath()	+ "\t'onCalculate()' method  --  'if(!Sys.atSteadyState() || !isRunning())' == true.");
 				return;
 			}
 			
 			while (((BObject)get("In_"+count))!=null && !ValFlag1)
-			{            
+			{
 				InVal = ((BStatusBoolean) ((BObject)get("In_"+count)));                        
 
 				/** Tests whether the slot is linked. If not, the value is set to null **/
 				if (getProgram().getLinks(getProperty("In_"+count)).length == 0)
-				{             
+				{
 					InVal.setStatusNull(true); 
-				} 
+				}
 
 				/** Tests whether the slot is true and valid **/
-				if (InVal.getValue() && InVal.getStatus().isValid()) ValFlag1=true;
+				if (InVal.getValue() && InVal.getStatus().isValid())
+				{ 
+					ValFlag1 = true;
+				}
 
-				count++;  
+				count++;
 			}
 
 			/** Turns Output On **/
@@ -229,8 +300,16 @@ extends BComponent implements Runnable
 			{
 				getOut().setValue(true);
 				getOut().setStatusNull(false);
-				if(getToNull()) {getOutRev().setStatusNull(true);}
-				else{getOutRev().setStatusNull(false);}
+				
+				if(getToNull()) 
+				{
+					getOutRev().setStatusNull(true);
+				}
+				else
+				{
+					getOutRev().setStatusNull(false);
+				}
+				
 				getOutRev().setValue(false);
 
 				fireTrue(BBoolean.make(true));
@@ -255,35 +334,25 @@ extends BComponent implements Runnable
 					getOutRev().setStatusNull(false);
 					
 				}
+				
 				fireFalse(BBoolean.make(true));
 			}
 
-			ValFlag1=false;  
-			count = 1;
+			ValFlag1	= false;  
+			count		= 1;
 		}
 		catch (Exception e) 
 		{
-			logger.error("\n\t\t" + getSlotPath()	+ "\n\t\t'onCalculate()' method had an error.\n\t\t" + e.getMessage() + "\n\t\t" + e.getStackTrace());
+			logger.error("\t" + getSlotPath()	+ "\n'onCalculate()' method had an error.\n" + e.getMessage() + "\n" + e.getStackTrace());
 		}
 	}
 	
 	
 
-	public void onStop() throws Exception
-	{
-		try
-		{
-			/** If we have a ticket, then cancel it  **/
-			if (ticket != null) ticket.cancel();
-		}
-		catch (Exception e) 
-		{
-			logger.error("\n\t\t" + getSlotPath()	+ "\n\t\t'onStop()' method had an error.\n\t\t" + e.getMessage() + "\n\t\t" + e.getStackTrace());
-		}
-	}  
-
+	
+	//----------------------------------------------------------------------------------------------------------
 	void updateTimer()
-	{        
+	{
 		if (ticket != null)ticket.cancel();
 		// ticket = Clock.schedule(getProgram(), BRelTime.makeSeconds(1), BSuperOr.calculate, null);
 		
@@ -295,10 +364,11 @@ extends BComponent implements Runnable
 		{
 		  calculate();
 		}
-	}    
+	}
 
 	Clock.Ticket ticket;      /** Used to manage the current timer **/
 
+	//----------------------------------------------------------------------------------------------------------
 	public void slots(double MD) throws Exception
 	{
 		for(int i=1; i<(MD+1 ); i++)
