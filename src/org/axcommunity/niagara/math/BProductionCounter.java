@@ -522,7 +522,7 @@ public class BProductionCounter extends BComponent
   
   public void stopped()
   {
-    if (refreshTimer != null) refreshTimer.cancel();
+    if(refreshTimer != null)  refreshTimer.cancel();
     if(midnightTimer != null) midnightTimer.cancel();
   }
   
@@ -621,9 +621,9 @@ public class BProductionCounter extends BComponent
       getScheduledBreak().setStatus(getInScheduledBreak().getStatus());
     }
     
-    if(p.equals(inShiftScheduleOrd) | p.equals(inBreakScheduleOrd)) doSetScheduleLinks();
+    if(p.equals(inShiftScheduleOrd) || p.equals(inBreakScheduleOrd)) doSetScheduleLinks();
     
-    if(p.equals(inNumberOfShifts) | getInNumberOfShifts() < (int)getInCurrentShift().getValue()) shiftSlots(getInNumberOfShifts(), cx);
+    if(p.equals(inNumberOfShifts) || getInNumberOfShifts() < (int)getInCurrentShift().getValue()) shiftSlots(getInNumberOfShifts(), cx);
     if(getInNumberOfShifts() < (int)getInCurrentShift().getValue()) setInNumberOfShifts((int)getInCurrentShift().getValue());
     
     if(p.equals(inGoodTransaction) && getInGoodTransaction())
@@ -784,7 +784,7 @@ public class BProductionCounter extends BComponent
   /**Resets the current shift values to 0*/
   public void doResetCurrentShiftPartCounts()
   {
-    if(!Sys.atSteadyState()|| !isRunning()) return;
+    if(!Sys.atSteadyState() || !isRunning()) return;
     setCurrentShiftGoodParts(0);
     setCurrentShiftBadParts(0);
     setCurrentShiftTotalParts(0);
@@ -800,7 +800,7 @@ public class BProductionCounter extends BComponent
   /**Resets the current shift values to 0 and sets the shift start time to the BAbsTime input*/
   public void doResetCurrentShiftPartCounts(BAbsTime shiftChangeTime)
   {
-    if(!Sys.atSteadyState()|| !isRunning()) return;
+    if(!Sys.atSteadyState() || !isRunning()) return;
     setCurrentShiftGoodParts(0);
     setCurrentShiftBadParts(0);
     setCurrentShiftTotalParts(0);
@@ -841,7 +841,7 @@ public class BProductionCounter extends BComponent
   /**Resets today's part counts to 0*/
   public void doResetTodaysPartCounts()
   {
-    if(!Sys.atSteadyState()|| !isRunning()) return;
+    if(!Sys.atSteadyState() || !isRunning()) return;
     setTodayGoodParts(0);
     setTodayBadParts(0);
     setTodayTotalParts(0);
@@ -856,7 +856,7 @@ public class BProductionCounter extends BComponent
   /**Resets yesterday's part counts to 0*/
   public void doResetYesterdaysPartCounts()
   {
-    if(!Sys.atSteadyState()|| !isRunning()) return;
+    if(!Sys.atSteadyState() || !isRunning()) return;
     setYesterdayGoodParts(0);
     setYesterdayBadParts(0);
     setYesterdayTotalParts(0);
@@ -871,7 +871,7 @@ public class BProductionCounter extends BComponent
   /**Resets the total part counts to 0*/
   public void doResetTotalPartCounts()
   {
-    if(!Sys.atSteadyState()|| !isRunning()) return;
+    if(!Sys.atSteadyState() || !isRunning()) return;
     setTotalGoodParts(0);
     setTotalBadParts(0);
     setTotalParts(0);
@@ -1136,35 +1136,35 @@ public class BProductionCounter extends BComponent
         //TODO: Create max good && max bad for each shift
         //TODO: Track average production per shift 
         
-        if(((BObject)get("shift_"+i+"_GoodParts"))==null) {this.add(("shift_"+i+"_GoodParts"), new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(0)), cx);}
-        if(((BObject)get("shift_"+i+"_BadParts"))==null) {this.add(("shift_"+i+"_BadParts"), new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(0)), cx);}
-        if(((BObject)get("shift_"+i+"_AvgPartsPerHour"))==null) {this.add(("shift_"+i+"_AvgPartsPerHour"), new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(1)), cx);}
-        if(((BObject)get("shift_"+i+"_AvgCycleTime"))==null) {this.add(("shift_"+i+"_AvgCycleTime"), BRelTime.make(0), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.SHOW_MILLISECONDS,false), cx);}
-        if(((BObject)get("shift_"+i+"_TotalParts"))==null) {this.add(("shift_"+i+"_TotalParts"), new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(0)), cx);}
-        if(((BObject)get("shift_"+i+"_Hours"))==null) {this.add(("shift_"+i+"_Hours"), BRelTime.make(0), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.SHOW_MILLISECONDS,false), cx);}
-        if(((BObject)get("shift_"+i+"_Breaks"))==null) {this.add(("shift_"+i+"_Breaks"), new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(0)), cx);}
-        if(((BObject)get("shift_"+i+"_BreakHours"))==null) {this.add(("shift_"+i+"_BreakHours"), BRelTime.make(0), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.SHOW_MILLISECONDS,false), cx);}
+        if(((BObject)get("shift_"+i+"_GoodParts"))==null)       {this.add(("shift_"+i+"_GoodParts"),        new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(0)), cx);}
+        if(((BObject)get("shift_"+i+"_BadParts"))==null)        {this.add(("shift_"+i+"_BadParts"),         new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(0)), cx);}
+        if(((BObject)get("shift_"+i+"_AvgPartsPerHour"))==null) {this.add(("shift_"+i+"_AvgPartsPerHour"),  new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(1)), cx);}
+        if(((BObject)get("shift_"+i+"_AvgCycleTime"))==null)    {this.add(("shift_"+i+"_AvgCycleTime"),     BRelTime.make(0), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.SHOW_MILLISECONDS,false), cx);}
+        if(((BObject)get("shift_"+i+"_TotalParts"))==null)      {this.add(("shift_"+i+"_TotalParts"),       new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(0)), cx);}
+        if(((BObject)get("shift_"+i+"_Hours"))==null)           {this.add(("shift_"+i+"_Hours"),            BRelTime.make(0), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.SHOW_MILLISECONDS,false), cx);}
+        if(((BObject)get("shift_"+i+"_Breaks"))==null)          {this.add(("shift_"+i+"_Breaks"),           new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(0)), cx);}
+        if(((BObject)get("shift_"+i+"_BreakHours"))==null)      {this.add(("shift_"+i+"_BreakHours"),       BRelTime.make(0), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.SHOW_MILLISECONDS,false), cx);}
       }
       
       for(int i=SlotCount+1;
-          (BObject)get("shift_"+i+"_GoodParts")!=null | 
-          (BObject)get("shift_"+i+"_BadParts")!=null | 
-          (BObject)get("shift_"+i+"_AvgPartsPerHour")!=null | 
-          (BObject)get("shift_"+i+"_AvgCycleTime")!=null | 
-          (BObject)get("shift_"+i+"_TotalParts")!=null | 
-          (BObject)get("shift_"+i+"_Hours")!=null | 
-          (BObject)get("shift_"+i+"_Breaks")!=null | 
+          (BObject)get("shift_"+i+"_GoodParts")!=null ||
+          (BObject)get("shift_"+i+"_BadParts")!=null ||
+          (BObject)get("shift_"+i+"_AvgPartsPerHour")!=null || 
+          (BObject)get("shift_"+i+"_AvgCycleTime")!=null ||
+          (BObject)get("shift_"+i+"_TotalParts")!=null ||
+          (BObject)get("shift_"+i+"_Hours")!=null ||
+          (BObject)get("shift_"+i+"_Breaks")!=null ||
           (BObject)get("shift_"+i+"_BreakHours")!=null;
           i++)
       {
-        if(((BObject)get("shift_"+i+"_GoodParts"))!=null) {this.remove("shift_"+i+"_GoodParts");}             
-        if(((BObject)get("shift_"+i+"_BadParts"))!=null) {this.remove("shift_"+i+"_BadParts");}             
+        if(((BObject)get("shift_"+i+"_GoodParts"))!=null)       {this.remove("shift_"+i+"_GoodParts");}             
+        if(((BObject)get("shift_"+i+"_BadParts"))!=null)        {this.remove("shift_"+i+"_BadParts");}             
         if(((BObject)get("shift_"+i+"_AvgPartsPerHour"))!=null) {this.remove("shift_"+i+"_AvgPartsPerHour");}             
-        if(((BObject)get("shift_"+i+"_AvgCycleTime"))!=null) {this.remove("shift_"+i+"_AvgPartsPerHour");}             
-        if(((BObject)get("shift_"+i+"_TotalParts"))!=null) {this.remove("shift_"+i+"_TotalParts");}             
-        if(((BObject)get("shift_"+i+"_Hours"))!=null) {this.remove("shift_"+i+"_Hours");}             
-        if(((BObject)get("shift_"+i+"_Breaks"))!=null) {this.remove("shift_"+i+"_Breaks");}             
-        if(((BObject)get("shift_"+i+"_BreakHours"))!=null) {this.remove("shift_"+i+"_BreakHours");}             
+        if(((BObject)get("shift_"+i+"_AvgCycleTime"))!=null)    {this.remove("shift_"+i+"_AvgPartsPerHour");}             
+        if(((BObject)get("shift_"+i+"_TotalParts"))!=null)      {this.remove("shift_"+i+"_TotalParts");}             
+        if(((BObject)get("shift_"+i+"_Hours"))!=null)           {this.remove("shift_"+i+"_Hours");}             
+        if(((BObject)get("shift_"+i+"_Breaks"))!=null)          {this.remove("shift_"+i+"_Breaks");}             
+        if(((BObject)get("shift_"+i+"_BreakHours"))!=null)      {this.remove("shift_"+i+"_BreakHours");}             
       }
     }
     catch (Exception e)
