@@ -1,0 +1,23 @@
+<!-- Module Include File -->
+
+<!-- Types -->
+<types>
+	<!-- org.axcommunity.niagara.views -->
+	<type name="SetBooleanActionView"  				class="org.axcommunity.niagara.views.BSetBooleanActionView"> 
+		<agent requiredPermissions="i">
+			<on type="axCommunity:SetBooleanAction"/>
+		</agent>
+  	</type>  
+	<type name="SysInfoView"						class="org.axcommunity.niagara.views.BSysInfoView"> 
+		<agent requiredPermissions="r">
+			<on type="axCommunity:SysInfo"/>
+		</agent>
+ 	</type>  
+	
+	<!-- org.axcommunity.niagara.widgets -->
+	<type name="RevolvingTextLabel"					class="org.axcommunity.niagara.widgets.BRevolvingTextLabel" />  
+	<type name="RevolvingTextLabel2"				class="org.axcommunity.niagara.widgets.BRevolvingTextLabel2" />  
+	<type name="DropDownList"						class="org.axcommunity.niagara.widgets.BDropDownList" />  
+	<type name="BoundLabelHighlight"				class="org.axcommunity.niagara.widgets.BBoundLabelHighlight" />
+	
+ </types>

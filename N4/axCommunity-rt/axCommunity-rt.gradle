@@ -1,0 +1,58 @@
+/*
+ * Copyright (c) 2014 Tridium, Inc. All Rights Reserved.
+ */
+
+ext 
+{
+	// Declare module name and project properties
+	name				= 'axCommunity'
+	// project.version		= '4.14.101'
+	project.group		= 'Community'
+	description			= "Open source AX Community module"
+}
+
+// Declare niagaraModule properties
+niagaraModule 
+{
+	preferredSymbol		= "axc4"
+	moduleName			= "axCommunity"
+	runtimeProfile		= "rt"
+
+	modulePart 
+	{
+		name			= "axCommunity-wb"
+		runtimeProfile	= "wb"
+	}
+
+	modulePart 
+	{
+		name			= "axCommunity-doc"
+		runtimeProfile	= "doc"
+	}
+}
+
+
+dependencies
+{
+	compile "Tridium:baja:4.0.0"
+	compile "Tridium:control-rt:4.0.0"
+	compile "Tridium:driver-rt:4.0.0"
+	compile "Tridium:platform-rt:4.0.0"
+	compile "Tridium:bql-rt:4.0.0"
+	compile "Tridium:alarm-rt:4.0.0"
+	compile "Tridium:history-rt:4.0.0"
+	compile "Tridium:gx-rt:4.0.0"
+	compile "Tridium:kitControl-rt:4.0.0"
+	compile "Tridium:nre:4.0.0"
+}
+
+// Include additional files in module jar
+jar 
+{
+	from('src') 
+	{
+		include 'relNotes/*.*'
+	}
+}
+
+// Declare compile and test dependencies

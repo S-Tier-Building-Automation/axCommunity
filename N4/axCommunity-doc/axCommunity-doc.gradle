@@ -1,0 +1,29 @@
+/*
+ * Copyright (c) 2014 Tridium, Inc. All Rights Reserved.
+ */
+
+ext {
+  // Declare module name and project properties
+  name = 'axCommunity'
+  //project.version = '4.14.101'
+  project.group = 'Community'
+  description = "Open source AX Community module"
+}
+
+// Declare niagaraModule properties
+niagaraModule {
+  preferredSymbol = "axc4"
+  moduleName = "axCommunity"
+  runtimeProfile = "doc"
+}
+
+
+// Include additional files in module jar
+jar {
+    from('src') {
+        include 'doc/*.*'
+        
+    }
+}
+
+// Declare compile and test dependencies

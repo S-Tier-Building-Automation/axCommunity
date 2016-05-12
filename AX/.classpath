@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding=".svn/|.svn/prop-base/|.svn/props/|.svn/text-base/|.svn/tmp/|.svn/tmp/prop-base/|.svn/tmp/props/|.svn/tmp/text-base/|com/|com/.svn/|com/.svn/prop-base/|com/.svn/props/|com/.svn/text-base/|com/.svn/tmp/|com/.svn/tmp/prop-base/|com/.svn/tmp/props/|com/.svn/tmp/text-base/|com/axcommunity/|com/axcommunity/.svn/|com/axcommunity/.svn/prop-base/|com/axcommunity/.svn/props/|com/axcommunity/.svn/text-base/|com/axcommunity/.svn/tmp/|com/axcommunity/.svn/tmp/prop-base/|com/axcommunity/.svn/tmp/props/|com/axcommunity/.svn/tmp/text-base/|doc/|doc/.svn/|doc/.svn/prop-base/|doc/.svn/props/|doc/.svn/text-base/|doc/.svn/tmp/|doc/.svn/tmp/prop-base/|doc/.svn/tmp/props/|doc/.svn/tmp/text-base/|org/.svn/|org/.svn/prop-base/|org/.svn/props/|org/.svn/text-base/|org/.svn/tmp/|org/.svn/tmp/prop-base/|org/.svn/tmp/props/|org/.svn/tmp/text-base/|org/axcommunity/.svn/|org/axcommunity/.svn/prop-base/|org/axcommunity/.svn/props/|org/axcommunity/.svn/text-base/|org/axcommunity/.svn/tmp/|org/axcommunity/.svn/tmp/prop-base/|org/axcommunity/.svn/tmp/props/|org/axcommunity/.svn/tmp/text-base/|org/axcommunity/niagara/.svn/|org/axcommunity/niagara/.svn/prop-base/|org/axcommunity/niagara/.svn/props/|org/axcommunity/niagara/.svn/text-base/|org/axcommunity/niagara/.svn/tmp/|org/axcommunity/niagara/.svn/tmp/prop-base/|org/axcommunity/niagara/.svn/tmp/props/|org/axcommunity/niagara/.svn/tmp/text-base/|org/axcommunity/niagara/bql/.svn/|org/axcommunity/niagara/bql/.svn/prop-base/|org/axcommunity/niagara/bql/.svn/props/|org/axcommunity/niagara/bql/.svn/text-base/|org/axcommunity/niagara/bql/.svn/tmp/|org/axcommunity/niagara/bql/.svn/tmp/prop-base/|org/axcommunity/niagara/bql/.svn/tmp/props/|org/axcommunity/niagara/bql/.svn/tmp/text-base/|org/axcommunity/niagara/conversion/.svn/|org/axcommunity/niagara/conversion/.svn/prop-base/|org/axcommunity/niagara/conversion/.svn/props/|org/axcommunity/niagara/conversion/.svn/text-base/|org/axcommunity/niagara/conversion/.svn/tmp/|org/axcommunity/niagara/conversion/.svn/tmp/prop-base/|org/axcommunity/niagara/conversion/.svn/tmp/props/|org/axcommunity/niagara/conversion/.svn/tmp/text-base/|org/axcommunity/niagara/graphics/|org/axcommunity/niagara/graphics/.svn/|org/axcommunity/niagara/graphics/.svn/prop-base/|org/axcommunity/niagara/graphics/.svn/props/|org/axcommunity/niagara/graphics/.svn/text-base/|org/axcommunity/niagara/graphics/.svn/tmp/|org/axcommunity/niagara/graphics/.svn/tmp/prop-base/|org/axcommunity/niagara/graphics/.svn/tmp/props/|org/axcommunity/niagara/graphics/.svn/tmp/text-base/|org/axcommunity/niagara/logic/.svn/|org/axcommunity/niagara/logic/.svn/prop-base/|org/axcommunity/niagara/logic/.svn/props/|org/axcommunity/niagara/logic/.svn/text-base/|org/axcommunity/niagara/logic/.svn/tmp/|org/axcommunity/niagara/logic/.svn/tmp/prop-base/|org/axcommunity/niagara/logic/.svn/tmp/props/|org/axcommunity/niagara/logic/.svn/tmp/text-base/|org/axcommunity/niagara/math/.svn/|org/axcommunity/niagara/math/.svn/prop-base/|org/axcommunity/niagara/math/.svn/props/|org/axcommunity/niagara/math/.svn/text-base/|org/axcommunity/niagara/math/.svn/tmp/|org/axcommunity/niagara/math/.svn/tmp/prop-base/|org/axcommunity/niagara/math/.svn/tmp/props/|org/axcommunity/niagara/math/.svn/tmp/text-base/|org/axcommunity/niagara/string/.svn/|org/axcommunity/niagara/string/.svn/prop-base/|org/axcommunity/niagara/string/.svn/props/|org/axcommunity/niagara/string/.svn/text-base/|org/axcommunity/niagara/string/.svn/tmp/|org/axcommunity/niagara/string/.svn/tmp/prop-base/|org/axcommunity/niagara/string/.svn/tmp/props/|org/axcommunity/niagara/string/.svn/tmp/text-base/|org/axcommunity/niagara/system/.svn/|org/axcommunity/niagara/system/.svn/prop-base/|org/axcommunity/niagara/system/.svn/props/|org/axcommunity/niagara/system/.svn/text-base/|org/axcommunity/niagara/system/.svn/tmp/|org/axcommunity/niagara/system/.svn/tmp/prop-base/|org/axcommunity/niagara/system/.svn/tmp/props/|org/axcommunity/niagara/system/.svn/tmp/text-base/|org/axcommunity/niagara/web/.svn/|org/axcommunity/niagara/web/.svn/prop-base/|org/axcommunity/niagara/web/.svn/props/|org/axcommunity/niagara/web/.svn/text-base/|org/axcommunity/niagara/web/.svn/tmp/|org/axcommunity/niagara/web/.svn/tmp/prop-base/|org/axcommunity/niagara/web/.svn/tmp/props/|org/axcommunity/niagara/web/.svn/tmp/text-base/|org/axcommunity/niagara/widgets/.svn/|org/axcommunity/niagara/widgets/.svn/prop-base/|org/axcommunity/niagara/widgets/.svn/props/|org/axcommunity/niagara/widgets/.svn/text-base/|org/axcommunity/niagara/widgets/.svn/tmp/|org/axcommunity/niagara/widgets/.svn/tmp/prop-base/|org/axcommunity/niagara/widgets/.svn/tmp/props/|org/axcommunity/niagara/widgets/.svn/tmp/text-base/" including="org/|org/axcommunity/|org/axcommunity/niagara/|org/axcommunity/niagara/bql/|org/axcommunity/niagara/conversion/|org/axcommunity/niagara/logic/|org/axcommunity/niagara/math/|org/axcommunity/niagara/string/|org/axcommunity/niagara/system/|org/axcommunity/niagara/web/|org/axcommunity/niagara/widgets/" kind="src" path="src"/>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jre7/lib/resources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://download.oracle.com/javase/6/docs/api/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jre7/lib/rt.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://download.oracle.com/javase/6/docs/api/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jre7/lib/jsse.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://download.oracle.com/javase/6/docs/api/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jre7/lib/jce.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://download.oracle.com/javase/6/docs/api/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jre7/lib/charsets.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://download.oracle.com/javase/6/docs/api/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jre7/lib/ext/dnsns.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jre7/lib/ext/dns_sd.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jre7/lib/ext/localedata.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jre7/lib/ext/sunjce_provider.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jre7/lib/ext/sunmscapi.jar"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/baja.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/control.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/driver.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/platform.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/fox.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/niagaraDriver.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/bql.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/workbench.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/bajaui.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/alarm.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/history.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/gx.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/kitControl.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/kitPx.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/converters.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/web.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/bin/nre.jar"/>
+	<classpathentry kind="output" path="eclipseBin"/>
+</classpath>
