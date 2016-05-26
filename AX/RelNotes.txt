@@ -360,7 +360,8 @@ V16.03.09.01 March 09, 2016 - Justin Koffler
 V16.03.17.01 March 09, 2016 - Justin Koffler	
 - MODIFIED BDynamicLinkBoolean, BDynamicLinkString and BDynamicLinkNumeric, added new action slot 'RemoveThenUpdateLink' that will force the link to update by first removing the link then relinking it. Be aware this will result in a change of value on the 'out' slot.
 		
-				
+V16.05.26.01 May 26, 2016 - Mike Arnott
+- MODIFIED BDynamicLinkNumeric, BDynamicLinkBoolean, BDynamicLinkString	change the link created to use handles rather than slots			
 		
 		
 		

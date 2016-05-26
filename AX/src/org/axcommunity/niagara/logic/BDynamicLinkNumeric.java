@@ -67,7 +67,8 @@ extends BComponent
 				BOrd ord = BOrd.make(getOrdIn().getValue());
 				if(isOrdValid(ord))
 				{
-					links[0].setSourceOrd(ord);
+					BComponent com = (BComponent)ord.relativizeToHost().get();					
+					links[0].setSourceOrd(com.getHandleOrd());
 				}
 				else
 				{
@@ -81,7 +82,8 @@ extends BComponent
 				BOrd ord = BOrd.make(getOrdIn().getValue());
 				if(isOrdValid(ord))
 				{
-					BLink link = new BLink(ord,"out","in",true);
+					BComponent com = (BComponent)ord.relativizeToHost().get();					
+					BLink link = new BLink(com.getHandleOrd(),"out","in",true);
 					this.add(null, link);  
 				}
 				else
@@ -92,12 +94,14 @@ extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error("\n slotPath = " + getSlotPath() + "\n getMessage = " + e.getMessage() + "\n getStackTrace = " + e.getStackTrace() + "\n toString = " + e.toString());
+			logger.error("\n Error in excute: slotPath = " + getSlotPath() + "\n getMessage = " + e.getMessage() + "\n getStackTrace = " + e.getStackTrace() + "\n toString = " + e.toString());
 		}
 	}
 	
 	private boolean isOrdValid(BOrd ord)
 	{
+		
+//		return true;
 		try
 		{
 			//try to create the component - if it fails, false
@@ -106,7 +110,7 @@ extends BComponent
 		}
 		catch(Exception e)
 		{
-			logger.trace("\n slotPath = " + getSlotPath() + "\n getMessage = " + e.getMessage() + "\n getStackTrace = " + e.getStackTrace() + "\n toString = " + e.toString());
+			logger.trace("\n Error in isOrdValid: slotPath = " + getSlotPath() + "\n getMessage = " + e.getMessage() + "\n getStackTrace = " + e.getStackTrace() + "\n toString = " + e.toString());
 			return false;
 		}
 

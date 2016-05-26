@@ -67,7 +67,8 @@ extends BComponent
 				BOrd ord = BOrd.make(getOrdIn().getValue());
 				if(isOrdValid(ord))
 				{
-					links[0].setSourceOrd(ord);
+					BComponent com = (BComponent)ord.relativizeToHost().get();					
+					links[0].setSourceOrd(com.getHandleOrd());
 				}
 				else
 				{
@@ -81,7 +82,8 @@ extends BComponent
 				BOrd ord = BOrd.make(getOrdIn().getValue());
 				if(isOrdValid(ord))
 				{
-					BLink link = new BLink(ord,"out","in",true);
+					BComponent com = (BComponent)ord.relativizeToHost().get();					
+					BLink link = new BLink(com.getHandleOrd(),"out","in",true);
 					this.add(null, link);  
 				}
 				else
