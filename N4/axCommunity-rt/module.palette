@@ -11,7 +11,9 @@
 			
 			
 			<p m="b=baja" t="b:Folder" n="Conversion">
-				<p n="AbsTimeToDateParts"				m="w=axCommunity" t="w:AbsTimeToDateParts" />
+				<p n="AbsTimeToDateParts"				m="w=axCommunity" t="w:AbsTimeToDateParts">
+							<p n="wsAnnotation"	f="r" t="b:WsAnnotation" v="5,5,20"/>
+				</p>
 				<p n="AbsTimesToAbsTimeRange"			m="w=axCommunity" t="w:AbsTimesToAbsTimeRange" />
 				<p n="AsciiHexDecConversion"			m="w=axCommunity" t="w:AsciiHexDecConversion"></p>
 				<p n="BitsToStatusNumeric"				m="w=axCommunity" t="w:BitsToStatusNumeric" />

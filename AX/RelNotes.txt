@@ -359,9 +359,25 @@ V16.03.09.01 March 09, 2016 - Justin Koffler
 
 V16.03.17.01 March 09, 2016 - Justin Koffler	
 - MODIFIED BDynamicLinkBoolean, BDynamicLinkString and BDynamicLinkNumeric, added new action slot 'RemoveThenUpdateLink' that will force the link to update by first removing the link then relinking it. Be aware this will result in a change of value on the 'out' slot.
-		
+
 V16.05.26.01 May 26, 2016 - Mike Arnott
-- MODIFIED BDynamicLinkNumeric, BDynamicLinkBoolean, BDynamicLinkString	change the link created to use handles rather than slots			
+- MODIFIED BDynamicLinkNumeric, BDynamicLinkBoolean, BDynamicLinkString	change the link created to use handles rather than slots
+		
+V16.06.28.01 June 28, 2016 - Justin Koffler	
+- MODIFIED BAbsTimeToDateParts
+	* rriemer mentioned he was getting the error "Unknown pattern character - 'X'" which I can only trace to possibly being how the GMT time string was being formated.
+	* Added new slot 'inSimpleDateFormat' which is used to customize the string output of the date time in slots 'stringDateOut' and 'outGMTTime'. I'm hoping this will fix the above isuue.
+			If no 'inSimpleDateFormat' value is present the default format for method BAbstime.encodeToString() is used which uses the ISO 8601 standard format of "yyyy-mm-ddThh:mm:ss.mmm[+/-]hh:mm".
+			For more details on the formating update your help database and look at the following doc under properties 'String BAbsTimeToDateParts.inSimpleDateFormat': local:|module://axCommunity/doc/org/axcommunity/niagara/conversion/BAbsTimeToDateParts.bajadoc
+	* If you still experience errors please let me know and I will continue to investigate.
+- MODIFIED BRelTimeToStatusNumeric
+	* Changed how the seconds/minutes/hours were being calculate to be more precise. 
+	* Added slots 'facetsRelTime' and 'facetsNumeric' to allow adjusting how values are displayed.
+- MODIFIED BParentFolderInfo
+	* Added new BFormat slot 'inFormat' that can be edited to modify value displayed in the 'parentName' slot.
+	* Added new BRelTime slot 'startupDelay' which is used to control how long after startup that the values are calculated.
+	* Added new Boolean Topic slot 'changed' which is fired only when the value of slot 'parentName' changes.
+	* Added new String Topic slot 'ParentName' which is fired after every refresh or startup.
 		
 		
 		
