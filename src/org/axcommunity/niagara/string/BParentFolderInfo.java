@@ -26,7 +26,14 @@ public class BParentFolderInfo extends BComponent
 	public void refresh(){invoke(refresh, null);}
 	public void doRefresh()
 	{
-		updateID();
+		if(getInFormat().toString().length()>0)
+		{
+			updateID();
+		}
+		else
+		{
+			setInFormat(BFormat.make("%parent.displayName%"));
+		}
 	}
 	
 	//----------------------------------------------------------------------------------------------------------
@@ -34,7 +41,14 @@ public class BParentFolderInfo extends BComponent
 	public void timerExpired() { invoke(timerExpired,null,null); }
 	public void doTimerExpired()
 	{
-		updateID();
+		if(getInFormat().toString().length()>0)
+		{
+			updateID();
+		}
+		else
+		{
+			setInFormat(BFormat.make("%parent.displayName%"));
+		}
 	}
 	
 	
@@ -90,7 +104,14 @@ public class BParentFolderInfo extends BComponent
 		{
 			if (prop == inFormat) 
 			{
-				updateID();
+				if(getInFormat().toString().length()>0)
+				{
+					updateID();
+				}
+				else
+				{
+					setInFormat(BFormat.make("%parent.displayName%"));
+				}
 			}
 		}
 	}

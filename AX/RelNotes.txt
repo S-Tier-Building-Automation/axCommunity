@@ -379,5 +379,10 @@ V16.06.28.01 June 28, 2016 - Justin Koffler
 	* Added new Boolean Topic slot 'changed' which is fired only when the value of slot 'parentName' changes.
 	* Added new String Topic slot 'ParentName' which is fired after every refresh or startup.
 		
-		
+V16.06.28.02 June 28, 2016 - Justin Koffler			
+- MODIFIED BParentFolderInfo, added logic to prevent slot 'inFormat' becoming blank or null which would produce errors. 
+	If 'inFormat' is blank or null it will be defaulted to '%parent.displayName%' which mimics its past behavior.
+
+
+
 		
