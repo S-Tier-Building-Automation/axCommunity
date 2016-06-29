@@ -8,6 +8,6 @@ def moduleVersion = '16.06.28'
 def moduleVersionPatch = [:]
 
 // For example, to patch envCtrlDriver module as 5.0.1.1
-moduleVersionPatch = '.1'
+moduleVersionPatch = '.2'
 
 version = "${moduleVersion}${moduleVersionPatch}"
