@@ -383,6 +383,11 @@ V16.06.28.02 June 28, 2016 - Justin Koffler
 - MODIFIED BParentFolderInfo, added logic to prevent slot 'inFormat' becoming blank or null which would produce errors. 
 	If 'inFormat' is blank or null it will be defaulted to '%parent.displayName%' which mimics its past behavior.
 
+V16.07.11.01 July 11, 2016 - Justin Koffler			
+- MODIFIED BEnumFromCommaSepVar
+	* modified logic to prevent errors as a result of duplicate ordinal or tag values. The duplicate entries will get skipped and the enum range will still get applied to the facets.
+	* added new StatusString slot 'outString' and StatusNumeric 'outNumeric' which outputs the string value and numeric values of the selected enum.
+
 
 
 		

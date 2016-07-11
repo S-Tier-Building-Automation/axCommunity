@@ -31,22 +31,22 @@
 	<classpathentry kind="lib" path="C:/Program Files/Java/jre7/lib/ext/localedata.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files/Java/jre7/lib/ext/sunjce_provider.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files/Java/jre7/lib/ext/sunmscapi.jar"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/baja.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/control.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/driver.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/platform.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/fox.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/niagaraDriver.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/bql.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/workbench.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/bajaui.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/alarm.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/history.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/gx.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/kitControl.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/kitPx.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/converters.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/modules/web.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-3.8.38/bin/nre.jar"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/modules/baja.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/modules/control.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/modules/driver.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/modules/platform.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/modules/fox.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/modules/niagaraDriver.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/modules/bql.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/modules/workbench.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/modules/bajaui.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/modules/alarm.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/modules/history.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/modules/gx.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/modules/kitControl.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/modules/kitPx.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/modules/converters.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/modules/web.jar" sourcepath="C:/Niagara/Niagara-3.8.38/modules/docBajaEclipse.zip"/>
+	<classpathentry kind="var" path="NIAGARA_HOME/bin/nre.jar"/>
 	<classpathentry kind="output" path="eclipseBin"/>
 </classpath>
