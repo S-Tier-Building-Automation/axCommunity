@@ -695,7 +695,7 @@ public class BProductionCounter extends BComponent
 					((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_GoodParts"))).setValue((double)getCurrentShiftGoodParts());
 					((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_BadParts"))).setValue((double)getCurrentShiftBadParts());
 					((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_TotalParts"))).setValue((double)getCurrentShiftTotalParts());
-					((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_AvgPartsPerHour"))).setValue((double)getCurrentShiftAvgPartsPerHour());
+					((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_AvgPartsPerHour"))).setValue(getCurrentShiftAvgPartsPerHour());
 					set("shift_"+previousShift+"_AvgCycleTime", getCurrentShiftAvgCycleTime());
 					set("shift_"+previousShift+"_Hours", getCurrentShiftElapsedTime());
 					set("shift_"+previousShift+"_BreakHours", getCurrentShiftTotalBreakHours());
@@ -1115,7 +1115,7 @@ public class BProductionCounter extends BComponent
 			//try to create the component - if it fails, false
 			BComponent com = (BComponent)ord.relativizeToHost().get();
 			//This gets rid of the "unused variable" warning Eclipse gives me
-			com = (BComponent)com;
+			com = com;
 			return true;
 		}
 		catch(Exception e)

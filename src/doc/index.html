@@ -1,9 +1,421 @@
-<html>
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-<title>axCommunity</title>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>AxCommunity Change Log</title>
+
+
+
+
+
+
 </head>
 
 <body>
-<p>This module is an open source effort for AX developers.  For more information, go to <a href="http://sourceforge.net/projects/niagaraaxcommun/">Sourceforge axCommunity Website</a> </p>
-</body>
+<br>
+<p>This module is an open source effort for AX developers.<br>
+For more information, go to <a href="http://sourceforge.net/projects/niagaraaxcommun/">Sourceforge axCommunity Website</a> </p>
+
+
+<h1>AxCommunity Change Log</h1>
+<pre>
+<code>
+<hr>
+<b>V16.07.21.01 July 21, 2016</b><i></b><i> - Justin Koffler</i></i>
+	- MODIFIED 'BSpecialHtmlCharStringToString'
+		* change encoding to UTF-8
+		* modified how the replacement was being done to avoid conflicts with encoding types.
+		* added ability to replace html numbers to string in addition to the existing html character to string.
+		* added new boolean slot 'unescapeUrlEncoding' which when true will convert normal url encoding characters into their normal strings.
+				* example $20 = space
+	- MODIFIED 'BProductionCounter', removed a couple duplicate type casts that were throwing errors when building the project.
+	- MODIFIED the change log file location so it will show up in the bajadocs when compiled thus can be view through workbench.
+	- (N4 Only) MODIFIED gradle build scripts to allow creation of the bajadocs when building the project.
+<hr>
+<b>V16.07.11.01 July 11, 2016</b><i></b><i> - Justin Koffler</i></i>
+	- MODIFIED 'BEnumFromCommaSepVar'
+		* modified logic to prevent errors as a result of duplicate ordinal or tag values. The duplicate entries will get skipped and the enum range will still get applied to the facets.
+		* added new StatusString slot 'outString' and StatusNumeric 'outNumeric' which outputs the string value and numeric values of the selected enum.
+<hr>
+<b>V16.06.28.02 June 28, 2016</b><i> - Justin Koffler</i>			
+	- MODIFIED 'BParentFolderInfo', 
+		* Added logic to prevent slot 'inFormat' becoming blank or null which would produce errors. 
+		* If 'inFormat' is blank or null it will be defaulted to '%parent.displayName%' which mimics its past behavior.
+<hr>
+<b>V16.06.28.01 June 28, 2016</b><i> - Justin Koffler</i>	
+	- MODIFIED 'BAbsTimeToDateParts'
+		* rriemer mentioned he was getting the error "Unknown pattern character - 'X'" which I can only trace to possibly being how the GMT time string was being formated.
+		* Added new slot 'inSimpleDateFormat' which is used to customize the string output of the date time in slots 'stringDateOut' and 'outGMTTime'. I'm hoping this will fix the above isuue.
+				* If no 'inSimpleDateFormat' value is present the default format for method BAbstime.encodeToString() is used which uses the ISO 8601 standard format of "yyyy-mm-ddThh:mm:ss.mmm[+/-]hh:mm".
+				* For more details on the formating update your help database and look at the following doc under properties 'String BAbsTimeToDateParts.inSimpleDateFormat': local:|module://axCommunity/doc/org/axcommunity/niagara/conversion/BAbsTimeToDateParts.bajadoc
+		* If you still experience errors please let me know and I will continue to investigate.
+	- MODIFIED BRelTimeToStatusNumeric
+		* Changed how the seconds/minutes/hours were being calculate to be more precise. 
+		* Added slots 'facetsRelTime' and 'facetsNumeric' to allow adjusting how values are displayed.
+	- MODIFIED BParentFolderInfo
+		* Added new BFormat slot 'inFormat' that can be edited to modify value displayed in the 'parentName' slot.
+		* Added new BRelTime slot 'startupDelay' which is used to control how long after startup that the values are calculated.
+		* Added new Boolean Topic slot 'changed' which is fired only when the value of slot 'parentName' changes.
+		* Added new String Topic slot 'ParentName' which is fired after every refresh or startup.		
+<hr>
+<b>V16.05.26.01 May 26, 2016</b><i> - Mike Arnott</i>
+	- MODIFIED BDynamicLinkNumeric, BDynamicLinkBoolean, BDynamicLinkString	change the link created to use handles rather than slots
+<hr>
+<b>V16.03.17.01 March 09, 2016</b><i> - Justin Koffler</i>	
+	- MODIFIED BDynamicLinkBoolean, BDynamicLinkString and BDynamicLinkNumeric, added new action slot 'RemoveThenUpdateLink' that will force the link to update by first removing the link then relinking it. Be aware this will result in a change of value on the 'out' slot.
+<hr>
+<b>V16.03.09.01 March 09, 2016</b><i> - Justin Koffler</i>	
+	- MODIFIED BSuperOr, added started() and atSteadyState() methods to better handle calculating results at station startup or object creation.	
+<hr>
+<b>V16.02.18.01 February 18, 2016</b><i> - Justin Koffler</i>
+	- MODIFIED BSuperOr 
+		* added new Topic slots 'True' and 'False' and new BRelTime slot 'time'. 
+		* The 'True' slot if fired with true value when 'Out' is true and 'False' is fired with true value when 'OutRev' is true.
+		* The 'time' slot allows you to control the calculated delay time. This used to be hard coded to 1 second. 
+		* I left the default value at 1 second as not to change the default behavior.
+<hr>
+<b>V16.01.06.01 January 06, 2016</b><i> - Justin Koffler</i>
+	- MODIFIED BReplaceString to allow removing all non-alphanumeric characters and replace with user defined string. An option to trim any replacement strings from the beginning and end of the string and remove any duplicate replacements.
+<hr>
+<b>V15.12.30.01 December 30, 2015</b><i> - Justin Koffler</i>
+	- MODIFIED BEnumFromCommaSepVar - added new slot 'inCsvWithNoIndex' in which the input values need only be comma separated and the index values will be automatically created. No need for new line separator.
+<hr>
+<b>V15.11.19.02 Nov 19, 2015</b><i> - Eric Bishop</i>
+	- ADDED BSpecialHtmlCharStringToString - Converts a string containing HTML character codes (ex: &amp; &lt; &gt;) to the correct characters.
+	- ADDED BOrdToPxView - Sets a PXView slot using an ord input.  Allows the user to programmatically specify a custom view for each folder or object.
+	- ADDED BProductionCounter - This object tracks part counts and based on shift and break schedules, provides parts per shift as well as calculate parts per hour and cycle time.  Also outputs total breaks and total time on break. For more information, see this object's documentation.  
+	- ADDED BConcatLogData - Concatenate 0 to 60 strings together, use prefixes and suffixes for each string, specify a delimiter, line up the results using spaces, enable & disable individual inputs, and specify a global prefix and suffix.   
+	- ADDED BReplaceNullOrBlankString - Replaces the input string with another string if the input is null of blank
+	- ADDED BRetainLastValidString - Retains the last valid, non-blank string.
+	- ADDED BStringBufferAndSelect - Buffers a multi-dimensional array of strings and select outputs. Inputs and outputs function independently from each other, so an input can be written while a different output is selected.
+	- ADDED BSuperStringTest - Tests a string against any number of strings (up to 60).  Different compare options are available.
+<hr>
+<b>V15.05.31 May 31, 2015</b><i> - Justin Koffler</i>
+	- MODIFIED BChangeCase to fix bug when input length is zero it would not clear the output slots.
+<hr>
+<b>V15.05.20 May 20, 2015</b><i> - Justin Koffler</i>
+	- MODIFIED BSuperConcatPlus to fix bug when only one input slot existed.
+	- MODIFIED BAbsTimeToDateParts to include debug logging output.
+<hr>
+<b>V15.01.08 January 26, 2015</b><i> - Eric Bishop</i>
+	- MODIFIED BDynamicLinkString, BDynamicLinkNumeric and BDynamicLinkBoolean - Out slots were not updated properly after startup when
+		the linked value was changed while the station was not running. Added started and atSteadyState overrides.
+<hr>
+<b>V15.01.07 January 7, 2015</b><i> - Justin Koffler</i>
+	- MODIFIED BEventAtTime to correctly factor in the 'timeOffset' slot when calculating the next trigger time.
+<hr>
+<b>V14.09.01 September 25, 2014</b>
+	- MODIFIED BBqlNumericRecap to support queries where the datatype of the column to be analyzed is a BSimple (aggregates for example)
+<hr>
+<b>V14.08.24 August 24, 2014</b><i> - Justin Koffler</i>
+	- MODIFIED BStatusEnumToStatusString to include new slot 'inputMustBeEnumWritable' and when true the link to slot 'enumIn' will not be required to be a EnumWritable
+	- MODIFIED BDynamicLinkString, BDynamicLinkNumeric and BDynamicLinkBoolean to include new action slot 'UpdateLink' that when triggered will force the dynamic link to update. I also added trace and error level console logging.
+<hr>
+<b>V14.07.02 July 22, 2014</b>
+	- ADDED BFileTOImage - input is a string containing a file ord, output is a BImage that can be used to animate px objects
+	- ADDED BNumericConstantAdjustable - an extension of the NumbericConstant that has math actions that can be used to adjust the output (add, sub, mult, div) by an entered double
+<hr>
+<b>V13.09.01 September 5, 2013</b>
+	- MODIFIED BSysInfo to separate inet calls into new thread - was causing issues with some systems
+	- MODIFIED several objects to remove unused imports
+<hr>
+<b>V13.04.03 April 17, 2013</b>
+	- FIXED BFireFoxxWeather now works in a versions < 3.5
+<hr>
+<b>V13.04.02 April 3, 2013</b>
+	- FIXED BFireFoxxWeather always reverted to the N. Canada location selected in the dropdown listbox.  Added a new choice for "Other" - you have to use that to manually put in other locations.	
+<hr>
+<b>V13.04.01 April 3, 2013</b><i> - Ron Lea (FireFoxx)</i>
+	- MODIFIED BSysInfo to better handle errors thrown by getLocalHost() based commands
+	- ADDED BFireFoxxWeather - 
+		* a new weather object that uses the Yahoo weather API.  
+		* The weather module is accessing Yahoo weather, there is a drop down list for western Canada.  
+		* For those people in the rest of the world, they will have to lookup the city code and enter it manually.
+<hr>
+<b>V13.02.01 Feb 7, 2013</b><i> - Eric Bishop</i>
+	- ADDED BRevolvingTextLabel2 as an enhanced version of the BRevolvingTextLabel
+		* fixed the default height so that it defaults to the height of the font
+		* Removed the default colors, so it doesn’t constantly revert to a green background.
+		* added scroll speed setting.
+		* added an optional pause at the beginning of the string.
+		* added end-of-string input (to change from the default “…”).
+<hr>
+<b>V13.03.01 March 20, 2013</b><i> - Mike Arnott</i>
+	- ADDED BScale - Numeric point extension which scales the output
+	- ADDED BBrushSwitch - Switches between two brushes using a boolean input
+	- ADDED BSetBrushAction - Fires a brush event
+	- ADDED BSetFontAction - Fires a brush event
+	- ADDED BFontSwitch - Switches between two fonts using a boolean input
+	- ADDED BWhoWhenBrushSetpoint - Brush setpoint that monitors when the last change was made and who made it
+	- ADDED BWhoWhenFontSetpoint - Font setpoint that monitors when the last change was made and who made it
+<hr>
+<b>V13.01.02 January 28, 2013</b><i> - Justin Koffler</i>
+	- MODIFIED 'BWhoWhenBooleanSetpoint' to include new slots: 'SetTrue' (action), 'SetFalse' (action), 
+		'outLogString' (status string), 'Value' (topic), 'LogString' (topic) and   'absTimeFacets' (facet) 
+		and fixed logic so that facets are applied.
+	- MODIFIED 'BWhoWhenStringSetpoint' to include new slots: 'outLogString' (status string), 'Value' (topic), 'LogString' (topic) and 'absTimeFacets' (facet)
+<hr>
+<b>V13.01.01 January 20, 2013</b><i> - Justin Koffler</i>
+	- MODIFIED 'BSysInfo' to include four new slots: 'ipAddress', 'hostName', 'domain' and 'fqdn'.
+<hr>
+<b>V12.09.02 Sept 26, 2012</b><i> - Mike Arnott</i>
+	- MODIFIED BDynamicTrendAnalyzer - made the TimeRange property non-transient.
+	- ADDED    BFilterLogMeanExt - new filter using a LogMean method to approach an average. Low filter values have an excellent step response.
+			   Higher values offer very smoot out put at the expense of response time... but still great. - Dean Mynott
+<hr>
+<b>V12.09.01 September 23, 2012</b>
+	- MODIFIED 'BBqlNumericRecap' 
+		* added new slots queryAndCalculate, calculating, lastQuery, error, calculated, errorOccured.
+<hr>
+<b>V12.07.02 July 14, 2012</b><i> - Justin Koffler</i>
+	- ADDED 'BStopwatch_v2' as a replacement for BStopwatch. 
+		* The first version didn't seem to work very well but in case anyone is actively using it I didn't want to make drastic modifications and screw up any of their logic so I made a new one.
+	- MODIFIED Palette, Alphabetized most of the palette, sorry this was driving me nuts but hope this doesn't confuse anyone.
+<hr>
+<b>V12.07.01 July 10, 2012</b>
+	- MODIFIED BTstatA extension – reverse acting version. Goes 'on' at Setpoint - differential, and 'off' at Setpoint - Dean Mynott
+	- ADDED    BLimitOutput – takes StatusNumeric input and applies high and  low limits. Ignores limits if they are null - Dean Mynott
+<hr>
+<b>V12.06.02 June 29, 2012</b>
+	- MODIFIED 'BFireOnChange' by adding try|catch block to changed method and added error level logging when exception is caught.
+<hr>
+<b>V12.06.01 June 3, 2012</b><i> - Justin Koffler</i>
+	- MODIFIED 'BAsciiHexDecConversion' to fix an error that would occur if the decimal or Hex input included commas. 
+	- MODIFIED 'BAsciiHexDecConversion' to fix an issue that when the ASCII, decimal and hex inputs were blank the outputs would not change. The outputs will not reflect the inputs when the inputs are blank.
+	- MODIFIED 'BAsciiHexDecConversion'
+		* added two slots 'inBytesLong' and 'inUseBytesLong' which can be used to set pad or truncate the decimal and hex output to a specified byte length. 
+		* also when used the outputs of the decimal and hex slots will contain zeros to null the byte.
+	- MODIFIED 'BSuperConcatPlus' to eliminate error thrown if all input slots are blank and the 'concatenate' action is triggered.
+	- ADDED BUnAckAlarmState extension - provides Alarm Ack on parent point of Unacked Alarm - Dean Mynott 
+<hr>
+<b>V12.05.02 May 14, 2012</b><i> - Justin Koffler</i>
+	- MODIFIED 'BAvgMinMax_v1' to include new slot 'sum' that is the sum of all the 'in' slots within the min/max range.
+	- MODIFIED 'BAvgMinMax' to include new slot 'sum' that is the sum of all the 'in' slots.
+	- MODIFIED 'BAvgMinMax' & 'BAvgMinMax_v1' so that it will only call the 'createOutput' method when a new value is written to one of the 'in' slots.
+	- MODIFIED 'BAvgMinMax' & 'BAvgMinMax_v1' to include new topic slot 'Calculated' that will fire when a new value is written to an 'in' slot and the new output values have been calculated.
+<hr>
+<b>V12.05.01 May 10, 2012</b><i> - Justin Koffler</i>
+	- MODIFIED 'BLatestStringNotMatching' to include new slot 'inUseExclusionList' with a default value of true.
+	- MODIFIED 'BBooleanRotateOnExecute' by removing the TRANSIENT flag on the 'out' slot so it would retain its value 
+		upon station restart.
+<hr>
+<b>V12.04.04 April 29, 2012</b><i> - Justin Koffler</i>
+	- MODIFIED BSuperOr
+		* added logging to find cause of null exception errors I was getting on station restarts.
+		* modified logic to eliminate the infinite 1 second delay loop upon first execution.
+		* moved the onExecute processes to a new method named onCalculate to help with the infinite loop issue.
+		* modified logic to NOT allow the onCalculate processes to take place if the system was not in a running state (this is where I was getting the null exception errors before I added this).
+<hr>
+<b>V12.04.03 April 24, 2012</b>
+	- NODIFIED 'BStringToFile', added status boolean slots "outSuccess" and "outFail"
+<hr>
+<b>V12.04.02 April 15, 2012</b>
+	-Minor tweaks to eliminate some unused code in the following objects: BLatestNumber, BLatestStringNotMatching, BOneShotBooleanSelect, 
+		BOneShotMultiSelect, BReplaceString, BSuperConcatPlus.
+<hr>
+<b>V12.04.01 April 4, 2012</b><i> - Mike Arnott</i>
+	-moved the BSysInfoView to new package, org.axcommunity.niagara.views
+	- ADDED BSetBooleanActionView; a workbench view of the BSetBooleanAction button that works like a momentary push-button.  
+		Finally, a momentary PB in Niagara!
+<hr>
+<b>V12.03.06 March 30, 2012</b><i> - Mike Arnott</i>
+	-modified BStringToFile; added threading to file write to avoid possible network share causing WD Timeout
+<hr>
+<b>V12.03.05 March 28, 2012</b><i> - Mike Arnott</i>
+	- ADDED a new view for the BSysInfo object, BSysInfoView; Learned how to create a custom workbench view for an object!
+		My graphics ability stinks - someone please, make it prettier!
+		Note: added new dependency on the converters.jar <dependency name="converters" />
+<hr>
+<b>V12.03.04 March 16, 2012</b><i> - Mike Arnott</i>
+	-modified BEventAtTime; Added timeOffset BRelTime to allow time-zone or other offsets to the event time.
+	- ADDED BEnumFromMultiString; An Enum extension that lets you input a variable number of statusstrings that become the
+		enum facets.    
+<hr>
+<b>V12.03.03 March 15, 2012</b><i> - Mike Arnott</i>
+	- ADDED BEventAtTime; Object accepts time of day as hours, minutes, seconds or a time string.  Fires an event (topic) at that time. 
+<hr>
+<b>V12.03.02 March 6, 2012</b><i> - Justin Koffler</i>
+	- ADDED BOneShotMultiSelect; 
+		* When 'trigger' input or 'fire' action slot are true the value set in the 'inXTrue' slot will be represented in the 'out' slot for the amount of time configured in the 'time' slot. 
+		* When the timer expires the value in the 'inXFalse' slot will be represented in the 'out' slot.
+<hr>
+<b>V12.03.01 March 2, 2012</b><i> - Mike Arnott</i>
+	- ADDED DynamicLinkNumeric; A Simple Numeric in/out with an ordIn string - if the ordIn changes the object will try to create or change the in link source to the out slot of the object in ordIn
+	- ADDED DynamicLinkBoolean; A Simple Boolean in/out with an ordIn string - if the ordIn changes the object will try to create or change the in link source to the out slot of the object in ordIn
+	- ADDED DynamicLinkString; A Simple String in/out with an ordIn string - if the ordIn changes the object will try to create or change the in link source to the out slot of the object in ordIn
+<hr>
+<b>V12.02.06 Feb 28, 2012</b><i> - Justin Koffler</i>
+	- ADDED BOneShotBooleanSelect; 
+		* When 'trigger' input or 'fire' action slot are true the value set in the 'inTrue' slot will be represented in the 'out' slot for the amount of time configured in the 'time' slot. 
+		* When the timer expires the value in the 'inFalse' slot will be represented in the 'out' slot.
+<hr>
+<b>V12.02.05 Feb 18, 2012</b><i> - Justin Koffler</i>
+	- ADDED BLatestStringNotMatching; Accepts up to 24 Status Numeric inputs and will output the latest value if it meets the minimum required length as configured in the "inMinLength" slot and provided it does not match any values from the slot "inCsvExclusionList".
+	- MODIFIED BLatestNumber by reordering slots so the output slot are at the top.
+	- MODIFIED BLatestNumber to include new slot 'outLastOutputChange' which will display the last time the output slot was updated.
+	- ADDED BReplaceString; Replaces string subset from input string with new value and outputs the results.
+<hr>
+<b>V12.02.04 Feb 13, 2012</b>
+	- MODIFIED BAsciiHexDecConversion to include option to delimit the decimal and hex output by a user chosen delimiter. (modified by: Justin Koffler)
+<hr>
+<b>V12.02.03 Feb 10, 2012</b><i> - Justin Koffler</i>
+	- ADDED BLatestNumber; Accepts up to 24 Status Numeric inputs and will output the latest value if it meets the minimum required value as configured in the "inMinValue" slot.
+<hr>
+<b>V12.02.02 Feb 05, 2012</b><i> - Justin Koffler</i>
+	- MODIFIED BSysInfo to include the "OsName" slot and I also added the action slots "RestartStation" and "RebootStation" 
+		which as the name suggests will restart or reboot the station.
+<hr>
+<b>V12.02.01 Feb 05, 2012</b><i> - Justin Koffler</i>
+	- ADDED BSuperConcatPlus; Allows you to set the number of Status String input slots and the character you want to use as a delimiter.
+	- ADDED BAsciiHexDecConversion; Accepts Status String inputs representing a value in ASCII, Hex or Decimal format and will output its corresponding value in ASCII, Hex and Decimal format.
+	- MODIFIED BChangeCase fixed bug that would cause an out of bounds error when input string was of zero length.
+<hr>
+<b>V11.12.03 Dec 28, 2011</b>
+	-fixed a bug with the BEnumFromCommaSepVar that was resetting the facets on a restart
+<hr>
+<b>V11.12.02 Dec 12, 2011</b><i> - Mike Arnott</i>
+	- ADDED BWhoWhenNumericSetpoint; A numeric setpoint object that remembers the username and time of the last change
+	- ADDED BWhoWhenBooleanSetpoint; A boolean setpoint object that remembers the username and time of the last change
+	- ADDED BWhoWhenStringSetpoint; A String setpoint object that remembers the username and time of the last change
+	- ADDED BWhoWhenEnumSetpoint; An enum setpoint object that remembers the username and time of the last change
+<hr>
+<b>V11.12.01 Dec 05, 2011</b>
+	- ADDED BBoundLabelHighlight by Dean Mynott: BoundLabel with adjustable highlight colour for mouseOver
+	- ADDED BDropDownList by Ron Lea @ Firefoxx Controls: A PX ONLY button that pops up a nav menu with up to 20 hyperlinks/labels
+<hr>
+<b>V11.11.01 Nov 15, 2011</b>
+	- ADDED BSimpleTStat by Murat Egrikavuk as discussed in forum topic 4832
+	- ADDED BTstatA by Dean Mynott: Tstat with SP and Diff. If Diff >=0 then DirectActing, If Diff < 0 then ReverseActing
+- ADDED BTstatB by Dean Mynott: Tstat with onSP and offSP. If onSP >= offSP then DirectActing, If onSP < offSP then ReverseActing
+<hr>
+<b>V11.09.02 Sept 1, 2011</b>
+	- ADDED BStatusStringToFormat by Dean Mynott @ Ronin: Great for bringing out Alarm Extension Text fields to Px Pages
+	- ADDED BBooleanToggle by Dean Mynott @ Ronin: Toggles ON/OFF via Trigger or Action input
+<hr>
+<b>V11.09.01 Sept 1, 2011</b>
+	- MODIFIED comments on Kors Engineering submitted objects 
+<hr>
+<b>V11.08.01 Aug 15, 2011</b>
+	- ADDED BSuperOr by Christopher Howard @ xen-com: This is an OrGate on steroids!  This OrGate can be generated to accommodate any number of points.
+<hr>
+<b>V11.06.01 June 16 2011</b>
+	- ADDED BFilterExt by Dean Mynott: Drop it onto a BNumericPoint and it will filter the parent's output with a simple but effective filter. start with a value of 5
+	- ADDED BRelTimeToStatusNumeric by Dean Mynott: rounds BrelTime into Hours, Minutes, Seconds
+<hr>
+<b>V11.05.01 May 8, 2011</b><i> - Justin Koffler</i>
+	- ADDED BStopwatch; the mother of all elapsed timers!
+<hr>
+<b>V11.03.01 March 22, 2011</b><i> - Justin Koffler</i>
+	- ADDED BChangeCase; takes a string in and converts it to all uppercase, all lowercase and title case outputs.
+	- MODIFIED BStatusNumericFifo: nuisance station output removed, handles all 0's better than before (no NaN).
+<hr>
+<b>V10.11.01 November 2, 2010</b>
+	- MODIFIED BAbsTimeToDateParts, added serial time out slot for milliseconds since epoch (1-1-1970)
+	- ADDED BEpochToAbsTime: used to convert the serial time from BAbsTimeToDateParts back to an AbsTime
+<hr>
+<b>V10.10.01 October 20, 2010</b>
+	- ADDED BTrendDynamicAnalyzer by Alper Uzmezler, BAS Services: similar to the existing TrendAnalyzer, but uses dynamic time ranges (last month)
+	- ADDED axCommunity.BEnumFromCommaSepVar: an EnumWritable extension that has a linkable string input you can use to create an enum from a comma separated value list
+<hr>
+<b>V10.08.02 August 31, 2010</b>
+	- MODIFIED BEnumWithStringOutput to eliminate extraneous messages logged in system output
+<hr>
+<b>V10.08.01 August 18, 2010</b>
+	- ADDED RevolvingTextLabel: widget that scrolls text if it is larger than the label size.  Will also parse delimited text and return a specific index if desired.
+<hr>
+<b>V10.04.01 April 13,2010</b>
+	- ADDED StringToFile: writes a status string to a file. Borrowed heavily from the BHistoryToCSV from CMH, thanks!
+<hr>
+<b>V10.02.01 February 24, 2010:</b>
+	- ADDED BSetBooleanAction: actions to set a boolean true/false
+<hr>
+<b>V10.01.01 January 11, 2010:</b>
+	- ADDED BBitsToStatusNumeric: takes 8 bits in, creates a numeric output from binary
+<hr>
+<b>V09.11.01 November 6, 2009:</b>
+	Not released as a jar yet, source only
+	- ADDED BEnumWithStringOutput: it's an extension of the enumwritable that also accepts a numeric in and has a string output equivalent of the enum value.  
+<hr>
+<b>V09.10.01 September 17, 2009: </b><i>Tyler Long, McKenney's Inc.</i>
+	- ADDED BAvgMinMax_v1: This is a build upon Crabill's AvgMinMax type on version v09.01.03.  Added two inputs to exclude 
+		values above and below set points inMaximum and inMinimum. Enabled actions so that the inputs (ie. InMinimum, InMaximum, & inCount)
+		may be configured outside of the property sheet.
+	- ADDED BParentFolderInfo: simple object that gets the parent folder name and outputs it as a String.
+	- ADDED BSetNumericAction: A lot like the trCopy object, but instead of outputing a numeric, it fires a top that can be linked to the set/override actions of a numeric writable.
+<hr>
+<b>V09.09.01 Sept 09, 2009</b><i> - Christopher Howard, Xen-Com</i>
+	- MODIFIED 'BFireOnChange', was not passing the value in the "New Numeric Input" event
+	- ADDED 'BHistoryToCSV', exports a history to a CSV file. 
+<hr>
+<b>V09.08.01 August 14, 2009</b>
+	- ADDED BGetHTTP, simple object to retrieve a web page as a StatusString
+	- MODIFIED BSysInfo, added Heap Total, Heap Used and Heap Free fields						  
+	- figured out how to add BajaDoc!
+<hr>
+<b>V09.07.01 July 6, 2009</b>
+	- ADDED BAbsTimesToAbsTimeRange, takes two abs time inputs, creates an abs time range output  	
+	- ADDED BAbsTimeOffset, takes one abs time and one number as seconds, adds seconds (positive or negative) to time input to create time output.
+<hr>
+<b>V09.04.03 June 22, 2009</b><i> - Vance Hensley, Hoffman Building Technologies</i>
+	- ADDED 'PeakValueAndTstamp'
+		* takes StatusNumeric input and checks for peaks. Includes a String display of the Date/Time Stamp as well.
+		* This object is coded to "Zero Out" at the first of the month.
+<hr>
+<b>V09.04.02 May 3, 2009</b><i> - Vance Hensley, Hoffman Building Technologies</i>
+	- ADDED 'StatusBooleanToStatusEnum'
+		* takes StatusBoolean input and converts true/false to correct integers for StatusEnum output via two actions to set True Value & False Value. 
+		* Handy for LON enums; occupancy is true via "0" (mostly) but SatSwitchs are often true via "1" or however the controller is programmed.
+	- ADDED 'BooleanRotateOnExecute', very simple boolean rotation object, use a trigger to execute.
+<hr>
+<b>V09.04.01 Apr 17, 2009</b><i> - Mike Arnott & Vance Hensley, Hoffman Building Technologies</i>
+	<i>from Vance Hensley</i>
+	- ADDED BBooleanCompareCmdStatus, (Note: This has a bug - after station restarts, all go out go true. Anyone want to take a look?) 
+		* compares the status to the command over the defined time period. 
+		* If status does not match by the end of the elapsed time from, sets output to true (for alarm).
+	<i>from Mike Arnott</i>
+	- ADDED BFireOnChange, Accepts a StatusString, StatusNumeric or StatusBoolean input, fires the appropriate event when String changes or Number changes or Boolean changes from False to True.
+<hr>
+<b>V09.03.01 Mar 12, 2009</b>
+	- ADDED BStatusNumericFifo, takes a status numeric input and puts it into a FIFO that shifts with a trigger input.  calculates min/max/avg of buffered values.
+<hr>
+<b>V09.02.03 Feb 22, 2009</b><i> - Tucker Watson, Activelogix</i>
+	- ADDED BPasswordReveal - Returns stored passwords for all users in UserService or stations in NiagaraNetwork 
+	- ADDED BTrendAnalyzer - Displays min,max,avg,count for selected trend/history
+<hr>
+<b>V09.02.02 Feb 16, 2009</b><i> - B. Collins,Electro Controls, Inc.</i>
+	- ADDED BBqlNumericRecap, Executes a BQL query based on the Execute Period for one or more NumericPoint values.  
+						 Object calculates the Count, Average, Minimum, Maximum and Sum of the values returned by the BQL query 
+	- ADDED BSysInfo, gets system information every X time period.  Linkable!
+<hr>
+<b>V09.01.04 Jan 21, 2009</b>
+	- ADDED BStatusNumericToStatusStringNoPad: same as niagara numeric to string converter, but no padded 0's before or after the decimal, no decimal if no fraction
+<hr>
+<b>V09.01.03 Jan 13, 2009</b><i> - Kevin Crabill, Cochrane Supply</i>
+	- ADDED AvgMinMax: Determines the minimum, maximum and average based on variable amount of inputs.
+	- ADDED NumericLatchCustom:	
+		* This is a modification to the existing latch object.  Currently you can only store one value for latching.  
+		* This object can store the previous X values.  A good example is monthly metering that is triggered at the end of the month.
+	- ADDED NumericLatchObject:	Same as Tridium's Latch object except the out property doesn't have transient flag set so value is maintained through a reboot.
+	- ADDED PingHealthConverter: Takes a BPingHealth input from a driver device and splits it into three different outputs.
+	- ADDED BTimeSplitter: Executes every updateTime and displays the current time in seven different outputs out, hours, minutes, seconds, day, month and year.
+	- ADDED BToggleLatch: This object has two different actions on it.  The latch action sets the out property to true while the unlatch action sets it to false.
+	- ADDED BToggleSwitch: The outputs for Analog and Boolean switch to either the NormalOpen input or the NormalClose input.  This is determined by booleanCmd input.						
+<hr>
+<b>V09.01.02 Jan 06, 2009</b>
+	- ADDED graphics package from John Siebert
+	- ADDED Modulo 
+	- ADDED RoundUp 
+	- ADDED TriggeredAdd 
+	- ADDED TriggeredSubtract 
+	- ADDED TriggeredMultiply 
+	- ADDED TriggeredDivide 
+	- ADDED TriggerdCopy
+<hr>
+<b>V09.01.01 Jan 01, 2009</b>
+	-initial release
+</pre>	
+</code>
+<body>
+
 </html>
