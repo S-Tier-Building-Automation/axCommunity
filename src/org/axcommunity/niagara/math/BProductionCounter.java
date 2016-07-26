@@ -21,13 +21,17 @@ import javax.baja.sys.Clock;
 import javax.baja.sys.Context;
 import javax.baja.sys.Flags;
 import javax.baja.sys.Property;
+import javax.baja.sys.Slot;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
+import javax.baja.units.BUnit;
+import javax.baja.util.BFormat;
+import javax.baja.util.TextUtil;
 
 /**
 @author    Eric Bishop 
 @creation  23 Mar 12
-@version   $Revision: 3$ $Date: 04/12/2012 06:34 AM$
+@version   $Revision: 4$ $Date: 07/26/2016 10:36 AM$
 <br>
 This object tracks part counts and based on shift and break schedules,<br>
 provides parts per shift as well as calculate parts per hour and cycle<br>
@@ -39,10 +43,24 @@ The schedule linking logic was borrowed && modified from axCommunity's BDynamicL
 <br>
 Updates:<br>
         2015-03-09 - Fixed roundToNearestSecond(BAbsTime).  When the input was 59 seconds, it threw errors when attempting to round.<br>
+        2016-07-26 - Added targets, and fixed the removal of the *_AvgCycleTime slots.<br>
 */
 
 public class BProductionCounter extends BComponent
 {
+  public static final Action inGood = newAction(Flags.OPERATOR,null);
+  public void inGood() {invoke(inGood,null,null);}
+  public void doInGood()
+  {
+    if(!getOnlyTrackPartsDurringValidShift() || getInCurrentShift().getValue() >=1) adjustGoodParts(1);
+  }
+  
+  public static final Action inBad = newAction(Flags.OPERATOR,null);
+  public void inBad() {invoke(inBad,null,null);}
+  public void doInBad()
+  {
+    if(!getOnlyTrackPartsDurringValidShift() || getInCurrentShift().getValue() >=1) adjustBadParts(1);
+  }
   /**Adds a good part to the good and total part counts*/
   public static final Property inGoodTransaction = newProperty(Flags.SUMMARY, false);
   /**Adds a good part to the good and total part counts*/
@@ -120,20 +138,6 @@ public class BProductionCounter extends BComponent
    * Example: station:|slot:/Global/ShiftSetup/shiftSchedule*/
   public void setInShiftScheduleOrd(String v) {setString(inShiftScheduleOrd,v);}
   
-  /**This slot is the receiving end of a link from the "inShiftScheduleOrd"*/
-  public static final Property inCurrentShift = newProperty(Flags.HIDDEN, new BStatusNumeric(0, BStatus.nullStatus));
-  /**This slot is the receiving end of a link from the "inShiftScheduleOrd"*/
-  public BStatusNumeric getInCurrentShift() { return (BStatusNumeric)get(inCurrentShift);}
-  /**This slot is the receiving end of a link from the "inShiftScheduleOrd"*/
-  public void setInCurrentShift(BStatusNumeric v) {set(inCurrentShift,v);}
-  
-  /**Ending time of the current shift.  If the current shift = 0, then this is the start of the next shift (or end of "off shift")*/
-  public static final Property inShiftEndTime = newProperty(Flags.HIDDEN, BAbsTime.make(), BFacets.make(BFacets.SHOW_SECONDS,true));
-  /**Ending time of the current shift.  If the current shift = 0, then this is the start of the next shift (or end of "off shift")*/
-  public BAbsTime getInShiftEndTime() { return (BAbsTime)get(inShiftEndTime);}
-  /**Ending time of the current shift.  If the current shift = 0, then this is the start of the next shift (or end of "off shift")*/
-  public void setInShiftEndTime(BAbsTime v) {set(inShiftEndTime,v);}
-  
   /**Ord of a boolean schedule that is set to true whenever a break occurs.  Creates a link to "inScheduledBreak". If no break is active, set the output to false (If using a boolean schedule, set default output to false, NOT null)
    * Example: station:|slot:/Global/ShiftSetup/breakSchedule*/
   public static final Property inBreakScheduleOrd = newProperty(0, "station:|slot:/Global/ShiftSetup/scheduledBreaks");
@@ -144,12 +148,42 @@ public class BProductionCounter extends BComponent
    * Example: station:|slot:/Global/ShiftSetup/breakSchedule*/
   public void setInBreakScheduleOrd(String v) {setString(inBreakScheduleOrd,v);}
   
+  public static final Property inShiftTargetsOrd = newProperty(0, "station:|slot:/Global/ShiftSetup/ShiftTargets");
+  public String getInShiftTargetsOrd() { return getString(inShiftTargetsOrd);}
+  public void setInShiftTargetsOrd(String v) {setString(inShiftTargetsOrd,v);}
+  
+  /**This slot is the receiving end of a link from the "inShiftScheduleOrd"*/
+  public static final Property inCurrentShift = newProperty(Flags.HIDDEN, new BStatusNumeric(0, BStatus.nullStatus));
+  /**This slot is the receiving end of a link from the "inShiftScheduleOrd"*/
+  public BStatusNumeric getInCurrentShift() { return (BStatusNumeric)get(inCurrentShift);}
+  /**This slot is the receiving end of a link from the "inShiftScheduleOrd"*/
+  public void setInCurrentShift(BStatusNumeric v) {set(inCurrentShift,v);}
+  
   /**Normally hidden and linked to the object listed in "inBreakScheduleOrd".  If desired, this slot can be directly linked to a boolean input if "inBreakScheduleOrd" is left blank.*/
   public static final Property inScheduledBreak = newProperty(Flags.HIDDEN, new BStatusBoolean(false, BStatus.nullStatus));
   /**Normally hidden and linked to the object listed in "inBreakScheduleOrd".  If desired, this slot can be directly linked to a boolean input if "inBreakScheduleOrd" is left blank.*/
   public BStatusBoolean getInScheduledBreak() { return (BStatusBoolean)get(inScheduledBreak);}
   /**Normally hidden and linked to the object listed in "inBreakScheduleOrd".  If desired, this slot can be directly linked to a boolean input if "inBreakScheduleOrd" is left blank.*/
   public void setInScheduledBreak(BStatusBoolean v) {set(inScheduledBreak,v);}
+  
+  /**Ending time of the current shift.  If the current shift = 0, then this is the start of the next shift (or end of "off shift")*/
+  public static final Property inShiftEndTime = newProperty(Flags.HIDDEN, BAbsTime.make(), BFacets.make(BFacets.SHOW_SECONDS,true));
+  /**Ending time of the current shift.  If the current shift = 0, then this is the start of the next shift (or end of "off shift")*/
+  public BAbsTime getInShiftEndTime() { return (BAbsTime)get(inShiftEndTime);}
+  /**Ending time of the current shift.  If the current shift = 0, then this is the start of the next shift (or end of "off shift")*/
+  public void setInShiftEndTime(BAbsTime v) {set(inShiftEndTime,v);}
+  
+  public static final Property inTargetData = newProperty(Flags.HIDDEN, "", BFacets.make(BFacets.MULTI_LINE, true));
+  public String getInTargetData() { return getString(inTargetData);}
+  public void setInTargetData(String v) {setString(inTargetData,v);}
+  
+  public static final Property inShiftToResetCountsOnOrd = newProperty(0, "");
+  public String getInShiftToResetCountsOnOrd() { return getString(inShiftToResetCountsOnOrd);}
+  public void setInShiftToResetCountsOnOrd(String v) {setString(inShiftToResetCountsOnOrd,v);}
+  
+  public static final Property shiftToResetCountsOn = newProperty(Flags.HIDDEN, new BStatusNumeric());
+  public BStatusNumeric getShiftToResetCountsOn() { return (BStatusNumeric)get(shiftToResetCountsOn);}
+  public void setShiftToResetCountsOn(BStatusNumeric v) {set(shiftToResetCountsOn,v);}
   
   /**Value pulled from "inScheduledBreak"*/
   public static final Property scheduledBreak = newProperty(Flags.READONLY, new BStatusBoolean(false, BStatus.nullStatus));
@@ -200,6 +234,10 @@ public class BProductionCounter extends BComponent
   /**Ending time of the current shift.  If the current shift = 0, then this is the start of the next shift (or End of "off shift")*/
   public void setCurrentShiftEndTime(BAbsTime v) {set(currentShiftEndTime,v);}
   
+  public static final Property currentShiftScheduledDuration = newProperty(Flags.SUMMARY|Flags.READONLY, BRelTime.make(0), BFacets.make(BFacets.SHOW_SECONDS, BBoolean.FALSE, BFacets.SHOW_SECONDS, BBoolean.FALSE));
+  public BRelTime getCurrentShiftScheduledDuration() { return (BRelTime)get(currentShiftScheduledDuration);}
+  public void setCurrentShiftScheduledDuration(BRelTime v) {set(currentShiftScheduledDuration,v);}
+  
   /**Total number of good parts processed during this shift.*/
   public static final Property currentShiftGoodParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0);
   /**Total number of good parts processed during this shift.*/
@@ -214,12 +252,36 @@ public class BProductionCounter extends BComponent
   /**Total number of bad parts processed during this shift.*/
   public void setCurrentShiftBadParts(int v) {setInt(currentShiftBadParts,v);}
   
+  /**The total number of good and bad parts processed during the current shift*/
+  public static final Property currentShiftTotalParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0);
+  /**The total number of good and bad parts processed during the current shift*/
+  public int getCurrentShiftTotalParts() { return getInt(currentShiftTotalParts);}
+  /**The total number of good and bad parts processed during the current shift*/
+  public void setCurrentShiftTotalParts(int v) {setInt(currentShiftTotalParts,v);}
+  
+//  public static final Property currentShiftPercentageGoodParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0.0, BFacets.tryMake("showUnits=b:true|units=u:percent;%;;;|precision=i:1"));
+  public static final Property currentShiftPercentageGoodParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0.0, BFacets.make(BFacets.SHOW_UNITS, BBoolean.TRUE, BFacets.UNITS, BUnit.getUnit("percent"), BFacets.PRECISION, BInteger.make(1)));
+  public double getCurrentShiftPercentageGoodParts() { return getDouble(currentShiftPercentageGoodParts);}
+  public void setCurrentShiftPercentageGoodParts(double v) {setDouble(currentShiftPercentageGoodParts,v);}
+  
+  public static final Property currentShiftPercentageBadParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0.0, BFacets.make(BFacets.SHOW_UNITS, BBoolean.TRUE, BFacets.UNITS, BUnit.getUnit("percent"), BFacets.PRECISION, BInteger.make(1)));
+  public double getCurrentShiftPercentageBadParts() { return getDouble(currentShiftPercentageBadParts);}
+  public void setCurrentShiftPercentageBadParts(double v) {setDouble(currentShiftPercentageBadParts,v);}
+  
   /**The average number of parts processed per hour (excluding breaks) during the current shift.*/
-  public static final Property currentShiftAvgPartsPerHour = newProperty(Flags.SUMMARY|Flags.READONLY, 0, BFacets.make(BFacets.PRECISION, BInteger.make(1)));
+  public static final Property currentShiftAvgPartsPerHour = newProperty(Flags.SUMMARY|Flags.READONLY, 0.0, BFacets.make(BFacets.PRECISION, BInteger.make(1)));
   /**The average number of parts processed per hour (excluding breaks) during the current shift.*/
   public double getCurrentShiftAvgPartsPerHour() { return getDouble(currentShiftAvgPartsPerHour);}
   /**The average number of parts processed per hour (excluding breaks) during the current shift.*/
   public void setCurrentShiftAvgPartsPerHour(double v) {setDouble(currentShiftAvgPartsPerHour,v);}
+  
+  public static final Property currentShiftTargetPartsPerHour = newProperty(Flags.SUMMARY|Flags.READONLY, 0, BFacets.make(BFacets.PRECISION, BInteger.make(1)));
+  public double getCurrentShiftTargetPartsPerHour() { return getDouble(currentShiftTargetPartsPerHour);}
+  public void setCurrentShiftTargetPartsPerHour(double v) {setDouble(currentShiftTargetPartsPerHour,v);}
+  
+  public static final Property currentShiftPercentageOfTargetPph = newProperty(Flags.SUMMARY|Flags.READONLY, 0.0, BFacets.make(BFacets.SHOW_UNITS, BBoolean.TRUE, BFacets.UNITS, BUnit.getUnit("percent"), BFacets.PRECISION, BInteger.make(1)));
+  public double getCurrentShiftPercentageOfTargetPph() { return getDouble(currentShiftPercentageOfTargetPph);}
+  public void setCurrentShiftPercentageOfTargetPph(double v) {setDouble(currentShiftPercentageOfTargetPph,v);}
   
   /**The average cycle time (excluding breaks) during the current shift.*/
   public static final Property currentShiftAvgCycleTime = newProperty(Flags.SUMMARY|Flags.READONLY, BRelTime.make(0), BFacets.make(BFacets.SHOW_MILLISECONDS,false));
@@ -228,12 +290,13 @@ public class BProductionCounter extends BComponent
   /**The average cycle time (excluding breaks) during the current shift.*/
   public void setCurrentShiftAvgCycleTime(BRelTime v) {set(currentShiftAvgCycleTime,v);}
   
-  /**The total number of good and bad parts processed during the current shift*/
-  public static final Property currentShiftTotalParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0);
-  /**The total number of good and bad parts processed during the current shift*/
-  public int getCurrentShiftTotalParts() { return getInt(currentShiftTotalParts);}
-  /**The total number of good and bad parts processed during the current shift*/
-  public void setCurrentShiftTotalParts(int v) {setInt(currentShiftTotalParts,v);}
+  public static final Property currentShiftTargetCycleTime = newProperty(Flags.SUMMARY|Flags.READONLY, BRelTime.make(0), BFacets.make(BFacets.SHOW_MILLISECONDS,false));
+  public BRelTime getCurrentShiftTargetCycleTime() { return (BRelTime)get(currentShiftTargetCycleTime);}
+  public void setCurrentShiftTargetCycleTime(BRelTime v) {set(currentShiftTargetCycleTime,v);}
+  
+  public static final Property currentShiftPercentageOfTargetCycleTime = newProperty(Flags.SUMMARY|Flags.READONLY, 0.0, BFacets.make(BFacets.SHOW_UNITS, BBoolean.TRUE, BFacets.UNITS, BUnit.getUnit("percent"), BFacets.PRECISION, BInteger.make(1)));
+  public double getCurrentShiftPercentageOfTargetCycleTime() { return getDouble(currentShiftPercentageOfTargetCycleTime);}
+  public void setCurrentShiftPercentageOfTargetCycleTime(double v) {setDouble(currentShiftPercentageOfTargetCycleTime,v);}
   
   /**The total time the current shift has been on break.*/
   public static final Property currentShiftTotalBreakHours = newProperty(Flags.SUMMARY|Flags.READONLY, BRelTime.make(0), BFacets.make(BFacets.SHOW_MILLISECONDS,false));
@@ -248,6 +311,14 @@ public class BProductionCounter extends BComponent
   public int getCurrentShiftTotalBreaks() { return getInt(currentShiftTotalBreaks);}
   /**The total number of breaks the current shift has taken.*/
   public void setCurrentShiftTotalBreaks(int v) {setInt(currentShiftTotalBreaks,v);}
+  
+  public static final Property currentShiftTarget = newProperty(Flags.SUMMARY|Flags.READONLY, new BStatusNumeric(0,BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(1)));
+  public BStatusNumeric getCurrentShiftTarget() { return (BStatusNumeric)get(currentShiftTarget);}
+  public void setCurrentShiftTarget(BStatusNumeric v) {set(currentShiftTarget,v);}
+  
+  public static final Property currentShiftPercentageOfTarget = newProperty(Flags.SUMMARY|Flags.READONLY, new BStatusNumeric(0,BStatus.ok), BFacets.make(BFacets.SHOW_UNITS, BBoolean.TRUE, BFacets.UNITS, BUnit.getUnit("percent"), BFacets.PRECISION, BInteger.make(1)));
+  public BStatusNumeric getCurrentShiftPercentageOfTarget() { return (BStatusNumeric)get(currentShiftPercentageOfTarget);}
+  public void setCurrentShiftPercentageOfTarget(BStatusNumeric v) {set(currentShiftPercentageOfTarget,v);}
   
   
   /**The total number of good parts processed today.*/
@@ -264,6 +335,21 @@ public class BProductionCounter extends BComponent
   /**The total number of bad parts processed today.*/
   public void setTodayBadParts(int v) {setInt(todayBadParts,v);}
   
+  /**The total number of good and bad parts processed today.*/
+  public static final Property todayTotalParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0);
+  /**The total number of good and bad parts processed today.*/
+  public int getTodayTotalParts() { return getInt(todayTotalParts);}
+  /**The total number of good and bad parts processed today.*/
+  public void setTodayTotalParts(int v) {setInt(todayTotalParts,v);}
+  
+  public static final Property todayPercentageGoodParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0.0, BFacets.make(BFacets.SHOW_UNITS, BBoolean.TRUE, BFacets.UNITS, BUnit.getUnit("percent"), BFacets.PRECISION, BInteger.make(1)));
+  public double getTodayPercentageGoodParts() { return getDouble(todayPercentageGoodParts);}
+  public void setTodayPercentageGoodParts(double v) {setDouble(todayPercentageGoodParts,v);}
+  
+  public static final Property todayPercentageBadParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0.0, BFacets.make(BFacets.SHOW_UNITS, BBoolean.TRUE, BFacets.UNITS, BUnit.getUnit("percent"), BFacets.PRECISION, BInteger.make(1)));
+  public double getTodayPercentageBadParts() { return getDouble(todayPercentageBadParts);}
+  public void setTodayPercentageBadParts(double v) {setDouble(todayPercentageBadParts,v);}
+  
   /**The average number of parts processed per hour (excluding breaks) today.*/
   public static final Property todayAvgPartsPerHour = newProperty(Flags.SUMMARY|Flags.READONLY, 0, BFacets.make(BFacets.PRECISION, BInteger.make(1)));
   /**The average number of parts processed per hour (excluding breaks) today.*/
@@ -277,13 +363,6 @@ public class BProductionCounter extends BComponent
   public BRelTime getTodayAvgCycleTime() { return (BRelTime)get(todayAvgCycleTime);}
   /**The average cycle time (excluding breaks) today.*/
   public void setTodayAvgCycleTime(BRelTime v) {set(todayAvgCycleTime,v);}
-  
-  /**The total number of good and bad parts processed today.*/
-  public static final Property todayTotalParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0);
-  /**The total number of good and bad parts processed today.*/
-  public int getTodayTotalParts() { return getInt(todayTotalParts);}
-  /**The total number of good and bad parts processed today.*/
-  public void setTodayTotalParts(int v) {setInt(todayTotalParts,v);}
   
   /**The total hours run (excluding breaks and off-shift) today.*/
   public static final Property todayTotalHours = newProperty(Flags.SUMMARY|Flags.READONLY, BRelTime.make(0), BFacets.make(BFacets.SHOW_MILLISECONDS,false));
@@ -313,6 +392,14 @@ public class BProductionCounter extends BComponent
   /**The total hours a shift has not run (currentShfit = 0) today.*/
   public void setTodayTotalOffShiftHours (BRelTime v) {set(todayTotalOffShiftHours ,v);}
   
+  public static final Property todayTarget = newProperty(Flags.SUMMARY|Flags.READONLY, new BStatusNumeric(0,BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(1)));
+  public BStatusNumeric getTodayTarget() { return (BStatusNumeric)get(todayTarget);}
+  public void setTodayTarget(BStatusNumeric v) {set(todayTarget,v);}
+  
+  public static final Property todayPercentageOfTarget = newProperty(Flags.SUMMARY|Flags.READONLY, new BStatusNumeric(0,BStatus.ok), BFacets.make(BFacets.SHOW_UNITS, BBoolean.TRUE, BFacets.UNITS, BUnit.getUnit("percent"), BFacets.PRECISION, BInteger.make(1)));
+  public BStatusNumeric getTodayPercentageOfTarget() { return (BStatusNumeric)get(todayPercentageOfTarget);}
+  public void setTodayPercentageOfTarget(BStatusNumeric v) {set(todayPercentageOfTarget,v);}
+  
   
   /**The total number of good parts processed yesterday.*/
   public static final Property yesterdayGoodParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0);
@@ -328,6 +415,21 @@ public class BProductionCounter extends BComponent
   /**The total number of bad parts processed yesterday.*/
   public void setYesterdayBadParts(int v) {setInt(yesterdayBadParts,v);}
   
+  /**The total number of good and bad parts processed yesterday.*/
+  public static final Property yesterdayTotalParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0);
+  /**The total number of good and bad parts processed yesterday.*/
+  public int getYesterdayTotalParts() { return getInt(yesterdayTotalParts);}
+  /**The total number of good and bad parts processed yesterday.*/
+  public void setYesterdayTotalParts(int v) {setInt(yesterdayTotalParts,v);}
+  
+  public static final Property yesterdayPercentageGoodParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0.0, BFacets.make(BFacets.SHOW_UNITS, BBoolean.TRUE, BFacets.UNITS, BUnit.getUnit("percent"), BFacets.PRECISION, BInteger.make(1)));
+  public double getYesterdayPercentageGoodParts() { return getDouble(yesterdayPercentageGoodParts);}
+  public void setYesterdayPercentageGoodParts(double v) {setDouble(yesterdayPercentageGoodParts,v);}
+  
+  public static final Property yesterdayPercentageBadParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0.0, BFacets.make(BFacets.SHOW_UNITS, BBoolean.TRUE, BFacets.UNITS, BUnit.getUnit("percent"), BFacets.PRECISION, BInteger.make(1)));
+  public double getYesterdayPercentageBadParts() { return getDouble(yesterdayPercentageBadParts);}
+  public void setYesterdayPercentageBadParts(double v) {setDouble(yesterdayPercentageBadParts,v);}
+  
   /**The average number of parts processed per hour (excluding breaks) yesterday.*/
   public static final Property yesterdayAvgPartsPerHour = newProperty(Flags.SUMMARY|Flags.READONLY, 0, BFacets.make(BFacets.PRECISION, BInteger.make(1)));
   /**The average number of parts processed per hour (excluding breaks) yesterday.*/
@@ -341,13 +443,6 @@ public class BProductionCounter extends BComponent
   public BRelTime getYesterdayAvgCycleTime() { return (BRelTime)get(yesterdayAvgCycleTime);}
   /**The average cycle time (excluding breaks) yesterday.*/
   public void setYesterdayAvgCycleTime(BRelTime v) {set(yesterdayAvgCycleTime,v);}
-  
-  /**The total number of good and bad parts processed yesterday.*/
-  public static final Property yesterdayTotalParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0);
-  /**The total number of good and bad parts processed yesterday.*/
-  public int getYesterdayTotalParts() { return getInt(yesterdayTotalParts);}
-  /**The total number of good and bad parts processed yesterday.*/
-  public void setYesterdayTotalParts(int v) {setInt(yesterdayTotalParts,v);}
   
   /**The total hours run (excluding breaks and off-shift) yesterday.*/
   public static final Property yesterdayTotalHours = newProperty(Flags.SUMMARY|Flags.READONLY, BRelTime.make(0), BFacets.make(BFacets.SHOW_MILLISECONDS,false));
@@ -377,6 +472,14 @@ public class BProductionCounter extends BComponent
   /**The total hours a shift has not run (currentShfit = 0) yesterday.*/
   public void setYesterdayTotalOffShiftHours (BRelTime v) {set(yesterdayTotalOffShiftHours ,v);}
   
+  public static final Property yesterdayTarget = newProperty(Flags.SUMMARY|Flags.READONLY, new BStatusNumeric(0,BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(1)));
+  public BStatusNumeric getYesterdayTarget() { return (BStatusNumeric)get(yesterdayTarget);}
+  public void setYesterdayTarget(BStatusNumeric v) {set(yesterdayTarget,v);}
+  
+  public static final Property yesterdayPercentageOfTarget = newProperty(Flags.SUMMARY|Flags.READONLY, new BStatusNumeric(0,BStatus.ok), BFacets.make(BFacets.SHOW_UNITS, BBoolean.TRUE, BFacets.UNITS, BUnit.getUnit("percent"), BFacets.PRECISION, BInteger.make(1)));
+  public BStatusNumeric getYesterdayPercentageOfTarget() { return (BStatusNumeric)get(yesterdayPercentageOfTarget);}
+  public void setYesterdayPercentageOfTarget(BStatusNumeric v) {set(yesterdayPercentageOfTarget,v);}
+  
   
   /**The total number of good parts processed.*/
   public static final Property totalGoodParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0);
@@ -392,6 +495,21 @@ public class BProductionCounter extends BComponent
   /**The total number of bad parts processed.*/
   public void setTotalBadParts(int v) {setInt(totalBadParts,v);}
   
+  /**The total number of good and bad parts processed.*/
+  public static final Property totalParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0);
+  /**The total number of good and bad parts processed.*/
+  public int getTotalParts() { return getInt(totalParts);}
+  /**The total number of good and bad parts processed.*/
+  public void setTotalParts(int v) {setInt(totalParts,v);}
+  
+  public static final Property totalPercentageGoodParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0.0, BFacets.make(BFacets.SHOW_UNITS, BBoolean.TRUE, BFacets.UNITS, BUnit.getUnit("percent"), BFacets.PRECISION, BInteger.make(1)));
+  public double getTotalPercentageGoodParts() { return getDouble(totalPercentageGoodParts);}
+  public void setTotalPercentageGoodParts(double v) {setDouble(totalPercentageGoodParts,v);}
+  
+  public static final Property totalPercentageBadParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0.0, BFacets.make(BFacets.SHOW_UNITS, BBoolean.TRUE, BFacets.UNITS, BUnit.getUnit("percent"), BFacets.PRECISION, BInteger.make(1)));
+  public double getTotalPercentageBadParts() { return getDouble(totalPercentageBadParts);}
+  public void setTotalPercentageBadParts(double v) {setDouble(totalPercentageBadParts,v);}
+  
   /**The average number of parts processed per hour (excluding breaks).*/
   public static final Property totalAvgPartsPerHour = newProperty(Flags.SUMMARY|Flags.READONLY, 0, BFacets.make(BFacets.PRECISION, BInteger.make(1)));
   /**The average number of parts processed per hour (excluding breaks).*/
@@ -405,13 +523,6 @@ public class BProductionCounter extends BComponent
   public BRelTime getTotalAvgCycleTime() { return (BRelTime)get(totalAvgCycleTime);}
   /**The average cycle time (excluding breaks).*/
   public void setTotalAvgCycleTime(BRelTime v) {set(totalAvgCycleTime,v);}
-  
-  /**The total number of good and bad parts processed.*/
-  public static final Property totalParts = newProperty(Flags.SUMMARY|Flags.READONLY, 0);
-  /**The total number of good and bad parts processed.*/
-  public int getTotalParts() { return getInt(totalParts);}
-  /**The total number of good and bad parts processed.*/
-  public void setTotalParts(int v) {setInt(totalParts,v);}
   
   /**The total hours run (excluding breaks and off-shift).*/
   public static final Property totalHours = newProperty(Flags.SUMMARY|Flags.READONLY, BRelTime.make(0), BFacets.make(BFacets.SHOW_MILLISECONDS,false));
@@ -441,6 +552,25 @@ public class BProductionCounter extends BComponent
   /**The total hours a shift has not run (currentShfit = 0).*/
   public void setTotalOffShiftHours (BRelTime v) {set(totalOffShiftHours ,v);}
 
+  public static BInteger lastAdjustmentForGoodParts = BInteger.make(0);
+  public static final Action adjustGoodCountBy = newAction(Flags.OPERATOR, lastAdjustmentForGoodParts);
+  public BInteger adjustGoodCountBy(BInteger v) {return (BInteger)invoke(adjustGoodCountBy,v,null);} 
+  public BInteger doAdjustGoodCountBy(BInteger v)
+  {
+    lastAdjustmentForGoodParts = v;
+    adjustGoodParts(lastAdjustmentForGoodParts.getInt());
+    return lastAdjustmentForGoodParts;
+  }
+  
+  public static BInteger lastAdjustmentForBadParts = BInteger.make(0);
+  public static final Action adjustBadCountBy = newAction(Flags.OPERATOR, lastAdjustmentForBadParts);
+  public BInteger adjustBadCountBy(BInteger v) {return (BInteger)invoke(adjustBadCountBy,v,null);} 
+  public BInteger doAdjustBadCountBy(BInteger v)
+  {
+    lastAdjustmentForBadParts = v;
+    adjustBadParts(lastAdjustmentForBadParts.getInt());
+    return lastAdjustmentForBadParts;
+  }
   
   /**Moves today's values to yesterday and resets today's values to 0.*/
   public static final Action moveTodaysPartCountsToYesterday = newAction(Flags.HIDDEN,null);
@@ -496,15 +626,12 @@ public class BProductionCounter extends BComponent
   
   /** */
   private BAbsTime breakStartTime;
-  /**Sets the name of the link slot used for the shift schedule input*/
-  static final String SHIFT_SCHEDULE_CONTAINER_LINK = "ShiftScheduleLink";
-  static final String SHIFT_END_SCHEDULE_CONTAINER_LINK = "ShiftEndScheduleLink";
-  /**Sets the name of the link slot used for the break schedule input*/
-  static final String BREAK_SCHEDULE_CONTAINER_LINK = "BreakScheduleLink";
   /**Timer used to reset the daily values at midnight each night*/
   Clock.Ticket midnightTimer;
   /**Timer used for refreshing "currentShiftElapsedTime", "currentShiftRemainingTime", "currentShiftAvgPartsPerHour", and "currentShiftAvgCycleTime"*/
   Clock.Ticket refreshTimer;
+  private boolean secondAttemptAtWritingPreviousShiftData;
+  boolean shiftTargetValuesLinkActive = false;
   
   //private int possibleOffShiftBreaks = 0;
   //private long possibleOffShiftBreakHours = 0;
@@ -515,14 +642,14 @@ public class BProductionCounter extends BComponent
     if(!Sys.atSteadyState() || !isRunning()) return;
     
     //At this point, the object is either new or just copied
-    doResetCurrentShiftPartCounts();
+    doResetCurrentShiftPartCounts(roundToNearestSecond());
     doSetScheduleLinks();
     startupRoutine();
   }
   
   public void stopped()
   {
-    if(refreshTimer != null)  refreshTimer.cancel();
+    if (refreshTimer != null) refreshTimer.cancel();
     if(midnightTimer != null) midnightTimer.cancel();
   }
   
@@ -532,19 +659,14 @@ public class BProductionCounter extends BComponent
     if(!isRunning()) return;
     
     //At this point, the system has just restarted
+    shiftSlots(getInNumberOfShifts(), null);
     startupRoutine();
   }
   
   private void startupRoutine()
   {
-    if(getInCurrentShift().getStatus().isValid() && getInCurrentShift().getValue() >= 1 && getInCurrentShift().getValue() != getCurrentShift().getValue())
-    {
-      //This should trigger changed method and automatically shift the counts around as needed. 
-      getCurrentShift().setValue(getInCurrentShift().getValue());
-      getCurrentShift().setStatus(0);
-    }
-    else if(getInCurrentShift().getValue() < 0) getCurrentShift().setStatusFault(true);
-    else if(getInCurrentShift().getStatus().isValid() && !getCurrentShift().getStatus().isValid()) getCurrentShift().setStatus(0);
+    //Shift the counts around as needed 
+    checkShift(roundToNearestSecond());
     
     if(getScheduledBreak().getValue() != getInScheduledBreak().getValue()) getScheduledBreak().setValue(getInScheduledBreak().getValue());
     if(getScheduledProduction().getValue() != getInCurrentShift().getValue() >= 1 && !getInScheduledBreak().getValue()) getScheduledProduction().setValue(getInCurrentShift().getValue() >= 1 && !getInScheduledBreak().getValue());
@@ -571,17 +693,19 @@ public class BProductionCounter extends BComponent
     if(getTotalHours().getMillis() < 0)                   {setTotalHours(BRelTime.make(0));                   logger.message(getSlotPath().toString() + " Negative value for: TotalHours");}
     if(getTotalOffShiftHours().getMillis() < 0)           {setTotalOffShiftHours(BRelTime.make(0));           logger.message(getSlotPath().toString() + " Negative value for: TotalOffShiftHours");}
     
+    shiftTargetValuesLinkActive = getInTargetData().length() > 0;
+    
     scheduleMidnightTimer();
     doRefreshValuesForToday();
     updateTimer();
+    updateDurration();
   }
-  
   
   /**Checks to see what changed and sets outputs accordingly.*/
   public void changed(Property p, Context cx)
   {
     if(!Sys.atSteadyState() || !isRunning()) return;
-    final BAbsTime absTimeThisChanged = roundToNearestSecond(BAbsTime.now());
+    final BAbsTime absTimeThisChanged = roundToNearestSecond();
     
     
     super.changed(p, cx);
@@ -615,57 +739,28 @@ public class BProductionCounter extends BComponent
         setCurrentShiftTotalBreakHours(roundToNearestSecond(getCurrentShiftTotalBreakHours().getMillis() + breakStartTime.delta(absTimeThisChanged).getMillis()));
         setTotalBreakHours(roundToNearestSecond(getTotalBreakHours().getMillis() + breakStartTime.delta(absTimeThisChanged).getMillis()));
         breakStartTime = null;
+        updateDurration();
       }
       if(!getInScheduledBreak().getValue()) breakStartTime = null;
       getScheduledBreak().setValue(getInScheduledBreak().getValue());
       getScheduledBreak().setStatus(getInScheduledBreak().getStatus());
     }
     
-    if(p.equals(inShiftScheduleOrd) || p.equals(inBreakScheduleOrd)) doSetScheduleLinks();
+    if(p.equals(inShiftScheduleOrd) || p.equals(inBreakScheduleOrd) || p.equals(inShiftTargetsOrd) || p.equals(inShiftToResetCountsOnOrd)) doSetScheduleLinks();
     
-    if(p.equals(inNumberOfShifts) || getInNumberOfShifts() < (int)getInCurrentShift().getValue()) shiftSlots(getInNumberOfShifts(), cx);
+    if(getInNumberOfShifts() < (int)getInCurrentShift().getValue() || p.equals(inNumberOfShifts)) shiftSlots(getInNumberOfShifts(), cx);
     if(getInNumberOfShifts() < (int)getInCurrentShift().getValue()) setInNumberOfShifts((int)getInCurrentShift().getValue());
     
-    if(p.equals(inGoodTransaction) && getInGoodTransaction())
-    {
       if(!getOnlyTrackPartsDurringValidShift() || getInCurrentShift().getValue() >=1)
       {
-        if(getInCurrentShift().getValue() >=1 )
-        {
-          setCurrentShiftGoodParts(getCurrentShiftGoodParts() + 1);
-          setCurrentShiftTotalParts(getCurrentShiftTotalParts() + 1);
-        }
-        setTodayGoodParts(getTodayGoodParts() + 1);
-        setTodayTotalParts(getTodayTotalParts() + 1);
-        setTotalGoodParts(getTotalGoodParts() + 1);
-        setTotalParts(getTotalParts() + 1);
-      }
+      if(p.equals(inGoodTransaction) && getInGoodTransaction()) adjustGoodParts(absTimeThisChanged, 1);
+      if(p.equals(inBadTransaction) && getInBadTransaction()) adjustBadParts(absTimeThisChanged, 1);
     }
     
-    if(p.equals(inBadTransaction) && getInBadTransaction())
+    if(p.equals(determinePartsPerHourAndCycleTimeBasedOn))
     {
-      if(!getOnlyTrackPartsDurringValidShift() || getInCurrentShift().getValue() >=1)
-      {
-        if(getInCurrentShift().getValue() >=1 )
-        {
-          setCurrentShiftBadParts(getCurrentShiftBadParts() + 1);
-          setCurrentShiftTotalParts(getCurrentShiftTotalParts() + 1);
-        }
-        setTodayBadParts(getTodayBadParts() + 1);
-        setTodayTotalParts(getTodayTotalParts() + 1);
-        setTotalBadParts(getTotalBadParts() + 1);
-        setTotalParts(getTotalParts() + 1);
-      }
-    }
-    
-    //if((p.equals(inGoodTransaction) && getInGoodTransaction()) || (p.equals(inBadTransaction) && getInBadTransaction()))
-    //{
-    //  possibleOffShiftBreaks = 0;
-    //  possibleOffShiftBreakHours = 0;
-    //}
-    if((p.equals(inGoodTransaction) && getInGoodTransaction()) || (p.equals(inBadTransaction) && getInBadTransaction()) || (p.equals(determinePartsPerHourAndCycleTimeBasedOn)))
-    {
-      if((getDeterminePartsPerHourAndCycleTimeBasedOn().getOrdinal() == 0 && getCurrentShiftTotalParts() > 0) || (getDeterminePartsPerHourAndCycleTimeBasedOn().getOrdinal() == 1 && getCurrentShiftGoodParts() > 0))
+      if((getDeterminePartsPerHourAndCycleTimeBasedOn().getOrdinal() == 0 && getCurrentShiftTotalParts() > 0) 
+      || (getDeterminePartsPerHourAndCycleTimeBasedOn().getOrdinal() == 1 && getCurrentShiftGoodParts() > 0))
       {
         refresh(absTimeThisChanged);
       }
@@ -673,48 +768,7 @@ public class BProductionCounter extends BComponent
     
     if(p == inCurrentShift) 
     {
-      if(getInCurrentShift().getStatus().isValid() && getCurrentShift().getStatus().isValid() && getInCurrentShift().getValue() != getCurrentShift().getValue())
-      {
-        int previousShift = (int)getCurrentShift().getValue();
-        
-        if(getInShiftToResetCountsOn() == (int)getInCurrentShift().getValue()) doResetShiftPartCounts();
-        
-        //check to see if the current shift was just changed FROM 0 to a number HIGHER THAN 0  -OR-  current shift changed && ignore no-production shift && production count = 0
-        if((getInCurrentShift().getValue() >= 1 && getCurrentShift().getValue() < 1) || (getIgnoreShiftsWithoutAnyTransactions() && getCurrentShiftTotalParts() == 0))
-        {
-          //if the shift start time is after today at 0:00:00.000, then add the current shift's hours to today's total off-shift hours 
-          if(getCurrentShiftStartTime().isAfter(absTimeThisChanged.timeOfDay(0, 0, 0, 0))) setTodayTotalOffShiftHours(BRelTime.make(getTodayTotalOffShiftHours().getMillis() + roundToNearestSecond(getCurrentShiftStartTime().delta(absTimeThisChanged)).getMillis()));
-          //if the shift start time is before today at 0:00:00.000, then subtract midnight.millis from absTimeThisChanged and add that total to today's total off-shift hours 
-          else setTodayTotalOffShiftHours(absTimeThisChanged.timeOfDay(0, 0, 0, 0).delta(absTimeThisChanged));
-          //Always add these hours to the total off-shift hours
-          setTotalOffShiftHours(BRelTime.make(getTotalOffShiftHours().getMillis() + roundToNearestSecond(getCurrentShiftStartTime().delta(absTimeThisChanged)).getMillis()));
-        }
-        else if(getCurrentShift().getValue() > 0)
-        {
-          refresh(absTimeThisChanged);
-          ((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_GoodParts"))).setValue((double)getCurrentShiftGoodParts());
-          ((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_BadParts"))).setValue((double)getCurrentShiftBadParts());
-          ((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_TotalParts"))).setValue((double)getCurrentShiftTotalParts());
-          ((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_AvgPartsPerHour"))).setValue((double)getCurrentShiftAvgPartsPerHour());
-          set("shift_"+previousShift+"_AvgCycleTime", getCurrentShiftAvgCycleTime());
-          set("shift_"+previousShift+"_Hours", getCurrentShiftElapsedTime());
-          set("shift_"+previousShift+"_BreakHours", getCurrentShiftTotalBreakHours());
-          ((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_Breaks"))).setValue(getCurrentShiftTotalBreaks());
-          
-          //if the shift start time is after today at 0:00:00.000, then add the current shift's hours to today's total shift hours 
-          if(getCurrentShiftStartTime().isAfter(absTimeThisChanged.timeOfDay(0, 0, 0, 0))) setTodayTotalHours(BRelTime.make(getTodayTotalHours().getMillis() + roundToNearestSecond(getCurrentShiftStartTime().delta(absTimeThisChanged)).getMillis()));
-          //if the shift start time is before today at 0:00:00.000, then subtract midnight.millis from absTimeThisChanged and add that total to today's total shift hours 
-          else setTodayTotalHours(absTimeThisChanged.timeOfDay(0, 0, 0, 0).delta(roundToNearestSecond(absTimeThisChanged)));
-          //Always add these hours to the total shift hours
-          setTotalHours(BRelTime.make(getTotalHours().getMillis() + roundToNearestSecond(getCurrentShiftStartTime().delta(absTimeThisChanged)).getMillis()));
-        }
-        
-        doResetCurrentShiftPartCounts(absTimeThisChanged);
-        breakStartTime = null;
-        if(getScheduledBreak().getValue()) getScheduledBreak().setValue(false);
-      }
-      else if(getInCurrentShift().getValue() < 0) getCurrentShift().setStatusFault(true);
-      else if(getInCurrentShift().getStatus().isValid() && !getCurrentShift().getStatus().isValid()) getCurrentShift().setStatus(0);
+      checkShift(absTimeThisChanged);
     }
     
     if(p.equals(inScheduledBreak) || p == inCurrentShift)
@@ -731,12 +785,248 @@ public class BProductionCounter extends BComponent
     {
       refresh(absTimeThisChanged);
       setCurrentShiftEndTime(getInShiftEndTime());
+      updateDurration();
     }
+    
     if(p.equals(inRefreshInterval))
     {
       updateTimer();
       refresh(absTimeThisChanged);
     }
+    
+    if(p.equals(inTargetData) || (!shiftTargetValuesLinkActive && p.getName().endsWith("_Target")))
+    {
+      if(shiftTargetValuesLinkActive) shiftTargetValuesLinkActive = getInTargetData().length() > 0;
+      refreshTargetData();
+    }
+    
+    if(p.equals(shiftToResetCountsOn) && getShiftToResetCountsOn().getStatus().isValid())
+    {
+      int shiftNum = (int) getShiftToResetCountsOn().getValue();
+      if(shiftNum >= 0 && shiftNum <= 60) setInShiftToResetCountsOn(shiftNum);
+      else setInShiftToResetCountsOn(-1);
+    }
+  }
+  
+  private void adjustGoodParts(int partCount)
+  {
+    adjustGoodParts(BAbsTime.now(), partCount);
+  }
+  
+  private void adjustBadParts(int partCount)
+  {
+    adjustBadParts(BAbsTime.now(), partCount);
+  }
+  
+  private void adjustGoodParts(BAbsTime absTimeThisChanged, int partCount)
+  {
+    if(getInCurrentShift().getValue() >=1 )
+    {
+      setCurrentShiftGoodParts(Math.max(0, getCurrentShiftGoodParts() + partCount));
+      setCurrentShiftTotalParts(Math.max(0, getCurrentShiftTotalParts() + partCount));
+    }
+    setTodayGoodParts(Math.max(0, getTodayGoodParts() + partCount));
+    setTodayTotalParts(Math.max(0, getTodayTotalParts() + partCount));
+    setTotalGoodParts(Math.max(0, getTotalGoodParts() + partCount));
+    setTotalParts(Math.max(0, getTotalParts() + partCount));
+    
+    refresh(absTimeThisChanged);
+  }
+  
+  private void adjustBadParts(BAbsTime absTimeThisChanged, int partCount)
+  {
+    if(getInCurrentShift().getValue() >=1 )
+    {
+      setCurrentShiftBadParts(Math.max(0, getCurrentShiftBadParts() + partCount));
+      setCurrentShiftTotalParts(Math.max(0, getCurrentShiftTotalParts() + partCount));
+    }
+    setTodayBadParts(Math.max(0, getTodayBadParts() + partCount));
+    setTodayTotalParts(Math.max(0, getTodayTotalParts() + partCount));
+    setTotalBadParts(Math.max(0, getTotalBadParts() + partCount));
+    setTotalParts(Math.max(0, getTotalParts() + partCount));
+    
+    refresh(absTimeThisChanged);
+  }
+  
+  private void checkShift(BAbsTime absTimeThisChanged)
+  {
+    if(getInCurrentShift().getStatus().isValid() && !getCurrentShift().getStatus().isValid()) getCurrentShift().setStatus(0);
+    secondAttemptAtWritingPreviousShiftData = false;
+    if(
+        getInCurrentShift().getStatus().isValid() && 
+        getCurrentShift().getStatus().isValid() && 
+        getInCurrentShift().getValue() != getCurrentShift().getValue()) 
+      shiftChange(absTimeThisChanged);
+    else if(getInCurrentShift().getValue() < 0) getCurrentShift().setStatusFault(true);
+  }
+  
+  private void shiftChange(BAbsTime absTimeThisChanged)
+  {
+    int previousShift = (int)getCurrentShift().getValue();
+    
+    if(getInShiftToResetCountsOn() == (int)getInCurrentShift().getValue())
+    {
+      doResetCurrentShiftPartCounts(absTimeThisChanged);
+      doResetShiftPartCounts();
+      doResetTodaysPartCounts();
+    } 
+    
+    //check to see if the current shift was just changed FROM 0 to a number HIGHER THAN 0  -OR-  current shift changed && ignore no-production shift && production count = 0
+    if((getInCurrentShift().getValue() >= 1 && getCurrentShift().getValue() < 1) || (getIgnoreShiftsWithoutAnyTransactions() && getCurrentShiftTotalParts() == 0))
+    {
+      //if the shift start time is after today at 0:00:00.000, then add the current shift's hours to today's total off-shift hours 
+      if(getCurrentShiftStartTime().isAfter(absTimeThisChanged.timeOfDay(0, 0, 0, 0))) setTodayTotalOffShiftHours(BRelTime.make(getTodayTotalOffShiftHours().getMillis() + roundToNearestSecond(getCurrentShiftStartTime().delta(absTimeThisChanged)).getMillis()));
+      //if the shift start time is before today at 0:00:00.000, then subtract midnight.millis from absTimeThisChanged and add that total to today's total off-shift hours 
+      else setTodayTotalOffShiftHours(absTimeThisChanged.timeOfDay(0, 0, 0, 0).delta(absTimeThisChanged));
+      //Always add these hours to the total off-shift hours
+      setTotalOffShiftHours(BRelTime.make(getTotalOffShiftHours().getMillis() + roundToNearestSecond(getCurrentShiftStartTime().delta(absTimeThisChanged)).getMillis()));
+    }
+    else if(getCurrentShift().getValue() > 0)
+    {
+      refresh(absTimeThisChanged);
+      
+      try
+      {
+        ((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_GoodParts"))).setValue((double)getCurrentShiftGoodParts());
+        ((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_BadParts"))).setValue((double)getCurrentShiftBadParts());
+        ((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_TotalParts"))).setValue((double)getCurrentShiftTotalParts());
+        ((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_PercentageGoodParts"))).setValue((double)getCurrentShiftPercentageGoodParts());
+        ((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_PercentageBadParts"))).setValue((double)getCurrentShiftPercentageBadParts());
+        ((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_AvgPartsPerHour"))).setValue((double)getCurrentShiftAvgPartsPerHour());
+        set("shift_"+previousShift+"_AvgCycleTime", getCurrentShiftAvgCycleTime());
+        set("shift_"+previousShift+"_Hours", getCurrentShiftElapsedTime());
+        set("shift_"+previousShift+"_BreakHours", getCurrentShiftTotalBreakHours());
+        ((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_Breaks"))).setValue(getCurrentShiftTotalBreaks());
+        ((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_Target"))).setValue(getCurrentShiftTarget().getValue());
+        ((BStatusNumeric) ((BObject)get("shift_"+previousShift+"_PercentageOfTarget"))).setValue(getCurrentShiftPercentageOfTarget().getValue());
+        
+      }
+      catch (Exception e)
+      {
+        if(secondAttemptAtWritingPreviousShiftData)
+        {
+          logger.error(getSlotPath().toString() + " - Could not update one or more slots for shift number " + previousShift + ", after attempting to recreate the needed slots.  2 attempts were made to write to the slot(s).");
+          logger.error(getSlotPath().toString() + e.getMessage());
+          e.printStackTrace();
+        }
+        else
+        {
+          logger.trace(getSlotPath().toString() + " - Could not update one or more slots for shift number " + previousShift + ", Attemtping to recreate the slot(s) and try again.");
+          refreshSlotsAndRetryShiftChange(absTimeThisChanged);
+        }
+      }
+      
+      updateDurration();
+      
+      //if the shift start time is after today at 0:00:00.000, then add the current shift's hours to today's total shift hours 
+      if(getCurrentShiftStartTime().isAfter(absTimeThisChanged.timeOfDay(0, 0, 0, 0))) setTodayTotalHours(BRelTime.make(getTodayTotalHours().getMillis() + roundToNearestSecond(getCurrentShiftStartTime().delta(absTimeThisChanged)).getMillis()));
+      //if the shift start time is before today at 0:00:00.000, then subtract midnight.millis from absTimeThisChanged and add that total to today's total shift hours 
+      else setTodayTotalHours(absTimeThisChanged.timeOfDay(0, 0, 0, 0).delta(roundToNearestSecond(absTimeThisChanged)));
+      //Always add these hours to the total shift hours
+      setTotalHours(BRelTime.make(getTotalHours().getMillis() + roundToNearestSecond(getCurrentShiftStartTime().delta(absTimeThisChanged)).getMillis()));
+    }
+    
+    doResetCurrentShiftPartCounts(absTimeThisChanged);
+    breakStartTime = null;
+    if(getScheduledBreak().getValue()) getScheduledBreak().setValue(false);
+  }
+  
+  private void updateDurration()
+  {
+    if(getInShiftEndTime() == BAbsTime.NULL)
+    {
+      setCurrentShiftScheduledDuration(BRelTime.make(0));
+      return;
+    }
+    
+    boolean useDefaultTime = true;
+    //If the current shift is > 0, pull the previous hours & breaks for the shift.
+    if(getCurrentShift().getValue() > 0)
+    {
+      BRelTime previousHours = null;
+      BRelTime previousBreaks = null;
+      try
+      {
+        previousHours = ((BRelTime) ((BObject)get("shift_"+getInCurrentShift().getValue()+"_Hours")));
+        previousBreaks = ((BRelTime) ((BObject)get("shift_"+getInCurrentShift().getValue()+"_BreakHours")));
+      }
+      catch (Exception e){}
+      
+      if(previousHours != null && previousBreaks != null)
+      {
+        int currentShiftDuration = roundToNearestMinute(getCurrentShiftStartTime().delta(getInShiftEndTime())).getMinutes();
+        previousHours = roundToNearestMinute(previousHours);
+        previousBreaks = roundToNearestMinute(previousBreaks);
+        int timeDifference = currentShiftDuration - previousHours.getMinutes() - previousBreaks.getMinutes();
+        
+        if(timeDifference < 5 && timeDifference > -5)
+        {
+          setCurrentShiftScheduledDuration(BRelTime.makeMinutes(currentShiftDuration - previousBreaks.getMinutes()));
+          useDefaultTime = false;
+        }
+      }
+    }
+    
+    //If the current shift is 0, just figure out how long it will be 0.
+    if(useDefaultTime) setCurrentShiftScheduledDuration(BRelTime.makeMinutes(roundToNearestMinute(getCurrentShiftStartTime().delta(getInShiftEndTime())).getMinutes() - getCurrentShiftTotalBreakHours().getMinutes()));
+  }
+  
+  private void refreshSlotsAndRetryShiftChange(BAbsTime absTimeThisChanged)
+  {
+    shiftSlots(getInNumberOfShifts(), null);
+    shiftChange(absTimeThisChanged);
+  }
+  
+  private void refreshTargetData()
+  {
+    double dailyTarget = 0;
+    int shiftNumber;
+    double tempValue = 0;
+    double currentShiftTarget = 0;
+    
+    String[] test = null;
+    if(shiftTargetValuesLinkActive) test = TextUtil.split(getInTargetData(), '\n');
+    
+    for (int i = 0; i < getInNumberOfShifts(); i++)
+    {
+      try
+      {
+        shiftNumber = i + 1;
+        if(shiftTargetValuesLinkActive)
+        {
+          if(i >= test.length) tempValue = 0;
+          else tempValue = Double.parseDouble(test[i]);
+          ((BStatusNumeric) ((BObject)get("shift_"+shiftNumber+"_Target"))).setValue(tempValue);
+        }
+        else tempValue = ((BStatusNumeric) ((BObject)get("shift_"+shiftNumber+"_Target"))).getValue();
+        
+        dailyTarget = dailyTarget + tempValue;
+        
+        //Update the percentage
+        ((BStatusNumeric) ((BObject)get("shift_"+shiftNumber+"_PercentageOfTarget"))).setValue(((((BStatusNumeric) ((BObject)get("shift_"+shiftNumber+"_GoodParts"))).getValue()) / tempValue) * 100);
+        if(shiftNumber == getCurrentShift().getValue()) currentShiftTarget = tempValue;
+      }
+      catch (Exception e)
+      {
+        logger.error(getSlotPath().toString() + e.getMessage());
+        e.printStackTrace();
+      }
+    }
+    
+    getCurrentShiftTarget().setValue(currentShiftTarget);
+    getTodayTarget().setValue(dailyTarget);
+    
+    if(getInShiftEndTime() != BAbsTime.NULL && currentShiftTarget > 0)
+    {
+      setCurrentShiftTargetPartsPerHour(currentShiftTarget / (((double)getCurrentShiftScheduledDuration().getMinutes()) / 60));
+      setCurrentShiftTargetCycleTime(BRelTime.make((long) (getCurrentShiftScheduledDuration().getMillis() / currentShiftTarget)));
+    }
+    else
+    {
+      setCurrentShiftTargetPartsPerHour(0);
+      setCurrentShiftTargetCycleTime(BRelTime.make(0));
+    }
+    doRefreshValuesForToday();
   }
   
   
@@ -745,7 +1035,7 @@ public class BProductionCounter extends BComponent
   {
     if(!Sys.atSteadyState() || !isRunning()) return;
     scheduleMidnightTimer();
-    final BAbsTime absTimeThisChanged = roundToNearestSecond(BAbsTime.now());
+    final BAbsTime absTimeThisChanged = roundToNearestSecond();
     final BAbsTime lastMidnight = absTimeThisChanged.timeOfDay(0, 0, 0, 0);
     
     if(!getIgnoreShiftsWithoutAnyTransactions() || getTodayTotalParts() > 0)
@@ -763,54 +1053,80 @@ public class BProductionCounter extends BComponent
       if(getInCurrentShift().getValue() >= 1) setYesterdayTotalHours(getTodayTotalHours());
       else if(getCurrentShiftStartTime().isAfter(lastMidnight)) setYesterdayTotalHours(getTodayTotalHours());
       else setYesterdayTotalHours(BRelTime.make(BAbsTime.now().timeOfDay(0, 0, 0, 0).getMillis() - roundToNearestSecond(getCurrentShiftStartTime().getMillis() + getTodayTotalHours().getMillis()).getMillis()));
-    }
     
     setYesterdayTotalBreaks(getTodayTotalBreaks());
     setYesterdayAvgPartsPerHour(getTodayAvgPartsPerHour());
     setYesterdayAvgCycleTime(getTodayAvgCycleTime());
+      getYesterdayTarget().setValue(getTodayTarget().getValue());
+      getYesterdayPercentageOfTarget().setValue(getTodayPercentageOfTarget().getValue());
+      setYesterdayPercentageGoodParts(getTodayPercentageGoodParts());
+      setYesterdayPercentageBadParts(getTodayPercentageBadParts());
+    }
     
+    setTodayGoodParts(0);
+    setTodayBadParts(0);
+    setTodayTotalParts(0);
     setTodayAvgPartsPerHour(0);
     setTodayAvgCycleTime(BRelTime.make(0));
     setTodayTotalBreakHours(BRelTime.make(0));
     setTodayTotalHours(BRelTime.make(0));
     setTodayTotalOffShiftHours(BRelTime.make(0));
     setTodayTotalBreaks(0);
-    
-    setTodayGoodParts(0);
-    setTodayBadParts(0);
-    setTodayTotalParts(0);
+    getTodayPercentageOfTarget().setValue(0);
+    setTodayPercentageGoodParts(0);
+    setTodayPercentageBadParts(0);
   }
   
-  /**Resets the current shift values to 0*/
+  /**Resets the current shift values to 0.
+   * This also copies the current shift times to today's time slots*/
   public void doResetCurrentShiftPartCounts()
   {
-    if(!Sys.atSteadyState() || !isRunning()) return;
-    setCurrentShiftGoodParts(0);
-    setCurrentShiftBadParts(0);
-    setCurrentShiftTotalParts(0);
-    setCurrentShiftAvgPartsPerHour(0);
-    setCurrentShiftAvgCycleTime(BRelTime.make(0));
-    setCurrentShiftTotalBreakHours(BRelTime.make(0));
-    setCurrentShiftStartTime(roundToNearestSecond(BAbsTime.now()));
-    setCurrentShiftTotalBreaks(0);
-    getCurrentShift().setValue(getInCurrentShift().getValue());
-    getCurrentShift().setStatus(0);
+    if(!Sys.atSteadyState()|| !isRunning()) return;
+    BAbsTime absTimeThisChanged = roundToNearestSecond();
+    
+    if(getInCurrentShift().getValue() >= 1)
+    {
+      //if the shift start time is after today at 0:00:00.000, then add the current shift's hours to today's total shift hours 
+      if(getCurrentShiftStartTime().isAfter(absTimeThisChanged.timeOfDay(0, 0, 0, 0))) setTodayTotalHours(BRelTime.make(getTodayTotalHours().getMillis() + roundToNearestSecond(getCurrentShiftStartTime().delta(absTimeThisChanged)).getMillis()));
+      //if the shift start time is before today at 0:00:00.000, then subtract midnight.millis from absTimeThisChanged and add that total to today's total shift hours 
+      else setTodayTotalHours(absTimeThisChanged.timeOfDay(0, 0, 0, 0).delta(absTimeThisChanged));
+      //Always add these hours to the total shift hours
+      setTotalHours(BRelTime.make(getTotalHours().getMillis() + roundToNearestSecond(getCurrentShiftStartTime().delta(absTimeThisChanged)).getMillis()));
+    }
+    else
+    {
+      //if the shift start time is after today at 0:00:00.000, then add the current shift's hours to today's total off-shift hours 
+      if(getCurrentShiftStartTime().isAfter(absTimeThisChanged.timeOfDay(0, 0, 0, 0))) setTodayTotalOffShiftHours(BRelTime.make(getTodayTotalOffShiftHours().getMillis() + roundToNearestSecond(getCurrentShiftStartTime().delta(absTimeThisChanged)).getMillis()));
+      //if the shift start time is before today at 0:00:00.000, then subtract midnight.millis from absTimeThisChanged and add that total to today's total off-shift hours 
+      else setTodayTotalOffShiftHours(absTimeThisChanged.timeOfDay(0, 0, 0, 0).delta(absTimeThisChanged));
+      //Always add these hours to the total off-shift hours
+      setTotalOffShiftHours(BRelTime.make(getTotalOffShiftHours().getMillis() + roundToNearestSecond(getCurrentShiftStartTime().delta(absTimeThisChanged)).getMillis()));
+    }
+    
+    doResetCurrentShiftPartCounts(absTimeThisChanged);
   }
   
-  /**Resets the current shift values to 0 and sets the shift start time to the BAbsTime input*/
-  public void doResetCurrentShiftPartCounts(BAbsTime shiftChangeTime)
+  /**
+   * Resets the current shift values to 0 and sets the shift start time to the BAbsTime input.
+   * DOES NOT COPY CURRENT SHIFT TIMES TO TODAY TIMES.
+   */
+  public void doResetCurrentShiftPartCounts(BAbsTime absTimeThisChanged)
   {
-    if(!Sys.atSteadyState() || !isRunning()) return;
+    if(!Sys.atSteadyState()|| !isRunning()) return;
+    
     setCurrentShiftGoodParts(0);
     setCurrentShiftBadParts(0);
     setCurrentShiftTotalParts(0);
+    setCurrentShiftPercentageGoodParts(0);
+    setCurrentShiftPercentageBadParts(0);
     setCurrentShiftAvgPartsPerHour(0);
     setCurrentShiftAvgCycleTime(BRelTime.make(0));
     setCurrentShiftTotalBreakHours(BRelTime.make(0));
-    setCurrentShiftStartTime(shiftChangeTime);
+    setCurrentShiftStartTime(absTimeThisChanged);
     setCurrentShiftTotalBreaks(0);
     getCurrentShift().setValue(getInCurrentShift().getValue());
     getCurrentShift().setStatus(0);
+    getCurrentShiftPercentageOfTarget().setValue(0);
   }
   
   /**Resets all shift values to 0 (except the current shift)*/
@@ -829,6 +1145,9 @@ public class BProductionCounter extends BComponent
         set("shift_"+i+"_Hours",BRelTime.make(0));
         set("shift_"+i+"_BreakHours",BRelTime.make(0));
         ((BStatusNumeric) ((BObject)get("shift_"+i+"_Breaks"))).setValue(0);
+        ((BStatusNumeric) ((BObject)get("shift_"+i+"_PercentageOfTarget"))).setValue(0);
+        ((BStatusNumeric) ((BObject)get("shift_"+i+"_PercentageGoodParts"))).setValue(0);
+        ((BStatusNumeric) ((BObject)get("shift_"+i+"_PercentageBadParts"))).setValue(0);
       }
     }
     catch (Exception e)
@@ -841,40 +1160,50 @@ public class BProductionCounter extends BComponent
   /**Resets today's part counts to 0*/
   public void doResetTodaysPartCounts()
   {
-    if(!Sys.atSteadyState() || !isRunning()) return;
+    if(!Sys.atSteadyState()|| !isRunning()) return;
+    doResetCurrentShiftPartCounts(roundToNearestSecond());
     setTodayGoodParts(0);
     setTodayBadParts(0);
     setTodayTotalParts(0);
+    setTodayPercentageGoodParts(0);
+    setTodayPercentageBadParts(0);
     setTodayAvgPartsPerHour(0);
     setTodayAvgCycleTime(BRelTime.make(0));
     setTodayTotalBreakHours(BRelTime.make(0));
     setTodayTotalHours(BRelTime.make(0));
     setTodayTotalOffShiftHours(BRelTime.make(0));
     setTodayTotalBreaks(0);
+    getTodayPercentageOfTarget().setValue(0);
   }
   
   /**Resets yesterday's part counts to 0*/
   public void doResetYesterdaysPartCounts()
   {
-    if(!Sys.atSteadyState() || !isRunning()) return;
+    if(!Sys.atSteadyState()|| !isRunning()) return;
     setYesterdayGoodParts(0);
     setYesterdayBadParts(0);
     setYesterdayTotalParts(0);
+    setYesterdayPercentageGoodParts(0);
+    setYesterdayPercentageBadParts(0);
     setYesterdayAvgPartsPerHour(0);
     setYesterdayAvgCycleTime(BRelTime.make(0));
     setYesterdayTotalBreakHours(BRelTime.make(0));
     setYesterdayTotalHours(BRelTime.make(0));
     setYesterdayTotalOffShiftHours(BRelTime.make(0));
     setYesterdayTotalBreaks(0);
+    getYesterdayTarget().setValue(0);
+    getYesterdayPercentageOfTarget().setValue(0);
   }
   
   /**Resets the total part counts to 0*/
   public void doResetTotalPartCounts()
   {
-    if(!Sys.atSteadyState() || !isRunning()) return;
+    if(!Sys.atSteadyState()|| !isRunning()) return;
     setTotalGoodParts(0);
     setTotalBadParts(0);
     setTotalParts(0);
+    setTotalPercentageGoodParts(0);
+    setTotalPercentageBadParts(0);
     setTotalAvgPartsPerHour(0);
     setTotalAvgCycleTime(BRelTime.make(0));
     setTotalBreakHours(BRelTime.make(0));
@@ -895,119 +1224,54 @@ public class BProductionCounter extends BComponent
     scheduleMidnightTimer();
   }
   
-  /**Checks the schedule links and recreates if needed. This is run after copying the object to ensure it is still linked properly.
-   * The linking logic was borrowed && modified from axCommunity's BDynamicLinkNumeric, written by Mike Arnott, Kors Engineering.*/
+  /**
+   *Checks the schedule links and recreates if needed. This is run after copying the object to ensure it is still linked properly.
+   * The linking logic was borrowed && modified from axCommunity's BDynamicLinkNumeric, written by Mike Arnott, Kors Engineering.
+   */
   public void doSetScheduleLinks()
   {
-    //see if the object already has a link
-    BLink[] shiftLinks = this.getLinks(this.getSlot("inCurrentShift"));
-    if(shiftLinks.length>0)
-    {
-      //will only alter link 0, not meant as a many to 1!!!
-      //try to make ord from input link string
-      BOrd ord = BOrd.make(getInShiftScheduleOrd());
-      if(isOrdValid(ord))
-      {
-        shiftLinks[0].setSourceOrd(ord);
-        getCurrentShift().setStatus(0);
-      }
+    if(linkSlots(getInShiftScheduleOrd(),        "out",      inCurrentShift,       "ShiftScheduleLink"))
+      getCurrentShift().setStatusNull(false);
       else
-      {
-        shiftLinks[0].deactivate();
-        this.remove(shiftLinks[0]);
         getCurrentShift().setStatusNull(true);
-      }
-    }
-    else
-    {
-      //no link, create one if possible
-      BOrd ord = BOrd.make(getInShiftScheduleOrd());
-      if(isOrdValid(ord))
-      {
-        BLink shiftLink = new BLink(ord,"out","inCurrentShift",true);
-        this.add(SHIFT_SCHEDULE_CONTAINER_LINK, shiftLink);
-        shiftLink.activate();
-        getCurrentShift().setStatus(0);
-      }
-      else
-      {
-        getCurrentShift().setStatusNull(true);
-      }
-    }
-    shiftLinks = null;
-  
-    //see if the object already has a link
-    BLink[] breakLinks = this.getLinks(this.getSlot("inScheduledBreak"));
-    if(breakLinks.length>0)
-    {
-      //will only alter link 0, not meant as a many to 1!!!
-      //try to make ord from input link string
-      BOrd ord = BOrd.make(getInBreakScheduleOrd());
-      if(isOrdValid(ord))
-      {
-        breakLinks[0].setSourceOrd(ord);
-        getScheduledBreak().setStatus(0);
-        getScheduledProduction().setStatus(0);
-      }
-      else
-      {
-        breakLinks[0].deactivate();
-        this.remove(breakLinks[0]);
-        getScheduledBreak().setStatusNull(true);
-        getScheduledProduction().setStatusNull(true);
-      }
-    }
-    else
-    {
-      //no link, create one if possible
-      BOrd ord = BOrd.make(getInBreakScheduleOrd());
-      if(isOrdValid(ord))
-      {
-        BLink breakLink = new BLink(ord,"out","inScheduledBreak",true);
-        this.add(BREAK_SCHEDULE_CONTAINER_LINK, breakLink);
-        breakLink.activate();
-        getScheduledBreak().setStatus(0);
-        getScheduledProduction().setStatus(0);
-      }
-      else
-      {
-        getScheduledBreak().setStatusNull(true);
-        getScheduledProduction().setStatusNull(true);
-      }
-    }
-    breakLinks = null;
     
+    if(!linkSlots(getInShiftScheduleOrd(),       "nextTime", inShiftEndTime,       "ShiftEndScheduleLink"))
+      setInShiftEndTime(BAbsTime.NULL);
     
-    //see if the object already has a link
-    BLink[] shiftEndLinks = this.getLinks(this.getSlot("inShiftEndTime"));
-    if(shiftEndLinks.length>0)
+    if(linkSlots(getInBreakScheduleOrd(),        "out",      inScheduledBreak,     "BreakScheduleLink"))
+      getScheduledBreak().setStatusNull(false);
+    else
+      getScheduledBreak().setStatusNull(true);
+    if(linkSlots(getInShiftToResetCountsOnOrd(), "out",      shiftToResetCountsOn, "ShiftToResetCountsLink"))
+      addSlotFlag(inShiftToResetCountsOn, Flags.READONLY);
+      else
+      removeSlotFlag(inShiftToResetCountsOn, Flags.READONLY);
+    
+    if(linkSlots(getInShiftTargetsOrd(),         "data",     inTargetData,         "TargetsLink"))
     {
-      //will only alter link 0, not meant as a many to 1!!!
-      //try to make ord from input link string
-      BOrd ord = BOrd.make(getInShiftScheduleOrd());
-      if(isOrdValid(ord))
+      if(!shiftTargetValuesLinkActive)
       {
-        shiftEndLinks[0].setSourceOrd(ord);
+        shiftTargetValuesLinkActive = true;
+        refreshTargetData();
+      }
+      
+      //Make the slots read only
+      for(int i = 1; i <= getInNumberOfShifts(); i++) addSlotFlag("shift_" + i + "_Target", Flags.READONLY);
       }
       else
       {
-        shiftEndLinks[0].deactivate();
-        this.remove(shiftEndLinks[0]);
-      }
-    }
-    else
-    {
-      //no link, create one if possible
-      BOrd ord = BOrd.make(getInShiftScheduleOrd());
-      if(isOrdValid(ord))
+      if(shiftTargetValuesLinkActive)
       {
-        BLink shiftEndLink = new BLink(ord,"nextTime","inShiftEndTime",true);
-        this.add(SHIFT_END_SCHEDULE_CONTAINER_LINK, shiftEndLink);
-        shiftEndLink.activate();
+        shiftTargetValuesLinkActive = false;
+        refreshTargetData();
       }
+      
+      //Make the slots read/write
+      for(int i = 1; i <= getInNumberOfShifts(); i++) removeSlotFlag("shift_" + i + "_Target", Flags.READONLY);
     }
-    shiftEndLinks = null;
-
+    
+    updateDurration();
+    getScheduledProduction().setStatusNull(getCurrentShift().getStatus().isNull() || getScheduledBreak().getStatus().isNull());
   }
   
   void updateTimer()
@@ -1026,6 +1290,10 @@ public class BProductionCounter extends BComponent
   private void refresh(BAbsTime absTimeThisChanged)
   {
     setCurrentShiftElapsedTime(roundToNearestSecond(getCurrentShiftStartTime().delta(absTimeThisChanged).getMillis()));
+    
+    if(getInShiftEndTime() == BAbsTime.NULL)
+      setCurrentShiftRemainingTime(BRelTime.make(0));
+    else
     setCurrentShiftRemainingTime(absTimeThisChanged.delta(getInShiftEndTime()));
     
     double mSeconds;
@@ -1043,13 +1311,15 @@ public class BProductionCounter extends BComponent
       
       if(getDeterminePartsPerHourAndCycleTimeBasedOn().getOrdinal() == 0 && getCurrentShiftTotalParts() > 0)
       {
-        setCurrentShiftAvgPartsPerHour(getCurrentShiftTotalParts()/hours);
-        setCurrentShiftAvgCycleTime(BRelTime.make((long) (mSeconds/getCurrentShiftTotalParts())));
+        setCurrentShiftAvgPartsPerHour(((double) getCurrentShiftTotalParts()) / hours);
+        setCurrentShiftAvgCycleTime(BRelTime.make((long) (mSeconds / getCurrentShiftTotalParts())));
+        getCurrentShiftPercentageOfTarget().setValue((((double) getCurrentShiftTotalParts()) / getCurrentShiftTarget().getValue()) * 100.0);
       }
       else if(getDeterminePartsPerHourAndCycleTimeBasedOn().getOrdinal() == 1 && getCurrentShiftGoodParts() > 0)
       {
-        setCurrentShiftAvgPartsPerHour(getCurrentShiftGoodParts()/hours);
-        setCurrentShiftAvgCycleTime(BRelTime.make((long) (mSeconds/getCurrentShiftGoodParts())));
+        setCurrentShiftAvgPartsPerHour(((double) getCurrentShiftGoodParts()) / hours);
+        setCurrentShiftAvgCycleTime(BRelTime.make((long) (mSeconds / getCurrentShiftGoodParts())));
+        getCurrentShiftPercentageOfTarget().setValue((((double) getCurrentShiftGoodParts()) / getCurrentShiftTarget().getValue()) * 100.0);
       }
       else
       {
@@ -1057,6 +1327,8 @@ public class BProductionCounter extends BComponent
         setCurrentShiftAvgCycleTime(BRelTime.make(0));
       }
     }
+    setCurrentShiftPercentageOfTargetPph((getCurrentShiftAvgPartsPerHour() / getCurrentShiftTargetPartsPerHour()) * 100);
+    setCurrentShiftPercentageOfTargetCycleTime((((double)getCurrentShiftTargetCycleTime().getMillis()) / ((double) getCurrentShiftAvgCycleTime().getMillis())) * 100.0);
     
     mSeconds = getTodayTotalHours().getMillis() + absTimeThisChanged.getMillis();
     mSeconds = mSeconds - getCurrentShiftStartTime().getMillis();
@@ -1068,13 +1340,15 @@ public class BProductionCounter extends BComponent
     
     if(getDeterminePartsPerHourAndCycleTimeBasedOn().getOrdinal() == 0 && getTodayTotalParts() > 0)
     {
-      setTodayAvgPartsPerHour(getTodayTotalParts()/hours);
-      setTodayAvgCycleTime(BRelTime.make((long) (mSeconds/getTodayTotalParts())));
+      setTodayAvgPartsPerHour(((double) getTodayTotalParts()) / hours);
+      setTodayAvgCycleTime(BRelTime.make((long) (mSeconds / getTodayTotalParts())));
+      getTodayPercentageOfTarget().setValue(((double) getTodayTotalParts() / getTodayTarget().getValue()) * 100);
     }
     else if(getDeterminePartsPerHourAndCycleTimeBasedOn().getOrdinal() == 1 && getTodayGoodParts() > 0)
     {
-      setTodayAvgPartsPerHour(getTodayGoodParts()/hours);
-      setTodayAvgCycleTime(BRelTime.make((long) (mSeconds/getTodayGoodParts())));
+      setTodayAvgPartsPerHour(((double) getTodayGoodParts()) / hours);
+      setTodayAvgCycleTime(BRelTime.make((long) (mSeconds / getTodayGoodParts())));
+      getTodayPercentageOfTarget().setValue(((double) getTodayGoodParts() / getTodayTarget().getValue()) * 100);
     }
     else
     {
@@ -1092,19 +1366,174 @@ public class BProductionCounter extends BComponent
     
     if(getDeterminePartsPerHourAndCycleTimeBasedOn().getOrdinal() == 0 && getTotalParts() > 0)
     {
-      setTotalAvgPartsPerHour(getTotalParts()/hours);
-      setTotalAvgCycleTime(BRelTime.make((long) (mSeconds/getTotalParts())));
+      setTotalAvgPartsPerHour(((double) getTotalParts()) / hours);
+      setTotalAvgCycleTime(BRelTime.make((long) (mSeconds / getTotalParts())));
     }
     else if(getDeterminePartsPerHourAndCycleTimeBasedOn().getOrdinal() == 1 && getTotalGoodParts() > 0)
     {
-      setTotalAvgPartsPerHour(getTotalGoodParts()/hours);
-      setTotalAvgCycleTime(BRelTime.make((long) (mSeconds/getTotalGoodParts())));
+      setTotalAvgPartsPerHour(((double) getTotalGoodParts()) / hours);
+      setTotalAvgCycleTime(BRelTime.make((long) (mSeconds / getTotalGoodParts())));
     }
     else
     {
       setTotalAvgPartsPerHour(0);
       setTotalAvgCycleTime(BRelTime.make(0));
     }
+    
+    setCurrentShiftPercentageGoodParts(((double) getCurrentShiftGoodParts() / (double) getCurrentShiftTotalParts()) * 100);
+    setCurrentShiftPercentageBadParts(((double) getCurrentShiftBadParts() / (double) getCurrentShiftTotalParts()) * 100);
+    setTodayPercentageGoodParts(((double) getTodayGoodParts() / (double) getTodayTotalParts()) * 100);
+    setTodayPercentageBadParts(((double) getTodayBadParts() / (double) getTodayTotalParts()) * 100);
+    setTotalPercentageGoodParts(((double) getTotalGoodParts() / (double) getTotalParts()) * 100);
+    setTotalPercentageBadParts(((double) getTotalBadParts() / (double) getTotalParts()) * 100);
+  }
+  
+  /**
+   *Checks the schedule links and recreates if needed. This is run after copying the object to ensure it is still linked properly.
+   * The linking logic was borrowed && modified from axCommunity's BDynamicLinkNumeric, written by Mike Arnott, Kors Engineering.
+   * 
+   * @param sourceOrd - The ord of the source object.
+   * @param sourceSlotName - The name of the source slot.
+   * @param targetSlotName - The name of the target slot name.
+   * @param linkName - The name of the link slot that will be created.
+   * @return Returns true if the link is good.
+   */
+  private boolean linkSlots(String sourceOrd, String sourceSlotName, Slot targetSlotName, String linkName)
+  {
+    sourceOrd = BFormat.make(sourceOrd).format(this.asComponent());
+    boolean linkIsOk = false;
+    
+    //see if the object already has a link
+    BLink[] links = this.getLinks(targetSlotName);
+    if(links.length>0)
+    {
+      //will only alter link 0, not meant as a many to 1!!!
+      //try to make ord from input link string
+      BOrd ord = BOrd.make(sourceOrd);
+      if(isOrdValid(ord))
+      {
+        logger.trace(getSlotPath().toString() + " - link already exists and ord is valid\r\nOrd specified: " + sourceOrd);
+        boolean linkIsActive = false;
+        try
+        {
+          links[0].setSourceOrd(ord);
+          linkIsActive = links[0].isActive();
+          if(linkIsActive) logger.trace(getSlotPath().toString() + " - existing link is active");
+          else logger.trace(getSlotPath().toString() + " - existing link is NOT active");
+          linkIsOk = true;
+        }
+        catch (Exception e)
+        {
+          linkIsOk = false;
+          if(!logger.isTraceOn() && !linkIsActive) logger.error(getSlotPath().toString() + " - existing link is NOT active");
+          logger.error(getSlotPath().toString() + " - Could not set source ord on existing link!");
+          logger.error(getSlotPath().toString() + e.getMessage());
+          if(logger.isTraceOn()) e.printStackTrace();
+          
+          logger.trace(getSlotPath().toString() + " - Deactivating and removing existing link");
+          try
+          {
+            links[0].deactivate();
+            this.remove(links[0]);
+          }
+          catch (Exception f)
+          {
+            linkIsOk = false;
+            logger.error(getSlotPath().toString() + " - Could not deactivate and remove invalid link!");
+            logger.error(getSlotPath().toString() + f.getMessage());
+            if(logger.isTraceOn()) f.printStackTrace();
+          }
+        }
+        
+        if(!linkIsActive)
+        {
+          logger.trace(getSlotPath().toString() + " - Link is inactive, attempting to activate link");
+          try
+          {
+            links[0].activate();
+            linkIsOk = true;
+          }
+          catch (Exception e)
+          {
+            linkIsOk = false;
+            logger.error(getSlotPath().toString() + " - Could not activate link! Source slot does not exist!\r\nSource ord specified: " + sourceOrd + "\r\nSource slot specified: " + sourceSlotName);
+            logger.trace(getSlotPath().toString() + e.getMessage());
+            if(logger.isTraceOn()) e.printStackTrace();
+          }
+          
+          logger.trace(getSlotPath().toString() + " - Removing existing link");
+          try
+          {
+            this.remove(links[0]);
+          }
+          catch (Exception e)
+          {
+            linkIsOk = false;
+            logger.error(getSlotPath().toString() + " - Could not deactivate and remove invalid link!  This needs to be resolved manually!");
+            logger.error(getSlotPath().toString() + e.getMessage());
+            e.printStackTrace();
+          }
+        }
+      }
+      else
+      {
+        logger.trace(getSlotPath().toString() + " - Invalid source ord provided!\r\nOrd specified: " + sourceOrd);
+        logger.trace(getSlotPath().toString() + " - Removing existing link");
+        links[0].deactivate();
+        this.remove(links[0]);
+        linkIsOk = false;
+      }
+    }
+    else
+    {
+      logger.trace(getSlotPath().toString() + " - Link does not exist, attempting to create one.\r\nOrd specified: " + sourceOrd);
+      //no link, create one if possible
+      BOrd ord = BOrd.make(sourceOrd);
+      if(isOrdValid(ord))
+      {
+        logger.trace(getSlotPath().toString() + " - Ord is valid");
+        BLink link = new BLink(ord,sourceSlotName,targetSlotName.getName(),true);
+        
+        try {this.add(linkName, link);}
+        catch (Exception e)
+        {
+          logger.error(getSlotPath().toString() + " - Could not create a new slot named " + linkName + ", because this slot name already exixts!");
+          logger.trace(getSlotPath().toString() + e.getMessage());
+          if(logger.isTraceOn()) e.printStackTrace();
+          links = null;
+          return false;
+        }
+        
+        logger.trace(getSlotPath().toString() + " - Activating link");
+        try
+        {
+          link.activate();
+          linkIsOk = true;
+        }
+        catch (Exception e)
+        {
+          logger.error(getSlotPath().toString() + " - Source slot does not exist!\r\nSource ord specified: " + sourceOrd + "\r\nSource slot specified: " + sourceSlotName);
+          logger.trace(getSlotPath().toString() + e.getMessage());
+          if(logger.isTraceOn()) e.printStackTrace();
+          linkIsOk = false;
+        }
+        
+        if(!linkIsOk)
+        {
+          logger.trace(getSlotPath().toString() + " - Could not activate the link, attempting to remove the slot");
+          try {this.remove(linkName);}
+          catch (Exception e)
+          {
+            logger.error(getSlotPath().toString() + " - Could not remove the link to the invalid slot on the source!");
+            logger.error(getSlotPath().toString() + e.getMessage());
+            e.printStackTrace();
+          }
+        }
+      }
+      else linkIsOk = false;
+    }
+    links = null;
+    return linkIsOk;
   }
   
   /**Checks to ensure the ord is valid before linking.*/
@@ -1125,46 +1554,62 @@ public class BProductionCounter extends BComponent
   }
   
   /**Creates all of the shift_*_* slots used to track part counts and times*/
-  public void shiftSlots(int SlotCount, Context cx)
+  private void shiftSlots(int SlotCount, Context cx)
   {
     try
     {
-      for(int i=1; i<SlotCount+1; i++)
+      for(int i=1; i<=SlotCount; i++)
       { 
         
         //TODO: Create a weekly counter
         //TODO: Create max good && max bad for each shift
         //TODO: Track average production per shift 
         
-        if(((BObject)get("shift_"+i+"_GoodParts"))==null)       {this.add(("shift_"+i+"_GoodParts"),        new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(0)), cx);}
-        if(((BObject)get("shift_"+i+"_BadParts"))==null)        {this.add(("shift_"+i+"_BadParts"),         new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(0)), cx);}
-        if(((BObject)get("shift_"+i+"_AvgPartsPerHour"))==null) {this.add(("shift_"+i+"_AvgPartsPerHour"),  new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(1)), cx);}
-        if(((BObject)get("shift_"+i+"_AvgCycleTime"))==null)    {this.add(("shift_"+i+"_AvgCycleTime"),     BRelTime.make(0), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.SHOW_MILLISECONDS,false), cx);}
-        if(((BObject)get("shift_"+i+"_TotalParts"))==null)      {this.add(("shift_"+i+"_TotalParts"),       new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(0)), cx);}
-        if(((BObject)get("shift_"+i+"_Hours"))==null)           {this.add(("shift_"+i+"_Hours"),            BRelTime.make(0), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.SHOW_MILLISECONDS,false), cx);}
-        if(((BObject)get("shift_"+i+"_Breaks"))==null)          {this.add(("shift_"+i+"_Breaks"),           new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(0)), cx);}
-        if(((BObject)get("shift_"+i+"_BreakHours"))==null)      {this.add(("shift_"+i+"_BreakHours"),       BRelTime.make(0), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.SHOW_MILLISECONDS,false), cx);}
+        if(((BObject)get("shift_"+i+"_GoodParts"))==null) {this.add(("shift_"+i+"_GoodParts"), new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(0)), cx);}
+        if(((BObject)get("shift_"+i+"_BadParts"))==null) {this.add(("shift_"+i+"_BadParts"), new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(0)), cx);}
+        if(((BObject)get("shift_"+i+"_PercentageGoodParts"))==null) {this.add(("shift_"+i+"_PercentageGoodParts"), new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.tryMake("showUnits=b:true|units=u:percent;%;;;|precision=i:1"), cx);}
+        if(((BObject)get("shift_"+i+"_PercentageBadParts"))==null) {this.add(("shift_"+i+"_PercentageBadParts"), new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.tryMake("showUnits=b:true|units=u:percent;%;;;|precision=i:1"), cx);}
+        if(((BObject)get("shift_"+i+"_TotalParts"))==null) {this.add(("shift_"+i+"_TotalParts"), new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(0)), cx);}
+        if(((BObject)get("shift_"+i+"_AvgPartsPerHour"))==null) {this.add(("shift_"+i+"_AvgPartsPerHour"), new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(1)), cx);}
+        if(((BObject)get("shift_"+i+"_AvgCycleTime"))==null) {this.add(("shift_"+i+"_AvgCycleTime"), BRelTime.make(0), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.SHOW_MILLISECONDS,false), cx);}
+        if(((BObject)get("shift_"+i+"_Hours"))==null) {this.add(("shift_"+i+"_Hours"), BRelTime.make(0), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.SHOW_MILLISECONDS,false), cx);}
+        if(((BObject)get("shift_"+i+"_Breaks"))==null) {this.add(("shift_"+i+"_Breaks"), new BStatusNumeric(), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(0)), cx);}
+        if(((BObject)get("shift_"+i+"_BreakHours"))==null) {this.add(("shift_"+i+"_BreakHours"), BRelTime.make(0), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.SHOW_MILLISECONDS,false), cx);}
+        if(((BObject)get("shift_"+i+"_Target"))==null)
+        {
+          if(shiftTargetValuesLinkActive) this.add(("shift_"+i+"_Target"), new BStatusNumeric(0,BStatus.ok), Flags.SUMMARY|Flags.READONLY, BFacets.make(BFacets.PRECISION, BInteger.make(1)), cx);
+          else this.add(("shift_"+i+"_Target"), new BStatusNumeric(0,BStatus.ok), Flags.SUMMARY, BFacets.make(BFacets.PRECISION, BInteger.make(1)), cx);
+        }
+        if(((BObject)get("shift_"+i+"_PercentageOfTarget"))==null) {this.add(("shift_"+i+"_PercentageOfTarget"), new BStatusNumeric(0,BStatus.ok), Flags.SUMMARY|Flags.READONLY, BFacets.tryMake("showUnits=b:true|units=u:percent;%;;;|precision=i:0"), cx);}
       }
       
       for(int i=SlotCount+1;
           (BObject)get("shift_"+i+"_GoodParts")!=null ||
           (BObject)get("shift_"+i+"_BadParts")!=null ||
+          (BObject)get("shift_"+i+"_PercentageGoodParts")!=null || 
+          (BObject)get("shift_"+i+"_PercentageBadParts")!=null || 
           (BObject)get("shift_"+i+"_AvgPartsPerHour")!=null || 
           (BObject)get("shift_"+i+"_AvgCycleTime")!=null ||
           (BObject)get("shift_"+i+"_TotalParts")!=null ||
           (BObject)get("shift_"+i+"_Hours")!=null ||
           (BObject)get("shift_"+i+"_Breaks")!=null ||
-          (BObject)get("shift_"+i+"_BreakHours")!=null;
+          (BObject)get("shift_"+i+"_BreakHours")!=null || 
+          (BObject)get("shift_"+i+"_Target")!=null || 
+          (BObject)get("shift_"+i+"_PercentageOfTarget")!=null;
           i++)
       {
-        if(((BObject)get("shift_"+i+"_GoodParts"))!=null)       {this.remove("shift_"+i+"_GoodParts");}             
-        if(((BObject)get("shift_"+i+"_BadParts"))!=null)        {this.remove("shift_"+i+"_BadParts");}             
+        if(((BObject)get("shift_"+i+"_GoodParts"))!=null) {this.remove("shift_"+i+"_GoodParts");}             
+        if(((BObject)get("shift_"+i+"_BadParts"))!=null) {this.remove("shift_"+i+"_BadParts");}             
+        if(((BObject)get("shift_"+i+"_PercentageGoodParts"))!=null) {this.remove("shift_"+i+"_PercentageGoodParts");}             
+        if(((BObject)get("shift_"+i+"_PercentageBadParts"))!=null) {this.remove("shift_"+i+"_PercentageBadParts");}             
+        if(((BObject)get("shift_"+i+"_TotalParts"))!=null) {this.remove("shift_"+i+"_TotalParts");}             
         if(((BObject)get("shift_"+i+"_AvgPartsPerHour"))!=null) {this.remove("shift_"+i+"_AvgPartsPerHour");}             
-        if(((BObject)get("shift_"+i+"_AvgCycleTime"))!=null)    {this.remove("shift_"+i+"_AvgPartsPerHour");}             
-        if(((BObject)get("shift_"+i+"_TotalParts"))!=null)      {this.remove("shift_"+i+"_TotalParts");}             
-        if(((BObject)get("shift_"+i+"_Hours"))!=null)           {this.remove("shift_"+i+"_Hours");}             
-        if(((BObject)get("shift_"+i+"_Breaks"))!=null)          {this.remove("shift_"+i+"_Breaks");}             
-        if(((BObject)get("shift_"+i+"_BreakHours"))!=null)      {this.remove("shift_"+i+"_BreakHours");}             
+        if(((BObject)get("shift_"+i+"_AvgCycleTime"))!=null) {this.remove("shift_"+i+"_AvgCycleTime");}             
+        if(((BObject)get("shift_"+i+"_Hours"))!=null) {this.remove("shift_"+i+"_Hours");}             
+        if(((BObject)get("shift_"+i+"_Breaks"))!=null) {this.remove("shift_"+i+"_Breaks");}             
+        if(((BObject)get("shift_"+i+"_BreakHours"))!=null) {this.remove("shift_"+i+"_BreakHours");}             
+        if(((BObject)get("shift_"+i+"_Target"))!=null) {this.remove("shift_"+i+"_Target");}             
+        if(((BObject)get("shift_"+i+"_PercentageOfTarget"))!=null) {this.remove("shift_"+i+"_PercentageOfTarget");}             
       }
     }
     catch (Exception e)
@@ -1172,12 +1617,14 @@ public class BProductionCounter extends BComponent
       logger.error(getSlotPath().toString() + e.getMessage());
       e.printStackTrace();
     }
+    
+    refreshTargetData();
   }
   
   private void scheduleMidnightTimer()
   {
-    //Create a random number that is between 0-3000 seconds
-    int randomNumber = (int) ((Math.random()) * 3000);
+    //Create a random number that is between 0-300 seconds
+    int randomNumber = (int) ((Math.random()) * 300000);
     int offsetMillis;
     int offsetSeconds = 0;
     if(randomNumber >= 1000)
@@ -1200,6 +1647,11 @@ public class BProductionCounter extends BComponent
     return BRelTime.make((long) temp);
   }
   
+  private BAbsTime roundToNearestSecond()
+  {
+    return roundToNearestSecond(BAbsTime.now());
+  }
+  
   private BAbsTime roundToNearestSecond(BAbsTime rawAbsTime)
   {
     BAbsTime tempTime = rawAbsTime;
@@ -1215,5 +1667,52 @@ public class BProductionCounter extends BComponent
     if(rawRelTime.getMillis() - (long)temp >= 500) temp = temp + 1000; 
     return BRelTime.make((long) temp);
   }
+  
+  private BRelTime roundToNearestMinute(BRelTime rawRelTime)
+  {
+    BRelTime result = BRelTime.makeMinutes(rawRelTime.getMinutes());
+    if(roundToNearestSecond(rawRelTime).getSeconds() - result.getSeconds() >= 30) result = BRelTime.makeMinutes(result.getMinutes() + 1);
+    return result;
+  }
+  
+  private void addSlotFlag(Property inPropertyName, int flag)
+  {
+    Slot updateSlot = getSlot(inPropertyName.getName());
+    setFlags(updateSlot, (getFlags(updateSlot) | flag));
+  }
+  
+  private void removeSlotFlag(Property inPropertyName, int flag)
+  {
+    Slot updateSlot = getSlot(inPropertyName.getName());
+    setFlags(updateSlot, (getFlags(updateSlot) & ~flag));
+  }
+  
+  private void addSlotFlag(String inPropertyName, int flag)
+  {
+    Slot updateSlot = getSlot(inPropertyName);
+    setFlags(updateSlot, (getFlags(updateSlot) | flag));
+  }
+  
+  private void removeSlotFlag(String inPropertyName, int flag)
+  {
+    Slot updateSlot = getSlot(inPropertyName);
+    setFlags(updateSlot, (getFlags(updateSlot) & ~flag));
+  }
+  
+  public String getPlexContainerStatusString(double v)
+  {
+    String containerStatusPlexString = ""+v;
+    
+    switch((int) v)
+    {
+      case 0: containerStatusPlexString = "0"; break;
+      case 1: containerStatusPlexString = "OK"; break;
+      case 2: containerStatusPlexString = "Hold"; break;
+      case 4: containerStatusPlexString = "Rejected"; break;
+      case 8: containerStatusPlexString = "Pass-Through"; break;
+    }
+    return containerStatusPlexString;
+  }
+  
   public static final Log logger = Log.getLog(TYPE.getModule().getModuleName() + "." + TYPE.getTypeName());
 }

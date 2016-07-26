@@ -105,6 +105,7 @@
 				<p n="Modulo"							m="k=axCommunity" t="k:Modulo" />
 				<p n="ProductionCounter"				m="k=axCommunity" t="k:ProductionCounter" />
 				<p n="RoundUp"							m="k=axCommunity" t="k:RoundUp" />
+				<p n="ShiftTargets"						m="k=axCommunity" t="k:ShiftTargets" />
 				<p n="StatusNumericFifo"				m="w=axCommunity" t="w:StatusNumericFifo"/>
 				<p n="TrAdd"							m="k=axCommunity" t="k:TrAdd" />
 				<p n="TrCopy"							m="k=axCommunity" t="k:TrCopy" />
