@@ -8,11 +8,15 @@ import java.util.StringTokenizer;
 import javax.baja.control.BEnumWritable;
 import javax.baja.log.Log;
 import javax.baja.naming.SlotPath;
+import javax.baja.status.BStatus;
+import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
+import javax.baja.sys.Action;
 import javax.baja.sys.BEnumRange;
 import javax.baja.sys.BFacets;
 import javax.baja.sys.BIcon;
+import javax.baja.sys.BString;
 import javax.baja.sys.Context;
 import javax.baja.sys.Flags;
 import javax.baja.sys.Property;
@@ -26,6 +30,46 @@ import javax.baja.util.TextUtil;
 
 public class BEnumFromCommaSepVar extends BEnumWritable
 {
+	// WORK IN PROGRESS FOR TWO POTENTIAL NEW SLOTS BELOW....
+	// /** When true and if a zero index isn't already specified in csv the 0 index will be populated with the value set in slot 'index0Value'.*/
+	// public final static Property reserveIndex0 = newProperty(0|Flags.SUMMARY, new BStatusBoolean(false));
+	// public BStatusBoolean getReserveIndex0() { return (BStatusBoolean)get(reserveIndex0); }
+	// public void setReserveIndex0(BStatusBoolean v) { set(reserveIndex0, v); }
+	
+	// /** The value to use for the 0 index when slot 'reserveIndex0' is set to true.*/
+	// public static final Property index0Value = newProperty(0, BString.DEFAULT,null);
+	// public String getIndex0Value() { return getString(index0Value); }
+	// public void setIndex0Value(String v) { setString(index0Value,v,null); }
+	
+	
+	
+	public static final Action SetNull = newAction(Flags.DEFAULT_ON_CLONE,null);
+	public void SetNull(){if(!Sys.atSteadyState()||!isRunning()){return;} invoke(SetNull,null,null);}
+	public void doSetNull()
+	{
+		getFallback().setStatus(BStatus.nullStatus);
+		getIn16().setStatus(BStatus.nullStatus);
+		getIn15().setStatus(BStatus.nullStatus);
+		getIn14().setStatus(BStatus.nullStatus);
+		getIn13().setStatus(BStatus.nullStatus);
+		getIn12().setStatus(BStatus.nullStatus);
+		getIn11().setStatus(BStatus.nullStatus);
+		getIn10().setStatus(BStatus.nullStatus);
+		getIn9().setStatus(BStatus.nullStatus);
+		getIn8().setStatus(BStatus.nullStatus);
+		getIn7().setStatus(BStatus.nullStatus);
+		getIn6().setStatus(BStatus.nullStatus);
+		getIn5().setStatus(BStatus.nullStatus);
+		getIn4().setStatus(BStatus.nullStatus);
+		getIn3().setStatus(BStatus.nullStatus);
+		getIn2().setStatus(BStatus.nullStatus);
+		getIn1().setStatus(BStatus.nullStatus);
+	}
+	
+	
+	
+	
+	
 	/**
 	* This the csv list to use for the enum string outputs
 	* To use, put in a value something like:
@@ -42,7 +86,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 	* To use no key value is required, put in a value something like the 
 	* someValue,anotherValue,moreValue,etcValue
 	* */
-	public static final Property inCsvWithNoIndex = newProperty(0,new BStatusString(""),BFacets.make("multiLine",true));
+	public static final Property inCsvWithNoIndex = newProperty(Flags.SUMMARY,new BStatusString(""),BFacets.make("multiLine",true));
 	public BStatusString getInCsvWithNoIndex() {return (BStatusString)get(inCsvWithNoIndex);}
 	public void setInCsvWithNoIndex(BStatusString v) {set(inCsvWithNoIndex, v);}
 	
@@ -50,7 +94,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
     public BStatusString getOutString() { return (BStatusString)get(outString);}
     public void setOutString(BStatusString v) {set(outString,v);}
 	
-	public static final Property outNumeric  = newProperty(0|Flags.SUMMARY, new BStatusNumeric(0), BFacets.makeNumeric(0));
+	public static final Property outNumeric  = newProperty(Flags.SUMMARY, new BStatusNumeric(0), BFacets.makeNumeric(0));
 	public BStatusNumeric getOutNumeric() {return (BStatusNumeric) get(outNumeric); }
 	public void setOutNumeric(BStatusNumeric v) {set(outNumeric, v);}
 	
@@ -69,17 +113,45 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 		//******************************************************************************************************
 		if (property == out) 
 		{
-			/*
-			 * Setting the slot status is commented out because if you have something linked to the slot that is triggered on change it will get fired twice,
-			 * once for the value change and once for the status change. I was thinking of adding a boolean option input slot to allow someone to allow the status change or not.
-			 * However, if everything works correctly (no exception errors) then you should never need to set the status of the slot. 
-			 */
-			
-			try					{setOutString(new BStatusString(((BEnumRange)this.getFacets().get("range")).getDisplayTag(this.getOut().getValue().getOrdinal(), null)/*, BStatus.ok*/));	}
-			catch (Exception e)	{setOutString(new BStatusString(""/*, BStatus.nullStatus*/));																								}
-			
-			try					{setOutNumeric(new BStatusNumeric((double)this.getOut().getValue().getOrdinal()/*, BStatus.ok*/));	}
-			catch (Exception e)	{setOutNumeric(new BStatusNumeric(0/*, BStatus.ok*/));}
+			if(getOut().getStatus().isValid()==true)
+			{
+				try
+				{
+					getOutString().setValue(((BEnumRange)this.getFacets().get("range")).getDisplayTag(this.getOut().getValue().getOrdinal(), null));
+					
+					if(getOutString().getStatus().isValid()==false)
+					{
+						getOutString().setStatus(BStatus.ok);
+					}
+				}
+				catch (Exception e)
+				{
+					setOutString(new BStatusString("", BStatus.nullStatus));
+				}
+				
+				
+				try					
+				{
+					getOutNumeric().setValue((double)this.getOut().getValue().getOrdinal());
+					
+					if(getOutNumeric().getStatus().isValid()==false)
+					{
+						getOutNumeric().setStatus(BStatus.ok);
+					}
+					
+				}
+				catch (Exception e)	
+				{
+					setOutNumeric(new BStatusNumeric(0, BStatus.nullStatus));
+				}
+				
+				
+			}
+			else
+			{
+				setOutString(new BStatusString("", BStatus.nullStatus));
+				setOutNumeric(new BStatusNumeric(0, BStatus.nullStatus));
+			}
 			
 		}  
 		
