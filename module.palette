@@ -62,6 +62,7 @@
 				<p n="BooleanRotateOnExecute"			m="k=axCommunity" t="k:BooleanRotateOnExecute"/>
 				<p n="BooleanToggle"					m="k=axCommunity" t="k:BooleanToggle"/>
 				<p n="BrushSwitch"						m="k=axCommunity" t="k:BrushSwitch"/>
+				<p n="DynamicLinks"						m="w=axCommunity" t="w:DynamicLinks" />
 				<p n="DynamicLinkBoolean"				m="w=axCommunity" t="w:DynamicLinkBoolean" />
 				<p n="DynamicLinkNumeric"				m="w=axCommunity" t="w:DynamicLinkNumeric" />
 				<p n="DynamicLinkString"				m="w=axCommunity" t="w:DynamicLinkString" />

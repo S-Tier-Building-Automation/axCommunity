@@ -29,10 +29,6 @@ import javax.baja.util.BFormat;
 import javax.baja.util.TextUtil;
 
 /**
-@author    Eric Bishop 
-@creation  23 Mar 12
-@version   $Revision: 4$ $Date: 07/26/2016 10:36 AM$
-<br>
 This object tracks part counts and based on shift and break schedules,<br>
 provides parts per shift as well as calculate parts per hour and cycle<br>
 time.  Also outputs total breaks and total time on break.<br> 
@@ -40,6 +36,10 @@ time.  Also outputs total breaks and total time on break.<br>
 <br>
 <br>
 The schedule linking logic was borrowed && modified from axCommunity's BDynamicLinkNumeric, written by Mike Arnott, Kors Engineering.<br>
+<br>
+@author    Eric Bishop 
+@creation  23 Mar 12
+@version   $Revision: 4$ $Date: 07/26/2016 10:36 AM$
 <br>
 Updates:<br>
         2015-03-09 - Fixed roundToNearestSecond(BAbsTime).  When the input was 59 seconds, it threw errors when attempting to round.<br>

@@ -43,6 +43,7 @@
 	<type name="LimitOutput"						class="org.axcommunity.niagara.math.BLimitOutput"/>
 	<type name="NumericConstantAdjustable"			class="org.axcommunity.niagara.math.BNumericConstantAdjustable"/>
 	<type name="ProductionCounter"					class="org.axcommunity.niagara.math.BProductionCounter"/>
+	<type name="ShiftTargets"						class="org.axcommunity.niagara.math.BShiftTargets"/>
 	
 	
 	<type name="BrushSwitch"						class="org.axcommunity.niagara.logic.BBrushSwitch"/>
