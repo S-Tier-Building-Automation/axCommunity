@@ -46,6 +46,7 @@
 	<type name="ShiftTargets"						class="org.axcommunity.niagara.math.BShiftTargets"/>
 	
 	
+	
 	<type name="BrushSwitch"						class="org.axcommunity.niagara.logic.BBrushSwitch"/>
 	<type name="FontSwitch"							class="org.axcommunity.niagara.logic.BFontSwitch"/>
 	<type name="ToggleSwitch"						class="org.axcommunity.niagara.logic.BToggleSwitch"/>

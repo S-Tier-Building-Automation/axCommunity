@@ -77,6 +77,7 @@
 	<type name="DynamicLinkNumeric"					class="org.axcommunity.niagara.logic.BDynamicLinkNumeric" />
 	<type name="DynamicLinkBoolean"					class="org.axcommunity.niagara.logic.BDynamicLinkBoolean" />
 	<type name="DynamicLinkString"					class="org.axcommunity.niagara.logic.BDynamicLinkString" />
+	<type name="DynamicLinks"						class="org.axcommunity.niagara.logic.BDynamicLinks" />
 	
 	<type name="BqlNumericRecap"					class="org.axcommunity.niagara.bql.BBqlNumericRecap"/> 
 	<type name="TrendAnalyzer"						class="org.axcommunity.niagara.bql.BTrendAnalyzer"/>
