@@ -24,15 +24,19 @@ extends BComponent
 
 	public void started()
 	{
+    if(!Sys.atSteadyState() || !isRunning()) return;
 		setOut(  getIn().getValue() );
 	}
+	
+  public void atSteadyState() throws Exception
+  {
+    if(!Sys.atSteadyState() || !isRunning()) return;
+    setOut(  getIn().getValue() );
+  }
 
 	public void changed(Property p, Context cx)
 	{
-		if(!Sys.atSteadyState() || !isRunning())
-		{
-			return;
-		}
+    if(!Sys.atSteadyState() || !isRunning()) return;
 
 		if (p == in)
 		{
@@ -42,6 +46,4 @@ extends BComponent
 
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");
-
-
 }
