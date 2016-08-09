@@ -1,9 +1,0 @@
-
-MOVED to 
-'AX\src\doc\index.html'					for the AX version.
-'N4\axCommunity-doc\src\doc\index.html'	for the N4 version.
-
-Be sure to update both files even if you only made 
-a change to one of the vesions. If your change was 
-to only one version make a note of that in your comment,
-otherwise it will be assumed the change was made to both.
