@@ -4,7 +4,7 @@
 
 group = 'Community'
 
-def moduleVersion = '16.06.28'
+def moduleVersion = '16.08.12'
 def moduleVersionPatch = [:]
 
 // For example, to patch envCtrlDriver module as 5.0.1.1

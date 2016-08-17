@@ -8,6 +8,7 @@ import javax.baja.status.BStatusNumeric;
 import javax.baja.sys.Action;
 import javax.baja.sys.BAbsTime;
 import javax.baja.sys.BComponent;
+import javax.baja.sys.BIcon;
 import javax.baja.sys.BMonth;
 import javax.baja.sys.Flags;
 import javax.baja.sys.Property;
@@ -249,6 +250,9 @@ public class BTrendAnalyzer extends BComponent
   
   public Type getType() { return TYPE; }
   public static final Type TYPE = Sys.loadType(BTrendAnalyzer.class);
+  
+  public BIcon getIcon() { return icon; }
+  private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/ActiveLogixLogo.png");
 
 /*+ ------------ END BAJA AUTO GENERATED CODE -------------- +*/
 

@@ -78,7 +78,7 @@ public class BSimpleTstat extends BComponent
     }
     
     public BIcon getIcon() { return icon; }
-    private static final BIcon icon = BIcon.std("control/booleanPoint.png");
+	private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/Ronin16.png");
 
 }
 

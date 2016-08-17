@@ -243,6 +243,9 @@ public class BTrendAnalyzer extends BComponent
   public Type getType() { return TYPE; }
   public static final Type TYPE = Sys.loadType(BTrendAnalyzer.class);
 
+  public BIcon getIcon() { return icon; }
+  private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/ActiveLogixLogo.png");
+
 /*+ ------------ END BAJA AUTO GENERATED CODE -------------- +*/
 
 

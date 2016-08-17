@@ -69,8 +69,8 @@ public class BBoundLabelHighlight extends BLabel
 // Icon
 ////////////////////////////////////////////////////////////////
   //icon for this component
-  //public BIcon getIcon() { return icon; }
-  //private static final BIcon icon = BIcon.make("module://ronin/res/Ronin16.png"); 
+  public BIcon getIcon() { return icon; }
+  private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/Ronin16.png"); 
 
 
 ////////////////////////////////////////////////////////////
