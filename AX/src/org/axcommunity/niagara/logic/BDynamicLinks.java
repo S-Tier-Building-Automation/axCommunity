@@ -75,13 +75,6 @@ import javax.baja.util.BFormat;
  */
 public class BDynamicLinks extends BComponent
 {
-  static int colSourceOrd = 0;
-  static int colSourceSlotName = 1;
-  static int colTargetSlotName = 2;
-  String [][] arrSlotInfo = new String[0][0];
-  Clock.Ticket midnightTimer;
-  Clock.Ticket refreshTimer;
-  
   /**See the class description for more information*/
   public static final Property slotInfoCsv = newProperty(0, "%parent.name%,,MyParentName\nstation:|%slotPath%,,SampleSlotPath", BFacets.make(BFacets.MULTI_LINE, true));
   /**See the class description for more information*/
@@ -123,15 +116,21 @@ public class BDynamicLinks extends BComponent
   private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/EB.png");
   public static final Log logger = Log.getLog(TYPE.getModule().getModuleName() + "." + TYPE.getTypeName());
   
-  
   private static final BFacets statusForInvalidOrdsFacets =  BFacets.make(BFacets.FIELD_EDITOR, BString.make("kitControl:PropagateFlagsFE"));
-
   public BFacets getSlotFacets(Slot slot)
   {
     if (slot.getName().equals(statusForInvalidOrds)) return statusForInvalidOrdsFacets;
     else return super.getSlotFacets(slot);
   }
     
+  static int colSourceOrd = 0;
+  static int colSourceSlotName = 1;
+  static int colTargetSlotName = 2;
+  String [][] arrSlotInfo = new String[0][0];
+  Clock.Ticket midnightTimer;
+  Clock.Ticket refreshTimer;
+  BComponent destinationComp = this;
+
   public void started() throws Exception
   {
     if(!Sys.atSteadyState() || !isRunning()) return;
@@ -153,7 +152,7 @@ public class BDynamicLinks extends BComponent
   
   public void changed(Property p, Context cx)
   {
-    if(!Sys.atSteadyState() || !isRunning()) return;
+    if(!Sys.atSteadyState() || !destinationComp.isRunning()) return;
     if(p.equals(slotInfoCsv) || p.equals(statusForInvalidOrds)) doRefreshLinks();
     if(p.equals(refreshInterval)) updateTimer();
     if(p.equals(refreshLinksAtMidnight)) scheduleMidnightTimer();
@@ -169,7 +168,7 @@ public class BDynamicLinks extends BComponent
   void updateTimer()
   {
     if (refreshTimer != null) refreshTimer.cancel();
-    if(getRefreshInterval().getSeconds() > 0) refreshTimer = Clock.schedulePeriodically(this, getRefreshInterval(), refreshLinks, null);
+    if(getRefreshInterval().getSeconds() > 0) refreshTimer = Clock.schedulePeriodically(destinationComp, getRefreshInterval(), refreshLinks, null);
   }
   
   private void scheduleMidnightTimer()
@@ -189,7 +188,7 @@ public class BDynamicLinks extends BComponent
       else offsetMillis = randomNumber;
       
       BAbsTime nextMidnight = BAbsTime.now().timeOfDay(0, 0, offsetSeconds, offsetMillis).nextDay();
-      midnightTimer = Clock.schedule(this, nextMidnight, midnightTimerExpired, null);
+      midnightTimer = Clock.schedule(destinationComp, nextMidnight, midnightTimerExpired, null);
     }
   }
   
@@ -201,15 +200,22 @@ public class BDynamicLinks extends BComponent
   
   public void doRefreshLinks()
   {
-    if(!Sys.atSteadyState() || !isRunning()) return;
+    if(!Sys.atSteadyState() || !destinationComp.isRunning()) return;
     String[][] strOrds;
 
-    try {strOrds = split(getSlotInfoCsv(), "\n", ",");}
+    try {strOrds = split(BFormat.make(getSlotInfoCsv()).format(destinationComp), "\n", ",");}
     catch (Exception e)
     {
-      logger.error(getSlotPath().toString() + " - Could not parse CSV string!");
+      logger.error(destinationComp.getSlotPath().toString() + " - Could not parse CSV string!");
       logger.trace(e.getMessage());
       if(logger.isTraceOn()) e.printStackTrace();
+      return;
+    }
+    
+    //If the CSV input is less than 3 columns, exit gracefully with an error in the application manager.
+    if(strOrds[0].length < 3)
+    {
+      logger.error(destinationComp.getSlotPath().toString() + " - Invalid number of fields provided in CSV string! Please read the DymanicLinks Bajadoc!");
       return;
     }
 
@@ -241,7 +247,7 @@ public class BDynamicLinks extends BComponent
       {
         try
         {
-          ord = BOrd.make(BFormat.make(formatOrd).format(this));
+          ord = BOrd.make(BFormat.make(formatOrd).format(destinationComp));
           if(isOrdValid(ord))
           {
             com = (BComponent)ord.relativizeToHost().get();
@@ -253,7 +259,7 @@ public class BDynamicLinks extends BComponent
           {
             try
             {
-              ord = BOrd.make(BFormat.make("station:|" + formatOrd).format(this));
+              ord = BOrd.make(BFormat.make("station:|" + formatOrd).format(destinationComp));
               if(isOrdValid(ord))
               {
                 com = (BComponent)ord.relativizeToHost().get();
@@ -266,7 +272,7 @@ public class BDynamicLinks extends BComponent
                 invalidSourceOrd = true;
                 if(!getIgnoreMissingObjects())
                 {
-                  logger.error(getSlotPath().toString() + " - Could not resolve ord!");
+                  logger.error(destinationComp.getSlotPath().toString() + " - Could not resolve ord!");
                   logger.error("Format: " + formatOrd);
                   logger.error("Ord: " + ord);
                   logger.error("Source Slot Name: " + sourceSlotName);
@@ -274,7 +280,7 @@ public class BDynamicLinks extends BComponent
                 }
                 else
                 {
-                  logger.trace(getSlotPath().toString() + " - Target slot missing and invalid source ord!");
+                  logger.trace(destinationComp.getSlotPath().toString() + " - Target slot missing and invalid source ord!");
                   logger.trace("Format: " + formatOrd);
                   logger.trace("Ord: " + ord);
                   logger.trace("Source Slot Name: " + sourceSlotName);
@@ -286,7 +292,7 @@ public class BDynamicLinks extends BComponent
               invalidSourceOrd = true;
               if(!getIgnoreMissingObjects())
               {
-                logger.error(getSlotPath().toString() + " - Could not retrieve ord/slot details!");
+                logger.error(destinationComp.getSlotPath().toString() + " - Could not retrieve ord/slot details!");
                 logger.error("Format: " + formatOrd);
                 logger.error("Ord: " + ord);
                 logger.error("Source Slot Name: " + sourceSlotName);
@@ -302,7 +308,7 @@ public class BDynamicLinks extends BComponent
           invalidSourceOrd = true;
           if(!getIgnoreMissingObjects())
           {
-            logger.error(getSlotPath().toString() + " - Could not retrieve ord/slot details!");
+            logger.error(destinationComp.getSlotPath().toString() + " - Could not retrieve ord/slot details!");
             logger.error("Format: " + formatOrd);
             logger.error("Ord: " + ord);
             logger.error("Source Slot Name: " + sourceSlotName);
@@ -314,7 +320,7 @@ public class BDynamicLinks extends BComponent
       }
       else sourceBValue = new BStatusString();
       
-      logger.trace(getSlotPath().toString());
+      logger.trace(destinationComp.getSlotPath().toString());
       logger.trace("Format: " + formatOrd);
       logger.trace("Ord: " + ord);
       logger.trace("Source Slot Name: " + sourceSlotName);
@@ -342,11 +348,10 @@ public class BDynamicLinks extends BComponent
               {
                 try
                 {
-                  BComponent destinationComp = this;
                   links = destinationComp.getLinks(destinationComp.getSlot(oldTargetSlotName));
                   Knob[] knobs = destinationComp.getKnobs(destinationComp.getSlot(oldTargetSlotName));
                   
-                  logger.trace(getSlotPath().toString() + " - Renaming slot from " + oldTargetSlotName + " to " + targetSlotName);
+                  logger.trace(destinationComp.getSlotPath().toString() + " - Renaming slot from " + oldTargetSlotName + " to " + targetSlotName);
                   destinationComp.rename(destinationComp.getProperty(oldTargetSlotName), targetSlotName);
                   renamedOldSlot = true;
                   
@@ -364,11 +369,11 @@ public class BDynamicLinks extends BComponent
                       {
                         if(links[k].getTargetSlotName().equalsIgnoreCase(oldTargetSlotName))
                         {
-                          logger.trace(getSlotPath().toString() + " - Setting target on link#" + k + " from " + oldTargetSlotName + " to " + targetSlotName);
+                          logger.trace(destinationComp.getSlotPath().toString() + " - Setting target on link#" + k + " from " + oldTargetSlotName + " to " + targetSlotName);
                           links[k].setTargetSlotName(targetSlotName);
                           validLinks = true;
                         }
-                        else logger.trace(getSlotPath().toString() + " - Did not update target on link#" + k + ": " + links[k].getTargetSlotName() + " != " + oldTargetSlotName);
+                        else logger.trace(destinationComp.getSlotPath().toString() + " - Did not update target on link#" + k + ": " + links[k].getTargetSlotName() + " != " + oldTargetSlotName);
                       }
                     }
                   }
@@ -380,16 +385,16 @@ public class BDynamicLinks extends BComponent
                     {
                       if(knobs[k].getSourceSlotName().equalsIgnoreCase(oldTargetSlotName))
                       {
-                        logger.trace(getSlotPath().toString() + " - Setting source on knob#" + k + " from " + oldTargetSlotName + " to " + targetSlotName);
+                        logger.trace(destinationComp.getSlotPath().toString() + " - Setting source on knob#" + k + " from " + oldTargetSlotName + " to " + targetSlotName);
                         knobs[k].getLink().setSourceSlotName(targetSlotName);
                       }
-                      else logger.trace(getSlotPath().toString() + " - Did not update source on knob#" + k + ": " + knobs[k].getSourceSlotName() + " != " + oldTargetSlotName);
+                      else logger.trace(destinationComp.getSlotPath().toString() + " - Did not update source on knob#" + k + ": " + knobs[k].getSourceSlotName() + " != " + oldTargetSlotName);
                     }
                   }
                 }
                 catch (Exception e)
                 {
-                  logger.error(getSlotPath().toString() + " - Could not rename old slot: " + oldTargetSlotName + " to: " + targetSlotName);
+                  logger.error(destinationComp.getSlotPath().toString() + " - Could not rename old slot: " + oldTargetSlotName + " to: " + targetSlotName);
                   logger.trace(e.getMessage());
                   if(logger.isTraceOn()) e.printStackTrace();
                 }
@@ -405,14 +410,14 @@ public class BDynamicLinks extends BComponent
             {
               logger.trace("Adding new action or topic slot named: " + targetSlotName);
               if(sourceSlot.isAction())
-                this.add(targetSlotName, new BCompositeAction(), Flags.SUMMARY, null, null);
+                destinationComp.add(targetSlotName, new BCompositeAction(), Flags.SUMMARY, null, null);
               else
-                this.add(targetSlotName, new BCompositeTopic(), Flags.SUMMARY, null, null);
+                destinationComp.add(targetSlotName, new BCompositeTopic(), Flags.SUMMARY, null, null);
             }
             else
             {
               logger.trace("Adding new slot name: " + targetSlotName);
-              this.add(targetSlotName, sourceBValue.newCopy(), Flags.SUMMARY, null, null);
+              destinationComp.add(targetSlotName, sourceBValue.newCopy(), Flags.SUMMARY, null, null);
               slotAdded = true;
             }
           }
@@ -420,7 +425,7 @@ public class BDynamicLinks extends BComponent
       }
       catch (Exception e)
       {
-        logger.error(getSlotPath().toString() + " - Could not create new slot: " + targetSlotName);
+        logger.error(destinationComp.getSlotPath().toString() + " - Could not create new slot: " + targetSlotName);
         logger.trace(e.getMessage());
         if(logger.isTraceOn()) e.printStackTrace();
         continue;
@@ -431,7 +436,7 @@ public class BDynamicLinks extends BComponent
 //      {
 //        if(!getIgnoreMissingObjects())
 //        {
-//          logger.error(getSlotPath().toString() + " - Target slot missing and invalid source ord!");
+//          logger.error(destinationComp.getSlotPath().toString() + " - Target slot missing and invalid source ord!");
 //          logger.error("Format: " + formatOrd);
 //          logger.error("Ord: " + ord);
 //          logger.error("Source Slot Name: " + sourceSlotName);
@@ -439,7 +444,7 @@ public class BDynamicLinks extends BComponent
 //        }
 //        else
 //        {
-//          logger.trace(getSlotPath().toString() + " - Target slot missing and invalid source ord!");
+//          logger.trace(destinationComp.getSlotPath().toString() + " - Target slot missing and invalid source ord!");
 //          logger.trace("Format: " + formatOrd);
 //          logger.trace("Ord: " + ord);
 //          logger.trace("Source Slot Name: " + sourceSlotName);
@@ -458,7 +463,7 @@ public class BDynamicLinks extends BComponent
         try {sourceSlotType = sourceBValue.getType();}
         catch (Exception e)
         {
-          logger.error(getSlotPath().toString() + " - Could not read target slot type for: " + ord + ", slot name: " + sourceSlotName);
+          logger.error(destinationComp.getSlotPath().toString() + " - Could not read target slot type for: " + ord + ", slot name: " + sourceSlotName);
           logger.trace(e.getMessage());
           if(logger.isTraceOn()) e.printStackTrace();
           continue;
@@ -467,7 +472,7 @@ public class BDynamicLinks extends BComponent
         try {targetSlotType = ((BObject)get(targetSlotName)).getType();}
         catch (Exception e)
         {
-          logger.error(getSlotPath().toString() + " - Could not read source slot type for: " + targetSlotName);
+          logger.error(destinationComp.getSlotPath().toString() + " - Could not read source slot type for: " + targetSlotName);
           logger.trace(e.getMessage());
           if(logger.isTraceOn()) e.printStackTrace();
           continue;
@@ -475,19 +480,19 @@ public class BDynamicLinks extends BComponent
         
         if(sourceSlotType != targetSlotType)
         {
-          try {this.remove(targetSlotName);}
+          try {destinationComp.remove(targetSlotName);}
           catch (Exception e)
           {
-            logger.error(getSlotPath().toString() + " - Could not remove slot: " + targetSlotName + " (this slot is the incorrect type)");
+            logger.error(destinationComp.getSlotPath().toString() + " - Could not remove slot: " + targetSlotName + " (this slot is the incorrect type)");
             logger.trace(e.getMessage());
             if(logger.isTraceOn()) e.printStackTrace();
             continue;
           }
           
-          try {this.add(targetSlotName, sourceBValue.newCopy(), Flags.SUMMARY, null, null);}
+          try {destinationComp.add(targetSlotName, sourceBValue.newCopy(), Flags.SUMMARY, null, null);}
           catch (Exception e)
           {
-            logger.error(getSlotPath().toString() + " - Could not create new slot: " + targetSlotName);
+            logger.error(destinationComp.getSlotPath().toString() + " - Could not create new slot: " + targetSlotName);
             logger.trace(e.getMessage());
             if(logger.isTraceOn()) e.printStackTrace();
             continue;
@@ -495,84 +500,95 @@ public class BDynamicLinks extends BComponent
         }
       }
       
-//      if(!renamedOldSlot)
- //     {
-        try
+      try
+      {
+        links = destinationComp.getLinks(destinationComp.getSlot(targetSlotName));
+        
+        //If the source slot name is blank, resolve the format and write it to the target slot
+        if(sourceSlotName.length() == 0)
         {
-          BComponent destinationComp = this;
-          links = destinationComp.getLinks(destinationComp.getSlot(targetSlotName));
-          
-          //If the source slot name is blank, resolve the format and write it to the target slot
-          if(sourceSlotName.length() == 0)
-          {
-            if(links.length>0)
-            {
-              logger.trace("Removing link from: " + targetSlotName);
-              destinationComp.remove(links[0]);
-            }
-            
-            logger.trace("Setting static value to : " + targetSlotName);
-            ((BStatusString) ((BObject)destinationComp.get(targetSlotName))).setValue(BFormat.make(formatOrd).format(destinationComp));
-            continue;
-          }
-          
           if(links.length>0)
           {
-            //will only alter link 0, not meant as a many to 1!!!
-            //try to make ord from input link string
-            if(isOrdValid(ord))
+            logger.trace("Removing link from: " + targetSlotName);
+            destinationComp.remove(links[0]);
+          }
+          
+          logger.trace("Setting static value to : " + targetSlotName);
+          try
+          {
+            ((BStatusString) ((BObject)destinationComp.get(targetSlotName))).setValue(BFormat.make(formatOrd).format(destinationComp));
+          }
+          catch (Exception f)
+          {
+            logger.error(destinationComp.getSlotPath().toString() + " - Could not resolve format: " + targetSlotName);
+            logger.trace(f.getMessage());
+            if(logger.isTraceOn()) f.printStackTrace();
+          }
+          continue;
+        }
+        
+        if(links.length>0)
+        {
+          //will only alter link 0, not meant as a many to 1!!!
+          //try to make ord from input link string
+          if(isOrdValid(ord))
+          {
+            boolean ordMismatch = !com.getHandleOrd().toString().equalsIgnoreCase(links[0].getSourceOrd().toString());
+            boolean slotNameMismatch = !sourceSlotName.equals(links[0].getSourceSlotName());
+            
+            if(ordMismatch && slotNameMismatch) links[0].setEnabled(false);
+            
+            if(ordMismatch)
             {
-              if(com.getHandleOrd() != links[0].getSourceOrd())
-              {
-                logger.trace("Setting link source ord for target slot: " + targetSlotName);
-                if(links[0].isActive()) links[0].deactivate();
-                links[0].setSourceOrd(com.getHandleOrd());
-              }
-              
-              if(sourceSlotName != links[0].getSourceSlotName())
-              {
-                logger.trace("Setting link source slot name for target slot: " + targetSlotName);
-                if(links[0].isActive()) links[0].deactivate();
-                links[0].setSourceSlotName(sourceSlotName);
-              }
-              
-              links[0].activate();
-              validLinks = true;
+              logger.trace("Setting link source ord for target slot: " + targetSlotName);
+              if(links[0].isActive()) links[0].deactivate();
+              links[0].setSourceOrd(com.getHandleOrd());
             }
-            else
+            
+            if(slotNameMismatch)
             {
-              //invalid ord, remove link 0
-              logger.trace("Invalid ord, removing link on target slot: " + targetSlotName);
-              destinationComp.remove(links[0]);
+              logger.trace("Setting link source slot name for target slot: " + targetSlotName);
+              if(links[0].isActive()) links[0].deactivate();
+              links[0].setSourceSlotName(sourceSlotName);
             }
+            
+            links[0].setEnabled(true);
+            links[0].activate();
+            validLinks = true;
           }
           else
           {
-            //no link, create one if possible
-            if(isOrdValid(ord))
-            {
-              logger.trace("Link not found, creating a new link for target slot: " + targetSlotName);
-              BLink link = new BLink(com.getHandleOrd(),sourceSlotName,targetSlotName,true);
-              destinationComp.add(null, link);
-              validLinks = true;
-              linkAdded = true;
-            }
-            else
-            {
-              logger.trace("Invalid source ord specified for target slot: " + targetSlotName);
-              if(!invalidSourceOrd) logger.error(getSlotPath().toString() + " - Invalid ord: " + ord);
-              validLinks = false;
-            }
+            //invalid ord, remove link 0
+            logger.trace("Invalid ord, removing link on target slot: " + targetSlotName);
+            destinationComp.remove(links[0]);
           }
         }
-        catch (Exception e)
+        else
         {
-          logger.error(getSlotPath().toString() + " - Link create/modify error: " + ord + ", source slot: " + sourceSlotName  + ", Target slot:" + targetSlotName);
-          logger.trace(e.getMessage());
-          if(logger.isTraceOn()) e.printStackTrace();
-          validLinks = false;
+          //no link, create one if possible
+          if(isOrdValid(ord))
+          {
+            logger.trace("Link not found, creating a new link for target slot: " + targetSlotName);
+            BLink link = new BLink(com.getHandleOrd(),sourceSlotName,targetSlotName,true);
+            destinationComp.add(null, link);
+            validLinks = true;
+            linkAdded = true;
+          }
+          else
+          {
+            logger.trace("Invalid source ord specified for target slot: " + targetSlotName);
+            if(!invalidSourceOrd) logger.error(destinationComp.getSlotPath().toString() + " - Invalid ord: " + ord);
+            validLinks = false;
+          }
         }
- //     }
+      }
+      catch (Exception e)
+      {
+        logger.error(destinationComp.getSlotPath().toString() + " - Link create/modify error: " + ord + ", source slot: " + sourceSlotName  + ", Target slot:" + targetSlotName);
+        logger.trace(e.getMessage());
+        if(logger.isTraceOn()) e.printStackTrace();
+        validLinks = false;
+      }
       
       BObject targetSlotAsObject = null;
       boolean targetSlotIsStatusValue = false;
@@ -595,7 +611,7 @@ public class BDynamicLinks extends BComponent
             try {((BStatusValue) ((BObject) get(targetSlotName))).setStatus(((BStatusValue)((BObject) com.get(sourceSlotName))).getStatus());}
             catch (Exception e)
             {
-              logger.trace(getSlotPath().toString() + " - Could not read source slot status");
+              logger.trace(destinationComp.getSlotPath().toString() + " - Could not read source slot status");
               logger.trace("Format: " + formatOrd);
               logger.trace("Ord: " + ord);
               logger.trace("Source Slot Name: " + sourceSlotName);
@@ -613,7 +629,7 @@ public class BDynamicLinks extends BComponent
             try {((BStatusValue) ((BObject) get(targetSlotName))).setStatus(0);}
             catch (Exception e)
             {
-              logger.error(getSlotPath().toString() + " - Source slot name is blank, so target slot should be a BStatusString, but failed to change the status to OK!");
+              logger.error(destinationComp.getSlotPath().toString() + " - Source slot name is blank, so target slot should be a BStatusString, but failed to change the status to OK!");
               logger.error("Format: " + formatOrd);
               logger.error("Ord: " + ord);
               logger.error("Target Slot Name: " + targetSlotName);
@@ -661,10 +677,10 @@ public class BDynamicLinks extends BComponent
       if(!foundSlot && ((BObject)get(oldTargetSlotName))!=null)
       {
         logger.trace("Removing unused slot: " + oldTargetSlotName);
-        try {this.remove(oldTargetSlotName);}
+        try {destinationComp.remove(oldTargetSlotName);}
         catch (Exception e)
         {
-          logger.error(getSlotPath().toString() + " - Could not remove unnecessary slot: " + oldTargetSlotName);
+          logger.error(destinationComp.getSlotPath().toString() + " - Could not remove unnecessary slot: " + oldTargetSlotName);
           logger.trace(e.getMessage());
           if(logger.isTraceOn()) e.printStackTrace();
           continue;
@@ -784,12 +800,30 @@ public class BDynamicLinks extends BComponent
     int firstChar = 0;
     int lastChar = 0;
     int index = 0;
+    
+    if(inString.startsWith("\""))
+    {
+      int secondQuote = inString.lastIndexOf("\"" + delim);
+      if(secondQuote > 2)
+      {
+        //quoted string found, set the value
+        firstChar = 1;
+        String value = inString.substring(firstChar, secondQuote);
+        value = replaceString(value, "\"\"", "\"");
+        list = resizeArray(list, index);
+        list[index++] = value;
+        lastChar = secondQuote + delim.length() + 1;
+        firstChar = lastChar;
+      }
+    }
+    
     while (lastChar < inString.length())
     {
       if (inString.substring(lastChar).startsWith(delim))
       {
         list = resizeArray(list, index);
         list[index++] = inString.substring(firstChar, lastChar);
+        logger.trace("Parameter found in CSV string: " + inString.substring(firstChar, lastChar));
         lastChar = lastChar + delim.length();
         firstChar = lastChar;
       }
@@ -817,7 +851,20 @@ public class BDynamicLinks extends BComponent
   }
   
   
-  
+  private static String replaceString(String sourceStr, String oldStr, String newStr)
+  {
+    int idx = sourceStr.lastIndexOf(oldStr);
+    if (idx != -1) 
+    {
+      StringBuffer results = new StringBuffer(sourceStr);
+      results.replace( idx, idx+oldStr.length(), newStr);
+      while( (idx=sourceStr.lastIndexOf(oldStr, idx-1)) != -1 ) results.replace(idx, idx+oldStr.length(), newStr);
+      
+      return results.toString();
+    }
+    else return sourceStr;
+  }
+
   
   
   
@@ -839,7 +886,7 @@ public class BDynamicLinks extends BComponent
   public SlotPath seguinStationSlotPath()
   {
     String pointsString = "points";
-    String thisSlotPath = this.getSlotPath().getBody();
+    String thisSlotPath = destinationComp.getSlotPath().getBody();
     int zoneFolderStringBegin = thisSlotPath.indexOf(pointsString) + pointsString.length() + 1;
     int zoneFolderStringLength = (thisSlotPath.substring(zoneFolderStringBegin)).indexOf("/");
     int zoneFolderStringEnd   = zoneFolderStringLength + zoneFolderStringBegin;
@@ -871,7 +918,7 @@ public class BDynamicLinks extends BComponent
   public SlotPath seguinZoneSlotPath()
   {
     String pointsString = "points";
-    String thisSlotPath = this.getSlotPath().getBody();
+    String thisSlotPath = destinationComp.getSlotPath().getBody();
     int zoneFolderStringBegin = thisSlotPath.indexOf(pointsString) + pointsString.length() + 1;
     int zoneFolderStringLength = (thisSlotPath.substring(zoneFolderStringBegin)).indexOf("/");
     int zoneFolderStringEnd   = zoneFolderStringLength + zoneFolderStringBegin;
@@ -903,7 +950,7 @@ public class BDynamicLinks extends BComponent
     BComponent com = null;
     try
     {
-      ord = BOrd.make(BFormat.make(path).format(this));
+      ord = BOrd.make(BFormat.make(path).format(destinationComp));
       com = (BComponent)ord.relativizeToHost().get();
     }
     catch (Exception e)
@@ -914,5 +961,3 @@ public class BDynamicLinks extends BComponent
     return com;
   }
 }
-
-
