@@ -254,6 +254,8 @@ public class BDynamicLinks extends BComponent
             sourceSlot = com.getSlot(sourceSlotName);
             sourceIsActionOrTopic = sourceSlot.isAction() || sourceSlot.isTopic();
             if(!sourceIsActionOrTopic) sourceBValue = com.get(sourceSlotName);
+            else if(sourceSlot.isAction()) sourceBValue = new BCompositeAction();
+            else if(sourceSlot.isTopic()) sourceBValue = new BCompositeTopic();
           }
           else
           {
@@ -266,6 +268,8 @@ public class BDynamicLinks extends BComponent
                 sourceSlot = com.getSlot(sourceSlotName);
                 sourceIsActionOrTopic = sourceSlot.isAction() || sourceSlot.isTopic();
                 if(!sourceIsActionOrTopic) sourceBValue = com.get(sourceSlotName);
+                else if(sourceSlot.isAction()) sourceBValue = new BCompositeAction();
+                else if(sourceSlot.isTopic()) sourceBValue = new BCompositeTopic();
               }
               else
               {
@@ -324,7 +328,7 @@ public class BDynamicLinks extends BComponent
       logger.trace("Format: " + formatOrd);
       logger.trace("Ord: " + ord);
       logger.trace("Source Slot Name: " + sourceSlotName);
-      if(!sourceIsActionOrTopic) try{logger.trace("Source Type: " + sourceBValue.getTypeDisplayName(null));} catch (Exception e){}
+      try{logger.trace("Source Type: " + sourceBValue.getTypeDisplayName(null));} catch (Exception e){}
       
       //Check to see if the target slot needs to be renamed
       try
@@ -406,20 +410,9 @@ public class BDynamicLinks extends BComponent
           //Add the new target slot, if needed
           if(!renamedOldSlot && !invalidSourceOrd)
           {
-            if(sourceIsActionOrTopic)
-            {
-              logger.trace("Adding new action or topic slot named: " + targetSlotName);
-              if(sourceSlot.isAction())
-                destinationComp.add(targetSlotName, new BCompositeAction(), Flags.SUMMARY, null, null);
-              else
-                destinationComp.add(targetSlotName, new BCompositeTopic(), Flags.SUMMARY, null, null);
-            }
-            else
-            {
-              logger.trace("Adding new slot name: " + targetSlotName);
-              destinationComp.add(targetSlotName, sourceBValue.newCopy(), Flags.SUMMARY, null, null);
-              slotAdded = true;
-            }
+            logger.trace("Adding new slot name: " + targetSlotName);
+            destinationComp.add(targetSlotName, sourceBValue.newCopy(), Flags.SUMMARY, null, null);
+            slotAdded = true;
           }
         }
       }
@@ -455,7 +448,7 @@ public class BDynamicLinks extends BComponent
 //      
 //      
       
-      if(!slotAdded && !sourceIsActionOrTopic && !invalidSourceOrd)
+      if(!slotAdded && !invalidSourceOrd)
       {
         Type sourceSlotType = null;
         Type targetSlotType = null;
@@ -478,6 +471,7 @@ public class BDynamicLinks extends BComponent
           continue;
         }
         
+        //TODO: This is broke
         if(sourceSlotType != targetSlotType)
         {
           try {destinationComp.remove(targetSlotName);}
