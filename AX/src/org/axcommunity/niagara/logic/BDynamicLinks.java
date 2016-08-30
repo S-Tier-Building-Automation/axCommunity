@@ -471,7 +471,6 @@ public class BDynamicLinks extends BComponent
           continue;
         }
         
-        //TODO: This is broke
         if(sourceSlotType != targetSlotType)
         {
           try {destinationComp.remove(targetSlotName);}
