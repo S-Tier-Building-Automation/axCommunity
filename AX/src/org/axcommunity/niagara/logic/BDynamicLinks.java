@@ -6,15 +6,23 @@ import javax.baja.naming.BOrd;
 import javax.baja.naming.SlotPath;
 import javax.baja.status.BIStatusValue;
 import javax.baja.status.BStatus;
+import javax.baja.status.BStatusBoolean;
+import javax.baja.status.BStatusEnum;
+import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
 import javax.baja.status.BStatusValue;
 import javax.baja.sys.Action;
 import javax.baja.sys.BAbsTime;
 import javax.baja.sys.BBoolean;
 import javax.baja.sys.BComponent;
+import javax.baja.sys.BDouble;
+import javax.baja.sys.BDynamicEnum;
 import javax.baja.sys.BFacets;
+import javax.baja.sys.BFloat;
 import javax.baja.sys.BIcon;
+import javax.baja.sys.BInteger;
 import javax.baja.sys.BLink;
+import javax.baja.sys.BLong;
 import javax.baja.sys.BObject;
 import javax.baja.sys.BRelTime;
 import javax.baja.sys.BString;
@@ -82,6 +90,19 @@ public class BDynamicLinks extends BComponent
   /**See the class description for more information*/
   public void setSlotInfoCsv(String v) {setString(slotInfoCsv,v);}
 
+  public static final Property executeFindAndReplace = newProperty(0, false);
+  public boolean getExecuteFindAndReplace() { return getBoolean(executeFindAndReplace);}
+  public void setExecuteFindAndReplace(boolean v) {setBoolean(executeFindAndReplace,v);}
+  
+  public static final Property findStringInCsv = newProperty(0, "", BFacets.make(BFacets.MULTI_LINE, true));
+  public String getFindStringInCsv() { return getString(findStringInCsv);}
+  public void setFindStringInCsv(String v) {setString(findStringInCsv,v);}
+  
+  public static final Property replaceStringInCsv = newProperty(0, "", BFacets.make(BFacets.MULTI_LINE, true));
+  public String getReplaceStringInCsv() { return getString(replaceStringInCsv);}
+  public void setReplaceStringInCsv(String v) {setString(replaceStringInCsv,v);}
+  
+
   /**Set to zero seconds to disable*/
   public static final Property refreshInterval = newProperty(0, BRelTime.make(0), BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.FALSE, BFacets.MIN, BRelTime.make(0)));
   /**Set to zero seconds to disable*/
@@ -100,6 +121,10 @@ public class BDynamicLinks extends BComponent
   public static final Property statusForInvalidOrds = newProperty(0, BStatus.makeAlarm(BStatus.stale, true), null);
   public BStatus getStatusForInvalidOrds() { return (BStatus)get(statusForInvalidOrds); }
   public void setStatusForInvalidOrds(BStatus v) { set(statusForInvalidOrds,v,null); }
+  
+  public static final Property reorderSlotsBasedOnCsvString = newProperty(0, false);
+  public boolean getReorderSlotsBasedOnCsvString() { return getBoolean(reorderSlotsBasedOnCsvString);}
+  public void setReorderSlotsBasedOnCsvString(boolean v) {setBoolean(reorderSlotsBasedOnCsvString,v);}
   
   /**This will refresh any links and any string values*/
   public static final Action refreshLinks = newAction(Flags.OPERATOR,null);
@@ -129,6 +154,8 @@ public class BDynamicLinks extends BComponent
   String [][] arrSlotInfo = new String[0][0];
   Clock.Ticket midnightTimer;
   Clock.Ticket refreshTimer;
+  
+  //This just makes it easier to copy this source into a program object.
   BComponent destinationComp = this;
 
   public void started() throws Exception
@@ -156,6 +183,38 @@ public class BDynamicLinks extends BComponent
     if(p.equals(slotInfoCsv) || p.equals(statusForInvalidOrds)) doRefreshLinks();
     if(p.equals(refreshInterval)) updateTimer();
     if(p.equals(refreshLinksAtMidnight)) scheduleMidnightTimer();
+    
+    if(p.equals(executeFindAndReplace) && 
+        getExecuteFindAndReplace() && 
+        getFindStringInCsv().length() > 0 && 
+        getSlotInfoCsv().length() > 0)
+    {
+      setSlotInfoCsv(replaceString(getSlotInfoCsv(), getFindStringInCsv(), getReplaceStringInCsv()));
+      setFindStringInCsv("");
+      setExecuteFindAndReplace(false);
+    }
+    
+    if(p.equals(reorderSlotsBasedOnCsvString) && getReorderSlotsBasedOnCsvString())
+    {
+      String targetSlotName = null;
+      for (int i = 0; i < arrSlotInfo.length; i++)
+      {
+        targetSlotName = arrSlotInfo[i][colTargetSlotName];
+        if(targetSlotName.length() > 0)
+        {
+          try
+          {
+            destinationComp.reorderToBottom(destinationComp.getProperty(targetSlotName));
+          }
+          catch (Exception e)
+          {
+            logger.error(destinationComp.getSlotPath().toString() + " - Could not reorder slot: " + targetSlotName);
+            logger.trace(e.getMessage());
+            if(logger.isTraceOn()) e.printStackTrace();
+          }
+        }
+      }
+    }
   }
   
   void startupRoutine()
@@ -333,7 +392,7 @@ public class BDynamicLinks extends BComponent
       //Check to see if the target slot needs to be renamed
       try
       {
-        if(((BObject)get(targetSlotName))==null)
+        if(((BObject) destinationComp.get(targetSlotName))==null)
         {
           logger.trace("Target slot name not found: " + targetSlotName);
           for (int j = 0; j < arrSlotInfo.length; j++)
@@ -348,7 +407,7 @@ public class BDynamicLinks extends BComponent
             if(formatOrd.equals(oldFormatOrd) && sourceSlotName.equals(oldSourceSlotName))
             {
               oldTargetSlotName = SlotPath.escape(oldTargetSlotName);
-              if(((BObject)get(oldTargetSlotName)) != null)
+              if(((BObject) destinationComp.get(oldTargetSlotName)) != null)
               {
                 try
                 {
@@ -462,7 +521,7 @@ public class BDynamicLinks extends BComponent
           continue;
         }
         
-        try {targetSlotType = ((BObject)get(targetSlotName)).getType();}
+        try {targetSlotType = ((BObject) destinationComp.get(targetSlotName)).getType();}
         catch (Exception e)
         {
           logger.error(destinationComp.getSlotPath().toString() + " - Could not read source slot type for: " + targetSlotName);
@@ -493,6 +552,20 @@ public class BDynamicLinks extends BComponent
         }
       }
       
+      if(getReorderSlotsBasedOnCsvString())
+      {
+      try
+        {
+          destinationComp.reorderToBottom(destinationComp.getProperty(targetSlotName));
+        }
+        catch (Exception e)
+        {
+          logger.error(destinationComp.getSlotPath().toString() + " - Could not reorder slot: " + targetSlotName);
+          logger.trace(e.getMessage());
+          if(logger.isTraceOn()) e.printStackTrace();
+        }
+      }
+      
       try
       {
         links = destinationComp.getLinks(destinationComp.getSlot(targetSlotName));
@@ -509,7 +582,7 @@ public class BDynamicLinks extends BComponent
           logger.trace("Setting static value to : " + targetSlotName);
           try
           {
-            ((BStatusString) ((BObject)destinationComp.get(targetSlotName))).setValue(BFormat.make(formatOrd).format(destinationComp));
+            ((BStatusString) ((BObject) destinationComp.get(targetSlotName))).setValue(BFormat.make(formatOrd).format(destinationComp));
           }
           catch (Exception f)
           {
@@ -583,16 +656,50 @@ public class BDynamicLinks extends BComponent
         validLinks = false;
       }
       
+      boolean newCodeFailed = true;
+      
+      /**
+       * TODO: This doesn't work.  It is supposed to retrieve the default 
+       * value for the slot and set that value, but getDefaultValue() only 
+       * works for frozen properties.
+       * 
+       * The code is disabled because there is no point to trying here.
+       */
+      if(!validLinks && 0 > 1)
+      {
+        logger.trace("Link is not valid on target: " + targetSlotName + "; attempting to set value to default");
+        try
+        {
+          destinationComp.set(targetSlotName, destinationComp.getProperty(targetSlotName).getDefaultValue());
+          newCodeFailed = false;
+        }
+        catch (Exception e)
+        {
+          newCodeFailed = true;
+          logger.trace(destinationComp.getSlotPath().toString() + " - Could not get default value (using NEW code) for: " + targetSlotName);
+          logger.trace(e.getMessage());
+          if(logger.isTraceOn()) e.printStackTrace();
+        }
+      }
+            
       BObject targetSlotAsObject = null;
+      BValue targetSlotAsValue = null;
       boolean targetSlotIsStatusValue = false;
       try
       {
-        targetSlotAsObject = ((BObject) get(targetSlotName));
+        targetSlotAsObject = ((BObject) destinationComp.get(targetSlotName));
         if(targetSlotAsObject != null)
           if(targetSlotAsObject instanceof BIStatusValue)
             targetSlotIsStatusValue = true;
       }
       catch (Exception e){}
+      
+      try
+      {
+        targetSlotAsValue = destinationComp.get(targetSlotName);
+      }
+      catch (Exception e){}
+
       
       if(targetSlotIsStatusValue)
       {
@@ -601,7 +708,7 @@ public class BDynamicLinks extends BComponent
           if(linkAdded && !sourceIsActionOrTopic)
           {
             logger.trace("Copying status from source slot to target slot: " + targetSlotName);
-            try {((BStatusValue) ((BObject) get(targetSlotName))).setStatus(((BStatusValue)((BObject) com.get(sourceSlotName))).getStatus());}
+            try {((BStatusValue) ((BObject) destinationComp.get(targetSlotName))).setStatus(((BStatusValue)((BObject) com.get(sourceSlotName))).getStatus());}
             catch (Exception e)
             {
               logger.trace(destinationComp.getSlotPath().toString() + " - Could not read source slot status");
@@ -619,7 +726,7 @@ public class BDynamicLinks extends BComponent
           if(sourceSlotName.length() == 0)
           {
             logger.trace("Target slot is a static value; setting status to OK for slot: " + targetSlotName);
-            try {((BStatusValue) ((BObject) get(targetSlotName))).setStatus(0);}
+            try {((BStatusValue) ((BObject) destinationComp.get(targetSlotName))).setStatus(0);}
             catch (Exception e)
             {
               logger.error(destinationComp.getSlotPath().toString() + " - Source slot name is blank, so target slot should be a BStatusString, but failed to change the status to OK!");
@@ -632,11 +739,45 @@ public class BDynamicLinks extends BComponent
           }
           else
           {
+            //TODO: Remove this once the code above actually works
+            if(newCodeFailed)
+            {
+              if(targetSlotAsValue instanceof BStatusBoolean)
+                destinationComp.set(targetSlotName, new BStatusBoolean(false, getStatusForInvalidOrds()));
+              else if(targetSlotAsValue instanceof BStatusNumeric)
+                destinationComp.set(targetSlotName, new BStatusNumeric(0, getStatusForInvalidOrds()));
+              else if(targetSlotAsValue instanceof BStatusEnum)
+                destinationComp.set(targetSlotName, new BStatusEnum(BDynamicEnum.DEFAULT, getStatusForInvalidOrds()));
+              else if(targetSlotAsValue instanceof BStatusString)
+                destinationComp.set(targetSlotName, new BStatusString("", getStatusForInvalidOrds()));
+            }
+            
             logger.trace("Link is not valid on target: " + targetSlotName + "; attempting to set status to: " + getStatusForInvalidOrds().flagsToString(null));
-            try {((BStatusValue) ((BObject) get(targetSlotName))).setStatus(getStatusForInvalidOrds());}
+            try {((BStatusValue) ((BObject) destinationComp.get(targetSlotName))).setStatus(getStatusForInvalidOrds());}
             catch (Exception e){}
           }
         }
+      }
+      
+      //TODO: Remove this once the code above actually works
+      else if(!validLinks && newCodeFailed)
+      {
+        if(targetSlotAsValue instanceof BBoolean)
+          destinationComp.set(targetSlotName, BBoolean.DEFAULT);
+        else if(targetSlotAsValue instanceof BInteger)
+          destinationComp.set(targetSlotName, BInteger.DEFAULT);
+        else if(targetSlotAsValue instanceof BDouble)
+          destinationComp.set(targetSlotName, BDouble.DEFAULT);
+        else if(targetSlotAsValue instanceof BString)
+          destinationComp.set(targetSlotName, BString.DEFAULT);
+        else if(targetSlotAsValue instanceof BLong)
+          destinationComp.set(targetSlotName, BLong.DEFAULT);
+        else if(targetSlotAsValue instanceof BFloat)
+          destinationComp.set(targetSlotName, BFloat.DEFAULT);
+        else if(targetSlotAsValue instanceof BAbsTime)
+          destinationComp.set(targetSlotName, BAbsTime.DEFAULT);
+        else if(targetSlotAsValue instanceof BRelTime)
+          destinationComp.set(targetSlotName, BRelTime.DEFAULT);
       }
     }
 
@@ -667,7 +808,7 @@ public class BDynamicLinks extends BComponent
         }
       }
       
-      if(!foundSlot && ((BObject)get(oldTargetSlotName))!=null)
+      if(!foundSlot && ((BObject) destinationComp.get(oldTargetSlotName))!=null)
       {
         logger.trace("Removing unused slot: " + oldTargetSlotName);
         try {destinationComp.remove(oldTargetSlotName);}
@@ -954,3 +1095,4 @@ public class BDynamicLinks extends BComponent
     return com;
   }
 }
+
