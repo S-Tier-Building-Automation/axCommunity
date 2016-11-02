@@ -92,6 +92,20 @@ public class BDynamicLinks extends BComponent
   /**See the class description for more information*/
   public void setSlotInfoCsv(String v) {setString(slotInfoCsv,v);}
 
+  /**Under development.  This doesn't do anything yet, so it is hidden.*/
+  public static final Property enableDynamicKnobs = newProperty(Flags.HIDDEN, true);
+  /**Under development.  This doesn't do anything yet, so it is hidden.*/
+  public boolean getEnableDynamicKnobs() { return getBoolean(enableDynamicKnobs);}
+  /**Under development.  This doesn't do anything yet, so it is hidden.*/
+  public void setEnableDynamicKnobs(boolean v) {setBoolean(enableDynamicKnobs,v);}
+  
+  /**Under development.  This doesn't do anything yet.*/
+  public static final Property knobInfoCsv = newProperty(Flags.HIDDEN, "", fctStrMulti);
+  /**Under development.  This doesn't do anything yet.*/
+  public String getKnobInfoCsv() { return getString(knobInfoCsv);}
+  /**Under development.  This doesn't do anything yet.*/
+  public void setKnobInfoCsv(String v) {setString(knobInfoCsv,v);}
+  
   public static final Property executeFindAndReplace = newProperty(0, false);
   public boolean getExecuteFindAndReplace() { return getBoolean(executeFindAndReplace);}
   public void setExecuteFindAndReplace(boolean v) {setBoolean(executeFindAndReplace,v);}
@@ -112,7 +126,7 @@ public class BDynamicLinks extends BComponent
   /**Set to zero seconds to disable*/
   public void setRefreshInterval(BRelTime v) {set(refreshInterval,v);}
   
-  public static final Property refreshLinksAtMidnight = newProperty(Flags.SUMMARY, true);
+  public static final Property refreshLinksAtMidnight = newProperty(0, true);
   public boolean getRefreshLinksAtMidnight() { return getBoolean(refreshLinksAtMidnight);}
   public void setRefreshLinksAtMidnight(boolean v) {setBoolean(refreshLinksAtMidnight,v);}
   
@@ -185,6 +199,20 @@ public class BDynamicLinks extends BComponent
     if(p.equals(slotInfoCsv) || p.equals(statusForInvalidOrds)) doRefreshLinks();
     if(p.equals(refreshInterval)) updateTimer();
     if(p.equals(refreshLinksAtMidnight)) scheduleMidnightTimer();
+    
+    if(p.equals(enableDynamicKnobs))
+    {
+      if(getEnableDynamicKnobs())
+      {
+        removeSlotFlag(knobInfoCsv, Flags.HIDDEN);
+        //Call new knob void here
+      }
+      else
+      {
+        addSlotFlag(knobInfoCsv, Flags.HIDDEN);
+        //I'm still not sure if any knobs should be deleted yet, but if so, it should be called here
+      }
+    }
     
     if(p.equals(executeFindAndReplace) && 
         getExecuteFindAndReplace() && 
@@ -343,15 +371,12 @@ public class BDynamicLinks extends BComponent
                 if(!getIgnoreMissingObjects())
                 {
                   logger.error(destinationComp.getSlotPath().toString() + " - Could not resolve ord!");
-                  logger.error("Format: " + formatOrd);
                   logger.error("Ord: " + ord);
                   logger.error("Source Slot Name: " + sourceSlotName);
-//                  continue;
                 }
                 else
                 {
                   logger.trace(destinationComp.getSlotPath().toString() + " - Target slot missing and invalid source ord!");
-                  logger.trace("Format: " + formatOrd);
                   logger.trace("Ord: " + ord);
                   logger.trace("Source Slot Name: " + sourceSlotName);
                 }
@@ -363,12 +388,10 @@ public class BDynamicLinks extends BComponent
               if(!getIgnoreMissingObjects())
               {
                 logger.error(destinationComp.getSlotPath().toString() + " - Could not retrieve ord/slot details!");
-                logger.error("Format: " + formatOrd);
                 logger.error("Ord: " + ord);
                 logger.error("Source Slot Name: " + sourceSlotName);
                 logger.trace(f.getMessage());
                 if(logger.isTraceOn()) f.printStackTrace();
-//                continue;
               }
             }
           }
@@ -379,7 +402,6 @@ public class BDynamicLinks extends BComponent
           if(!getIgnoreMissingObjects())
           {
             logger.error(destinationComp.getSlotPath().toString() + " - Could not retrieve ord/slot details!");
-            logger.error("Format: " + formatOrd);
             logger.error("Ord: " + ord);
             logger.error("Source Slot Name: " + sourceSlotName);
             logger.trace(e.getMessage());
@@ -391,7 +413,6 @@ public class BDynamicLinks extends BComponent
       else sourceBValue = new BStatusString();
       
       logger.trace(destinationComp.getSlotPath().toString());
-      logger.trace("Format: " + formatOrd);
       logger.trace("Ord: " + ord);
       logger.trace("Source Slot Name: " + sourceSlotName);
       try{logger.trace("Source Type: " + sourceBValue.getTypeDisplayName(null));} catch (Exception e){}
@@ -489,30 +510,6 @@ public class BDynamicLinks extends BComponent
         if(logger.isTraceOn()) e.printStackTrace();
         continue;
       }
-      
-      
-//      if(invalidSourceOrd && ((BObject)get(targetSlotName))==null)
-//      {
-//        if(!getIgnoreMissingObjects())
-//        {
-//          logger.error(destinationComp.getSlotPath().toString() + " - Target slot missing and invalid source ord!");
-//          logger.error("Format: " + formatOrd);
-//          logger.error("Ord: " + ord);
-//          logger.error("Source Slot Name: " + sourceSlotName);
-//          logger.error("Target Slot Name: " + targetSlotName);
-//        }
-//        else
-//        {
-//          logger.trace(destinationComp.getSlotPath().toString() + " - Target slot missing and invalid source ord!");
-//          logger.trace("Format: " + formatOrd);
-//          logger.trace("Ord: " + ord);
-//          logger.trace("Source Slot Name: " + sourceSlotName);
-//          logger.trace("Target Slot Name: " + targetSlotName);
-//        }
-//        continue;
-//      }
-//      
-//      
       
       if(!slotAdded && !invalidSourceOrd)
       {
@@ -747,7 +744,7 @@ public class BDynamicLinks extends BComponent
           else
           {
             //TODO: Remove this once the code above actually works
-            if(newCodeFailed)
+            if(newCodeFailed && targetSlotAsValue != null)
             {
               if(targetSlotAsValue instanceof BStatusBoolean)
                 destinationComp.set(targetSlotName, new BStatusBoolean(false, getStatusForInvalidOrds()));
@@ -767,7 +764,7 @@ public class BDynamicLinks extends BComponent
       }
       
       //TODO: Remove this once the code above actually works
-      else if(!validLinks && newCodeFailed)
+      else if(!validLinks && newCodeFailed && targetSlotAsValue != null)
       {
         if(targetSlotAsValue instanceof BBoolean)
           destinationComp.set(targetSlotName, BBoolean.DEFAULT);
@@ -1100,5 +1097,17 @@ public class BDynamicLinks extends BComponent
       if(logger.isTraceOn()) e.printStackTrace();
     }
     return com;
+  }
+  
+  private void addSlotFlag(Property inPropertyName, int flag)
+  {
+    Slot updateSlot = getSlot(inPropertyName.getName());
+    setFlags(updateSlot, (getFlags(updateSlot) | flag));
+  }
+  
+  private void removeSlotFlag(Property inPropertyName, int flag)
+  {
+    Slot updateSlot = getSlot(inPropertyName.getName());
+    setFlags(updateSlot, (getFlags(updateSlot) & ~flag));
   }
 }
