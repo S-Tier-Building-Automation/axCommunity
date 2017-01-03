@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.baja.io.Base64;
 import javax.baja.status.BStatusString;
 import javax.baja.sys.Action;
 import javax.baja.sys.BComponent;
@@ -21,6 +22,7 @@ import javax.baja.sys.Type;
  * Gets a specified web page as a StatusString
  *
  * @authors    Mike Arnott & Roman Ivanov, Kors Engineering
+ * 1/3/2107	   Additions by Julio Romero, added username/password
  */
 
 public class BGetHTTP extends BComponent{
@@ -33,7 +35,9 @@ public class BGetHTTP extends BComponent{
 			try {
 
 				String url = getInURL().getValue();
-				String response = Requester.get(new URL(url));
+				String username = getInUsername().getValue();
+				String password = getInPassword().getValue();
+				String response = Requester.get(new URL(url), username, password);
 				getHttpOut().setValue(response);
 			}catch (Exception e) {
 				//logger.warning( e.getClass().getName() + " : " + e.getMessage() + "\n");
@@ -61,6 +65,22 @@ public class BGetHTTP extends BComponent{
 		set(inURL, v);
 	}
 	
+	public static final Property inUsername = newProperty(Flags.SUMMARY, new BStatusString());
+	public BStatusString getInUsername() {
+		return (BStatusString) get(inUsername); 
+	}
+	public void setInUsername(BStatusString v) {
+		set(inUsername, v);
+	}
+
+	public static final Property inPassword = newProperty(Flags.SUMMARY, new BStatusString());
+	public BStatusString getInPassword() {
+		return (BStatusString) get(inPassword); 
+	}
+	public void setInPassword(BStatusString v) {
+		set(inPassword, v);
+	}
+	
 	/**Returned document*/
     public static final Property httpOut = newProperty(Flags.SUMMARY, new BStatusString(),tBox);
     public BStatusString getHttpOut() { return (BStatusString)get(httpOut); }
@@ -84,8 +104,12 @@ class Requester{
 	 * @return String with the response body.
 	 * @throws IOException
 	 */
-	public static String get(URL destination) throws IOException {
+	public static String get(URL destination, String login, String password) throws IOException {
 		HttpURLConnection connection = (HttpURLConnection) destination.openConnection();
+		if (login!=null && !"".equals(login.trim())) {
+			String authCode = Base64.encode((login + ":" + password).getBytes());
+			connection.setRequestProperty("Authorization", "Basic " + authCode);
+		}
 		connection.setRequestMethod("GET");
 		connection.setRequestProperty("Host", destination.getHost());
 		connection.setDoOutput(true);
