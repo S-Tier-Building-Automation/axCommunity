@@ -15,7 +15,7 @@ public class BBooleanRotateOnExecute extends BComponent
 	//Action "execute"
 	////////////////////////////////////////////////////////////////
 
-	public static final Action execute = newAction(Flags.ASYNC|Flags.DEFAULT_ON_CLONE,null);
+	public static final Action execute = newAction(0,null);
 	public void execute() { invoke(execute,null,null); }
 
 	////////////////////////////////////////////////////////////////
