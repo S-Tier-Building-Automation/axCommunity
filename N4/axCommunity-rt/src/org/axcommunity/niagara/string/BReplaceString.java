@@ -40,7 +40,6 @@ public class BReplaceString extends BComponent
 	public BDynamicEnum getCaseSensitivity() { return (BDynamicEnum)get(caseSensitivity); }
 	public void setCaseSensitivity(BDynamicEnum v) { set(caseSensitivity,v,null); }
 	
-	
 	/**Status String value in representing string to search for text to replace.*/
 	public static final Property inString = newProperty(0|Flags.SUMMARY, new BStatusString(""));
 	public BStatusString getInString() { return (BStatusString)get(inString);}
@@ -70,7 +69,6 @@ public class BReplaceString extends BComponent
 	public BStatusString getInReplacementString() { return (BStatusString)get(inReplacementString);}
 	public void setInReplacementString(BStatusString v) {set(inReplacementString,v);}
 	
-	
 	//********************************************************************************************************************************
 	
 	/**When TRUE all non-alphanumeric characters will be replaced with the value from 'inNonAlphaNumericReplacementString'*/
@@ -93,10 +91,6 @@ public class BReplaceString extends BComponent
 	public BStatusBoolean getInPreventConsecutiveReplacements() { return (BStatusBoolean)get(inPreventConsecutiveReplacements); }
 	public void setInPreventConsecutiveReplacements(BStatusBoolean v) { set(inPreventConsecutiveReplacements, v); }
 	
-	
-	
-	
-	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//	OUTPUTS   /////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,8 +109,6 @@ public class BReplaceString extends BComponent
 	public final static Property outNonAlphaNumericFound = newProperty(0, new BStatusBoolean(false));
 	public BStatusBoolean getOutNonAlphaNumericFound() { return (BStatusBoolean)get(outNonAlphaNumericFound); }
 	public void setOutNonAlphaNumericFound(BStatusBoolean v) { set(outNonAlphaNumericFound, v); }
-	
-	
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//	TOPIC SLOTS   /////////////////////////////////////////////////////////////////////////////////////////
@@ -124,7 +116,6 @@ public class BReplaceString extends BComponent
 	
 	public static final Topic NewStringResults = newTopic(0);
 	public void fireNewStringResults(BString event){fire(NewStringResults,event,null);}
-	
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/** Method invoked when any of the inputs changes values */////////////////////////////////////////////////
@@ -144,7 +135,6 @@ public class BReplaceString extends BComponent
 
 		}
 	}
-	
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/** Finds the string to replace and replaces with replacement string then outputs results. *///////////////
@@ -245,7 +235,11 @@ public class BReplaceString extends BComponent
 		}
 		catch (Exception e) 
 		{
-			log.severe("\n" + getSlotPath()	+ "\tdoExecute()\n" + e.getMessage() + "\n" + e.getStackTrace());
+			log.severe( "\n" + getSlotPath()	
+						+ "\n" + "Method             = " + "doExecute()" 
+						+ "\n" + "getMessage         = " + e.getMessage() 
+						+ "\n" + "getStackTrace      = " + e.getStackTrace() 
+						+ "\n" + "toString           = " + e.toString());
 			
 			getOutString().setValue("");
 			getOutStringFound().setValue(false);
@@ -344,12 +338,7 @@ public class BReplaceString extends BComponent
 			
 		return output;
 	}
-		
-		
-		
-		
-		
-	
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/** FIND AND REPLACE USING REGULAR EXPRESSION (CAN'T APPLY THE CASE SENSITIVITY HERE). *////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -401,13 +390,6 @@ public class BReplaceString extends BComponent
 		
 		
 	}
-	
-	
-	
-	
-	
-	
-	
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/** Finds the string to be replaced and replaces with new string. *////////////////////////////////////////
@@ -500,7 +482,14 @@ public class BReplaceString extends BComponent
 		}
 		catch (Exception e) 
 		{
-			log.severe("\n" + getSlotPath()	+ "\tprocessReplacement()\n" + e.getMessage() + "\n" + e.getStackTrace());
+			log.severe( "\n" + getSlotPath()	
+						+ "\n" + "Method             = " + "processReplacement()" 
+						+ "\n" + "input              = '" + input + "', LENGTH = '" + input.length() + "'"
+						+ "\n" + "stringToReplace    = '" + stringToReplace + "', LENGTH = '" + stringToReplace.length() + "'"
+						+ "\n" + "replacementString  = '" + replacementString + "', LENGTH = '" + replacementString.length() + "'"
+						+ "\n" + "getMessage         = " + e.getMessage() 
+						+ "\n" + "getStackTrace      = " + e.getStackTrace() 
+						+ "\n" + "toString           = " + e.toString());
 			FoundNormalReplacement	= false;
 			FoundNonAlphaNumeric	= false;
 			output 					= "";
@@ -511,14 +500,6 @@ public class BReplaceString extends BComponent
 		
 		return output;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/** Finds the non-alpha and non-numeric characters and replaces them with the replacement string*//////////
@@ -544,7 +525,12 @@ public class BReplaceString extends BComponent
 		}
 		catch (Exception e) 
 		{
-			log.severe("\n" + getSlotPath()	+ "\tremoveNonAlphaNumeric()\n" + e.getMessage() + "\n" + e.getStackTrace());
+			log.severe( "\n" + getSlotPath()	
+						+ "\n" + "Method             = " + "removeNonAlphaNumeric()" 
+						+ "\n" + "input              = '" + input + "', LENGTH = '" + input.length() + "'"
+						+ "\n" + "getMessage         = " + e.getMessage() 
+						+ "\n" + "getStackTrace      = " + e.getStackTrace() 
+						+ "\n" + "toString           = " + e.toString());
 			FoundNormalReplacement	= false;
 			FoundNonAlphaNumeric	= false;
 			output 					= "";
@@ -554,12 +540,7 @@ public class BReplaceString extends BComponent
 		
 		return output;
 	}
-	
-	
-	
-	
-	
-	
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/** Finds any double replacements and replaces with single replacement. *//////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -579,7 +560,15 @@ public class BReplaceString extends BComponent
 		}
 		catch (Exception e) 
 		{
-			log.severe("\n" + getSlotPath()	+ "\tremoveDuplicateReplacements()\n" + e.getMessage() + "\n" + e.getStackTrace());
+			log.severe( "\n" + getSlotPath()	
+						+ "\n" + "Method             = "	+ "removeDuplicateReplacements()" 
+						+ "\n" + "input              = '" + input + "', LENGTH = '" + input.length() + "'"
+						+ "\n" + "stringToReplace    = '" + stringToReplace + "', LENGTH = '" + stringToReplace.length() + "'"
+						+ "\n" + "replacementString  = '" + replacementString + "', LENGTH = '" + replacementString.length() + "'"
+						+ "\n" + "getMessage         = " + e.getMessage() 
+						+ "\n" + "getStackTrace      = " + e.getStackTrace() 
+						+ "\n" + "toString           = " + e.toString());
+						
 			FoundNormalReplacement	= false;
 			FoundNonAlphaNumeric	= false;
 			output 					= "";
@@ -590,12 +579,6 @@ public class BReplaceString extends BComponent
 		return output;
 	}
 	
-	
-	
-	
-	
-	
-	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/** Removes any replacement strings from the beginning and end of output string. */////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -603,44 +586,54 @@ public class BReplaceString extends BComponent
 	{
 		log.finest("\t" + getSlotPath()	+ "\t trimReplacements() called with input = '" + input + "'");
 		
-		String	replacementString1	= getInReplacementString().getValue();
-		String	replacementString2	= getInNonAlphaNumericReplacementString().getValue();
 		String	output				= input;
 		
-		try
+		if(input.length() > 0)
 		{
-			if(replacementString1.length()>0)
-			{
-				while( output.substring(0, replacementString1.length()).equals(replacementString1) &&  output.length()>replacementString1.length() ) 
-				{
-					output = output.substring(replacementString1.length());
-				}
-				
-				while( (output.substring(output.length()-replacementString1.length()).compareTo(replacementString1)==0) &&  output.length()>replacementString1.length() )
-				{
-					output = output.substring(0,output.length()-replacementString1.length());
-				}
-			}
+			String	replacementString1	= getInReplacementString().getValue();
+			String	replacementString2	= getInNonAlphaNumericReplacementString().getValue();
 			
-			if(replacementString2.length()>0)
+			try
 			{
-				while( output.substring(0, replacementString2.length()).equals(replacementString2) &&  output.length()>replacementString2.length() ) 
+				if(replacementString1.length()>0)
 				{
-					output = output.substring(replacementString2.length());
+					while( output.substring(0, replacementString1.length()).equals(replacementString1) &&  output.length()>replacementString1.length() ) 
+					{
+						output = output.substring(replacementString1.length());
+					}
+					
+					while( (output.substring(output.length()-replacementString1.length()).compareTo(replacementString1)==0) &&  output.length()>replacementString1.length() )
+					{
+						output = output.substring(0,output.length()-replacementString1.length());
+					}
 				}
 				
-				while( (output.substring(output.length()-replacementString2.length()).compareTo(replacementString2)==0) &&  output.length()>replacementString2.length() )
+				if(replacementString2.length()>0)
 				{
-					output = output.substring(0,output.length()-replacementString2.length());
+					while( output.substring(0, replacementString2.length()).equals(replacementString2) &&  output.length()>replacementString2.length() ) 
+					{
+						output = output.substring(replacementString2.length());
+					}
+					
+					while( (output.substring(output.length()-replacementString2.length()).compareTo(replacementString2)==0) &&  output.length()>replacementString2.length() )
+					{
+						output = output.substring(0,output.length()-replacementString2.length());
+					}
 				}
 			}
-		}
-		catch (Exception e) 
-		{
-			log.severe("\n" + getSlotPath()	+ "\ttrimReplacements()\tINPUT: " +input+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
-			FoundNormalReplacement	= false;
-			FoundNonAlphaNumeric	= false;
-			output 					= "";
+			catch (Exception e) 
+			{
+				log.severe( "\n" + getSlotPath()	
+							+ "\n" + "Method             = " + "trimReplacements()" 
+							+ "\n" + "input              = '" + input + "', LENGTH = '" + input.length() + "'"
+							+ "\n" + "getMessage         = " + e.getMessage() 
+							+ "\n" + "getStackTrace      = " + e.getStackTrace() 
+							+ "\n" + "toString           = " + e.toString());
+							
+				FoundNormalReplacement	= false;
+				FoundNonAlphaNumeric	= false;
+				output 					= "";
+			}
 		}
 		
 		log.finest("\t" + getSlotPath()	+ "\t trimReplacements() returning '" + output + "'");
@@ -648,15 +641,6 @@ public class BReplaceString extends BComponent
 		return output;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	//public static final Log logger = Log.getLog("axCommunity.ReplaceString");
 	public static final Logger log = Logger.getLogger("axCommunity.ReplaceString");
 
 	public Type getType() { return TYPE; }
@@ -664,6 +648,4 @@ public class BReplaceString extends BComponent
 
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/JustinKoffler.png");
-
-
 }
