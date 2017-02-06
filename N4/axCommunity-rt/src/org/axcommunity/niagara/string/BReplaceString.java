@@ -1,8 +1,10 @@
 package org.axcommunity.niagara.string;
 
 import java.util.logging.*;
-import javax.baja.log.Log;
+
+import javax.baja.status.BStatus;
 import javax.baja.status.BStatusBoolean;
+import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
 import javax.baja.sys.*;
 
@@ -27,7 +29,7 @@ public class BReplaceString extends BComponent
 	//	ACTION SLOTS   ////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public static final Action Execute = newAction(0|Flags.ASYNC|Flags.DEFAULT_ON_CLONE,null);
+	public static final Action Execute = newAction(Flags.ASYNC|Flags.DEFAULT_ON_CLONE,null);
 	public void Execute(){invoke(Execute,null,null);}
 	// public void doExecute(){} // Method actions are below on change method.
 	
@@ -41,31 +43,31 @@ public class BReplaceString extends BComponent
 	public void setCaseSensitivity(BDynamicEnum v) { set(caseSensitivity,v,null); }
 	
 	/**Status String value in representing string to search for text to replace.*/
-	public static final Property inString = newProperty(0|Flags.SUMMARY, new BStatusString(""));
+	public static final Property inString = newProperty(Flags.SUMMARY, new BStatusString(""), BFacets.make(BFacets.MULTI_LINE, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getInString() { return (BStatusString)get(inString);}
 	public void setInString(BStatusString v) {set(inString,v);}  
 
 	//********************************************************************************************************************************
 	
 	/**Status String value in representing text to search for and replace.*/
-	public static final Property inStringToReplace = newProperty(0|Flags.SUMMARY, new BStatusString(""));
+	public static final Property inStringToReplace = newProperty(Flags.SUMMARY, new BStatusString(""), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getInStringToReplace() { return (BStatusString)get(inStringToReplace);}
 	public void setInStringToReplace(BStatusString v) {set(inStringToReplace,v);}
 
 	/** Comma separated values representing the string you wish to search for and replace.*/
-	public static final Property inCsvStringsToReplace = newProperty(Flags.SUMMARY, new BStatusString(""));
+	public static final Property inCsvStringsToReplace = newProperty(0, new BStatusString(""), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getInCsvStringsToReplace() { return (BStatusString)get(inCsvStringsToReplace);}
 	public void setInCsvStringsToReplace(BStatusString v) {set(inCsvStringsToReplace,v);}
 	
 	/** Regular Expression representing the string you wish to search for and replace.*/
-	public static final Property inRegExpToReplace = newProperty(Flags.SUMMARY, new BStatusString(""));
+	public static final Property inRegExpToReplace = newProperty(0, new BStatusString(""), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getInRegExpToReplace() { return (BStatusString)get(inRegExpToReplace);}
 	public void setInRegExpToReplace(BStatusString v) {set(inRegExpToReplace,v);}
 	
 	//********************************************************************************************************************************
 	
 	/**Status String value in representing text to use in place of searched text.*/
-	public static final Property inReplacementString = newProperty(Flags.SUMMARY, new BStatusString(""));
+	public static final Property inReplacementString = newProperty(Flags.SUMMARY, new BStatusString(""), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getInReplacementString() { return (BStatusString)get(inReplacementString);}
 	public void setInReplacementString(BStatusString v) {set(inReplacementString,v);}
 	
@@ -77,7 +79,7 @@ public class BReplaceString extends BComponent
 	public void setInRemoveNonAlphaNumericCharacters(BStatusBoolean v) { set(inRemoveNonAlphaNumericCharacters, v); }
 	
 	/**Character to use as replacement for non-alphanumeric characters. This must only be a SINGLE character*/
-	public static final Property inNonAlphaNumericReplacementString = newProperty(0, new BStatusString());
+	public static final Property inNonAlphaNumericReplacementString = newProperty(0, new BStatusString(), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getInNonAlphaNumericReplacementString() { return (BStatusString)get(inNonAlphaNumericReplacementString);}
 	public void setInNonAlphaNumericReplacementString(BStatusString v) {set(inNonAlphaNumericReplacementString,v);}
 
@@ -96,7 +98,7 @@ public class BReplaceString extends BComponent
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/**Status String value out representing the new text with replaced values.*/
-	public static final Property outString = newProperty(Flags.SUMMARY, new BStatusString(""));
+	public static final Property outString = newProperty(Flags.SUMMARY, new BStatusString(""), BFacets.make(BFacets.MULTI_LINE, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getOutString() { return (BStatusString)get(outString);}
 	public void setOutString(BStatusString v) {set(outString,v);}
 
@@ -110,6 +112,22 @@ public class BReplaceString extends BComponent
 	public BStatusBoolean getOutNonAlphaNumericFound() { return (BStatusBoolean)get(outNonAlphaNumericFound); }
 	public void setOutNonAlphaNumericFound(BStatusBoolean v) { set(outNonAlphaNumericFound, v); }
 
+	/**STATUS NUMERIC OUTPUT, LengthInput*/
+	public static final Property outLengthInput  = newProperty(0, new BStatusNumeric(0, BStatus.DEFAULT), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public BStatusNumeric getOutLengthInput() {return (BStatusNumeric) get(outLengthInput); }
+	public void setOutLengthInput(BStatusNumeric v) {set(outLengthInput, v);}
+	
+	/**STATUS NUMERIC OUTPUT, LengthOutput*/
+	public static final Property outLengthOutput  = newProperty(0, new BStatusNumeric(0, BStatus.DEFAULT), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public BStatusNumeric getOutLengthOutput() {return (BStatusNumeric) get(outLengthOutput); }
+	public void setOutLengthOutput(BStatusNumeric v) {set(outLengthOutput, v);}
+	
+	/**STATUS NUMERIC OUTPUT, LengthDifference*/
+	public static final Property outLengthDifference  = newProperty(0, new BStatusNumeric(0, BStatus.DEFAULT), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public BStatusNumeric getOutLengthDifference() {return (BStatusNumeric) get(outLengthDifference); }
+	public void setOutLengthDifference(BStatusNumeric v) {set(outLengthDifference, v);}
+	
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//	TOPIC SLOTS   /////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,7 +159,7 @@ public class BReplaceString extends BComponent
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public void doExecute()
 	{
-		log.finest("\t" + getSlotPath()	+ "\t doExecute() called...");
+		log.finest("\t" + getSlotPath()	+ "\t" + "doExecute() called...");
 		
 		try
 		{	
@@ -151,7 +169,7 @@ public class BReplaceString extends BComponent
 			FoundNormalReplacement		= false;
 			FoundNonAlphaNumeric		= false;
 			
-			// Process Order:
+			// PROCESS ORDER:
 			// Non-Alpha
 			// RegExp
 			// Single
@@ -168,7 +186,7 @@ public class BReplaceString extends BComponent
 			}
 			else
 			{
-				log.finest("\t" + getSlotPath()	+ "\t skipping removeNonAlphaNumeric()");
+				log.finest("\t" + getSlotPath()	+ "\t" + "skipping removeNonAlphaNumeric()");
 			}
 			
 			
@@ -181,7 +199,7 @@ public class BReplaceString extends BComponent
 			}
 			else
 			{
-				log.finest("\t" + getSlotPath()	+ "\t skipping regExpReplacement()");
+				log.finest("\t" + getSlotPath()	+ "\t" + "skipping regExpReplacement()");
 			}
 
 			
@@ -194,7 +212,7 @@ public class BReplaceString extends BComponent
 			}
 			else
 			{
-				log.finest("\t" + getSlotPath()	+ "\t skipping singleReplacement()");
+				log.finest("\t" + getSlotPath()	+ "\t" + "skipping singleReplacement()");
 			}
 			
 			
@@ -207,7 +225,7 @@ public class BReplaceString extends BComponent
 			}
 			else
 			{
-				log.finest("\t" + getSlotPath()	+ "\t skipping csvReplacement()");
+				log.finest("\t" + getSlotPath()	+ "\t" + "skipping csvReplacement()");
 			}
 
 			
@@ -220,7 +238,7 @@ public class BReplaceString extends BComponent
 			}
 			else
 			{
-				log.finest("\t" + getSlotPath()	+ "\t skipping trimReplacements()");
+				log.finest("\t" + getSlotPath()	+ "\t" + "skipping trimReplacements()");
 			}
 	
 			
@@ -228,18 +246,36 @@ public class BReplaceString extends BComponent
 		
 			
 			// ALL DONE WITH REPLACEMENTS, OUTPUT THE RESULTS.
+			getOutLengthInput().setValue(getInString().getValue().length());
+			getOutLengthOutput().setValue(output.length());
+			getOutLengthDifference().setValue(getOutLengthOutput().getValue() - getOutLengthInput().getValue());
+			
+			// setOutLengthInput(new BStatusNumeric(getInString().getValue().length(), BStatus.ok));
+			// setOutLengthOutput(new BStatusNumeric(output.length(), BStatus.ok));
+			// setOutLengthDifference(new BStatusNumeric(getOutLengthOutput().getValue() - getOutLengthInput().getValue(), BStatus.ok));
+			
 			getOutString().setValue(output);
 			getOutStringFound().setValue(FoundNormalReplacement);
 			getOutNonAlphaNumericFound().setValue(FoundNonAlphaNumeric);
 			fireNewStringResults(BString.make(output));
+			
+			
 		}
 		catch (Exception e) 
 		{
-			log.severe( "\n" + getSlotPath()	
-						+ "\n" + "Method             = " + "doExecute()" 
-						+ "\n" + "getMessage         = " + e.getMessage() 
-						+ "\n" + "getStackTrace      = " + e.getStackTrace() 
-						+ "\n" + "toString           = " + e.toString());
+			log.severe(	  "\n" + getSlotPath()	
+						+ "\n" + "METHOD          = " + "doExecute()" 
+						+ "\n" + "MESSAGE         = " + "\n" + e.getMessage() 
+						+ "\n" + "STACKTRACE      = " + "\n" + e.getStackTrace() 
+						+ "\n" + "TO STRING       = " + "\n" + e.toString());
+			
+			getOutLengthInput().setValue(getInString().getValue().length());
+			getOutLengthOutput().setValue(0);
+			getOutLengthDifference().setValue(getOutLengthOutput().getValue() - getOutLengthInput().getValue());
+			
+			// setOutLengthInput(new BStatusNumeric(getInString().getValue().length(), BStatus.ok));
+			// setOutLengthOutput(new BStatusNumeric(0, BStatus.ok));
+			// setOutLengthDifference(new BStatusNumeric(getOutLengthOutput().getValue() - getOutLengthInput().getValue(), BStatus.ok));
 			
 			getOutString().setValue("");
 			getOutStringFound().setValue(false);
@@ -252,7 +288,7 @@ public class BReplaceString extends BComponent
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public String csvReplacement(String input)
 	{
-		log.finest("\t" + getSlotPath()	+ "\t csvReplacement() called with input = '" + input + "'");
+		log.finest("\t" + getSlotPath()	+ "\t" + "csvReplacement() called with input = '" + input + "'");
 		
 		String		output					= input;
 		String[]	arrStringsToReplace		= getInCsvStringsToReplace().getValue().split(",");
@@ -279,7 +315,7 @@ public class BReplaceString extends BComponent
 						int	idx = input.lastIndexOf( csvStringToReplace );
 						if ( idx != -1 ) 
 						{
-							log.finest("\t" + getSlotPath()	+ "\tinput(" + input.length() + ") Replacing '" + csvStringToReplace + "' with '" + replacementString + "' in '" +  input + "'");
+							log.finest("\t" + getSlotPath()	+ "\t" + "input(" + input.length() + ") Replacing '" + csvStringToReplace + "' with '" + replacementString + "' in '" +  input + "'");
 							
 							StringBuffer results = new StringBuffer( input );
 							results.replace( idx, idx+csvStringToReplace.length(), replacementString );
@@ -292,7 +328,7 @@ public class BReplaceString extends BComponent
 						}
 						else
 						{
-							log.finest("\t" + getSlotPath()	+ "\tDidn't find '" + csvStringToReplace + "' in '" +  input + "'");
+							log.finest("\t" + getSlotPath()	+ "\t" + "csvReplacement() Didn't find '" + csvStringToReplace + "' in '" +  input + "'");
 						}
 					}
 					else
@@ -300,7 +336,7 @@ public class BReplaceString extends BComponent
 						int	idx = input.toUpperCase().lastIndexOf( csvStringToReplace.toUpperCase() );
 						if ( idx != -1 ) 
 						{
-							log.finest("\t" + getSlotPath()	+ "\tinput(" + input.length() + ") Replacing '" + csvStringToReplace + "' with '" + replacementString + "' in '" +  input + "'");
+							log.finest("\t" + getSlotPath()	+ "\t" + "input(" + input.length() + ") Replacing '" + csvStringToReplace + "' with '" + replacementString + "' in '" +  input + "'");
 							
 							StringBuffer results = new StringBuffer( input );
 							results.replace( idx, idx+csvStringToReplace.length(), replacementString );
@@ -313,7 +349,7 @@ public class BReplaceString extends BComponent
 						}
 						else
 						{
-							log.finest("\t" + getSlotPath()	+ "\tDidn't find '" + csvStringToReplace + "' in '" +  input + "'");
+							log.finest("\t" + getSlotPath()	+ "\t" + "csvReplacement() Didn't find '" + csvStringToReplace + "' in '" +  input + "'");
 						}
 					}
 				}
@@ -322,18 +358,23 @@ public class BReplaceString extends BComponent
 			}
 			else
 			{
-				log.finest("\t" + getSlotPath()	+ "\tinCsvStringsToReplace Not Defined, no replacements made.");
+				log.finest("\t" + getSlotPath()	+ "\t" + "inCsvStringsToReplace Not Defined, no replacements made.");
 			}
 		}
 		catch (Exception e) 
 		{
-			log.severe("\n" + getSlotPath()	+ "\tregExpReplacement()\n" + e.getMessage() + "\n" + e.getStackTrace());
+			log.severe(	  "\n" + getSlotPath()	
+						+ "\n" + "METHOD          = " + "csvReplacement()" 
+						+ "\n" + "MESSAGE         = " + "\n" + e.getMessage() 
+						+ "\n" + "STACKTRACE      = " + "\n" + e.getStackTrace() 
+						+ "\n" + "TO STRING       = " + "\n" + e.toString());
+						
 			FoundNormalReplacement	= false;
 			FoundNonAlphaNumeric	= false;
 			output 					= "";
 		}
 		
-		log.finest("\t" + getSlotPath()	+ "\t csvReplacement() returning '" + output + "'");
+		log.finest("\t" + getSlotPath()	+ "\t" + "csvReplacement() returning '" + output + "'");
 		
 			
 		return output;
@@ -344,7 +385,7 @@ public class BReplaceString extends BComponent
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public String regExpReplacement(String input)
 	{
-		log.finest("\t" + getSlotPath()	+ "\t regExpReplacement() called with input = '" + input + "'");
+		log.finest("\t" + getSlotPath()	+ "\t" + "regExpReplacement() called with input = '" + input + "'");
 		
 		String		output					= input;
 		String		regExpToReplace			= getInRegExpToReplace().getValue();
@@ -355,35 +396,40 @@ public class BReplaceString extends BComponent
 			if(getInRegExpToReplace().getValue().length()>0)
 			{
 				// FIND AND REPLACE SINGLE LOOKUP VALUE
-				int idx = input.lastIndexOf( regExpToReplace );
-				if ( idx != -1 ) 
-				{
-					log.finest("\t" + getSlotPath()	+ "\tinput(" + input.length() + ") Replacing '" + regExpToReplace + "' with '" + replacementString + "' in '" +  input + "'");
+				// int idx = input.lastIndexOf( regExpToReplace );
+				// if ( idx != -1 ) 
+				// {
+					log.finest("\t" + getSlotPath()	+ "\t" + "input(" + input.length() + ") Replacing '" + regExpToReplace + "' with '" + replacementString + "' in '" +  input + "'");
 					
 					output = input.replaceAll(regExpToReplace, replacementString);
 					FoundNormalReplacement	= true;
-				}
-				else
-				{
-					log.finest("\t" + getSlotPath()	+ "\tDidn't find '" + regExpToReplace + "' in '" +  input + "'");
-				}
+				// }
+				// else
+				// {
+					// log.finest("\t" + getSlotPath()	+ "\t" + "regExpReplacement() Didn't find '" + regExpToReplace + "' in '" +  input + "'");
+				// }
 			}
 			else
 			{
-				log.finest("\t" + getSlotPath()	+ "\tinRegExpToReplace Not Defined, no replacements made.");
+				log.finest("\t" + getSlotPath()	+ "\t" + "inRegExpToReplace Not Defined, no replacements made.");
 			}
 			
 			
 		}
 		catch (Exception e) 
 		{
-			log.severe("\n" + getSlotPath()	+ "\tregExpReplacement()\n" + e.getMessage() + "\n" + e.getStackTrace());
+			log.severe(	  "\n" + getSlotPath()	
+						+ "\n" + "METHOD          = " + "regExpReplacement()" 
+						+ "\n" + "MESSAGE         = " + "\n" + e.getMessage() 
+						+ "\n" + "STACKTRACE      = " + "\n" + e.getStackTrace() 
+						+ "\n" + "TO STRING       = " + "\n" + e.toString());
+						
 			FoundNormalReplacement	= false;
 			FoundNonAlphaNumeric	= false;
 			output 					= "";
 		}
 		
-		log.finest("\t" + getSlotPath()	+ "\t regExpReplacement() returning '" + output + "'");
+		log.finest("\t" + getSlotPath()	+ "\t" + "regExpReplacement() returning '" + output + "'");
 		
 			
 		return output;
@@ -396,7 +442,7 @@ public class BReplaceString extends BComponent
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public String singleReplacement(String input, String stringToReplace, String replacementString, boolean NormalReplacement)
 	{
-		log.finest("\t" + getSlotPath()	+ "\t singleReplacement() called with input = '" + input + "'");
+		log.finest("\t" + getSlotPath()	+ "\t" + "singleReplacement() called with input = '" + input + "'");
 		
 		String		output			= input;
 		boolean		caseSensitive	= true;
@@ -414,7 +460,7 @@ public class BReplaceString extends BComponent
 				int idx = input.lastIndexOf( stringToReplace );
 				if ( idx != -1 ) 
 				{
-					log.finest("\t" + getSlotPath()	+ "\tinput(" + input.length() + ") Replacing '" + stringToReplace + "' with '" + replacementString + "' in '" +  input + "'");
+					log.finest("\t" + getSlotPath()	+ "\t" + "input(" + input.length() + ") Replacing '" + stringToReplace + "' with '" + replacementString + "' in '" +  input + "'");
 					StringBuffer results = new StringBuffer( input );
 					results.replace( idx, idx+stringToReplace.length(), replacementString );
 					while( (idx=input.lastIndexOf(stringToReplace, idx-1)) != -1 ) 
@@ -440,7 +486,7 @@ public class BReplaceString extends BComponent
 				}
 				else
 				{
-					log.finest("\t" + getSlotPath()	+ "\tDidn't find '" + stringToReplace + "' in '" +  input + "'");
+					log.finest("\t" + getSlotPath()	+ "\t" + "singleReplacement() Didn't find '" + stringToReplace + "' in '" +  input + "'");
 					output = input;
 				}
 			}
@@ -449,7 +495,7 @@ public class BReplaceString extends BComponent
 				int idx = input.toUpperCase().lastIndexOf( stringToReplace.toUpperCase() );
 				if ( idx != -1 ) 
 				{
-					log.finest("\t" + getSlotPath()	+ "\tinput(" + input.length() + ") Replacing '" + stringToReplace + "' with '" + replacementString + "' in '" +  input + "'");
+					log.finest("\t" + getSlotPath()	+ "\t" + "input(" + input.length() + ") Replacing '" + stringToReplace + "' with '" + replacementString + "' in '" +  input + "'");
 					StringBuffer results = new StringBuffer( input );
 					results.replace( idx, idx+stringToReplace.length(), replacementString );
 					while( (idx=input.toUpperCase().lastIndexOf(stringToReplace.toUpperCase(), idx-1)) != -1 ) 
@@ -475,7 +521,7 @@ public class BReplaceString extends BComponent
 				}
 				else
 				{
-					log.finest("\t" + getSlotPath()	+ "\tDidn't find '" + stringToReplace + "' in '" +  input + "'");
+					log.finest("\t" + getSlotPath()	+ "\t" + "singleReplacement() Didn't find '" + stringToReplace + "' in '" +  input + "'");
 					output = input;
 				}
 			}
@@ -483,19 +529,20 @@ public class BReplaceString extends BComponent
 		catch (Exception e) 
 		{
 			log.severe( "\n" + getSlotPath()	
-						+ "\n" + "Method             = " + "processReplacement()" 
-						+ "\n" + "input              = '" + input + "', LENGTH = '" + input.length() + "'"
-						+ "\n" + "stringToReplace    = '" + stringToReplace + "', LENGTH = '" + stringToReplace.length() + "'"
-						+ "\n" + "replacementString  = '" + replacementString + "', LENGTH = '" + replacementString.length() + "'"
-						+ "\n" + "getMessage         = " + e.getMessage() 
-						+ "\n" + "getStackTrace      = " + e.getStackTrace() 
-						+ "\n" + "toString           = " + e.toString());
+						+ "\n" + "METHOD               = " + "processReplacement()" 
+						+ "\n" + "INPUT                = '" + input + "', LENGTH = '" + input.length() + "'"
+						+ "\n" + "STRING TO REPLACE    = '" + stringToReplace + "', LENGTH = '" + stringToReplace.length() + "'"
+						+ "\n" + "REPLACEMENT STRING   = '" + replacementString + "', LENGTH = '" + replacementString.length() + "'"
+						+ "\n" + "MESSAGE              = " + "\n" + e.getMessage() 
+						+ "\n" + "STACKTRACE           = " + "\n" + e.getStackTrace() 
+						+ "\n" + "TO STRING            = " + "\n" + e.toString());
+						
 			FoundNormalReplacement	= false;
 			FoundNonAlphaNumeric	= false;
 			output 					= "";
 		}
 		
-		log.finest("\t" + getSlotPath()	+ "\t singleReplacement() returning '" + output + "'");
+		log.finest("\t" + getSlotPath()	+ "\t" + "singleReplacement() returning '" + output + "'");
 		
 		
 		return output;
@@ -506,7 +553,7 @@ public class BReplaceString extends BComponent
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public String removeNonAlphaNumeric(String input)
 	{
-		log.finest("\t" + getSlotPath()	+ "\t removeNonAlphaNumeric() called with input = '" + input + "'");
+		log.finest("\t" + getSlotPath()	+ "\t" + "removeNonAlphaNumeric() called with input = '" + input + "'");
 		
 		String			replacementString	= getInNonAlphaNumericReplacementString().getValue();
 		StringBuffer	inputChars			= new StringBuffer( input );
@@ -526,17 +573,18 @@ public class BReplaceString extends BComponent
 		catch (Exception e) 
 		{
 			log.severe( "\n" + getSlotPath()	
-						+ "\n" + "Method             = " + "removeNonAlphaNumeric()" 
-						+ "\n" + "input              = '" + input + "', LENGTH = '" + input.length() + "'"
-						+ "\n" + "getMessage         = " + e.getMessage() 
-						+ "\n" + "getStackTrace      = " + e.getStackTrace() 
-						+ "\n" + "toString           = " + e.toString());
+						+ "\n" + "METHOD               = " + "removeNonAlphaNumeric()" 
+						+ "\n" + "INPUT                = '" + input + "', LENGTH = '" + input.length() + "'"
+						+ "\n" + "MESSAGE              = " + "\n" + e.getMessage() 
+						+ "\n" + "STACKTRACE           = " + "\n" + e.getStackTrace() 
+						+ "\n" + "TO STRING            = " + "\n" + e.toString());
+						
 			FoundNormalReplacement	= false;
 			FoundNonAlphaNumeric	= false;
 			output 					= "";
 		}
 		
-		log.finest("\t" + getSlotPath()	+ "\t removeNonAlphaNumeric() returning '" + output + "'");
+		log.finest("\t" + getSlotPath()	+ "\t" + "removeNonAlphaNumeric() returning '" + output + "'");
 		
 		return output;
 	}
@@ -546,7 +594,7 @@ public class BReplaceString extends BComponent
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public String removeDuplicateReplacements(String input, String stringToReplace, String replacementString)
 	{
-		log.finest("\t" + getSlotPath()	+ "\t removeDuplicateReplacements() called with input = '" + input + "'");
+		log.finest("\t" + getSlotPath()	+ "\t" + "removeDuplicateReplacements() called with input = '" + input + "'");
 		
 		String	output	= input;
 		int		idx		= input.lastIndexOf( stringToReplace );
@@ -561,20 +609,20 @@ public class BReplaceString extends BComponent
 		catch (Exception e) 
 		{
 			log.severe( "\n" + getSlotPath()	
-						+ "\n" + "Method             = "	+ "removeDuplicateReplacements()" 
-						+ "\n" + "input              = '" + input + "', LENGTH = '" + input.length() + "'"
-						+ "\n" + "stringToReplace    = '" + stringToReplace + "', LENGTH = '" + stringToReplace.length() + "'"
-						+ "\n" + "replacementString  = '" + replacementString + "', LENGTH = '" + replacementString.length() + "'"
-						+ "\n" + "getMessage         = " + e.getMessage() 
-						+ "\n" + "getStackTrace      = " + e.getStackTrace() 
-						+ "\n" + "toString           = " + e.toString());
+						+ "\n" + "METHOD               = " + "removeDuplicateReplacements()" 
+						+ "\n" + "INPUT                = '" + input + "', LENGTH = '" + input.length() + "'"
+						+ "\n" + "STRING TO REPLACE    = '" + stringToReplace + "', LENGTH = '" + stringToReplace.length() + "'"
+						+ "\n" + "REPLACEMENT STRING   = '" + replacementString + "', LENGTH = '" + replacementString.length() + "'"
+						+ "\n" + "MESSAGE              = " + "\n" + e.getMessage() 
+						+ "\n" + "STACKTRACE           = " + "\n" + e.getStackTrace() 
+						+ "\n" + "TO STRING            = " + "\n" + e.toString());
 						
 			FoundNormalReplacement	= false;
 			FoundNonAlphaNumeric	= false;
 			output 					= "";
 		}
 		
-		log.finest("\t" + getSlotPath()	+ "\t removeDuplicateReplacements() returning '" + output + "'");
+		log.finest("\t" + getSlotPath()	+ "\t" + "removeDuplicateReplacements() returning '" + output + "'");
 		
 		return output;
 	}
@@ -584,7 +632,7 @@ public class BReplaceString extends BComponent
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public String trimReplacements(String input)
 	{
-		log.finest("\t" + getSlotPath()	+ "\t trimReplacements() called with input = '" + input + "'");
+		log.finest("\t" + getSlotPath()	+ "\t" + "trimReplacements() called with input = '" + input + "'");
 		
 		String	output				= input;
 		
@@ -624,28 +672,29 @@ public class BReplaceString extends BComponent
 			catch (Exception e) 
 			{
 				log.severe( "\n" + getSlotPath()	
-							+ "\n" + "Method             = " + "trimReplacements()" 
-							+ "\n" + "input              = '" + input + "', LENGTH = '" + input.length() + "'"
-							+ "\n" + "getMessage         = " + e.getMessage() 
-							+ "\n" + "getStackTrace      = " + e.getStackTrace() 
-							+ "\n" + "toString           = " + e.toString());
-							
+							+ "\n" + "METHOD               = " + "trimReplacements()" 
+							+ "\n" + "INPUT                = '" + input + "', LENGTH = '" + input.length() + "'"
+							+ "\n" + "MESSAGE              = " + "\n" + e.getMessage() 
+							+ "\n" + "STACKTRACE           = " + "\n" + e.getStackTrace() 
+							+ "\n" + "TO STRING            = " + "\n" + e.toString());
+				
 				FoundNormalReplacement	= false;
 				FoundNonAlphaNumeric	= false;
 				output 					= "";
 			}
 		}
 		
-		log.finest("\t" + getSlotPath()	+ "\t trimReplacements() returning '" + output + "'");
+		log.finest("\t" + getSlotPath()	+ "\t" + "trimReplacements() returning '" + output + "'");
 		
 		return output;
 	}
 	
-	public static final Logger log = Logger.getLogger("axCommunity.ReplaceString");
 
 	public Type getType() { return TYPE; }
 	public static final Type TYPE = Sys.loadType(BReplaceString.class);
 
+	public static final Logger log = Logger.getLogger(TYPE.getModule().getModuleName() + "." + TYPE.getTypeName());
+	
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/JustinKoffler.png");
 }
