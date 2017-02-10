@@ -145,6 +145,7 @@ public class BDynamicLinks extends BComponent
 	public static final Property useAreaZoneStation = newProperty(Flags.HIDDEN, false);
 	public boolean getUseAreaZoneStation() { return getBoolean(useAreaZoneStation); }
 	public void setUseAreaZoneStation(boolean v) { setBoolean(useAreaZoneStation, v); }
+	
 	/**This will refresh any links and any string values*/
 	public static final Action refreshLinks = newAction(Flags.OPERATOR,null);
 	/**This will refresh any links and any string values*/
@@ -181,13 +182,28 @@ public class BDynamicLinks extends BComponent
 	{
 		if(!Sys.atSteadyState() || !isRunning()) return;
 		//At this point, we know the object was just created (or copied).
-		startupRoutine();
+		try
+		{
+			startupRoutine();
+		}
+		catch (Exception e) 
+		{
+			logger.error("\n" + getSlotPath() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
+		}
 	}
 
 	public void atSteadyState() throws Exception
 	{
 		if(!Sys.atSteadyState() || !isRunning()) return;
-		startupRoutine();
+
+		try
+		{
+			startupRoutine();
+		}
+		catch (Exception e) 
+		{
+			logger.error("\n" + getSlotPath() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
+		}
 	}
 
 	public void stopped()
@@ -241,7 +257,6 @@ public class BDynamicLinks extends BComponent
 						{
 							if(destinationComp.getProperty(targetSlotName).isDynamic())
 							{
-								logger.trace(destinationComp.getSlotPath().toString() + "\t[changed()]\t" + "Reordering slot: " + targetSlotName);
 								destinationComp.reorderToBottom(destinationComp.getProperty(SlotPath.escape(targetSlotName)));
 							}
 						}
@@ -266,28 +281,42 @@ public class BDynamicLinks extends BComponent
 	
 	void updateTimer()
 	{
-		if (refreshTimer != null) refreshTimer.cancel();
-		if(getRefreshInterval().getSeconds() > 0) refreshTimer = Clock.schedulePeriodically(destinationComp, getRefreshInterval(), refreshLinks, null);
+		try
+		{
+			if (refreshTimer != null) refreshTimer.cancel();
+			if(getRefreshInterval().getSeconds() > 0) refreshTimer = Clock.schedulePeriodically(destinationComp, getRefreshInterval(), refreshLinks, null);
+		}
+		catch (Exception e) 
+		{
+			logger.error("\n" + getSlotPath() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
+		}
 	}
 	
 	private void scheduleMidnightTimer()
 	{
-		if(midnightTimer != null) midnightTimer.cancel();
-		if(getRefreshLinksAtMidnight())
+		try
 		{
-			//Create a random number that is between 0-300 seconds
-			int randomNumber = (int) ((Math.random()) * 300000);
-			int offsetMillis;
-			int offsetSeconds = 0;
-			if(randomNumber >= 1000)
+			if(midnightTimer != null) midnightTimer.cancel();
+			if(getRefreshLinksAtMidnight())
 			{
-				offsetSeconds = randomNumber / 1000;
-				offsetMillis = randomNumber % 1000;
+				//Create a random number that is between 0-300 seconds
+				int randomNumber = (int) ((Math.random()) * 300000);
+				int offsetMillis;
+				int offsetSeconds = 0;
+				if(randomNumber >= 1000)
+				{
+					offsetSeconds = randomNumber / 1000;
+					offsetMillis = randomNumber % 1000;
+				}
+				else offsetMillis = randomNumber;
+				
+				BAbsTime nextMidnight = BAbsTime.now().timeOfDay(0, 0, offsetSeconds, offsetMillis).nextDay();
+				midnightTimer = Clock.schedule(destinationComp, nextMidnight, midnightTimerExpired, null);
 			}
-			else offsetMillis = randomNumber;
-			
-			BAbsTime nextMidnight = BAbsTime.now().timeOfDay(0, 0, offsetSeconds, offsetMillis).nextDay();
-			midnightTimer = Clock.schedule(destinationComp, nextMidnight, midnightTimerExpired, null);
+		}
+		catch (Exception e) 
+		{
+			logger.error("\n" + getSlotPath() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
 		}
 	}
 	
@@ -1069,7 +1098,6 @@ public class BDynamicLinks extends BComponent
 		}
 		
 		return new SlotPath("slot", station);
-		
 	}
 	
 	/**

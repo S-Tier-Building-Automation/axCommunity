@@ -1,60 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/resources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="https://docs.oracle.com/javase/8/docs/api/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/rt.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="https://docs.oracle.com/javase/8/docs/api/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/jsse.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="https://docs.oracle.com/javase/8/docs/api/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/jce.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="https://docs.oracle.com/javase/8/docs/api/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/charsets.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="https://docs.oracle.com/javase/8/docs/api/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/jfr.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="https://docs.oracle.com/javase/8/docs/api/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/ext/access-bridge-32.jar"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/ext/cldrdata.jar"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/ext/dnsns.jar"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/ext/jaccess.jar"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/ext/jfxrt.jar"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/ext/localedata.jar"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/ext/nashorn.jar"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/ext/sunec.jar"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/ext/sunjce_provider.jar"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/ext/sunmscapi.jar"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/ext/sunpkcs11.jar"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/jre/lib/ext/zipfs.jar"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/baja.jar" sourcepath="C:/Niagara/Niagara-4.2.36.34/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/control-rt.jar" sourcepath="C:/Niagara/Niagara-4.2.36.34/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/driver-rt.jar" sourcepath="C:/Niagara/Niagara-4.2.36.34/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/platform-rt.jar" sourcepath="C:/Niagara/Niagara-4.2.36.34/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/bql-rt.jar" sourcepath="C:/Niagara/Niagara-4.2.36.34/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/alarm-rt.jar" sourcepath="C:/Niagara/Niagara-4.2.36.34/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/history-rt.jar" sourcepath="C:/Niagara/Niagara-4.2.36.34/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/gx-rt.jar" sourcepath="C:/Niagara/Niagara-4.2.36.34/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/kitControl-rt.jar" sourcepath="C:/Niagara/Niagara-4.2.36.34/modules/docBajaEclipse.zip"/>
-	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/bin/ext/nre.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Justin/.gradle/caches/modules-2/files-2.1/org.testng/testng/6.8.8/c4fb20cf89d278d71667d7273fa6e6cff8b97ca9/testng-6.8.8.jar" sourcepath="C:/Users/Justin/.gradle/caches/modules-2/files-2.1/org.testng/testng/6.8.8/2e40f493e5db82f4586d24034b4dd931d0b7f9dc/testng-6.8.8-sources.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Justin/.gradle/caches/modules-2/files-2.1/org.beanshell/bsh/2.0b4/a05f0a0feefa8d8467ac80e16e7de071489f0d9c/bsh-2.0b4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Justin/.gradle/caches/modules-2/files-2.1/com.beust/jcommander/1.27/58c9cbf0f1fa296f93c712f2cf46de50471920f9/jcommander-1.27.jar" sourcepath="C:/Users/Justin/.gradle/caches/modules-2/files-2.1/com.beust/jcommander/1.27/fae697ac46477a5227a5ee14f8f3a1270a4627b0/jcommander-1.27-sources.jar"/>
 	<classpathentry kind="output" path="build-eclipse"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/baja.jar"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/control-rt.jar"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/driver-rt.jar"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/platform-rt.jar"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/bql-rt.jar"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/alarm-rt.jar"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/history-rt.jar"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/gx-rt.jar"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/modules/kitControl-rt.jar"/>
+	<classpathentry kind="lib" path="C:/Niagara/Niagara-4.2.36.34/bin/ext/nre.jar"/>
+	<classpathentry sourcepath="C:/Users/Justin/.gradle/caches/modules-2/files-2.1/org.testng/testng/6.8.8/2e40f493e5db82f4586d24034b4dd931d0b7f9dc/testng-6.8.8-sources.jar" kind="lib" path="C:/Users/Justin/.gradle/caches/modules-2/files-2.1/org.testng/testng/6.8.8/c4fb20cf89d278d71667d7273fa6e6cff8b97ca9/testng-6.8.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Justin/.gradle/caches/modules-2/files-2.1/org.beanshell/bsh/2.0b4/a05f0a0feefa8d8467ac80e16e7de071489f0d9c/bsh-2.0b4.jar"/>
+	<classpathentry sourcepath="C:/Users/Justin/.gradle/caches/modules-2/files-2.1/com.beust/jcommander/1.27/fae697ac46477a5227a5ee14f8f3a1270a4627b0/jcommander-1.27-sources.jar" kind="lib" path="C:/Users/Justin/.gradle/caches/modules-2/files-2.1/com.beust/jcommander/1.27/58c9cbf0f1fa296f93c712f2cf46de50471920f9/jcommander-1.27.jar"/>
 </classpath>

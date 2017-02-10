@@ -2,12 +2,10 @@
  * Copyright (c) 2014 Tridium Inc., All Rights Reserved
  */
 
-group = 'Community'
-
-def moduleVersion = '17.02.01.00'
-def moduleVersionPatch = [:]
-
-// For example, to patch envCtrlDriver module as 5.0.1.1
-moduleVersionPatch = '.0'
-
-version = "${moduleVersion}${moduleVersionPatch}"
+group					= 'Community'
+def moduleVersion		= '17.02.10.00'
+def moduleVersionPatch	= [:]
+moduleVersionPatch		= '.0'
+version					= "${moduleVersion}${moduleVersionPatch}"
+ext.description			= "Open source AX Community module"
+ext.copyright			= 'Copyright \u00A9 2000-2017 AxCommunity Project. All rights reserved.'

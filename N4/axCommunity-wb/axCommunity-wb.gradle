@@ -2,40 +2,43 @@
  * Copyright (c) 2014 Tridium, Inc. All Rights Reserved.
  */
 
-ext {
-  // Declare module name and project properties
-  name = 'axCommunity'
-  //project.version = '4.14.101'
-  project.group = 'Community'
-  description = "Open source AX Community module"
+ext
+{
+	// Declare module name and project properties
+	name				= 'axCommunity'
+	project.group		= 'Community'
+	description			= "Open source AX Community module"
 }
 
 // Declare niagaraModule properties
-niagaraModule {
-  preferredSymbol = "axc4"
-  moduleName = "axCommunity"
-  runtimeProfile = "wb"
+niagaraModule 
+{
+	preferredSymbol		= "axc4"
+	moduleName			= "axCommunity"
+	runtimeProfile		= "wb"
 }
 
-dependencies {
-   compile "Tridium:baja:4.0.0"
-   compile "Tridium:control-rt:4.0.0"
-   compile "Tridium:workbench-wb:4.0.0"
-   compile "Tridium:bajaui-wb:4.0.0"
-   compile "Tridium:gx-rt:4.0.0"
-   compile "Tridium:kitPx-wb:4.0.0"
-   compile "Tridium:converters-rt:4.0.0"
-            
-   compile "Community:axCommunity-rt:4.0.0"
+dependencies
+{
+	compile "Tridium:baja:4.0.0"
+	compile "Tridium:control-rt:4.0.0"
+	compile "Tridium:workbench-wb:4.0.0"
+	compile "Tridium:bajaui-wb:4.0.0"
+	compile "Tridium:gx-rt:4.0.0"
+	compile "Tridium:kitPx-wb:4.0.0"
+	compile "Tridium:converters-rt:4.0.0"
+	compile "Community:axCommunity-rt:4.0.0"
 }
 
 // Include additional files in module jar
-jar {
-    from('src') {
-        include 'org/axcommunity/niagara/graphics/*.png'
-        include 'org/axcommunity/niagara/graphics/*.jpg'
-        include 'org/axcommunity/niagara/graphics/*.gif'
-    }
+jar
+{
+	from('src')
+	{
+		include 'org/axcommunity/niagara/graphics/*.png'
+		include 'org/axcommunity/niagara/graphics/*.jpg'
+		include 'org/axcommunity/niagara/graphics/*.gif'
+	}
 }
 
 // Declare compile and test dependencies

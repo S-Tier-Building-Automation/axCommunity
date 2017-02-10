@@ -6,7 +6,6 @@ ext
 {
 	// Declare module name and project properties
 	name				= 'axCommunity'
-	// project.version		= '16.5.1'
 	project.group		= 'Community'
 	description			= "Open source AX Community module"
 }
