@@ -34,6 +34,7 @@ import javax.baja.sys.Knob;
 import javax.baja.sys.Property;
 import javax.baja.sys.Slot;
 import javax.baja.sys.Sys;
+import javax.baja.sys.Topic;
 import javax.baja.sys.Type;
 import javax.baja.util.BCompositeAction;
 import javax.baja.util.BCompositeTopic;
@@ -153,6 +154,11 @@ public class BDynamicLinks extends BComponent
 	
 	public static final Action midnightTimerExpired = newAction(Flags.HIDDEN,null);
 	public void midnightTimerExpired() {invoke(midnightTimerExpired,null,null);}
+	
+	/**This is fired every time the links are refreshed regardless if any changes occurred.*/
+	public static final Topic LinksRefreshed = newTopic(0);
+	public void fireLinksRefreshed(BBoolean event){fire(LinksRefreshed,event,null);}
+	
 	
 	public Type getType() { return TYPE; }
 	public static final Type TYPE = Sys.loadType(BDynamicLinks.class);
@@ -866,6 +872,8 @@ public class BDynamicLinks extends BComponent
 			}
 		}
 		arrSlotInfo = strOrds;
+		
+		fireLinksRefreshed(BBoolean.make(true));
 	}
 	
 	/**Checks to ensure the ord is valid before linking.*/
