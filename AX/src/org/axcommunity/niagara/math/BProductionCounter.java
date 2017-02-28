@@ -39,11 +39,13 @@ The schedule linking logic was borrowed && modified from axCommunity's BDynamicL
 <br>
 @author    Eric Bishop 
 @creation  23 Mar 12
-@version   $Revision: 4$ $Date: 07/26/2016 10:36 AM$
+@version   $Revision: 6$ $Date: 02/10/2017 10:30 AM$
 <br>
 Updates:<br>
         2015-03-09 - Fixed roundToNearestSecond(BAbsTime).  When the input was 59 seconds, it threw errors when attempting to round.<br>
         2016-07-26 - Added targets, and fixed the removal of the *_AvgCycleTime slots.<br>
+        2017-02-02 - Fixed target data refreshing and set schedule links at midnight.<br>
+        2017-02-10 - Fixed an issue with the total break hours going negative (caused by recording breaks for shifts that do not contain any data)<br>
 */
 
 public class BProductionCounter extends BComponent
@@ -636,10 +638,12 @@ public class BProductionCounter extends BComponent
   //private int possibleOffShiftBreaks = 0;
   //private long possibleOffShiftBreakHours = 0;
   
+  private final BComponent mySelf() {return this;}
+  
   /**started override.  Checks links, sets outputs, and sets midnight timer.*/
   public void started() throws Exception
   {
-    if(!Sys.atSteadyState() || !isRunning()) return;
+    if(!Sys.atSteadyState() || !mySelf().isRunning()) return;
     
     //At this point, the object is either new or just copied
     doResetCurrentShiftPartCounts(roundToNearestSecond());
@@ -671,27 +675,59 @@ public class BProductionCounter extends BComponent
     if(getScheduledBreak().getValue() != getInScheduledBreak().getValue()) getScheduledBreak().setValue(getInScheduledBreak().getValue());
     if(getScheduledProduction().getValue() != getInCurrentShift().getValue() >= 1 && !getInScheduledBreak().getValue()) getScheduledProduction().setValue(getInCurrentShift().getValue() >= 1 && !getInScheduledBreak().getValue());
     
-    if(getCurrentShiftAvgPartsPerHour() < 0)              {setCurrentShiftAvgPartsPerHour(0);                 logger.message(getSlotPath().toString() + " Negative value for: CurrentShiftAvgPartsPerHour");}
-    if(getCurrentShiftAvgCycleTime().getMillis() < 0)     {setCurrentShiftAvgCycleTime(BRelTime.make(0));     logger.message(getSlotPath().toString() + " Negative value for: CurrentShiftAvgCycleTime");}
-    if(getCurrentShiftTotalBreakHours().getMillis() < 0)  {setCurrentShiftTotalBreakHours(BRelTime.make(0));  logger.message(getSlotPath().toString() + " Negative value for: CurrentShiftTotalBreakHours");}
-    if(getCurrentShiftAvgPartsPerHour() < 0)              {setCurrentShiftAvgPartsPerHour(0);                 logger.message(getSlotPath().toString() + " Negative value for: CurrentShiftAvgPartsPerHour");}
-    if(getCurrentShiftAvgCycleTime().getMillis() < 0)     {setCurrentShiftAvgCycleTime(BRelTime.make(0));     logger.message(getSlotPath().toString() + " Negative value for: CurrentShiftAvgCycleTime");}
-    if(getCurrentShiftTotalBreakHours().getMillis() < 0)  {setCurrentShiftTotalBreakHours(BRelTime.make(0));  logger.message(getSlotPath().toString() + " Negative value for: CurrentShiftTotalBreakHours");}
-    if(getTodayAvgPartsPerHour() < 0)                     {setTodayAvgPartsPerHour(0);                        logger.message(getSlotPath().toString() + " Negative value for: TodayAvgPartsPerHour");}
-    if(getTodayAvgCycleTime().getMillis() < 0)            {setTodayAvgCycleTime(BRelTime.make(0));            logger.message(getSlotPath().toString() + " Negative value for: TodayAvgCycleTime");}
-    if(getTodayTotalBreakHours().getMillis() < 0)         {setTodayTotalBreakHours(BRelTime.make(0));         logger.message(getSlotPath().toString() + " Negative value for: TodayTotalBreakHours");}
-    if(getTodayTotalHours().getMillis() < 0)              {setTodayTotalHours(BRelTime.make(0));              logger.message(getSlotPath().toString() + " Negative value for: TodayTotalHours");}
-    if(getTodayTotalOffShiftHours().getMillis() < 0)      {setTodayTotalOffShiftHours(BRelTime.make(0));      logger.message(getSlotPath().toString() + " Negative value for: TodayTotalOffShiftHours");}
-    if(getYesterdayAvgPartsPerHour() < 0)                 {setYesterdayAvgPartsPerHour(0);                    logger.message(getSlotPath().toString() + " Negative value for: YesterdayAvgPartsPerHour");}
-    if(getYesterdayAvgCycleTime().getMillis() < 0)        {setYesterdayAvgCycleTime(BRelTime.make(0));        logger.message(getSlotPath().toString() + " Negative value for: YesterdayAvgCycleTime");}
-    if(getYesterdayTotalBreakHours().getMillis() < 0)     {setYesterdayTotalBreakHours(BRelTime.make(0));     logger.message(getSlotPath().toString() + " Negative value for: YesterdayTotalBreakHours");}
-    if(getYesterdayTotalHours().getMillis() < 0)          {setYesterdayTotalHours(BRelTime.make(0));          logger.message(getSlotPath().toString() + " Negative value for: YesterdayTotalHours");}
-    if(getYesterdayTotalOffShiftHours().getMillis() < 0)  {setYesterdayTotalOffShiftHours(BRelTime.make(0));  logger.message(getSlotPath().toString() + " Negative value for: YesterdayTotalOffShiftHours");}
-    if(getTotalAvgPartsPerHour() < 0)                     {setTotalAvgPartsPerHour(0);                        logger.message(getSlotPath().toString() + " Negative value for: TotalAvgPartsPerHour");}
-    if(getTotalAvgCycleTime().getMillis() < 0)            {setTotalAvgCycleTime(BRelTime.make(0));            logger.message(getSlotPath().toString() + " Negative value for: TotalAvgCycleTime");}
-    if(getTotalBreakHours().getMillis() < 0)              {setTotalBreakHours(BRelTime.make(0));              logger.message(getSlotPath().toString() + " Negative value for: TotalBreakHours");}
-    if(getTotalHours().getMillis() < 0)                   {setTotalHours(BRelTime.make(0));                   logger.message(getSlotPath().toString() + " Negative value for: TotalHours");}
-    if(getTotalOffShiftHours().getMillis() < 0)           {setTotalOffShiftHours(BRelTime.make(0));           logger.message(getSlotPath().toString() + " Negative value for: TotalOffShiftHours");}
+    if(getTotalBreakHours().getMillis() >= getTotalHours().getMillis())
+    {
+      logger.message(mySelf().getSlotPath().toString() + " Bad values detected (created by an older version of this object).  Attempting to salvage data.");
+      
+      if(
+          getYesterdayTotalHours().getSeconds() <= 0 ||
+          getTotalHours().getSeconds() <= 0 ||
+          getYesterdayTotalBreaks() <= 0
+        )
+        setTotalBreaks(0);
+      else
+      {
+        //Find the number of actual shifts, and multiply that by the number of breaks that were last recorded
+        setTotalBreaks((getTotalHours().getSeconds() / getYesterdayTotalHours().getSeconds()) * getYesterdayTotalBreaks());
+      }
+      
+      if(
+          getTotalBreaks() <= 0 ||
+          getYesterdayTotalBreakHours().getMillis() <= 0 ||
+          getYesterdayTotalBreaks() <= 0
+        )
+        setTotalBreakHours(BRelTime.make(0));
+      else
+      {
+        //Find the average amount of time per break and multiply it by the number of breaks we just swagged. 
+        setTotalBreakHours(roundToNearestSecond(getTotalBreaks() * (getYesterdayTotalBreakHours().getMillis() / getYesterdayTotalBreaks())));
+      }
+    }
+    
+    if(getCurrentShiftAvgPartsPerHour() < 0)              {setCurrentShiftAvgPartsPerHour(0);                 logger.message(mySelf().getSlotPath().toString() + " Negative value for: CurrentShiftAvgPartsPerHour");}
+    if(getCurrentShiftAvgCycleTime().getMillis() < 0)     {setCurrentShiftAvgCycleTime(BRelTime.make(0));     logger.message(mySelf().getSlotPath().toString() + " Negative value for: CurrentShiftAvgCycleTime");}
+    if(getCurrentShiftTotalBreakHours().getMillis() < 0)  {setCurrentShiftTotalBreakHours(BRelTime.make(0));  logger.message(mySelf().getSlotPath().toString() + " Negative value for: CurrentShiftTotalBreakHours");}
+    if(getCurrentShiftAvgPartsPerHour() < 0)              {setCurrentShiftAvgPartsPerHour(0);                 logger.message(mySelf().getSlotPath().toString() + " Negative value for: CurrentShiftAvgPartsPerHour");}
+    if(getCurrentShiftAvgCycleTime().getMillis() < 0)     {setCurrentShiftAvgCycleTime(BRelTime.make(0));     logger.message(mySelf().getSlotPath().toString() + " Negative value for: CurrentShiftAvgCycleTime");}
+    if(getCurrentShiftTotalBreakHours().getMillis() < 0)  {setCurrentShiftTotalBreakHours(BRelTime.make(0));  logger.message(mySelf().getSlotPath().toString() + " Negative value for: CurrentShiftTotalBreakHours");}
+    if(getTodayAvgPartsPerHour() < 0)                     {setTodayAvgPartsPerHour(0);                        logger.message(mySelf().getSlotPath().toString() + " Negative value for: TodayAvgPartsPerHour");}
+    if(getTodayAvgCycleTime().getMillis() < 0)            {setTodayAvgCycleTime(BRelTime.make(0));            logger.message(mySelf().getSlotPath().toString() + " Negative value for: TodayAvgCycleTime");}
+    if(getTodayTotalBreakHours().getMillis() < 0)         {setTodayTotalBreakHours(BRelTime.make(0));         logger.message(mySelf().getSlotPath().toString() + " Negative value for: TodayTotalBreakHours");}
+    if(getTodayTotalHours().getMillis() < 0)              {setTodayTotalHours(BRelTime.make(0));              logger.message(mySelf().getSlotPath().toString() + " Negative value for: TodayTotalHours");}
+    if(getTodayTotalOffShiftHours().getMillis() < 0)      {setTodayTotalOffShiftHours(BRelTime.make(0));      logger.message(mySelf().getSlotPath().toString() + " Negative value for: TodayTotalOffShiftHours");}
+    if(getYesterdayAvgPartsPerHour() < 0)                 {setYesterdayAvgPartsPerHour(0);                    logger.message(mySelf().getSlotPath().toString() + " Negative value for: YesterdayAvgPartsPerHour");}
+    if(getYesterdayAvgCycleTime().getMillis() < 0)        {setYesterdayAvgCycleTime(BRelTime.make(0));        logger.message(mySelf().getSlotPath().toString() + " Negative value for: YesterdayAvgCycleTime");}
+    if(getYesterdayTotalBreakHours().getMillis() < 0)     {setYesterdayTotalBreakHours(BRelTime.make(0));     logger.message(mySelf().getSlotPath().toString() + " Negative value for: YesterdayTotalBreakHours");}
+    if(getYesterdayTotalHours().getMillis() < 0)          {setYesterdayTotalHours(BRelTime.make(0));          logger.message(mySelf().getSlotPath().toString() + " Negative value for: YesterdayTotalHours");}
+    if(getYesterdayTotalOffShiftHours().getMillis() < 0)  {setYesterdayTotalOffShiftHours(BRelTime.make(0));  logger.message(mySelf().getSlotPath().toString() + " Negative value for: YesterdayTotalOffShiftHours");}
+    if(getTotalAvgPartsPerHour() < 0)                     {setTotalAvgPartsPerHour(0);                        logger.message(mySelf().getSlotPath().toString() + " Negative value for: TotalAvgPartsPerHour");}
+    if(getTotalAvgCycleTime().getMillis() < 0)            {setTotalAvgCycleTime(BRelTime.make(0));            logger.message(mySelf().getSlotPath().toString() + " Negative value for: TotalAvgCycleTime");}
+    if(getTotalBreakHours().getMillis() < 0)              {setTotalBreakHours(BRelTime.make(0));              logger.message(mySelf().getSlotPath().toString() + " Negative value for: TotalBreakHours");}
+    if(getTotalHours().getMillis() < 0)                   {setTotalHours(BRelTime.make(0));                   logger.message(mySelf().getSlotPath().toString() + " Negative value for: TotalHours");}
+    if(getTotalOffShiftHours().getMillis() < 0)           {setTotalOffShiftHours(BRelTime.make(0));           logger.message(mySelf().getSlotPath().toString() + " Negative value for: TotalOffShiftHours");}
+    if(getYesterdayTotalBreaks() < 0)                     {setYesterdayTotalBreaks(0);                        logger.message(mySelf().getSlotPath().toString() + " Negative value for: YesterdayTotalBreaks");}
+    
+    
     
     shiftTargetValuesLinkActive = getInTargetData().length() > 0;
     
@@ -699,17 +735,18 @@ public class BProductionCounter extends BComponent
     doRefreshValuesForToday();
     updateTimer();
     updateDurration();
+    refreshTargetData();
   }
   
   /**Checks to see what changed and sets outputs accordingly.*/
   public void changed(Property p, Context cx)
   {
-    if(!Sys.atSteadyState() || !isRunning()) return;
+    if(!Sys.atSteadyState() || !mySelf().isRunning()) return;
     final BAbsTime absTimeThisChanged = roundToNearestSecond();
     
     
     super.changed(p, cx);
-    if(p.equals(inScheduledBreak))
+    if(p.equals(inScheduledBreak) && (!getIgnoreShiftsWithoutAnyTransactions() || getCurrentShiftTotalParts() > 0))
     {
       if(getInScheduledBreak().getValue() && getInCurrentShift().getValue() >= 1 && getInScheduledBreak().getStatus().isValid() && !getScheduledBreak().getValue())
       {
@@ -735,7 +772,6 @@ public class BProductionCounter extends BComponent
           //if(getIgnoreShiftsWithoutAnyTransactions() && getCurrentShiftTotalParts() == 0) possibleOffShiftBreakHours = breakTimeDelta;
         }
         
-        //TODO: Fix total break hours (it keeps going negative)
         setCurrentShiftTotalBreakHours(roundToNearestSecond(getCurrentShiftTotalBreakHours().getMillis() + breakStartTime.delta(absTimeThisChanged).getMillis()));
         setTotalBreakHours(roundToNearestSecond(getTotalBreakHours().getMillis() + breakStartTime.delta(absTimeThisChanged).getMillis()));
         breakStartTime = null;
@@ -794,9 +830,9 @@ public class BProductionCounter extends BComponent
       refresh(absTimeThisChanged);
     }
     
-    if(p.equals(inTargetData) || (!shiftTargetValuesLinkActive && p.getName().endsWith("_Target")))
+    if(p.equals(inTargetData) || (getInTargetData().length() == 0 && p.getName().endsWith("_Target")))
     {
-      if(shiftTargetValuesLinkActive) shiftTargetValuesLinkActive = getInTargetData().length() > 0;
+      shiftTargetValuesLinkActive = getInTargetData().length() > 0;
       refreshTargetData();
     }
     
@@ -854,16 +890,15 @@ public class BProductionCounter extends BComponent
     secondAttemptAtWritingPreviousShiftData = false;
     if(
         getInCurrentShift().getStatus().isValid() && 
-        getCurrentShift().getStatus().isValid() && 
         getInCurrentShift().getValue() != getCurrentShift().getValue()) 
       shiftChange(absTimeThisChanged);
     else if(getInCurrentShift().getValue() < 0) getCurrentShift().setStatusFault(true);
+    else if(getCurrentShift().getStatus() != getInCurrentShift().getStatus()) getCurrentShift().setStatus(getInCurrentShift().getStatus());
   }
   
   private void shiftChange(BAbsTime absTimeThisChanged)
   {
     int previousShift = (int)getCurrentShift().getValue();
-    
     if(getInShiftToResetCountsOn() == (int)getInCurrentShift().getValue())
     {
       doResetCurrentShiftPartCounts(absTimeThisChanged);
@@ -905,13 +940,13 @@ public class BProductionCounter extends BComponent
       {
         if(secondAttemptAtWritingPreviousShiftData)
         {
-          logger.error(getSlotPath().toString() + " - Could not update one or more slots for shift number " + previousShift + ", after attempting to recreate the needed slots.  2 attempts were made to write to the slot(s).");
-          logger.error(getSlotPath().toString() + e.getMessage());
-          e.printStackTrace();
+          logger.error(mySelf().getSlotPath().toString() + " - Could not update one or more slots for shift number " + previousShift + ", after attempting to recreate the needed slots.  2 attempts were made to write to the slot(s).");
+          logger.error(mySelf().getSlotPath().toString() + " - " + e.getMessage());
+          if(logger.getSeverity() <= Log.ERROR) e.printStackTrace();
         }
         else
         {
-          logger.trace(getSlotPath().toString() + " - Could not update one or more slots for shift number " + previousShift + ", Attemtping to recreate the slot(s) and try again.");
+          logger.trace(mySelf().getSlotPath().toString() + " - Could not update one or more slots for shift number " + previousShift + ", Attemtping to recreate the slot(s) and try again.");
           refreshSlotsAndRetryShiftChange(absTimeThisChanged);
         }
       }
@@ -992,24 +1027,28 @@ public class BProductionCounter extends BComponent
       try
       {
         shiftNumber = i + 1;
+        
+        //If there is any linked target data available, pull the data from there and update the shift slots
         if(shiftTargetValuesLinkActive)
         {
           if(i >= test.length) tempValue = 0;
           else tempValue = Double.parseDouble(test[i]);
           ((BStatusNumeric) ((BObject)get("shift_"+shiftNumber+"_Target"))).setValue(tempValue);
         }
+        
+        //If there isn't any linked target data, pull the shift target data from the shift slot (data that is manually entered)
         else tempValue = ((BStatusNumeric) ((BObject)get("shift_"+shiftNumber+"_Target"))).getValue();
         
         dailyTarget = dailyTarget + tempValue;
         
         //Update the percentage
         ((BStatusNumeric) ((BObject)get("shift_"+shiftNumber+"_PercentageOfTarget"))).setValue(((((BStatusNumeric) ((BObject)get("shift_"+shiftNumber+"_GoodParts"))).getValue()) / tempValue) * 100);
-        if(shiftNumber == getCurrentShift().getValue()) currentShiftTarget = tempValue;
+        if(shiftNumber == getInCurrentShift().getValue()) currentShiftTarget = tempValue;
       }
       catch (Exception e)
       {
-        logger.error(getSlotPath().toString() + e.getMessage());
-        e.printStackTrace();
+        logger.error(mySelf().getSlotPath().toString() + " - " + e.getMessage());
+        if(logger.getSeverity() <= Log.ERROR) e.printStackTrace();
       }
     }
     
@@ -1033,19 +1072,23 @@ public class BProductionCounter extends BComponent
   /**Moves today's values to yesterday and resets today's values to 0.*/
   public void doMoveTodaysPartCountsToYesterday()
   {
-    if(!Sys.atSteadyState() || !isRunning()) return;
+    if(!Sys.atSteadyState() || !mySelf().isRunning()) return;
     scheduleMidnightTimer();
     final BAbsTime absTimeThisChanged = roundToNearestSecond();
     final BAbsTime lastMidnight = absTimeThisChanged.timeOfDay(0, 0, 0, 0);
     
+    doSetScheduleLinks();
     if(!getIgnoreShiftsWithoutAnyTransactions() || getTodayTotalParts() > 0)
     {
       setYesterdayGoodParts(getTodayGoodParts());
       setYesterdayBadParts(getTodayBadParts());
       setYesterdayTotalParts(getTodayTotalParts());
+      
+      if((getIgnoreShiftsWithoutAnyTransactions() && getCurrentShiftTotalParts() == 0 && getInCurrentShift().getValue() >= 1) || getInCurrentShift().getValue() == 0)
+        setYesterdayTotalOffShiftHours(BRelTime.make(getTodayTotalOffShiftHours().getMillis() + roundToNearestSecond(getCurrentShiftStartTime().delta(absTimeThisChanged)).getMillis()));
+      else
       setYesterdayTotalOffShiftHours(getTodayTotalOffShiftHours());
       
-      //TODO: Fix total break hours (it keeps going negative)
       if(breakStartTime == null) setYesterdayTotalBreakHours(getTodayTotalBreakHours());
       else if(breakStartTime.isAfter(lastMidnight)) setYesterdayTotalBreakHours(getTodayTotalBreakHours());
       else setYesterdayTotalBreakHours(roundToNearestSecond(lastMidnight.delta(breakStartTime).getMillis() + getTodayTotalBreakHours().getMillis()));
@@ -1075,6 +1118,8 @@ public class BProductionCounter extends BComponent
     getTodayPercentageOfTarget().setValue(0);
     setTodayPercentageGoodParts(0);
     setTodayPercentageBadParts(0);
+    
+    refreshTargetData();
   }
   
   /**Resets the current shift values to 0.
@@ -1104,6 +1149,7 @@ public class BProductionCounter extends BComponent
     }
     
     doResetCurrentShiftPartCounts(absTimeThisChanged);
+    refreshTargetData();
   }
   
   /**
@@ -1127,12 +1173,13 @@ public class BProductionCounter extends BComponent
     getCurrentShift().setValue(getInCurrentShift().getValue());
     getCurrentShift().setStatus(0);
     getCurrentShiftPercentageOfTarget().setValue(0);
+    refreshTargetData();
   }
   
   /**Resets all shift values to 0 (except the current shift)*/
   public void doResetShiftPartCounts()
   {
-    if(!Sys.atSteadyState() || !isRunning()) return;
+    if(!Sys.atSteadyState() || !mySelf().isRunning()) return;
     try
     {
       for(int i=1; i<getInNumberOfShifts()+1; i++)
@@ -1152,9 +1199,10 @@ public class BProductionCounter extends BComponent
     }
     catch (Exception e)
     {
-      logger.error(getSlotPath().toString() + e.getMessage());
-      e.printStackTrace();
+      logger.error(mySelf().getSlotPath().toString() + " - " + e.getMessage());
+      if(logger.getSeverity() <= Log.ERROR) e.printStackTrace();
     }
+    refreshTargetData();
   }
   
   /**Resets today's part counts to 0*/
@@ -1174,6 +1222,7 @@ public class BProductionCounter extends BComponent
     setTodayTotalOffShiftHours(BRelTime.make(0));
     setTodayTotalBreaks(0);
     getTodayPercentageOfTarget().setValue(0);
+    refreshTargetData();
   }
   
   /**Resets yesterday's part counts to 0*/
@@ -1215,13 +1264,14 @@ public class BProductionCounter extends BComponent
   /**Resets all values to 0*/
   public void doResetAll()
   {
-    if(!Sys.atSteadyState() || !isRunning()) return;
+    if(!Sys.atSteadyState() || !mySelf().isRunning()) return;
     doResetCurrentShiftPartCounts();
     doResetShiftPartCounts();
     doResetTotalPartCounts();
     doResetTodaysPartCounts();
     doResetYesterdaysPartCounts();
     scheduleMidnightTimer();
+    refreshTargetData();
   }
   
   /**
@@ -1277,7 +1327,7 @@ public class BProductionCounter extends BComponent
   void updateTimer()
   {
     if (refreshTimer != null) refreshTimer.cancel();
-    refreshTimer = Clock.schedulePeriodically(this, getInRefreshInterval(), refreshValuesForToday, null);
+    refreshTimer = Clock.schedulePeriodically(mySelf(), getInRefreshInterval(), refreshValuesForToday, null);
   }
   
   /**Executes the private void "refresh", which ONLY refreshes "currentShiftElapsedTime", "currentShiftRemainingTime", all "AvgPartsPerHour" outputs, and all "AvgCycleTime" outputs.  Automatically executed at the rate specified in "inRefreshInterval"*/
@@ -1412,25 +1462,25 @@ public class BProductionCounter extends BComponent
       BOrd ord = BOrd.make(sourceOrd);
       if(isOrdValid(ord))
       {
-        logger.trace(getSlotPath().toString() + " - link already exists and ord is valid\r\nOrd specified: " + sourceOrd);
+        logger.trace(mySelf().getSlotPath().toString() + " - link already exists and ord is valid\r\nOrd specified: " + sourceOrd);
         boolean linkIsActive = false;
         try
         {
           links[0].setSourceOrd(ord);
           linkIsActive = links[0].isActive();
-          if(linkIsActive) logger.trace(getSlotPath().toString() + " - existing link is active");
-          else logger.trace(getSlotPath().toString() + " - existing link is NOT active");
+          if(linkIsActive) logger.trace(mySelf().getSlotPath().toString() + " - existing link is active");
+          else logger.trace(mySelf().getSlotPath().toString() + " - existing link is NOT active");
           linkIsOk = true;
         }
         catch (Exception e)
         {
           linkIsOk = false;
-          if(!logger.isTraceOn() && !linkIsActive) logger.error(getSlotPath().toString() + " - existing link is NOT active");
-          logger.error(getSlotPath().toString() + " - Could not set source ord on existing link!");
-          logger.error(getSlotPath().toString() + e.getMessage());
-          if(logger.isTraceOn()) e.printStackTrace();
+          if(!logger.isTraceOn() && !linkIsActive) logger.error(mySelf().getSlotPath().toString() + " - existing link is NOT active");
+          logger.error(mySelf().getSlotPath().toString() + " - Could not set source ord on existing link!");
+          logger.error(mySelf().getSlotPath().toString() + " - " + e.getMessage());
+          if(logger.getSeverity() <= Log.ERROR) e.printStackTrace();
           
-          logger.trace(getSlotPath().toString() + " - Deactivating and removing existing link");
+          logger.trace(mySelf().getSlotPath().toString() + " - Deactivating and removing existing link");
           try
           {
             links[0].deactivate();
@@ -1439,15 +1489,15 @@ public class BProductionCounter extends BComponent
           catch (Exception f)
           {
             linkIsOk = false;
-            logger.error(getSlotPath().toString() + " - Could not deactivate and remove invalid link!");
-            logger.error(getSlotPath().toString() + f.getMessage());
-            if(logger.isTraceOn()) f.printStackTrace();
+            logger.error(mySelf().getSlotPath().toString() + " - Could not deactivate and remove invalid link!");
+            logger.error(mySelf().getSlotPath().toString() + " - " + f.getMessage());
+            if(logger.getSeverity() <= Log.ERROR) f.printStackTrace();
           }
         }
         
         if(!linkIsActive)
         {
-          logger.trace(getSlotPath().toString() + " - Link is inactive, attempting to activate link");
+          logger.trace(mySelf().getSlotPath().toString() + " - Link is inactive, attempting to activate link");
           try
           {
             links[0].activate();
@@ -1456,12 +1506,12 @@ public class BProductionCounter extends BComponent
           catch (Exception e)
           {
             linkIsOk = false;
-            logger.error(getSlotPath().toString() + " - Could not activate link! Source slot does not exist!\r\nSource ord specified: " + sourceOrd + "\r\nSource slot specified: " + sourceSlotName);
-            logger.trace(getSlotPath().toString() + e.getMessage());
-            if(logger.isTraceOn()) e.printStackTrace();
+            logger.error(mySelf().getSlotPath().toString() + " - Could not activate link! Source slot does not exist!\r\nSource ord specified: " + sourceOrd + "\r\nSource slot specified: " + sourceSlotName);
+            logger.error(mySelf().getSlotPath().toString() + " - " + e.getMessage());
+            if(logger.getSeverity() <= Log.ERROR) e.printStackTrace();
           }
           
-          logger.trace(getSlotPath().toString() + " - Removing existing link");
+          logger.trace(mySelf().getSlotPath().toString() + " - Removing existing link");
           try
           {
             this.remove(links[0]);
@@ -1469,16 +1519,16 @@ public class BProductionCounter extends BComponent
           catch (Exception e)
           {
             linkIsOk = false;
-            logger.error(getSlotPath().toString() + " - Could not deactivate and remove invalid link!  This needs to be resolved manually!");
-            logger.error(getSlotPath().toString() + e.getMessage());
-            e.printStackTrace();
+            logger.error(mySelf().getSlotPath().toString() + " - Could not deactivate and remove invalid link!  This needs to be resolved manually!");
+            logger.error(mySelf().getSlotPath().toString() + " - " + e.getMessage());
+            if(logger.getSeverity() <= Log.ERROR) e.printStackTrace();
           }
         }
       }
       else
       {
-        logger.trace(getSlotPath().toString() + " - Invalid source ord provided!\r\nOrd specified: " + sourceOrd);
-        logger.trace(getSlotPath().toString() + " - Removing existing link");
+        logger.trace(mySelf().getSlotPath().toString() + " - Invalid source ord provided!\r\nOrd specified: " + sourceOrd);
+        logger.trace(mySelf().getSlotPath().toString() + " - Removing existing link");
         links[0].deactivate();
         this.remove(links[0]);
         linkIsOk = false;
@@ -1486,25 +1536,25 @@ public class BProductionCounter extends BComponent
     }
     else
     {
-      logger.trace(getSlotPath().toString() + " - Link does not exist, attempting to create one.\r\nOrd specified: " + sourceOrd);
+      logger.trace(mySelf().getSlotPath().toString() + " - Link does not exist, attempting to create one.\r\nOrd specified: " + sourceOrd);
       //no link, create one if possible
       BOrd ord = BOrd.make(sourceOrd);
       if(isOrdValid(ord))
       {
-        logger.trace(getSlotPath().toString() + " - Ord is valid");
+        logger.trace(mySelf().getSlotPath().toString() + " - Ord is valid");
         BLink link = new BLink(ord,sourceSlotName,targetSlotName.getName(),true);
         
         try {this.add(linkName, link);}
         catch (Exception e)
         {
-          logger.error(getSlotPath().toString() + " - Could not create a new slot named " + linkName + ", because this slot name already exixts!");
-          logger.trace(getSlotPath().toString() + e.getMessage());
-          if(logger.isTraceOn()) e.printStackTrace();
+          logger.error(mySelf().getSlotPath().toString() + " - Could not create a new slot named " + linkName + ", because this slot name already exixts!");
+          logger.error(mySelf().getSlotPath().toString() + " - " + e.getMessage());
+          if(logger.getSeverity() <= Log.ERROR) e.printStackTrace();
           links = null;
           return false;
         }
         
-        logger.trace(getSlotPath().toString() + " - Activating link");
+        logger.trace(mySelf().getSlotPath().toString() + " - Activating link");
         try
         {
           link.activate();
@@ -1512,21 +1562,21 @@ public class BProductionCounter extends BComponent
         }
         catch (Exception e)
         {
-          logger.error(getSlotPath().toString() + " - Source slot does not exist!\r\nSource ord specified: " + sourceOrd + "\r\nSource slot specified: " + sourceSlotName);
-          logger.trace(getSlotPath().toString() + e.getMessage());
-          if(logger.isTraceOn()) e.printStackTrace();
+          logger.error(mySelf().getSlotPath().toString() + " - Source slot does not exist!\r\nSource ord specified: " + sourceOrd + "\r\nSource slot specified: " + sourceSlotName);
+          logger.error(mySelf().getSlotPath().toString() + " - " + e.getMessage());
+          if(logger.getSeverity() <= Log.ERROR) e.printStackTrace();
           linkIsOk = false;
         }
         
         if(!linkIsOk)
         {
-          logger.trace(getSlotPath().toString() + " - Could not activate the link, attempting to remove the slot");
+          logger.trace(mySelf().getSlotPath().toString() + " - Could not activate the link, attempting to remove the slot");
           try {this.remove(linkName);}
           catch (Exception e)
           {
-            logger.error(getSlotPath().toString() + " - Could not remove the link to the invalid slot on the source!");
-            logger.error(getSlotPath().toString() + e.getMessage());
-            e.printStackTrace();
+            logger.error(mySelf().getSlotPath().toString() + " - Could not remove the link to the invalid slot on the source!");
+            logger.error(mySelf().getSlotPath().toString() + " - " + e.getMessage());
+            if(logger.getSeverity() <= Log.ERROR) e.printStackTrace();
           }
         }
       }
@@ -1614,8 +1664,8 @@ public class BProductionCounter extends BComponent
     }
     catch (Exception e)
     {
-      logger.error(getSlotPath().toString() + e.getMessage());
-      e.printStackTrace();
+      logger.error(mySelf().getSlotPath().toString() + " - " + e.getMessage());
+      if(logger.getSeverity() <= Log.ERROR) e.printStackTrace();
     }
     
     refreshTargetData();
@@ -1636,7 +1686,7 @@ public class BProductionCounter extends BComponent
     
     BAbsTime nextMidnight = BAbsTime.now().timeOfDay(0, 0, offsetSeconds, offsetMillis).nextDay();
     if(midnightTimer != null) midnightTimer.cancel();
-    midnightTimer = Clock.schedule(this, nextMidnight, moveTodaysPartCountsToYesterday, null);
+    midnightTimer = Clock.schedule(mySelf(), nextMidnight, moveTodaysPartCountsToYesterday, null);
   }
   
   private BRelTime roundToNearestSecond(long rawMillis)
@@ -1677,26 +1727,26 @@ public class BProductionCounter extends BComponent
   
   private void addSlotFlag(Property inPropertyName, int flag)
   {
-    Slot updateSlot = getSlot(inPropertyName.getName());
-    setFlags(updateSlot, (getFlags(updateSlot) | flag));
+    Slot updateSlot = mySelf().getSlot(inPropertyName.getName());
+    mySelf().setFlags(updateSlot, (mySelf().getFlags(updateSlot) | flag));
   }
   
   private void removeSlotFlag(Property inPropertyName, int flag)
   {
-    Slot updateSlot = getSlot(inPropertyName.getName());
-    setFlags(updateSlot, (getFlags(updateSlot) & ~flag));
+    Slot updateSlot = mySelf().getSlot(inPropertyName.getName());
+    mySelf().setFlags(updateSlot, (mySelf().getFlags(updateSlot) & ~flag));
   }
   
   private void addSlotFlag(String inPropertyName, int flag)
   {
-    Slot updateSlot = getSlot(inPropertyName);
-    setFlags(updateSlot, (getFlags(updateSlot) | flag));
+    Slot updateSlot = mySelf().getSlot(inPropertyName);
+    mySelf().setFlags(updateSlot, (mySelf().getFlags(updateSlot) | flag));
   }
   
   private void removeSlotFlag(String inPropertyName, int flag)
   {
-    Slot updateSlot = getSlot(inPropertyName);
-    setFlags(updateSlot, (getFlags(updateSlot) & ~flag));
+    Slot updateSlot = mySelf().getSlot(inPropertyName);
+    mySelf().setFlags(updateSlot, (mySelf().getFlags(updateSlot) & ~flag));
   }
   
   public String getPlexContainerStatusString(double v)
