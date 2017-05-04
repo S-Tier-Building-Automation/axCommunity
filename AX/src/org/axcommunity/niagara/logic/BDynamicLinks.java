@@ -309,6 +309,7 @@ public class BDynamicLinks extends BComponent
 				int randomNumber = (int) ((Math.random()) * 300000);
 				int offsetMillis;
 				int offsetSeconds = 0;
+				int offsetMinutes = 0;
 				if(randomNumber >= 1000)
 				{
 					offsetSeconds = randomNumber / 1000;
@@ -316,7 +317,13 @@ public class BDynamicLinks extends BComponent
 				}
 				else offsetMillis = randomNumber;
 				
-				BAbsTime nextMidnight = BAbsTime.now().timeOfDay(0, 0, offsetSeconds, offsetMillis).nextDay();
+	      if(offsetSeconds > 59)
+	      {
+	        offsetMinutes = offsetSeconds / 60;
+	        offsetSeconds = offsetSeconds % 60;
+	      }
+	      
+	      BAbsTime nextMidnight = BAbsTime.now().timeOfDay(0, offsetMinutes, offsetSeconds, offsetMillis).nextDay();
 				midnightTimer = Clock.schedule(destinationComp, nextMidnight, midnightTimerExpired, null);
 			}
 		}
@@ -951,19 +958,26 @@ public class BDynamicLinks extends BComponent
 	private static String[][] resizeArray(String[][] inArray, int len1, int len2)
 	{
 		if (len1 <= inArray.length && len2 <= inArray[0].length) return inArray;
-		int tempMin;
-		
-		if(len1 <= inArray.length) tempMin = inArray.length;
-		else tempMin = 100;
-		
-		int newLength1 = Math.min(tempMin, inArray.length*2);
-		newLength1 = Math.max(tempMin, len1);
-		
-		if(len2 <= inArray[0].length) tempMin = inArray[0].length;
-		else tempMin = 100;
-		
-		int newLength2 = Math.min(tempMin, inArray[0].length*2);
-		newLength2 = Math.max(tempMin, len2);
+    
+    int newLength1 = 100;
+    
+    if(len1 <= inArray.length) newLength1 = inArray.length;
+    {
+      newLength1 = Math.max(newLength1, inArray.length + 50);
+      newLength1 = Math.min(newLength1, inArray.length * 2);
+      newLength1 = Math.max(newLength1, len1);
+    }
+    
+    
+    int newLength2 = 100;
+    
+    if(len2 <= inArray[0].length) newLength2 = inArray[0].length;
+    {
+      newLength2 = Math.max(newLength2, inArray[0].length + 50);
+      newLength2 = Math.min(newLength2, inArray[0].length * 2);
+      newLength2 = Math.max(newLength2, len2);
+    }
+    
 		String[][] expand = new String[newLength1][newLength2];
 		
 		for(int i = 0; i < inArray.length; i++)
@@ -1030,7 +1044,12 @@ public class BDynamicLinks extends BComponent
 	private static String[] resizeArray(String[] inArray, int len)
 	{
 		if (len < inArray.length) return inArray;
-		int newLength = Math.min(100, inArray.length*2);
+		//int newLength = Math.min(100, inArray.length*2);
+    int newLength = 100;
+    newLength = Math.max(newLength, inArray.length + 50);
+    newLength = Math.min(newLength, inArray.length * 2);
+    newLength = Math.max(newLength, len);
+    
 		String[] expand = new String[newLength];
 		System.arraycopy(inArray, 0, expand, 0, inArray.length);
 		return expand;
