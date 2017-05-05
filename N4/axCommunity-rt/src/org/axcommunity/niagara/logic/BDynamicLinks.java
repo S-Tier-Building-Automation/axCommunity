@@ -1,44 +1,15 @@
 package org.axcommunity.niagara.logic;
 
 
-import javax.baja.log.Log;
-import javax.baja.naming.BOrd;
-import javax.baja.naming.SlotPath;
-import javax.baja.status.BIStatusValue;
-import javax.baja.status.BStatus;
-import javax.baja.status.BStatusBoolean;
-import javax.baja.status.BStatusEnum;
-import javax.baja.status.BStatusNumeric;
-import javax.baja.status.BStatusString;
-import javax.baja.status.BStatusValue;
-import javax.baja.sys.Action;
-import javax.baja.sys.BAbsTime;
-import javax.baja.sys.BBoolean;
-import javax.baja.sys.BComponent;
-import javax.baja.sys.BDouble;
-import javax.baja.sys.BDynamicEnum;
-import javax.baja.sys.BFacets;
-import javax.baja.sys.BFloat;
-import javax.baja.sys.BIcon;
-import javax.baja.sys.BInteger;
-import javax.baja.sys.BLink;
-import javax.baja.sys.BLong;
-import javax.baja.sys.BObject;
-import javax.baja.sys.BRelTime;
-import javax.baja.sys.BString;
-import javax.baja.sys.BValue;
-import javax.baja.sys.Clock;
-import javax.baja.sys.Context;
-import javax.baja.sys.Flags;
-import javax.baja.sys.Knob;
-import javax.baja.sys.Property;
-import javax.baja.sys.Slot;
-import javax.baja.sys.Sys;
-import javax.baja.sys.Topic;
-import javax.baja.sys.Type;
-import javax.baja.util.BCompositeAction;
-import javax.baja.util.BCompositeTopic;
-import javax.baja.util.BFormat;
+import java.nio.charset.Charset;
+
+import javax.baja.log.*;
+import javax.baja.naming.*;
+import javax.baja.status.*;
+import javax.baja.sys.*;
+import javax.baja.util.*;
+
+import com.tridium.util.StringEscapeUtils;
 
 /**
  * The primary function of this object is to be able to link from several objects anywhere on the station using a list of ords and/or
@@ -147,6 +118,28 @@ public class BDynamicLinks extends BComponent
 	public boolean getUseAreaZoneStation() { return getBoolean(useAreaZoneStation); }
 	public void setUseAreaZoneStation(boolean v) { setBoolean(useAreaZoneStation, v); }
 	
+	
+	public static final Property outDelimitedSlotNames = newProperty(0, BString.DEFAULT, BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public String getOutDelimitedSlotNames() { return getString(outDelimitedSlotNames); }
+	public void setOutDelimitedSlotNames(String v) { setString(outDelimitedSlotNames,v,null); }
+	
+	public static final Property outDelimitedSlotValues = newProperty(0, BString.DEFAULT, BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public String getOutDelimitedSlotValues() { return getString(outDelimitedSlotValues); }
+	public void setOutDelimitedSlotValues(String v) { setString(outDelimitedSlotValues,v,null); }
+	
+	public static final Property outDelimitedSlotNameValuePairs = newProperty(0, BString.DEFAULT, BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public String getOutDelimitedSlotNameValuePairs() { return getString(outDelimitedSlotNameValuePairs); }
+	public void setOutDelimitedSlotNameValuePairs(String v) { setString(outDelimitedSlotNameValuePairs,v,null); }
+	
+	public static final Property inPairsDelimiter = newProperty(0, "\\u007C", BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public String getInPairsDelimiter() { return getString(inPairsDelimiter); }
+	public void setInPairsDelimiter(String v) { setString(inPairsDelimiter,v,null); }
+	
+	public static final Property inDelimiter = newProperty(0, "\\u002C", BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public String getInDelimiter() { return getString(inDelimiter); }
+	public void setInDelimiter(String v) { setString(inDelimiter,v,null); }
+	
+	
 	/**This will refresh any links and any string values*/
 	public static final Action refreshLinks = newAction(Flags.OPERATOR,null);
 	/**This will refresh any links and any string values*/
@@ -158,6 +151,19 @@ public class BDynamicLinks extends BComponent
 	/**This is fired every time the links are refreshed regardless if any changes occurred.*/
 	public static final Topic LinksRefreshed = newTopic(0);
 	public void fireLinksRefreshed(BBoolean event){fire(LinksRefreshed,event,null);}
+	
+	/**This is fired every time outDelimitedSlotNames or outDelimitedSlotValues is updated.*/
+	public static final Topic CsvSlotNames = newTopic(0);
+	public void fireCsvSlotNames(BString event){fire(CsvSlotNames,event,null);}
+	
+	/**This is fired every time outDelimitedSlotNames or outDelimitedSlotValues is updated.*/
+	public static final Topic CsvSlotValues = newTopic(0);
+	public void fireCsvSlotValues(BString event){fire(CsvSlotValues,event,null);}
+	
+	/**This is fired every time outDelimitedSlotNames or outDelimitedSlotValues is updated.*/
+	public static final Topic CsvSlotNameValuePairs = newTopic(0);
+	public void fireCsvSlotNameValuePairs(BString event){fire(CsvSlotNameValuePairs,event,null);}
+	
 	
 	
 	public Type getType() { return TYPE; }
@@ -176,14 +182,17 @@ public class BDynamicLinks extends BComponent
 		
 	static int colSourceOrd = 0;
 	static int colSourceSlotName = 1;
-	static int colTargetSlotName = 2;
+	static int colTargetSlotName = 2;	
+	/*------------------------------------------------------------------------------------------------------------------------*/
+	
 	String [][] arrSlotInfo = new String[0][0];
 	Clock.Ticket midnightTimer;
 	Clock.Ticket refreshTimer;
 	
 	//This just makes it easier to copy this source into a program object.
 	BComponent destinationComp = this;
-
+	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	public void started() throws Exception
 	{
 		if(!Sys.atSteadyState() || !isRunning()) return;
@@ -197,7 +206,8 @@ public class BDynamicLinks extends BComponent
 			logger.error("\n" + getSlotPath() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
 		}
 	}
-
+	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	public void atSteadyState() throws Exception
 	{
 		if(!Sys.atSteadyState() || !isRunning()) return;
@@ -211,19 +221,36 @@ public class BDynamicLinks extends BComponent
 			logger.error("\n" + getSlotPath() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
 		}
 	}
-
+	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	public void stopped()
 	{
 		if (refreshTimer != null) refreshTimer.cancel();
 		if(midnightTimer != null) midnightTimer.cancel();
 	}
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	public void changed(Property p, Context cx)
 	{
 		if(!Sys.atSteadyState() || !destinationComp.isRunning()) return;
-		if(p.equals(slotInfoCsv) || p.equals(statusForInvalidOrds) || p.equals(useAreaZoneStation)) doRefreshLinks();
-		if(p.equals(refreshInterval)) updateTimer();
-		if(p.equals(refreshLinksAtMidnight)) scheduleMidnightTimer();
+		
+		if(p.equals(slotInfoCsv) || p.equals(statusForInvalidOrds) || p.equals(useAreaZoneStation)) 
+		{
+			doRefreshLinks();
+			return;
+		}
+		
+		if(p.equals(refreshInterval))
+		{
+			updateTimer();
+			return;
+		}
+		
+		if(p.equals(refreshLinksAtMidnight)) 
+		{
+			scheduleMidnightTimer();
+			return;
+		}
 		
 		if(p.equals(enableDynamicKnobs))
 		{
@@ -237,6 +264,7 @@ public class BDynamicLinks extends BComponent
 				addSlotFlag(knobInfoCsv, Flags.HIDDEN);
 				//I'm still not sure if any knobs should be deleted yet, but if so, it should be called here
 			}
+			return;
 		}
 		
 		if(p.equals(executeFindAndReplace) && 
@@ -247,6 +275,7 @@ public class BDynamicLinks extends BComponent
 			setSlotInfoCsv(replaceString(getSlotInfoCsv(), getFindStringInCsv(), getReplaceStringInCsv()));
 			setFindStringInCsv("");
 			setExecuteFindAndReplace(false);
+			return;
 		}
 		
 		if(p.equals(reorderSlotsBasedOnCsvString) && getReorderSlotsBasedOnCsvString())
@@ -275,9 +304,134 @@ public class BDynamicLinks extends BComponent
 					}
 				}
 			}
+			
+			makeDelimitedOutput();
+			return;
+		}
+		
+		
+		if( !p.equals(outDelimitedSlotNames) && !p.equals(outDelimitedSlotValues) ) 
+		{
+			makeDelimitedOutput();
+			return;
+		}
+		
+		
+		
+	}
+	
+	String escape(String s){return com.tridium.util.EscUtil.slot.escape(s);}
+	String unescape(String s){return com.tridium.util.EscUtil.slot.unescape(s);}
+	
+	
+	/*------------------------------------------------------------------------------------------------------------------------*/
+	/**
+	 * makeCsvOutput was added on 2017.05.04 by Justin Koffler
+	 */
+	public void makeDelimitedOutput()
+	{
+		String csvNames = "";
+		String csvValues = "";
+		String pairs = "";
+
+		try
+		{
+
+			//Normal Delimiter Setup..........
+			String delim = getInDelimiter();
+			try
+			{
+				if(getInDelimiter().substring(0, 2).toString().equalsIgnoreCase("\\u"))
+				{
+					String tempDelim = getInDelimiter();
+					tempDelim = tempDelim.replace("\\","");
+					String[] arr = tempDelim.split("u");
+					delim = "";
+					for(int i = 1; i < arr.length; i++)
+					{
+					    int hexVal = Integer.parseInt(arr[i], 16);
+					    delim += (char)hexVal;
+					}
+				}
+			}
+			catch (Exception e){}
+			
+			
+			//Pairs Delimiter Setup..........
+			String parsDelim = getInPairsDelimiter();
+			try
+			{
+				if(getInPairsDelimiter().substring(0, 2).toString().equalsIgnoreCase("\\u"))
+				{
+					String tempPairsDelim = getInPairsDelimiter();
+					tempPairsDelim = tempPairsDelim.replace("\\","");
+					String[] arr = tempPairsDelim.split("u");
+					parsDelim = "";
+					for(int i = 1; i < arr.length; i++)
+					{
+					    int hexVal = Integer.parseInt(arr[i], 16);
+					    parsDelim += (char)hexVal;
+					}
+				}
+			}
+			catch (Exception e){}
+			
+			
+			//Iterate through each slot and build our delimited values...
+			Property[] dyProps = this.getDynamicPropertiesArray();
+			
+			for(int i = 0; i < dyProps.length; i++)
+			{
+				Property property = dyProps[i];
+				
+				if(  !property.isAction() && !property.isTopic() && !property.getType().is(BLink.TYPE) && !property.getType().is(BWsAnnotation.TYPE) )
+				{
+					String name = unescape(property.getName());
+					String value = "";
+					
+					if(property.getType().toString().toUpperCase().indexOf("STATUS") > -1)
+					{
+						BStatusValue sv = (BStatusValue) get(property).asValue();
+						value = sv.getValueValue().toString();
+					}
+					else{value = get(property).asValue().toString();}
+					
+					logger.trace("\t" + getSlotPath() + "\t" + "slotName: '" + name + "', slotValue: '" + value + "', Type: " + property.getType().toString() );
+	
+					if(csvNames.length()<=0){csvNames = name;}
+					else{csvNames = csvNames + delim + name;}
+	
+					if(csvValues.length()<=0){csvValues = value;}
+					else{csvValues = csvValues + delim + value;}
+					
+					if(pairs.length()<=0){pairs = name + parsDelim + value;}
+					else{pairs = pairs + delim + name + parsDelim + value;}
+				}
+				else
+				{
+					logger.trace("\t" + getSlotPath() + "\t" + "'" + property.getName() + "' is type: '" + property.getType() + "' and will not be included in csv.");
+				}
+			}
+
+			logger.trace("\n" + getSlotPath() + "\n" + "Names:\n" + csvNames + "\nValues:\n" + csvValues);
+
+			setOutDelimitedSlotNames(csvNames);
+			setOutDelimitedSlotValues(csvValues);
+			setOutDelimitedSlotNameValuePairs(pairs);
+			fireCsvSlotNames(BString.make(csvNames));
+			fireCsvSlotValues(BString.make(csvValues));
+			fireCsvSlotNameValuePairs(BString.make(pairs));
+		}
+		catch (Exception e)
+		{
+			logger.error("\n" + getSlotPath() + "\n" + "makeCsvOutput()\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
 		}
 	}
 	
+	
+	
+	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	void startupRoutine()
 	{
 		scheduleMidnightTimer();
@@ -285,6 +439,7 @@ public class BDynamicLinks extends BComponent
 		doRefreshLinks();
 	}
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	void updateTimer()
 	{
 		try
@@ -298,6 +453,7 @@ public class BDynamicLinks extends BComponent
 		}
 	}
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	private void scheduleMidnightTimer()
 	{
 		try
@@ -333,12 +489,14 @@ public class BDynamicLinks extends BComponent
 		}
 	}
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	public void doMidnightTimerExpired()
 	{
 		doRefreshLinks();
 		scheduleMidnightTimer();
 	}
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	public void doRefreshLinks()
 	{
 		if(!Sys.atSteadyState() || !destinationComp.isRunning()) return;
@@ -623,6 +781,13 @@ public class BDynamicLinks extends BComponent
 				}
 			}
 			
+			
+			
+			
+			
+			
+			
+			
 			try
 			{
 				links = destinationComp.getLinks(destinationComp.getSlot(targetSlotName));
@@ -881,8 +1046,12 @@ public class BDynamicLinks extends BComponent
 		arrSlotInfo = strOrds;
 		
 		fireLinksRefreshed(BBoolean.make(true));
+		
+		makeDelimitedOutput();
 	}
 	
+	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	/**Checks to ensure the ord is valid before linking.*/
 	private boolean isOrdValid(BOrd ord)
 	{
@@ -900,6 +1069,7 @@ public class BDynamicLinks extends BComponent
 		}
 	}
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	private static String[][] split(String inString, String delim1, String delim2)
 	{									
 		if(inString.indexOf(delim1) == -1 && inString.indexOf(delim2) == -1) 
@@ -955,6 +1125,7 @@ public class BDynamicLinks extends BComponent
 		}
 	}
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	private static String[][] resizeArray(String[][] inArray, int len1, int len2)
 	{
 		if (len1 <= inArray.length && len2 <= inArray[0].length) return inArray;
@@ -988,6 +1159,7 @@ public class BDynamicLinks extends BComponent
 	}
 	
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	private static String[] split(String inString, String delim)
 	{									
 		if (inString.indexOf(delim) == -1) 
@@ -1041,6 +1213,7 @@ public class BDynamicLinks extends BComponent
 		}
 	}
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	private static String[] resizeArray(String[] inArray, int len)
 	{
 		if (len < inArray.length) return inArray;
@@ -1056,6 +1229,7 @@ public class BDynamicLinks extends BComponent
 	}
 	
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	private static String replaceString(String sourceStr, String oldStr, String newStr)
 	{
 		int idx = sourceStr.lastIndexOf(oldStr);
@@ -1073,6 +1247,7 @@ public class BDynamicLinks extends BComponent
 	
 	
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	/**
 	 * This is a custom string that can be used in the source ord BFormat input.
 	 */
@@ -1085,6 +1260,8 @@ public class BDynamicLinks extends BComponent
 		return station;
 	}
 
+	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	/**
 	 * This is a custom string that can be used in the source ord BFormat input.
 	 */
@@ -1127,6 +1304,7 @@ public class BDynamicLinks extends BComponent
 		return new SlotPath("slot", station);
 	}
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	/**
 	 * This is a custom string that can be used in the source ord BFormat input.
 	 */
@@ -1138,7 +1316,8 @@ public class BDynamicLinks extends BComponent
 				zone = "station:|" + zone;
 		return zone;
 	}
-
+	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	/**
 	 * This is a custom string that can be used in the source ord BFormat input.
 	 */
@@ -1172,6 +1351,7 @@ public class BDynamicLinks extends BComponent
 		return new SlotPath("slot", zone);
 	}
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	/**
 	 * This is a custom string that can be used in the source ord BFormat input.
 	 */
@@ -1180,6 +1360,7 @@ public class BDynamicLinks extends BComponent
 		return getComponentFromPath(seguinZonePath());
 	}
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	/**
 	 * This is a custom string that can be used in the source ord BFormat input.
 	 */
@@ -1188,6 +1369,7 @@ public class BDynamicLinks extends BComponent
 		return getComponentFromPath(seguinStationPath());
 	}
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	private BComponent getComponentFromPath(String path)
 	{
 		BOrd ord = null;
@@ -1205,12 +1387,14 @@ public class BDynamicLinks extends BComponent
 		return com;
 	}
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	private void addSlotFlag(Property inPropertyName, int flag)
 	{
 		Slot updateSlot = destinationComp.getSlot(inPropertyName.getName());
 		destinationComp.setFlags(updateSlot, (destinationComp.getFlags(updateSlot) | flag));
 	}
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
 	private void removeSlotFlag(Property inPropertyName, int flag)
 	{
 		Slot updateSlot = destinationComp.getSlot(inPropertyName.getName());

@@ -26,7 +26,8 @@ import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
 import javax.baja.units.BUnit;
 import javax.baja.util.BFormat;
-import javax.baja.util.TextUtil;
+//import javax.baja.util.TextUtil;
+import javax.baja.nre.util.TextUtil;
 
 /**
 This object tracks part counts and based on shift and break schedules,<br>
