@@ -22,6 +22,12 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 <pre>
 <code>
 <hr>
+<b>V17.05.15.01 May 15, 2017</b><i></b><i> - Justin Koffler</i></i>
+	- MODIFED 'BDynamicLinks'
+		* Added boolean slot 'enableDelimittedValues' with default value of false.
+			* Not enabling this field will reduce the its processing overhead and reduce the memory used to store the string values.
+			* The overhead and memory is minimal, but in the event you have a large number of slots, the usage could have a negative impacting depending upon your setting.
+<hr>
 <b>V17.05.04.02 May 04, 2017</b><i></b><i> - Justin Koffler</i></i>
 	- MODIFED 'BDynamicLinks'
 		* Added string output slots outDelimitedSlotNames, outDelimitedSlotValues and outDelimitedSlotNameValuePairs.

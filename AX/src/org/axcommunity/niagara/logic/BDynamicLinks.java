@@ -118,7 +118,10 @@ public class BDynamicLinks extends BComponent
 	public boolean getUseAreaZoneStation() { return getBoolean(useAreaZoneStation); }
 	public void setUseAreaZoneStation(boolean v) { setBoolean(useAreaZoneStation, v); }
 	
-	
+	public static final Property enableDelimittedValues = newProperty(0, false);
+	public boolean getEnableDelimittedValues() { return getBoolean(enableDelimittedValues); }
+	public void setEnableDelimittedValues(boolean v) { setBoolean(enableDelimittedValues, v); }
+
 	public static final Property outDelimitedSlotNames = newProperty(0, BString.DEFAULT, BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public String getOutDelimitedSlotNames() { return getString(outDelimitedSlotNames); }
 	public void setOutDelimitedSlotNames(String v) { setString(outDelimitedSlotNames,v,null); }
@@ -309,12 +312,18 @@ public class BDynamicLinks extends BComponent
 			return;
 		}
 		
+		if( p.equals(enableDelimittedValues) ) 
+		{
+			makeDelimitedOutput();
+			return;
+		}
 		
 		if( !p.equals(outDelimitedSlotNames) && !p.equals(outDelimitedSlotValues) ) 
 		{
 			makeDelimitedOutput();
 			return;
 		}
+		
 		
 		
 		
@@ -330,101 +339,110 @@ public class BDynamicLinks extends BComponent
 	 */
 	public void makeDelimitedOutput()
 	{
-		String csvNames = "";
-		String csvValues = "";
-		String pairs = "";
-
-		try
+		if(getEnableDelimittedValues()==true)
 		{
+			String csvNames = "";
+			String csvValues = "";
+			String pairs = "";
 
-			//Normal Delimiter Setup..........
-			String delim = getInDelimiter();
 			try
 			{
-				if(getInDelimiter().substring(0, 2).toString().equalsIgnoreCase("\\u"))
+
+				//Normal Delimiter Setup..........
+				String delim = getInDelimiter();
+				try
 				{
-					String tempDelim = getInDelimiter();
-					tempDelim = tempDelim.replace("\\","");
-					String[] arr = tempDelim.split("u");
-					delim = "";
-					for(int i = 1; i < arr.length; i++)
+					if(getInDelimiter().substring(0, 2).toString().equalsIgnoreCase("\\u"))
 					{
-					    int hexVal = Integer.parseInt(arr[i], 16);
-					    delim += (char)hexVal;
+						String tempDelim = getInDelimiter();
+						tempDelim = tempDelim.replace("\\","");
+						String[] arr = tempDelim.split("u");
+						delim = "";
+						for(int i = 1; i < arr.length; i++)
+						{
+							int hexVal = Integer.parseInt(arr[i], 16);
+							delim += (char)hexVal;
+						}
 					}
 				}
-			}
-			catch (Exception e){}
-			
-			
-			//Pairs Delimiter Setup..........
-			String parsDelim = getInPairsDelimiter();
-			try
-			{
-				if(getInPairsDelimiter().substring(0, 2).toString().equalsIgnoreCase("\\u"))
-				{
-					String tempPairsDelim = getInPairsDelimiter();
-					tempPairsDelim = tempPairsDelim.replace("\\","");
-					String[] arr = tempPairsDelim.split("u");
-					parsDelim = "";
-					for(int i = 1; i < arr.length; i++)
-					{
-					    int hexVal = Integer.parseInt(arr[i], 16);
-					    parsDelim += (char)hexVal;
-					}
-				}
-			}
-			catch (Exception e){}
-			
-			
-			//Iterate through each slot and build our delimited values...
-			Property[] dyProps = this.getDynamicPropertiesArray();
-			
-			for(int i = 0; i < dyProps.length; i++)
-			{
-				Property property = dyProps[i];
+				catch (Exception e){}
 				
-				if(  !property.isAction() && !property.isTopic() && !property.getType().is(BLink.TYPE) && !property.getType().is(BWsAnnotation.TYPE) )
+				
+				//Pairs Delimiter Setup..........
+				String parsDelim = getInPairsDelimiter();
+				try
 				{
-					String name = unescape(property.getName());
-					String value = "";
-					
-					if(property.getType().toString().toUpperCase().indexOf("STATUS") > -1)
+					if(getInPairsDelimiter().substring(0, 2).toString().equalsIgnoreCase("\\u"))
 					{
-						BStatusValue sv = (BStatusValue) get(property).asValue();
-						value = sv.getValueValue().toString();
+						String tempPairsDelim = getInPairsDelimiter();
+						tempPairsDelim = tempPairsDelim.replace("\\","");
+						String[] arr = tempPairsDelim.split("u");
+						parsDelim = "";
+						for(int i = 1; i < arr.length; i++)
+						{
+							int hexVal = Integer.parseInt(arr[i], 16);
+							parsDelim += (char)hexVal;
+						}
 					}
-					else{value = get(property).asValue().toString();}
-					
-					logger.trace("\t" + getSlotPath() + "\t" + "slotName: '" + name + "', slotValue: '" + value + "', Type: " + property.getType().toString() );
-	
-					if(csvNames.length()<=0){csvNames = name;}
-					else{csvNames = csvNames + delim + name;}
-	
-					if(csvValues.length()<=0){csvValues = value;}
-					else{csvValues = csvValues + delim + value;}
-					
-					if(pairs.length()<=0){pairs = name + parsDelim + value;}
-					else{pairs = pairs + delim + name + parsDelim + value;}
 				}
-				else
+				catch (Exception e){}
+				
+				
+				//Iterate through each slot and build our delimited values...
+				Property[] dyProps = this.getDynamicPropertiesArray();
+				
+				for(int i = 0; i < dyProps.length; i++)
 				{
-					logger.trace("\t" + getSlotPath() + "\t" + "'" + property.getName() + "' is type: '" + property.getType() + "' and will not be included in csv.");
+					Property property = dyProps[i];
+					
+					if(  !property.isAction() && !property.isTopic() && !property.getType().is(BLink.TYPE) && !property.getType().is(BWsAnnotation.TYPE) )
+					{
+						String name = unescape(property.getName());
+						String value = "";
+						
+						if(property.getType().toString().toUpperCase().indexOf("STATUS") > -1)
+						{
+							BStatusValue sv = (BStatusValue) get(property).asValue();
+							value = sv.getValueValue().toString();
+						}
+						else{value = get(property).asValue().toString();}
+						
+						logger.trace("\t" + getSlotPath() + "\t" + "slotName: '" + name + "', slotValue: '" + value + "', Type: " + property.getType().toString() );
+		
+						if(csvNames.length()<=0){csvNames = name;}
+						else{csvNames = csvNames + delim + name;}
+		
+						if(csvValues.length()<=0){csvValues = value;}
+						else{csvValues = csvValues + delim + value;}
+						
+						if(pairs.length()<=0){pairs = name + parsDelim + value;}
+						else{pairs = pairs + delim + name + parsDelim + value;}
+					}
+					else
+					{
+						logger.trace("\t" + getSlotPath() + "\t" + "'" + property.getName() + "' is type: '" + property.getType() + "' and will not be included in csv.");
+					}
 				}
+
+				logger.trace("\n" + getSlotPath() + "\n" + "Names:\n" + csvNames + "\nValues:\n" + csvValues);
+
+				setOutDelimitedSlotNames(csvNames);
+				setOutDelimitedSlotValues(csvValues);
+				setOutDelimitedSlotNameValuePairs(pairs);
+				fireCsvSlotNames(BString.make(csvNames));
+				fireCsvSlotValues(BString.make(csvValues));
+				fireCsvSlotNameValuePairs(BString.make(pairs));
 			}
-
-			logger.trace("\n" + getSlotPath() + "\n" + "Names:\n" + csvNames + "\nValues:\n" + csvValues);
-
-			setOutDelimitedSlotNames(csvNames);
-			setOutDelimitedSlotValues(csvValues);
-			setOutDelimitedSlotNameValuePairs(pairs);
-			fireCsvSlotNames(BString.make(csvNames));
-			fireCsvSlotValues(BString.make(csvValues));
-			fireCsvSlotNameValuePairs(BString.make(pairs));
+			catch (Exception e)
+			{
+				logger.error("\n" + getSlotPath() + "\n" + "makeCsvOutput()\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
+			}
 		}
-		catch (Exception e)
+		else
 		{
-			logger.error("\n" + getSlotPath() + "\n" + "makeCsvOutput()\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
+			if(getOutDelimitedSlotNames().length()>0)			{setOutDelimitedSlotNames("");			fireCsvSlotNames(BString.make(""));				}
+			if(getOutDelimitedSlotValues().length()>0)			{setOutDelimitedSlotValues("");			fireCsvSlotValues(BString.make(""));			}
+			if(getOutDelimitedSlotNameValuePairs().length()>0)	{setOutDelimitedSlotNameValuePairs("");	fireCsvSlotNameValuePairs(BString.make(""));	}
 		}
 	}
 	

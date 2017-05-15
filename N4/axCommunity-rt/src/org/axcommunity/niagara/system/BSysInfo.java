@@ -2,6 +2,7 @@ package org.axcommunity.niagara.system;
 
 import java.net.InetAddress;
 
+import javax.baja.status.BStatus;
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
 import javax.baja.sys.Action;
@@ -140,6 +141,18 @@ public class BSysInfo extends BComponent
 		getUsedHeap().setValue(usedMem);
 		getFreeHeap().setValue(freeMem);
 
+		try{getNiagaraHome().setValue(Sys.getNiagaraHome().toString());}
+		catch (Exception e){getNiagaraHome().setValue("");}
+		
+		try{getNiagaraUserHome().setValue(Sys.getNiagaraUserHome().toString());}
+		catch (Exception e){getNiagaraUserHome().setValue("");}
+		
+		try{getProtectedStationHome().setValue(Sys.getProtectedStationHome().toString());}
+		catch (Exception e){getProtectedStationHome().setValue("");}
+		
+		try{getStationHome().setValue(Sys.getStationHome().toString());}
+		catch (Exception e){getStationHome().setValue("");}
+		
 		new InetInfo().start();
 	}
 
@@ -301,6 +314,24 @@ public class BSysInfo extends BComponent
 	public void setFqdn(BStatusString v) { set(fqdn, v); }
 	public BStatusString getFqdn() {return (BStatusString)get(fqdn);}
 
+	
+	public static final Property niagaraHome = newProperty(Flags.SUMMARY, new BStatusString("", BStatus.DEFAULT), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public BStatusString getNiagaraHome() { return (BStatusString)get(niagaraHome);}
+	public void setNiagaraHome(BStatusString v) {set(niagaraHome,v);}
+	
+	
+	public static final Property niagaraUserHome = newProperty(Flags.SUMMARY, new BStatusString("", BStatus.DEFAULT), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public BStatusString getNiagaraUserHome() { return (BStatusString)get(niagaraUserHome);}
+	public void setNiagaraUserHome(BStatusString v) {set(niagaraUserHome,v);}
+	
+	public static final Property protectedStationHome = newProperty(Flags.SUMMARY, new BStatusString("", BStatus.DEFAULT), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public BStatusString getProtectedStationHome() { return (BStatusString)get(protectedStationHome);}
+	public void setProtectedStationHome(BStatusString v) {set(protectedStationHome,v);}
+	
+	public static final Property stationHome = newProperty(Flags.SUMMARY, new BStatusString("", BStatus.DEFAULT), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public BStatusString getStationHome() { return (BStatusString)get(stationHome);}
+	public void setStationHome(BStatusString v) {set(stationHome,v);}
+	
 	/***/
 	public static final Property cpuUsage = newProperty(Flags.SUMMARY, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setCpuUsage(BStatusNumeric v) { set(cpuUsage, v); }

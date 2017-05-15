@@ -22,6 +22,18 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 <pre>
 <code>
 <hr>
+<b>V17.05.15.01 May 15, 2017</b><i></b><i> - Justin Koffler</i></i>
+	- MODIFED 'BDynamicLinks'
+		* Added boolean slot 'enableDelimittedValues' with default value of false.
+			* Not enabling this field will reduce the its processing overhead and reduce the memory used to store the string values.
+			* The overhead and memory is minimal, but in the event you have a large number of slots, the usage could have a negative impacting depending upon your setting.
+	- MODIFED 'BSysInfo' (N4 version only)
+		* Added new string slots 'niagaraHome', 'niagaraUserHome', 'protectedStationHome' and 'stationHome'
+			* This will output the file system path for the given niagara variable.
+			* A try/catch method is used for setting these and in the catch method the slots are set to an empty string. 
+			* On non-softJaces some of these variables don't exist, hence the use of the try/catch.
+			* If this poses a problem for anything please let me know and will remedy asap.
+<hr>
 <b>V17.05.04.02 May 04, 2017</b><i></b><i> - Justin Koffler</i></i>
 	- MODIFED 'BDynamicLinks'
 		* Added string output slots outDelimitedSlotNames, outDelimitedSlotValues and outDelimitedSlotNameValuePairs.
