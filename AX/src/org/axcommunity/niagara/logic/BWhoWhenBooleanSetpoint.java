@@ -66,10 +66,9 @@ extends BComponent
 	public void SetTrue(){invoke(SetTrue,null,null);}
 	public void doSetTrue(Context cxin)
 	{
-		logger.trace("\t\t" + getSlotPath()	+ "\t\tTRIGGERED TRUE BY: " + cxin.getUser().getUsername());
 		
 		valueCurrent = getOut().getValue();
-		
+		String by = "logic";
 		if(cxin==null)
 		{
 			//for wiresheet invokes, set username to "logic"
@@ -78,8 +77,12 @@ extends BComponent
 		else 
 		{
 			//for any user invokes, get the context username
-			getChangedBy().setValue(cxin.getUser().getUsername());
+			by = cxin.getUser().getUsername();
+			getChangedBy().setValue(by);
 		}
+
+		logger.trace("\t\t" + getSlotPath()	+ "\t\tTRIGGERED TRUE BY: " + by);
+
 		//set value and timestamp
 		getOut().setValue(true);
 		fireValue(BBoolean.make(true));
@@ -88,7 +91,7 @@ extends BComponent
 		getOut().setStatus(BStatus.ok);
 		setTimeChanged(BAbsTime.make());
 		
-		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + cxin.getUser().getUsername() + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
+		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + by + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
 		getOutLogString().setValue(stringToLog);
 		fireLogString(BString.make(stringToLog));
 	}
@@ -98,7 +101,7 @@ extends BComponent
 	public void SetFalse(){invoke(SetFalse,null,null);}
 	public void doSetFalse(Context cxin)
 	{
-		logger.trace("\t\t" + getSlotPath()	+ "\t\tTRIGGERED FALSE BY: " + cxin.getUser().getUsername());
+		String by = "logic";
 		
 		valueCurrent = getOut().getValue();
 		
@@ -110,8 +113,12 @@ extends BComponent
 		else 
 		{
 			//for any user invokes, get the context username
-			getChangedBy().setValue(cxin.getUser().getUsername());
+			by = cxin.getUser().getUsername();
+			getChangedBy().setValue(by);
 		}
+
+		logger.trace("\t\t" + getSlotPath()	+ "\t\tTRIGGERED FALSE BY: " + by);
+
 		//set value and timestamp
 		getOut().setValue(false);
 		fireValue(BBoolean.make(false));
@@ -120,7 +127,7 @@ extends BComponent
 		getOut().setStatus(BStatus.ok);
 		setTimeChanged(BAbsTime.make());
 		
-		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + cxin.getUser().getUsername() + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
+		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + by + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
 		getOutLogString().setValue(stringToLog);
 		fireLogString(BString.make(stringToLog));
 	}
@@ -131,10 +138,9 @@ extends BComponent
 	public void SetValue(BBoolean v){invoke(SetValue, null);}
 	public void doSetValue(BBoolean v, Context cxin)
 	{
-		logger.trace("\t\t" + getSlotPath()	+ "\t\tTRIGGERED " + v.getBoolean() + " BY: " + cxin.getUser().getUsername());
 		
 		valueCurrent = getOut().getValue();
-		
+		String by = "logic";
 		if(cxin==null)
 		{
 			//for wiresheet invokes, set username to "logic"
@@ -144,8 +150,13 @@ extends BComponent
 		else 
 		{
 			//for any user invokes, get the context username
-			getChangedBy().setValue(cxin.getUser().getUsername());
+			by = cxin.getUser().getUsername();
+			getChangedBy().setValue(by);
+			
 		}
+
+		logger.trace("\t\t" + getSlotPath()	+ "\t\tTRIGGERED " + v.getBoolean() + " BY: " + by);
+
 		//set value and timestamp
 		getOut().setValue(v.getBoolean());
 		fireValue(BBoolean.make(v.getBoolean()));
@@ -154,7 +165,7 @@ extends BComponent
 		getOut().setStatus(BStatus.ok);
 		setTimeChanged(BAbsTime.make());
 		
-		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + cxin.getUser().getUsername() + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
+		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + by + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
 		getOutLogString().setValue(stringToLog);
 		fireLogString(BString.make(stringToLog));
 	}

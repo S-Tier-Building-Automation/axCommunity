@@ -59,7 +59,7 @@ extends BComponent
 	public void doSetValue(BString v, Context cxin)
 	{
 		valueCurrent = getOut().getValue();
-		
+		String by = "logic";
 		if(cxin==null)
 		{
 		//for wiresheet invokes, set username to "logic"
@@ -69,7 +69,8 @@ extends BComponent
 		else 
 		{
 		//for any user invokes, get the context username
-		getChangedBy().setValue(cxin.getUser().getUsername());
+			by = cxin.getUser().getUsername();
+		getChangedBy().setValue(by);
 		}
 		//set value and timestamp
 		getOut().setValue(v.getString());
@@ -79,7 +80,7 @@ extends BComponent
 		getOut().setStatus(BStatus.ok);
 		setTimeChanged(BAbsTime.make());
 		
-		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + cxin.getUser().getUsername() + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
+		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + by + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
 		getOutLogString().setValue(stringToLog);
 		fireLogString(BString.make(stringToLog));
 	}
