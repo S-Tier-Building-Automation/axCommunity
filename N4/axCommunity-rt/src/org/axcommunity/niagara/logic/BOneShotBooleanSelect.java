@@ -9,20 +9,19 @@ import javax.baja.sys.*;
 
 /**
  * When 'trigger' input or 'fire' action slot are true the value
- * set in the 'inXTrue' slot will be represented in the 'out' slot
+ * set in the 'inTrue' slot will be represented in the 'out' slot
  * for the amount of time configured in the 'time' slot.
- * When the timer expires the value in the 'inXFalse' slot 
+ * When the timer expires the value in the 'inFalse' slot 
  * will be represented in the 'out' slot.
  *
  *
  * @author		Justin Koffler, Texas Power Systems
  * @version		12.02.28
- * 
  * 	Update 6/29/2017 by James Johnson to move to current logger syntax
- */
+  */
  
  
-public class BOneShotMultiSelect extends BComponent
+public class BOneShotBooleanSelect extends BComponent
 {
 	private boolean last;
 	private boolean fired;
@@ -38,10 +37,8 @@ public class BOneShotMultiSelect extends BComponent
 	public void doFire()
 	{
 		fired = true;
-		getOutBool().setValue(		getInBoolTrue().getValue());
-		getOutNum().setValue(		getInNumTrue().getValue());
-		getOutString().setValue(	getInStringTrue().getValue());
-
+		getOut().setValue(getInTrue().getValue());
+		
 		getOutTimerActive().setValue(true);
 		setLastTrigger(BAbsTime.now());
 		updateTimer();
@@ -51,13 +48,11 @@ public class BOneShotMultiSelect extends BComponent
 	public void timerExpired() { invoke(timerExpired,null,null); }
 	public void doTimerExpired()
 	{
-		getOutBool().setValue(		getInBoolFalse().getValue());
-		getOutNum().setValue(		getInNumFalse().getValue());
-		getOutString().setValue(	getInStringFalse().getValue());
-		
+		getOut().setValue(getInFalse().getValue());
 		getOutTimerActive().setValue(false);
 		fired = false;
 	}
+	
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/**	TRACKS THE TIMER	*//////////////////////////////////////////////////////////////////////////////////
@@ -83,46 +78,26 @@ public class BOneShotMultiSelect extends BComponent
 	public BRelTime getTime() { return (BRelTime)get(time); }
 	public void setTime(BRelTime v) { set(time,v,null); }
 	
-	public final static Property inBoolTrue = newProperty(0|Flags.SUMMARY, new BStatusBoolean(false));
-	public BStatusBoolean getInBoolTrue() { return (BStatusBoolean)get(inBoolTrue); }
-	public void setInBoolTrue(BStatusBoolean v) { set(inBoolTrue, v); }
+	/** When trigger input is true this is the boolean value that will set on the output.*/
+	public final static Property inTrue = newProperty(0|Flags.SUMMARY, new BStatusBoolean(),null);
+	public BStatusBoolean getInTrue() { return (BStatusBoolean)get(inTrue); }
+	public void setInTrue(BStatusBoolean v) { set(inTrue, v); }
 	
-	public final static Property inBoolFalse = newProperty(0|Flags.SUMMARY, new BStatusBoolean(false));
-	public BStatusBoolean getInBoolFalse() { return (BStatusBoolean)get(inBoolFalse); }
-	public void setInBoolFalse(BStatusBoolean v) { set(inBoolFalse, v); }
+	/** When trigger input is false this is the boolean value that will set on the output.*/
+	public final static Property inFalse = newProperty(0|Flags.SUMMARY, new BStatusBoolean(),null);
+	public BStatusBoolean getInFalse() { return (BStatusBoolean)get(inFalse); }
+	public void setInFalse(BStatusBoolean v) { set(inFalse, v); }
 	
-	public static final Property inNumTrue  = newProperty(0|Flags.SUMMARY, new BStatusNumeric(0), BFacets.makeNumeric(0));
-	public BStatusNumeric getInNumTrue() {return (BStatusNumeric) get(inNumTrue); }
-	public void setInNumTrue(BStatusNumeric v) {set(inNumTrue, v);}
-	
-	public static final Property inNumFalse  = newProperty(0|Flags.SUMMARY, new BStatusNumeric(0), BFacets.makeNumeric(0));
-	public BStatusNumeric getInNumFalse() {return (BStatusNumeric) get(inNumFalse); }
-	public void setInNumFalse(BStatusNumeric v) {set(inNumFalse, v);}
-	
-	public static final Property inStringTrue = newProperty(0|Flags.SUMMARY, new BStatusString());
-	public BStatusString getInStringTrue() { return (BStatusString)get(inStringTrue);}
-	public void setInStringTrue(BStatusString v) {set(inStringTrue,v);}
-
-	public static final Property inStringFalse = newProperty(0|Flags.SUMMARY, new BStatusString());
-	public BStatusString getInStringFalse() { return (BStatusString)get(inStringFalse);}
-	public void setInStringFalse(BStatusString v) {set(inStringFalse,v);}
-
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//	OUTPUTS   /////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public final static Property outBool = newProperty(0|Flags.SUMMARY, new BStatusBoolean(false));
-	public BStatusBoolean getOutBool() { return (BStatusBoolean)get(outBool); }
-	public void setOutBool(BStatusBoolean v) { set(outBool, v); }
-	
-	public static final Property outNum  = newProperty(0|Flags.SUMMARY, new BStatusNumeric(0), BFacets.makeNumeric(0));
-	public BStatusNumeric getOutNum() {return (BStatusNumeric) get(outNum); }
-	public void setOutNum(BStatusNumeric v) {set(outNum, v);}
-	
-	public static final Property outString = newProperty(Flags.SUMMARY, new BStatusString());
-	public BStatusString getOutString() { return (BStatusString)get(outString);}
-	public void setOutString(BStatusString v) {set(outString,v);}
+	/** When trigger input is true the value from slot 'in' will be represented in this slot. */
+	public final static Property out = newProperty(0|Flags.SUMMARY|Flags.READONLY, new BStatusBoolean(),null);
+	public BStatusBoolean getOut() { return (BStatusBoolean)get(out); }
+	public void setOut(BStatusBoolean v) { set(out, v); }
+
 	
 	/** Time of last trigger input*/
 	public static final Property lastTrigger = newProperty(0|Flags.READONLY, BAbsTime.make(), BFacets.make("showMilliseconds",true));
@@ -133,6 +108,7 @@ public class BOneShotMultiSelect extends BComponent
 	public final static Property outTimerActive = newProperty(0, new BStatusBoolean(false));
 	public BStatusBoolean getOutTimerActive() { return (BStatusBoolean)get(outTimerActive); }
 	public void setOutTimerActive(BStatusBoolean v) { set(outTimerActive, v); }
+
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/**    METHOD INVOKED WHEN ANY OF THE INPUTS CHANGES VALUES   *////////////////////////////////////////////
@@ -150,10 +126,8 @@ public class BOneShotMultiSelect extends BComponent
 					if(triggered && !last)
 					{
 						last = triggered;
-						getOutBool().setValue(		getInBoolTrue().getValue());
-						getOutNum().setValue(		getInNumTrue().getValue());
-						getOutString().setValue(	getInStringTrue().getValue());
-
+						getOut().setValue(getInTrue().getValue());
+						
 						getOutTimerActive().setValue(true);
 						setLastTrigger(BAbsTime.now());
 						updateTimer();
@@ -170,12 +144,12 @@ public class BOneShotMultiSelect extends BComponent
 			}
 		}
 	}
-
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public static final Logger logger = Logger.getLogger("axCommunity.OneShotBooleanSelect");
 	
 	public Type getType() { return TYPE; }
-	public static final Type TYPE = Sys.loadType(BOneShotMultiSelect.class);
+	public static final Type TYPE = Sys.loadType(BOneShotBooleanSelect.class);
 
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/JustinKoffler.png");

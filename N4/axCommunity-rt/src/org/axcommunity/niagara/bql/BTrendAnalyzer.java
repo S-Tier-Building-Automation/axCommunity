@@ -17,7 +17,7 @@ import javax.baja.util.BAbsTimeRange;
  * @company Activelogix (http://www.activelogix.com)
  * @blog http://www.tuckwat.com
  * 
- *	updated 06/29/17 by James Johnson: replace the “|bql:historyFunc:HistoryRollup” syntax with “|bql:history:HistoryRollup”. 
+ *	updated 06/29/17 by James Johnson: replace the '|bql:historyFunc:HistoryRollup' syntax with '|bql:history:HistoryRollup'. 
  *
  */
 

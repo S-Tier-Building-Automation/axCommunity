@@ -11,7 +11,7 @@ import javax.baja.sys.*;
 import javax.baja.util.BAbsTimeRange;
 
 
-// updated 06/29/17 by James Johnson: replace the “|bql:historyFunc:HistoryRollup” syntax with “|bql:history:HistoryRollup”. 
+// updated 06/29/17 by James Johnson: replace the '|bql:historyFunc:HistoryRollup' syntax with '|bql:history:HistoryRollup'. 
 
 
 public class BTrendDynamicAnalyzer extends BComponent {
