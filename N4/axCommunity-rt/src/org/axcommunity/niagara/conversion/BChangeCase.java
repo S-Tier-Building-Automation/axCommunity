@@ -1,6 +1,8 @@
 package org.axcommunity.niagara.conversion;
 
-import javax.baja.log.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.baja.status.BStatusString;
 import javax.baja.sys.BComponent;
 import javax.baja.sys.BIcon;
@@ -14,6 +16,8 @@ import javax.baja.sys.Type;
 /**
 * Changes case on Status String input to Upper, Lower and Tile case outputs.
 * @author Justin Koffler
+* 
+* 	Update 6/29/2017 by James Johnson to move to current logger syntax
 */
 public class BChangeCase
 extends BComponent
@@ -76,7 +80,7 @@ extends BComponent
 					}
 					catch (Exception e) 
 					{
-						logger.error("\r\n\r\n" + getSlotPath() + "\r\n" + e.getMessage() + "\r\n" + e.getStackTrace() + "\r\n");
+						logger.log(Level.SEVERE, "\r\n\r\n" + getSlotPath() + "\r\n" + e.getMessage() + "\r\n" + e.getStackTrace() + "\r\n");
 					}
 				}
 				else
@@ -84,7 +88,7 @@ extends BComponent
 					getOutUppercase().setValue("");   
 					getOutLowercase().setValue(""); 
 					getOutTitlecase().setValue("");
-					logger.trace("\r\n\r\n" + getSlotPath() + "\r\n#########  String Input Length Not Greater Than Zero  #########\r\n");
+					logger.log(Level.FINE,"\r\n\r\n" + getSlotPath() + "\r\n#########  String Input Length Not Greater Than Zero  #########\r\n");
 				}
 			}
 		}
@@ -111,7 +115,7 @@ extends BComponent
 	public void setOutTitlecase(BStatusString v) {set(outTitlecase,v);}
 
 	
-	public static final Log logger = Log.getLog("axCommunity.ChangeCase");
+	public static final Logger logger = Logger.getLogger("axCommunity.ChangeCase");
 	
 	public Type getType() { return TYPE; }
 	public static final Type TYPE = Sys.loadType(BChangeCase.class);

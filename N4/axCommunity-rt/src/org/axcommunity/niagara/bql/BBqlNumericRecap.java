@@ -1,11 +1,12 @@
 package org.axcommunity.niagara.bql;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.baja.collection.BITable;
 import javax.baja.collection.Column;
 import javax.baja.collection.ColumnList;
 import javax.baja.collection.TableCursor;
-import javax.baja.log.Log;
 import javax.baja.naming.BOrd;
 import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusNumeric;
@@ -16,16 +17,18 @@ import javax.baja.sys.*;
  * Object executes a BQL query based on the Execute Period for one or more NumericPoint values.  
  * Object calculates the Count, Average, Minimum, Maxium and Sum of the values returned by the BQL query.  
  * If no values are returned by the BQL query the object will set the Avg, Min, Max and Sum to the Fallback value.  
- * If any values return a �nan� they are omitted from the calculation.
+ * If any values return a nan they are omitted from the calculation.
  * 
- * NOTE � A valid BQL ord string is required in the �In Bql Ord� slot for the object to execute.  
+ * NOTE  A valid BQL ord string is required in the In Bql Ord slot for the object to execute.  
  * If the slot is empty or the syntax of the query is incorrect, the object will not execute.
  * 
- * Sample Query 1:  station:|slot:/Drivers/BacnetNetwork|bql:select out from control:NumericPoint where displayName = 'ZoneTemp�
- * Sample Query 2:  station:|slot:/Drivers/LonNetwork|bql:select out from control:NumericPoint where displayName like '*nvoAirFlow�
+ * Sample Query 1:  station:|slot:/Drivers/BacnetNetwork|bql:select out from control:NumericPoint where displayName = 'ZoneTemp
+ * Sample Query 2:  station:|slot:/Drivers/LonNetwork|bql:select out from control:NumericPoint where displayName like '*nvoAirFlow
 
  *
  * @author    Brian W. Collins, Electro Controls, Inc.
+ * 
+ * Update 6/29/2017 by James Johnson to move to current logger syntax
  */
 public class BBqlNumericRecap extends BComponent {
 
@@ -231,7 +234,7 @@ public class BBqlNumericRecap extends BComponent {
 		{
 			getError().setValue(true);
 			fireErrorOccured(BBoolean.make(true));
-			logger.error("\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
+			logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
 		}		
 	}
 
@@ -255,7 +258,7 @@ public class BBqlNumericRecap extends BComponent {
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/electro_diamond_header.png");
 
-	public static final Log logger = Log.getLog("axCommunity.BqlNumericRecap");
+	public static final Logger logger = Logger.getLogger("axCommunity.BqlNumericRecap");
 
 	//TYPE declaration
 	public Type getType() { return TYPE; }

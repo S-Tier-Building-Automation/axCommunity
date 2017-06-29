@@ -1,6 +1,8 @@
 package org.axcommunity.niagara.weather;
 
-import javax.baja.log.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.baja.status.BStatus;
 import javax.baja.status.BStatusEnum;
 import javax.baja.status.BStatusNumeric;
@@ -12,12 +14,13 @@ import javax.baja.xml.XParser;
 import java.net.URL;
 import java.net.URLEncoder;
 
+//	Update 6/29/2017 by James Johnson to move to current logger syntax
 
 public class BFireFoxxWeather
 extends BComponent
 {
   
-      protected static Log log1 = Log.getLog("BFireFoxxWeather");
+      protected static Logger log1 = Logger.getLogger("BFireFoxxWeather");
   
       
       public static int[] stateInt = new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,3200}; 
@@ -40,7 +43,7 @@ extends BComponent
         super.started();
         doLocationField();
         updateTimeTimer();
-        log1.trace("Start Up "); 
+        log1.log(Level.FINE, "Start Up "); 
       }
       
       
@@ -170,9 +173,9 @@ extends BComponent
       String address = (http + units);
       String url = BRequest.get(new URL(address));
       XElem root = XParser.make(url).parse();
-      log1.trace("URL " + url);
-      log1.trace("HTTP " + http);
-      log1.trace("Address " + address);
+      log1.log(Level.FINE, "URL " + url);
+      log1.log(Level.FINE, "HTTP " + http);
+      log1.log(Level.FINE, "Address " + address);
       return root;
     }
 
@@ -182,7 +185,7 @@ extends BComponent
       {
         try 
         {     
-          log1.trace("Update Report "); 
+          log1.log(Level.FINE, "Update Report "); 
           
           // Parse XML
           XElem root = getFeed();

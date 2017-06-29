@@ -1,6 +1,8 @@
 package org.axcommunity.niagara.logic;
 
-import javax.baja.log.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.baja.status.*;
 import javax.baja.sys.*;
 
@@ -9,6 +11,8 @@ import javax.baja.sys.*;
 *
 * @author    Mike Arnott
 * @creation  9 Dec 11
+* 
+* 	Update 6/29/2017 by James Johnson to move to current logger syntax
 */
 public class BWhoWhenBooleanSetpoint
 extends BComponent
@@ -66,7 +70,7 @@ extends BComponent
 	public void SetTrue(){invoke(SetTrue,null,null);}
 	public void doSetTrue(Context cxin)
 	{
-		logger.trace("\t\t" + getSlotPath()	+ "\t\tTRIGGERED TRUE BY: " + cxin.getUser().getUsername());
+		logger.log(Level.FINE, "\t\t" + getSlotPath()	+ "\t\tTRIGGERED TRUE BY: " + cxin.getUser().getUsername());
 		
 		valueCurrent = getOut().getValue();
 		
@@ -98,7 +102,7 @@ extends BComponent
 	public void SetFalse(){invoke(SetFalse,null,null);}
 	public void doSetFalse(Context cxin)
 	{
-		logger.trace("\t\t" + getSlotPath()	+ "\t\tTRIGGERED FALSE BY: " + cxin.getUser().getUsername());
+		logger.log(Level.FINE, "\t\t" + getSlotPath()	+ "\t\tTRIGGERED FALSE BY: " + cxin.getUser().getUsername());
 		
 		valueCurrent = getOut().getValue();
 		
@@ -131,7 +135,7 @@ extends BComponent
 	public void SetValue(BBoolean v){invoke(SetValue, null);}
 	public void doSetValue(BBoolean v, Context cxin)
 	{
-		logger.trace("\t\t" + getSlotPath()	+ "\t\tTRIGGERED " + v.getBoolean() + " BY: " + cxin.getUser().getUsername());
+		logger.log(Level.FINE, "\t\t" + getSlotPath()	+ "\t\tTRIGGERED " + v.getBoolean() + " BY: " + cxin.getUser().getUsername());
 		
 		valueCurrent = getOut().getValue();
 		
@@ -167,7 +171,7 @@ extends BComponent
 	public void fireLogString(BString event){fire(LogString,event,null);}
 	
 
-	public static final Log logger = Log.getLog("axCommunity.WhoWhenBooleanSetpoint");
+	public static final Logger logger = Logger.getLogger("axCommunity.WhoWhenBooleanSetpoint");
 
 
 	public BIcon getIcon() { return icon; }

@@ -1,6 +1,8 @@
 package org.axcommunity.niagara.time;
 
-import javax.baja.log.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
@@ -21,6 +23,8 @@ import javax.baja.sys.*;
 *
 * @author   Justin Koffler
 * @creation	July 15, 2012
+* 
+* 	Update 6/29/2017 by James Johnson to move to current logger syntax
 */
 
 
@@ -92,7 +96,7 @@ public class BStopwatch_v2 extends BComponent
 	{
 		try
 		{
-			logger.trace("\t\t" + getSlotPath()	+ "\t\t******** doReset() Method Called ********");
+			logger.log(Level.FINE, "\t\t" + getSlotPath()	+ "\t\t******** doReset() Method Called ********");
 			
 			if (updateTicket != null) updateTicket.cancel();
 			
@@ -185,7 +189,7 @@ public class BStopwatch_v2 extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error("\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
+			logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
 		}
 	}
 	
@@ -196,7 +200,7 @@ public class BStopwatch_v2 extends BComponent
 	{
 		try
 		{
-			logger.trace("\t\t" + getSlotPath()	+ "\t\t******** doStart() [start of method] ********");
+			logger.log(Level.FINE, "\t\t" + getSlotPath()	+ "\t\t******** doStart() [start of method] ********");
 
 			if(getInTriggerOnOneshot().getValue()==false && getInStop().getValue()==true)
 			{
@@ -206,7 +210,7 @@ public class BStopwatch_v2 extends BComponent
 			//Start the timer when start input is true and timer not already running.
 			if (!running)
 			{
-				logger.trace("\r\n\t\t" + getSlotPath()	+ "\t\t******** doStart() Method and is NOT running. ********"
+				logger.log(Level.FINE, "\r\n\t\t" + getSlotPath()	+ "\t\t******** doStart() Method and is NOT running. ********"
 										+ "\r\n\t\t running = " + running
 										+ "\r\n\t\t lap =     " + lap
 										+ "\r\n\t\t outLap =  " + getOutLap().getValue()
@@ -235,7 +239,7 @@ public class BStopwatch_v2 extends BComponent
 				getOutRunning().setValue(true);
 				setOutTimeStarted(BAbsTime.now());
 				
-				logger.trace("\r\n\t\t" + getSlotPath()	+ "\t\t******** doStart() [end of method] ********"
+				logger.log(Level.FINE, "\r\n\t\t" + getSlotPath()	+ "\t\t******** doStart() [end of method] ********"
 										+ "\r\n\t\t running = " + running
 										+ "\r\n\t\t lap =     " + lap
 										+ "\r\n\t\t outLap =  " + getOutLap().getValue()
@@ -249,7 +253,7 @@ public class BStopwatch_v2 extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error("\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
+			logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
 		}
 	}
 	
@@ -261,7 +265,7 @@ public class BStopwatch_v2 extends BComponent
 	{
 		try
 		{
-			logger.trace("\t\t" + getSlotPath()	+ "\t\t******** doStop() Method Called ********");
+			logger.log(Level.FINE, "\t\t" + getSlotPath()	+ "\t\t******** doStop() Method Called ********");
 			if (running) 
 			{
 				running		= false;
@@ -276,7 +280,7 @@ public class BStopwatch_v2 extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error("\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
+			logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
 		}
 	}
 	
@@ -468,7 +472,7 @@ public class BStopwatch_v2 extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error("\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
+			logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
 		}
 	} 
 
@@ -572,7 +576,7 @@ public class BStopwatch_v2 extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error("\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
+			logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
 		}
 	}
 
@@ -697,7 +701,7 @@ public class BStopwatch_v2 extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error("\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
+			logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
 		}
 	}
 
@@ -705,7 +709,7 @@ public class BStopwatch_v2 extends BComponent
 	//*********************************************************************************************************
 	// END OF THE ROAD ****************************************************************************************
 	//*********************************************************************************************************
-	public static final Log logger = Log.getLog("axCommunity.Stopwatch_v2");
+	public static final Logger logger = Logger.getLogger("axCommunity.Stopwatch_v2");
 	
 	public Type getType() { return TYPE; }
 	public static final Type TYPE = Sys.loadType(BStopwatch_v2.class);

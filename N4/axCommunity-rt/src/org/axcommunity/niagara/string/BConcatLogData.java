@@ -1,6 +1,8 @@
 package org.axcommunity.niagara.string;
 
-import javax.baja.log.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.baja.status.BStatus;
 import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusString;
@@ -27,6 +29,7 @@ import javax.baja.sys.Type;
  * @author ebishop
  * @creation Mar 18, 2013
  *
+ *	Update 6/29/2017 by James Johnson to move to current logger syntax
  */
 public class BConcatLogData extends BComponent
 {
@@ -103,7 +106,7 @@ public class BConcatLogData extends BComponent
           }
           catch (Exception e)
           {
-            logger.error(getSlotPath().toString() + e.getMessage());
+            logger.log(Level.SEVERE, getSlotPath().toString() + e.getMessage());
             e.printStackTrace();
           }
         }
@@ -138,7 +141,7 @@ public class BConcatLogData extends BComponent
         }
         catch (Exception e)
         {
-          logger.error(getSlotPath().toString() + e.getMessage());
+          logger.log(Level.SEVERE, getSlotPath().toString() + e.getMessage());
           e.printStackTrace();
         }
         
@@ -155,7 +158,7 @@ public class BConcatLogData extends BComponent
         }
         catch (Exception e)
         {
-          logger.error(getSlotPath().toString() + e.getMessage());
+          logger.log(Level.SEVERE, getSlotPath().toString() + e.getMessage());
           e.printStackTrace();
         }
         
@@ -210,11 +213,11 @@ public class BConcatLogData extends BComponent
     }
     catch (Exception e)
     {
-      logger.error(getSlotPath().toString() + e.getMessage());
+      logger.log(Level.SEVERE, getSlotPath().toString() + e.getMessage());
       e.printStackTrace();
     }
   }
-  public static final Log logger = Log.getLog(TYPE.getModule().getModuleName() + "." + TYPE.getTypeName());
+  public static final Logger logger = Logger.getLogger(TYPE.getModule().getModuleName() + "." + TYPE.getTypeName());
   public BFacets getSlotFacets(Slot slot) { return super.getSlotFacets(slot); }
   public BStatus getStatus() { return getOutString().getStatus(); }
   public BStatusValue getStatusValue() { return getOutString().getStatusValue(); }

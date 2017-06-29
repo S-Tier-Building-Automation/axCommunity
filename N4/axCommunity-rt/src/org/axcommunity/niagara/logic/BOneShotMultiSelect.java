@@ -1,6 +1,8 @@
 package org.axcommunity.niagara.logic;
 
-import javax.baja.log.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.baja.status.*;
 import javax.baja.sys.*;
 
@@ -15,6 +17,8 @@ import javax.baja.sys.*;
  *
  * @author		Justin Koffler, Texas Power Systems
  * @version		12.02.28
+ * 
+ * 	Update 6/29/2017 by James Johnson to move to current logger syntax
  */
  
  
@@ -162,13 +166,13 @@ public class BOneShotMultiSelect extends BComponent
 			}
 			catch (Exception e) 
 			{
-				logger.error("\r\n\t\t" + getSlotPath()	+ "\r\n\t\t" + e.getMessage() + "\r\n\t\t" + e.getStackTrace());
+				logger.log(Level.SEVERE, "\r\n\t\t" + getSlotPath()	+ "\r\n\t\t" + e.getMessage() + "\r\n\t\t" + e.getStackTrace());
 			}
 		}
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public static final Log logger = Log.getLog("axCommunity.OneShotBooleanSelect");
+	public static final Logger logger = Logger.getLogger("axCommunity.OneShotBooleanSelect");
 	
 	public Type getType() { return TYPE; }
 	public static final Type TYPE = Sys.loadType(BOneShotMultiSelect.class);

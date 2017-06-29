@@ -16,6 +16,9 @@ import javax.baja.util.BAbsTimeRange;
  * @creation 02 Feb 07
  * @company Activelogix (http://www.activelogix.com)
  * @blog http://www.tuckwat.com
+ * 
+ *	updated 06/29/17 by James Johnson: replace the “|bql:historyFunc:HistoryRollup” syntax with “|bql:history:HistoryRollup”. 
+ *
  */
 
 public class BTrendAnalyzer extends BComponent
@@ -262,7 +265,7 @@ public class BTrendAnalyzer extends BComponent
 		String endDate = getDateRange().getEndTime().encodeToString();
 
 		BOrd bqlOrd = BOrd.make(hist + "?period=timeRange;start=" + startDate + ";end=" + endDate
-				+ "|bql:historyFunc:HistoryRollup.rollup(select *, baja:RelTime '" + fiftyYearsInMS + "')");
+				+ "|bql:history:HistoryRollup.rollup(select *, baja:RelTime '" + fiftyYearsInMS + "')");
 
 		// Run the BQL query
 		BITable result = (BITable) bqlOrd.resolve(Sys.getStation()).get();

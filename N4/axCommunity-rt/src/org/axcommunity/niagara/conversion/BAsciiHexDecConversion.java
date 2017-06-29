@@ -1,6 +1,8 @@
 package org.axcommunity.niagara.conversion;
 
-import javax.baja.log.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
@@ -20,6 +22,8 @@ import javax.baja.sys.*;
  *
  * @author		Justin Koffler
  * @creation	5 Feb 12
+ * 
+ * 	Update 6/29/2017 by James Johnson to move to current logger syntax
  */
 
 
@@ -358,7 +362,7 @@ public class BAsciiHexDecConversion extends BComponent
 				}
 			}
 			
-			logger.trace( "\r\n\t\t" + getSlotPath()	
+			logger.log(Level.FINE, "\r\n\t\t" + getSlotPath()	
 						+ "\r\n\t\t convertStringToHex() results..." 
 						+ "\r\n\t\t FROM:"
 						+ "\r\n\t\t '" + str + "'"
@@ -369,7 +373,7 @@ public class BAsciiHexDecConversion extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error(		"\r\n\t\t" + getSlotPath()	
+			logger.log(Level.SEVERE,		"\r\n\t\t" + getSlotPath()	
 							+	"\r\n\t\t" + "ERROR IN convertStringToHex() METHOD!"
 							+	"\r\n\t\t" + e.getMessage() 
 							+	"\r\n\t\t" + e.getStackTrace());
@@ -402,7 +406,7 @@ public class BAsciiHexDecConversion extends BComponent
 			}
 			String hexToString = sb.toString();
 			
-			logger.trace( "\r\n\t\t" + getSlotPath()	
+			logger.log(Level.FINE, "\r\n\t\t" + getSlotPath()	
 						+ "\r\n\t\t convertHexToString() results..." 
 						+ "\r\n\t\t FROM:"
 						+ "\r\n\t\t '" + hex + "'"
@@ -413,7 +417,7 @@ public class BAsciiHexDecConversion extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error(		"\r\n\t\t" + getSlotPath()	
+			logger.log(Level.SEVERE,		"\r\n\t\t" + getSlotPath()	
 							+	"\r\n\t\t" + "ERROR IN convertHexToString() METHOD!"
 							+	"\r\n\t\t" + e.getMessage() 
 							+	"\r\n\t\t" + e.getStackTrace());
@@ -446,7 +450,7 @@ public class BAsciiHexDecConversion extends BComponent
 			}
 			String decToString = sb.toString();
 			
-			logger.trace( "\r\n\t\t" + getSlotPath()	
+			logger.log(Level.FINE, "\r\n\t\t" + getSlotPath()	
 						+ "\r\n\t\t convertDecToString() results..." 
 						+ "\r\n\t\t FROM:"
 						+ "\r\n\t\t '" + dec + "'"
@@ -457,7 +461,7 @@ public class BAsciiHexDecConversion extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error(		"\r\n\t\t" + getSlotPath()	
+			logger.log(Level.SEVERE,		"\r\n\t\t" + getSlotPath()	
 							+	"\r\n\t\t" + "ERROR IN convertDecToString() METHOD!"
 							+	"\r\n\t\t" + e.getMessage() 
 							+	"\r\n\t\t" + e.getStackTrace());
@@ -522,7 +526,7 @@ public class BAsciiHexDecConversion extends BComponent
 				}
 			}
 			
-			logger.trace( "\r\n\t\t" + getSlotPath()	
+			logger.log(Level.FINE, "\r\n\t\t" + getSlotPath()	
 						+ "\r\n\t\t convertHexToDecimal() results..." 
 						+ "\r\n\t\t FROM:"
 						+ "\r\n\t\t '" + hex + "'"
@@ -533,7 +537,7 @@ public class BAsciiHexDecConversion extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error(		"\r\n\t\t" + getSlotPath()	
+			logger.log(Level.SEVERE,		"\r\n\t\t" + getSlotPath()	
 							+	"\r\n\t\t" + "ERROR IN convertHexToDecimal() METHOD!"
 							+	"\r\n\t\t" + e.getMessage() 
 							+	"\r\n\t\t" + e.getStackTrace());
@@ -572,7 +576,7 @@ public class BAsciiHexDecConversion extends BComponent
 				newString = strIn;
 			}
 			
-			logger.trace( "\r\n\t\t" + getSlotPath()	
+			logger.log(Level.FINE, "\r\n\t\t" + getSlotPath()	
 						+ "\r\n\t\t removeChar() results..." 
 						+ "\r\n\t\t FROM:"
 						+ "\r\n\t\t '" + strIn + "'"
@@ -583,7 +587,7 @@ public class BAsciiHexDecConversion extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error(		"\r\n\t\t" + getSlotPath()	
+			logger.log(Level.SEVERE,		"\r\n\t\t" + getSlotPath()	
 							+	"\r\n\t\t" + "ERROR IN removeChar() METHOD!"
 							+	"\r\n\t\t" + e.getMessage() 
 							+	"\r\n\t\t" + e.getStackTrace());
@@ -602,7 +606,7 @@ public class BAsciiHexDecConversion extends BComponent
 	public void onStop() throws Exception{ }
 	
 
-	public static final Log logger = Log.getLog("axCommunity.AsciiHexDecConversion");
+	public static final Logger logger = Logger.getLogger("axCommunity.AsciiHexDecConversion");
 	
 	public Type getType() { return TYPE; }
 	public static final Type TYPE = Sys.loadType(BAsciiHexDecConversion.class);

@@ -1,6 +1,8 @@
 package org.axcommunity.niagara.string;
 
-import javax.baja.log.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
@@ -35,6 +37,8 @@ import javax.baja.sys.Type;
  *
  * @author		Justin Koffler
  * @creation	5 Feb 12
+ * 
+ * 	Update 6/29/2017 by James Johnson to move to current logger syntax
  */
 
 
@@ -200,14 +204,14 @@ public class BSuperConcatPlus extends BComponent
 				}
 				catch(Exception e)
 				{
-					logger.error("\r\n\t\t" + getSlotPath() + "\r\n\t\t" + e.getStackTrace(), e);
+					logger.log(Level.SEVERE, "\r\n\t\t" + getSlotPath() + "\r\n\t\t" + e.getStackTrace(), e);
 				}
 			}
 
 			// ONE OF THE STRING INPUTS HAS CHANGED ///////////////////////////////////////////////////////////
 			if(calcOnChange==true && p!=numberOfSlots && p!=numberOfValues && p!=outNoDelimeters && p!=outDelimitValuesOnly && p!=outDelimitAll && p!=outDelimitValuesOnlyPlusTimestamp && p!=outDelimitAllPlusTimestamp)
 			{
-				logger.trace("\r\n\t\t" + getSlotPath()	+ "\r\n\t\tCalculating because " + p.getName() + " changed");
+				logger.log(Level.FINE, "\r\n\t\t" + getSlotPath()	+ "\r\n\t\tCalculating because " + p.getName() + " changed");
 
 				Thread t = new Thread(new calculate());
 				t.start();
@@ -281,7 +285,7 @@ public class BSuperConcatPlus extends BComponent
 			{
 				BStatusString inValue = ((BStatusString) ((BObject)get("In_"+i)));
 
-				logger.trace("\r\n\t\t" + getSlotPath()	+ "\r\n\t\tBEGINING OF FOR LOOP..."
+				logger.log(Level.FINE, "\r\n\t\t" + getSlotPath()	+ "\r\n\t\tBEGINING OF FOR LOOP..."
 						+ "\r\n\t\tSLOT  = " + i 
 						+ "\r\n\t\tVALUE = " + inValue
 						+ "\r\n\t\tOUT1  = " + strOutNoDelimeters
@@ -369,7 +373,7 @@ public class BSuperConcatPlus extends BComponent
 						strOutDelimitAllPlusTimestamp			= strOutDelimitAllPlusTimestamp			+ delim + currentTime();
 					}
 				}
-				logger.trace("\r\n\t\t" + getSlotPath()	+ "\r\n\t\tEND OF FOR LOOP..."
+				logger.log(Level.FINE, "\r\n\t\t" + getSlotPath()	+ "\r\n\t\tEND OF FOR LOOP..."
 						+ "\r\n\t\tSLOT  = " + i 
 						+ "\r\n\t\tVALUE = " + inValue
 						+ "\r\n\t\tOUT1  = " + strOutNoDelimeters
@@ -412,7 +416,7 @@ public class BSuperConcatPlus extends BComponent
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/** Type	*//////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public static final Log logger = Log.getLog("axCommunity.SuperConcatPlus");
+	public static final Logger logger = Logger.getLogger("axCommunity.SuperConcatPlus");
 
 	public Type getType() { return TYPE; }
 	public static final Type TYPE = Sys.loadType(BSuperConcatPlus.class);

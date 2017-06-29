@@ -1,5 +1,8 @@
 package org.axcommunity.niagara.time;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
@@ -20,7 +23,6 @@ import javax.baja.sys.Sys;
 import javax.baja.sys.Topic;
 import javax.baja.sys.Type;
 import javax.baja.units.BUnit;
-import javax.baja.log.Log;
 
 /**
 * A simple event scheduler with a variable input for the time of day
@@ -29,6 +31,8 @@ import javax.baja.log.Log;
 * The topic will fire when the time of day is >= the input time
 * 
 * @author Mike Arnott, Kors Engineering
+* 
+* 	Update 6/29/2017 by James Johnson to move to current logger syntax
 */
 public class BEventAtTime extends BComponent
 {
@@ -65,7 +69,7 @@ public class BEventAtTime extends BComponent
 			}
 			catch(Exception e)
 			{
-				logger.error("\n" + getSlotPath() + "\n" + e.toString() + "\n" + e.getMessage() + "\n" + e.getStackTrace());
+				logger.log(Level.SEVERE, "\n" + getSlotPath() + "\n" + e.toString() + "\n" + e.getMessage() + "\n" + e.getStackTrace());
 			}
 		}
 		else if (property==timeStringIn)
@@ -80,7 +84,7 @@ public class BEventAtTime extends BComponent
 			}
 			catch(Exception e)
 			{
-				logger.error("\n" + getSlotPath() + "\n" + e.toString() + "\n" + e.getMessage() + "\n" + e.getStackTrace());
+				logger.log(Level.SEVERE, "\n" + getSlotPath() + "\n" + e.toString() + "\n" + e.getMessage() + "\n" + e.getStackTrace());
 			}
 		}
 		else if(property == timeOffset)    
@@ -191,7 +195,7 @@ public class BEventAtTime extends BComponent
 	public BRelTime getTimeOffset() { return (BRelTime)get(timeOffset); }
 	public void setTimeOffset(BRelTime v) { set(timeOffset, v, null); }
 
-	public static final Log logger = Log.getLog("axCommunity.EventAtTime");
+	public static final Logger logger = Logger.getLogger("axCommunity.EventAtTime");
 	
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");

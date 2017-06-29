@@ -22,6 +22,38 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 <pre>
 <code>
 <hr>
+<b>V17.06.29.01 June 29, 2017</b><i></b><i> - Mike Arnott</i></i>
+	- MODIFED 
+		'BBqlNumericRecap'
+		'BAbsTimeToDateparts'
+		'BAsciiHexDecConversion'
+		'BChangeCase'
+		'BEnumFromCommaSepVar'
+		'BEnumFromMultiString'
+		'BStatusEnumToStatusString'
+		'BDynamicLinkBoolean'
+		'BDynamicLinkNumeric'
+		'BDynamicLinkString'
+		'BFireOnChange'
+		'BLatestNumber'
+		'BLastestStringNotMatching'
+		'BOneSHotBooleanSelect'
+		'BOneShotMultiSelect'
+		'BSuperOr'
+		'BWhoWhenBooleanSetpoint'
+		'BProductionCounter'
+		'BShiftTargets'
+		'BConcatLogData'
+		'BStringBufferAndSelect'
+		'BSuperConcatPlus'
+		'BStringToFile'
+		'BEventAtTime'
+		'BStopwatch_v2'
+		'BFireFoxxWeather'
+			* By James Johnson: Move to current logger syntax to support 4.3
+	- MODIFED 'BTrendAnalyzer','BDynamicTrendAnalyzer'
+		*replace the '|bql:historyFunc:HistoryRollup' syntax with '|bql:history:HistoryRollup'
+<hr>
 <b>V17.05.15.01 May 15, 2017</b><i></b><i> - Justin Koffler</i></i>
 	- MODIFED 'BDynamicLinks'
 		* Added boolean slot 'enableDelimittedValues' with default value of false.
@@ -232,7 +264,7 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 		* Removed the default colors, so it doesn’t constantly revert to a green background.
 		* added scroll speed setting.
 		* added an optional pause at the beginning of the string.
-		* added end-of-string input (to change from the default “…”).
+		* added end-of-string input (to change from the default ????).
 <hr>
 <b>V13.03.01 March 20, 2013</b><i> - Mike Arnott</i>
 	- ADDED BScale - Numeric point extension which scales the output

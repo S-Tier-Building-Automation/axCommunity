@@ -1,7 +1,9 @@
 package org.axcommunity.niagara.conversion;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.baja.control.BEnumWritable;
-import javax.baja.log.Log;
 import javax.baja.naming.SlotPath;
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
@@ -15,6 +17,8 @@ import javax.baja.sys.*;
  * to that point in the enum range facets.
  * 
  * @author Mike Arnott, Kors Engineering
+ * 
+ * 	Update 6/29/2017 by James Johnson to move to current logger syntax
 */
 public class BEnumFromMultiString
     extends BEnumWritable
@@ -59,7 +63,7 @@ public class BEnumFromMultiString
     
     if(isRunning())
     {
-      logger.trace("changed:" + p.getName());
+      logger.log(Level.FINE, "changed:" + p.getName());
       // NUMBEROFSLOTS HAS CHANGED //////////////////////////////////////////////////////////////////////
       if(p == numberOfSlots)
       {
@@ -69,13 +73,13 @@ public class BEnumFromMultiString
         }
         catch(Exception e)
         {
-          logger.error("\r\n\t\t" + getSlotPath() + "\r\n\t\t" + e.getStackTrace(), e);
+          logger.log(Level.SEVERE, "\r\n\t\t" + getSlotPath() + "\r\n\t\t" + e.getStackTrace(), e);
         }
       }
       if(p.getName().startsWith("In_"))
       {
         // ONE OF THE STRING INPUTS HAS CHANGED ///////////////////////////////////////////////////////////
-        logger.trace("in slot changed:" + p.getName());
+        logger.log(Level.FINE, "in slot changed:" + p.getName());
        calculate();
       }
     }
@@ -170,7 +174,7 @@ public class BEnumFromMultiString
   }
   
   private String[] copyPartialStringArray(String[] inArray,int count){
-    logger.trace("calling copy partial strings, size "+ count);
+    logger.log(Level.FINE, "calling copy partial strings, size "+ count);
     String[] ret = new String[count];
     for(int i=0;i<count;i++)
     {
@@ -179,7 +183,7 @@ public class BEnumFromMultiString
     return ret;  
   }
   private int[] copyPartialIntArray(int[] inArray,int count){
-    logger.trace("calling copy partial ints, size "+ count);
+    logger.log(Level.FINE, "calling copy partial ints, size "+ count);
     int[] ret = new int[count];
     for(int i=0;i<count;i++)
     {
@@ -187,7 +191,7 @@ public class BEnumFromMultiString
     }
     return ret;  
   }
-  public static final Log logger = Log.getLog("axCommunity.BEnumFromMultiString");
+  public static final Logger logger = Logger.getLogger("axCommunity.BEnumFromMultiString");
 
   public BIcon getIcon() { return icon; }
   private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");

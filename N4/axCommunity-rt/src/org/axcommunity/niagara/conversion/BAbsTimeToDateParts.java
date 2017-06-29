@@ -7,7 +7,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import javax.baja.log.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
 import javax.baja.sys.BAbsTime;
@@ -27,6 +29,8 @@ import javax.baja.units.BUnit;
 /**
  * Converts an AbsTime input into individual outputs for date parts
  * @author Mike Arnott, Kors Engineering
+ * 
+ * Update 6/29/2017 by James Johnson to move to current logger syntax
  */
 
  
@@ -97,7 +101,7 @@ public class BAbsTimeToDateParts extends BComponent
 			}
 			catch (Exception e) 
 			{
-				logger.error("\nERROR in: 'public void changed'" + "\ngetMessage =\n" + e.getMessage() + "\ngetStackTrace =\n" + e.getStackTrace() +	"\ntoString =\n" + e.toString());
+				logger.log(Level.SEVERE, "\nERROR in: 'public void changed'" + "\ngetMessage =\n" + e.getMessage() + "\ngetStackTrace =\n" + e.getStackTrace() +	"\ntoString =\n" + e.toString());
 			}
 		
 		}
@@ -235,7 +239,7 @@ public class BAbsTimeToDateParts extends BComponent
 	public static final Type TYPE = Sys.loadType(BAbsTimeToDateParts.class);
 	public Type getType() { return TYPE; }
 
-	public static final Log logger = Log.getLog(TYPE.getModule().getModuleName() + "." + TYPE.getTypeName());
+	public static final Logger logger = Logger.getLogger(TYPE.getModule().getModuleName() + "." + TYPE.getTypeName());
 
 
 	private double toDayOfWeek(String dow)
@@ -255,7 +259,7 @@ public class BAbsTimeToDateParts extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error("\nERROR in: 'private double toDayOfWeek'" + "\ngetMessage =\n" + e.getMessage() + "\ngetStackTrace =\n" + e.getStackTrace() +	"\ntoString =\n" + e.toString());
+			logger.log(Level.SEVERE, "\nERROR in: 'private double toDayOfWeek'" + "\ngetMessage =\n" + e.getMessage() + "\ngetStackTrace =\n" + e.getStackTrace() +	"\ntoString =\n" + e.toString());
 			return 0;
 		}
 	}
@@ -297,7 +301,7 @@ public class BAbsTimeToDateParts extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error("\nERROR in: 'private double toJulian'" + "\ngetMessage =\n" + e.getMessage() + "\ngetStackTrace =\n" + e.getStackTrace() +	"\ntoString =\n" + e.toString());
+			logger.log(Level.SEVERE, "\nERROR in: 'private double toJulian'" + "\ngetMessage =\n" + e.getMessage() + "\ngetStackTrace =\n" + e.getStackTrace() +	"\ntoString =\n" + e.toString());
 			return 0;
 		}
 	}
@@ -338,7 +342,7 @@ public class BAbsTimeToDateParts extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error("\nERROR in: 'public int[] fromJulian'" + "\ngetMessage =\n" + e.getMessage() + "\ngetStackTrace =\n" + e.getStackTrace() +	"\ntoString =\n" + e.toString());
+			logger.log(Level.SEVERE, "\nERROR in: 'public int[] fromJulian'" + "\ngetMessage =\n" + e.getMessage() + "\ngetStackTrace =\n" + e.getStackTrace() +	"\ntoString =\n" + e.toString());
 			return new int[] {0, 0, 0};
 		}
 	}

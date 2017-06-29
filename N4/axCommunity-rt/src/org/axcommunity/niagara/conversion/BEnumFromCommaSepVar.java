@@ -1,12 +1,13 @@
 package org.axcommunity.niagara.conversion;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.StringTokenizer;
 
 import javax.baja.control.BEnumWritable;
-import javax.baja.log.Log;
 import javax.baja.naming.SlotPath;
 import javax.baja.nre.util.TextUtil;
 import javax.baja.status.BStatusNumeric;
@@ -22,6 +23,8 @@ import javax.baja.sys.Type;
 
 /** Extension of the EnumWritable that accepts a csv string, one per line, as the range
 * @author Mike Arnott, Kors Engineering
+* 
+* 	Update 6/29/2017 by James Johnson to move to current logger syntax
 */
 
 public class BEnumFromCommaSepVar extends BEnumWritable
@@ -122,13 +125,13 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 						
 						
 						//ONLY IF LOG LEVEL IS TRACE AND THIS IS THE FIRST TOKEN OUTPUT TO CONSOLE THE ARRAY VALUES.
-						if(logger.isTraceOn() && i==0)
+						if(logger.isLoggable(Level.FINE) && i==0)
 						{
 							try
 							{
 								for (int k = 0; k < tokCount; k++)
 								{
-									logger.trace("\t" + getSlotPath() + "\t ("+k+" of "+tokCount+") " + "\t tokKeys[" + k + "] = " + tokKeys[k] + "\t\t tokVals[" + k + "] = " + tokVals[k] );
+									logger.log(Level.FINE, "\t" + getSlotPath() + "\t ("+k+" of "+tokCount+") " + "\t tokKeys[" + k + "] = " + tokKeys[k] + "\t\t tokVals[" + k + "] = " + tokVals[k] );
 								}
 							}
 							catch (Exception e) 
@@ -137,7 +140,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 								StringWriter errors = new StringWriter();
 								e.printStackTrace(new PrintWriter(errors));
 								msg = msg + "\n" + "PRINTSTACKTRACE: \n" + errors.toString();
-								logger.error("\n" + getSlotPath()	+ "\n" + msg);
+								logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + msg);
 							}
 						}
 						
@@ -150,20 +153,20 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 						{
 							if((Integer.parseInt(row[0])==0) && zeroIndexSet==false)
 							{
-								logger.trace("\t" + getSlotPath() + "\t **ZERO KEY BUT NO YET SET**  Integer.parseInt(row[0]) = " + (Integer.parseInt(row[0])) + " and zeroIndexSet = " + zeroIndexSet); 
+								logger.log(Level.FINE, "\t" + getSlotPath() + "\t **ZERO KEY BUT NO YET SET**  Integer.parseInt(row[0]) = " + (Integer.parseInt(row[0])) + " and zeroIndexSet = " + zeroIndexSet); 
 								zeroIndexSet	= true;
 								dupKey			= false;
 								break;
 							}
 							else if((Integer.parseInt(row[0])==0) && zeroIndexSet==true)
 							{
-								logger.trace("\t" + getSlotPath() + "\t **DUP ZERO KEY FOUND** Integer.parseInt(row[0]) = " + (Integer.parseInt(row[0])) + " and zeroIndexSet = " + zeroIndexSet);
+								logger.log(Level.FINE, "\t" + getSlotPath() + "\t **DUP ZERO KEY FOUND** Integer.parseInt(row[0]) = " + (Integer.parseInt(row[0])) + " and zeroIndexSet = " + zeroIndexSet);
 								dupKey = true;
 								break;
 							}
 							else if(tokKeys[k]==Integer.parseInt(row[0]))
 							{
-								logger.trace("\t" + getSlotPath() + "\t **DUP NON-ZERO KEY FOUND** Integer.parseInt(row[0]) = " + (Integer.parseInt(row[0])) + " and zeroIndexSet = " + zeroIndexSet);
+								logger.log(Level.FINE, "\t" + getSlotPath() + "\t **DUP NON-ZERO KEY FOUND** Integer.parseInt(row[0]) = " + (Integer.parseInt(row[0])) + " and zeroIndexSet = " + zeroIndexSet);
 								dupKey = true;
 								break;
 							}
@@ -201,24 +204,24 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 								zeroIndexSet = true;
 							}
 							
-							logger.trace("\t" + getSlotPath() + "\t (" + keyCount + ") Added tag '" + SlotPath.escape(row[1]) + "' with ordinal '"+ (Integer.parseInt(row[0])) + "' to index '" + keyCount + "' zeroIndexSet = '" + zeroIndexSet + "'");
+							logger.log(Level.FINE, "\t" + getSlotPath() + "\t (" + keyCount + ") Added tag '" + SlotPath.escape(row[1]) + "' with ordinal '"+ (Integer.parseInt(row[0])) + "' to index '" + keyCount + "' zeroIndexSet = '" + zeroIndexSet + "'");
 							keyCount++;
 						}
 						else
 						{
-							logger.trace("\t" + getSlotPath() + "\t DUPLICATE FOUND '" + SlotPath.escape(row[1]) + "' with index '"+ (Integer.parseInt(row[0])) + "'");
+							logger.log(Level.FINE, "\t" + getSlotPath() + "\t DUPLICATE FOUND '" + SlotPath.escape(row[1]) + "' with index '"+ (Integer.parseInt(row[0])) + "'");
 						}
 						
 						
 						
 						//ONLY IF LOG LEVEL IS TRACE OUTPUT TO CONSOLE THE ARRAY VALUES.
-						if(logger.isTraceOn())
+						if(logger.isLoggable(Level.FINE))
 						{
 							try
 							{
 								for (int k2 = 0; k2 < tokCount; k2++)
 								{
-									logger.trace("\t" + getSlotPath() + "\t ("+k2+" of "+tokCount+") " + "\t tokKeys[" + k2 + "] = " + tokKeys[k2] + "\t\t tokVals[" + k2 + "] = " + tokVals[k2] );
+									logger.log(Level.FINE, "\t" + getSlotPath() + "\t ("+k2+" of "+tokCount+") " + "\t tokKeys[" + k2 + "] = " + tokKeys[k2] + "\t\t tokVals[" + k2 + "] = " + tokVals[k2] );
 								}
 							}
 							catch (Exception e) 
@@ -227,7 +230,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 								StringWriter errors = new StringWriter();
 								e.printStackTrace(new PrintWriter(errors));
 								msg = msg + "\n" + "PRINTSTACKTRACE: \n" + errors.toString();
-								logger.error("\n" + getSlotPath()	+ "\n" + msg);
+								logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + msg);
 							}
 						}
 						
@@ -242,14 +245,14 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 					
 					
 					//ONLY IF LOG LEVEL IS TRACE OUTPUT TO CONSOLE THE ARRAY VALUES.
-					if(logger.isTraceOn())
+					if(logger.isLoggable(Level.FINE))
 					{
 						try
 						{
-							logger.trace("\t" + getSlotPath()	+ "\t BEFORE RESIZING ARRAY:");
+							logger.log(Level.FINE, "\t" + getSlotPath()	+ "\t BEFORE RESIZING ARRAY:");
 							for (int v = 0; v < tokVals.length; v++)
 							{
-								logger.trace("\t" + getSlotPath()	+ "\t (" + v + ") KEY: " + tokKeys[v] + "\t VAL: " + tokVals[v]);
+								logger.log(Level.FINE, "\t" + getSlotPath()	+ "\t (" + v + ") KEY: " + tokKeys[v] + "\t VAL: " + tokVals[v]);
 							}
 						}
 						catch (Exception e) 
@@ -258,7 +261,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 							StringWriter errors = new StringWriter();
 							e.printStackTrace(new PrintWriter(errors));
 							msg = msg + "\n" + "PRINTSTACKTRACE: \n" + errors.toString();
-							logger.error("\n" + getSlotPath()	+ "\n" + msg);
+							logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + msg);
 						}
 					}
 					
@@ -274,14 +277,14 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 					
 					
 					//ONLY IF LOG LEVEL IS TRACE OUTPUT TO CONSOLE THE ARRAY VALUES.
-					if(logger.isTraceOn())
+					if(logger.isLoggable(Level.FINE))
 					{
 						try
 						{
-							logger.trace("\t" + getSlotPath()	+ "\t AFTER RESIZING ARRAY:");
+							logger.log(Level.FINE, "\t" + getSlotPath()	+ "\t AFTER RESIZING ARRAY:");
 							for (int v = 0; v < tokVals.length; v++)
 							{
-								logger.trace("\t" + getSlotPath()	+ "\t (" + v + ") KEY: " + tokKeys[v] + "\t VAL: " + tokVals[v]);
+								logger.log(Level.FINE, "\t" + getSlotPath()	+ "\t (" + v + ") KEY: " + tokKeys[v] + "\t VAL: " + tokVals[v]);
 							}
 						}
 						catch (Exception e) 
@@ -290,7 +293,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 							StringWriter errors = new StringWriter();
 							e.printStackTrace(new PrintWriter(errors));
 							msg = msg + "\n" + "PRINTSTACKTRACE: \n" + errors.toString();
-							logger.error("\n" + getSlotPath()	+ "\n" + msg);
+							logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + msg);
 						}
 					}
 					
@@ -313,7 +316,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 						StringWriter errors = new StringWriter();
 						e.printStackTrace(new PrintWriter(errors));
 						msg = msg + "\n" + "PRINTSTACKTRACE: \n" + errors.toString();
-						logger.error("\n" + getSlotPath()	+ "\n" + msg);
+						logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + msg);
 					}
 				}
 			}
@@ -323,7 +326,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
 				msg = msg + "\n" + "PRINTSTACKTRACE: \n" + errors.toString();
-				logger.error("\n" + getSlotPath()	+ "\n" + msg);
+				logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + msg);
 			}
 		}
 		
@@ -367,7 +370,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 							//DETERMINE IF CURRENT TOKEN IS A DUPLICATE OR NOT.
 							for (int v1 = 0; v1 < tokVals.length; v1++)
 							{
-								logger.trace("\t" + getSlotPath() + "\t ("+v1+" of "+tokVals.length+") " + "\t tokVals[" + v1 + "] = " + tokVals[v1] + " keyCount = " + keyCount + " tmp = " + tmp);
+								logger.log(Level.FINE,"\t" + getSlotPath() + "\t ("+v1+" of "+tokVals.length+") " + "\t tokVals[" + v1 + "] = " + tokVals[v1] + " keyCount = " + keyCount + " tmp = " + tmp);
 								
 								if(tokVals[v1] != null)
 								{
@@ -392,12 +395,12 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 								tokKeys[keyCount]		= keyCount;
 								tokVals[keyCount]		= SlotPath.escape(tmp);
 								
-								logger.trace("\t" + getSlotPath() + "\t (" + keyCount + ") Added tag '" + SlotPath.escape(tmp) + "' with ordinal '"+ (keyCount) + "' to index '" + keyCount + "'");
+								logger.log(Level.FINE, "\t" + getSlotPath() + "\t (" + keyCount + ") Added tag '" + SlotPath.escape(tmp) + "' with ordinal '"+ (keyCount) + "' to index '" + keyCount + "'");
 								keyCount++;
 							}
 							else
 							{
-								logger.trace("\t" + getSlotPath() + "\t DUPLICATE FOUND '" + SlotPath.escape(tmp) + "'");
+								logger.log(Level.FINE, "\t" + getSlotPath() + "\t DUPLICATE FOUND '" + SlotPath.escape(tmp) + "'");
 							}
 						}
 						catch (Exception e) 
@@ -406,7 +409,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 							StringWriter errors = new StringWriter();
 							e.printStackTrace(new PrintWriter(errors));
 							msg = msg + "\n" + "PRINTSTACKTRACE: \n" + errors.toString();
-							logger.error("\n" + getSlotPath()	+ "\n" + msg);
+							logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + msg);
 						}
 					}
 					
@@ -416,14 +419,14 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 					//----------------------------------------------------------------------------
 					
 					//ONLY IF LOG LEVEL IS TRACE OUTPUT TO CONSOLE THE ARRAY VALUES.
-					if(logger.isTraceOn())
+					if(logger.isLoggable(Level.FINE))
 					{
 						try
 						{
-							logger.trace("\t" + getSlotPath()	+ "\t BEFORE RESIZING ARRAY:");
+							logger.log(Level.FINE, "\t" + getSlotPath()	+ "\t BEFORE RESIZING ARRAY:");
 							for (int v = 0; v < tokVals.length; v++)
 							{
-								logger.trace("\t" + getSlotPath()	+ "\t (" + v + ") KEY: " + tokKeys[v] + "\t VAL: " + tokVals[v]);
+								logger.log(Level.FINE, "\t" + getSlotPath()	+ "\t (" + v + ") KEY: " + tokKeys[v] + "\t VAL: " + tokVals[v]);
 							}
 						}
 						catch (Exception e) 
@@ -432,7 +435,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 							StringWriter errors = new StringWriter();
 							e.printStackTrace(new PrintWriter(errors));
 							msg = msg + "\n" + "PRINTSTACKTRACE: \n" + errors.toString();
-							logger.error("\n" + getSlotPath()	+ "\n" + msg);
+							logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + msg);
 						}
 					}
 					
@@ -447,14 +450,14 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 					
 					
 					//ONLY IF LOG LEVEL IS TRACE OUTPUT TO CONSOLE THE ARRAY VALUES.
-					if(logger.isTraceOn())
+					if(logger.isLoggable(Level.FINE))
 					{
 						try
 						{
-							logger.trace("\t" + getSlotPath()	+ "\t AFTER RESIZING ARRAY:");
+							logger.log(Level.FINE, "\t" + getSlotPath()	+ "\t AFTER RESIZING ARRAY:");
 							for (int v = 0; v < tokVals.length; v++)
 							{
-								logger.trace("\t" + getSlotPath()	+ "\t (" + v + ") KEY: " + tokKeys[v] + "\t VAL: " + tokVals[v]);
+								logger.log(Level.FINE, "\t" + getSlotPath()	+ "\t (" + v + ") KEY: " + tokKeys[v] + "\t VAL: " + tokVals[v]);
 							}
 						}
 						catch (Exception e) 
@@ -463,7 +466,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 							StringWriter errors = new StringWriter();
 							e.printStackTrace(new PrintWriter(errors));
 							msg = msg + "\n" + "PRINTSTACKTRACE: \n" + errors.toString();
-							logger.error("\n" + getSlotPath()	+ "\n" + msg);
+							logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + msg);
 						}
 					}
 					
@@ -487,7 +490,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 						StringWriter errors = new StringWriter();
 						e.printStackTrace(new PrintWriter(errors));
 						msg = msg + "\n" + "PRINTSTACKTRACE: \n" + errors.toString();
-						logger.error("\n" + getSlotPath()	+ "\n" + msg);
+						logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + msg);
 					}
 					
 				}
@@ -498,7 +501,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 				StringWriter errors = new StringWriter();
 				e.printStackTrace(new PrintWriter(errors));
 				msg = msg + "\n" + "PRINTSTACKTRACE: \n" + errors.toString();
-				logger.error("\n" + getSlotPath()	+ "\n" + msg);
+				logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + msg);
 			}
 		}
 	}
@@ -516,7 +519,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 			Object	newArray		= java.lang.reflect.Array.newInstance(elementType, newSize);
 			int		preserveLength	= Math.min(oldSize, newSize);
 			
-			logger.trace("\t" + getSlotPath() + "\t oldSize = " + oldSize + "\t newSize = " + newSize + " elementType = " + elementType.toString());
+			logger.log(Level.FINE, "\t" + getSlotPath() + "\t oldSize = " + oldSize + "\t newSize = " + newSize + " elementType = " + elementType.toString());
 			
 			if (preserveLength > 0)
 			{
@@ -531,7 +534,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 			StringWriter errors = new StringWriter();
 			e.printStackTrace(new PrintWriter(errors));
 			msg = msg + "\n" + "PRINTSTACKTRACE: \n" + errors.toString();
-			logger.error("\n" + getSlotPath()	+ "\n" + msg);
+			logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + msg);
 			
 			return null;
 		}
@@ -540,7 +543,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");
-	public static final Log logger = Log.getLog("axCommunity.BEnumFromCommaSepVar");
+	public static final Logger logger = Logger.getLogger("axCommunity.BEnumFromCommaSepVar");
 
 	public static final Type TYPE = Sys.loadType(BEnumFromCommaSepVar.class);
 	public Type getType() { return TYPE; }

@@ -10,6 +10,10 @@ import javax.baja.status.BStatusNumeric;
 import javax.baja.sys.*;
 import javax.baja.util.BAbsTimeRange;
 
+
+// updated 06/29/17 by James Johnson: replace the “|bql:historyFunc:HistoryRollup” syntax with “|bql:history:HistoryRollup”. 
+
+
 public class BTrendDynamicAnalyzer extends BComponent {
     public static final Property history = newProperty(0, BOrd.NULL, null);
     public static final Property dateRange = newProperty(0, new BAbsTimeRange(BAbsTime.make(2000, BMonth.make(0), 0, 0, 0), BAbsTime.make()), null);
@@ -104,7 +108,7 @@ public class BTrendDynamicAnalyzer extends BComponent {
 
         String str2 = getHistory().toString();
 
-        BOrd localBOrd = BOrd.make(str2 + "?period=" + getTimeRange() + ";delta=" + getTimeRangeDelta() + "|bql:historyFunc:HistoryRollup.rollup(select *, baja:RelTime '" + str1 + "')");
+        BOrd localBOrd = BOrd.make(str2 + "?period=" + getTimeRange() + ";delta=" + getTimeRangeDelta() + "|bql:history:HistoryRollup.rollup(select *, baja:RelTime '" + str1 + "')");
 
         BITable localBITable = (BITable) localBOrd.resolve(Sys.getStation()).get();
         ColumnList localColumnList = localBITable.getColumns();

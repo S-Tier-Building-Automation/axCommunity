@@ -1,8 +1,9 @@
 package org.axcommunity.niagara.math;
 
 import java.text.NumberFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import javax.baja.log.Log;
 import javax.baja.status.BIStatusValue;
 import javax.baja.status.BStatus;
 import javax.baja.status.BStatusNumeric;
@@ -18,6 +19,8 @@ import javax.baja.sys.Property;
 import javax.baja.sys.Slot;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
+
+//	Update 6/29/2017 by James Johnson to move to current logger syntax
 
 /**
  * BNumericPoint defines a read only numeric.
@@ -92,7 +95,7 @@ public class BShiftTargets extends BComponent implements BIStatusValue
     }
     catch (Exception e)
     {
-      logger.error(getSlotPath().toString() + e.getMessage());
+      logger.log(Level.SEVERE, getSlotPath().toString() + e.getMessage());
       e.printStackTrace();
     }
     setData(stringValue);
@@ -119,7 +122,7 @@ public class BShiftTargets extends BComponent implements BIStatusValue
     }
     catch (Exception e)
     {
-      logger.error(getSlotPath().toString() + e.getMessage());
+      logger.log(Level.SEVERE, getSlotPath().toString() + e.getMessage());
       e.printStackTrace();
     }
   }
@@ -130,5 +133,5 @@ public class BShiftTargets extends BComponent implements BIStatusValue
   public BIcon getIcon() { return icon; }
   private static final BIcon icon = BIcon.make("local:|module://ROI/com/royaloakindustries/niagara/Graphics/EB.png");
   
-  public static final Log logger = Log.getLog(TYPE.getModule().getModuleName() + "." + TYPE.getTypeName());
+  public static final Logger logger = Logger.getLogger(TYPE.getModule().getModuleName() + "." + TYPE.getTypeName());
 }

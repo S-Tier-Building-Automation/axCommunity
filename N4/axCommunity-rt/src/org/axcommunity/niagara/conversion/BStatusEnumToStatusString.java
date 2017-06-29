@@ -1,8 +1,10 @@
 
 package org.axcommunity.niagara.conversion;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.baja.control.BEnumWritable;
-import javax.baja.log.Log;
 import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusEnum;
 import javax.baja.status.BStatusString;
@@ -10,6 +12,8 @@ import javax.baja.sys.*;
 /**
  * Converts a StatusEnum input to a Status String output.
  * @author Mike Arnott, Kors Engineering
+ * 
+ * 	Update 6/29/2017 by James Johnson to move to current logger syntax
  */
 public class BStatusEnumToStatusString extends BComponent
 {
@@ -39,7 +43,7 @@ public class BStatusEnumToStatusString extends BComponent
 			}
 			catch (Exception e) 
 			{
-				logger.error("\n slotPath = " + getSlotPath() + "\n getMessage = " + e.getMessage() + "\n getStackTrace = " + e.getStackTrace() + "\n toString = " + e.toString());
+				logger.log(Level.SEVERE, "\n slotPath = " + getSlotPath() + "\n getMessage = " + e.getMessage() + "\n getStackTrace = " + e.getStackTrace() + "\n toString = " + e.toString());
 			}
 		}
 	}
@@ -66,7 +70,7 @@ public class BStatusEnumToStatusString extends BComponent
 	public BStatusString getStringOut() { return (BStatusString)get(stringOut);}
 	public void setStringOut(BStatusString v) {set(stringOut,v);}
 	
-	public static final Log logger = Log.getLog("axCommunity.StatusEnumToStatusString");
+	public static final Logger logger = Logger.getLogger("axCommunity.StatusEnumToStatusString");
 	
 	
 	public BIcon getIcon() { return icon; }

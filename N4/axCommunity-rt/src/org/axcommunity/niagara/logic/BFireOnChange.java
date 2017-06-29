@@ -1,6 +1,8 @@
 package org.axcommunity.niagara.logic;
 
-import javax.baja.log.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
@@ -14,6 +16,7 @@ import javax.baja.sys.*;
  * 
  * I really did this to figure out how Topics work, but found it pretty handy!
  * @author Mike Arnott, Kors Engineering
+ * 	Update 6/29/2017 by James Johnson to move to current logger syntax
  */
 public class BFireOnChange extends BComponent {
     //event to fire when new input value detected
@@ -61,7 +64,7 @@ public class BFireOnChange extends BComponent {
 		}
 		catch (Exception e) 
 		{
-			logger.error("\n\n" + getSlotPath()	+ "\n\n" + e.getMessage() +	"\n\n" + e.getStackTrace());
+			logger.log(Level.SEVERE, "\n\n" + getSlotPath()	+ "\n\n" + e.getMessage() +	"\n\n" + e.getStackTrace());
 		}
 
     }
@@ -97,7 +100,7 @@ public class BFireOnChange extends BComponent {
     	fire(newBooleanInput,event,null);
     }
 	
-	public static final Log logger = Log.getLog("axCommunity.FireOnChange");
+	public static final Logger logger = Logger.getLogger("axCommunity.FireOnChange");
 	
     public BIcon getIcon() { return icon; }
     private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");

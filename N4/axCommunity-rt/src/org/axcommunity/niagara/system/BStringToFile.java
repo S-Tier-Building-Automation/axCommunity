@@ -1,6 +1,8 @@
 package org.axcommunity.niagara.system;
 
-import javax.baja.log.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.baja.status.*;
 import javax.baja.sys.*;
 import java.io.BufferedWriter;
@@ -12,6 +14,8 @@ import java.io.FileWriter;
 * Borrowed heavily from the BHistoryToCSV from CMH, thanks!
 * @author  MLA, Kors Engineering, 04/13/2010
 * 03/30/2012 added threading to avoid watchdog timeouts caused by network share path failures
+* 
+* 	Update 6/29/2017 by James Johnson to move to current logger syntax
 */
 public class BStringToFile extends BComponent
 {
@@ -52,7 +56,7 @@ public class BStringToFile extends BComponent
 			{
 				getOutFail().setValue(true);
 				fireFail(BBoolean.make(true));
-				logger.error("\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
+				logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
 				throw new RuntimeException(e);
 			}
 			setLastTransaction(BAbsTime.make());
@@ -102,7 +106,7 @@ public class BStringToFile extends BComponent
 	public void fireFail(BBoolean event){fire(Fail,event,null);}
 	
 	
-	public static final Log logger = Log.getLog("axCommunity.StringToFile");
+	public static final Logger logger = Logger.getLogger("axCommunity.StringToFile");
 	
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");

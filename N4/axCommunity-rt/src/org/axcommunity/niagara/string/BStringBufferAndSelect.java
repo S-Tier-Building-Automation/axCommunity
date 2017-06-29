@@ -1,6 +1,8 @@
 package org.axcommunity.niagara.string;
 
-import javax.baja.log.Log;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.baja.status.BStatus;
 import javax.baja.status.BStatusString;
 import javax.baja.sys.Action;
@@ -14,6 +16,9 @@ import javax.baja.sys.Flags;
 import javax.baja.sys.Property;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
+
+
+//	Update 6/29/2017 by James Johnson to move to current logger syntax
 
 public class BStringBufferAndSelect extends BComponent
 {
@@ -103,7 +108,7 @@ public class BStringBufferAndSelect extends BComponent
     }
     catch (Exception e)
     {
-      logger.error(getSlotPath().toString() + e.getMessage());
+      logger.log(Level.SEVERE, getSlotPath().toString() + e.getMessage());
       e.printStackTrace();
     }
     
@@ -132,7 +137,7 @@ public class BStringBufferAndSelect extends BComponent
       }
       catch (Exception e)
       {
-        logger.error(getSlotPath().toString() + e.getMessage());
+        logger.log(Level.SEVERE, getSlotPath().toString() + e.getMessage());
         e.printStackTrace();
       }
     }
@@ -162,7 +167,7 @@ public class BStringBufferAndSelect extends BComponent
     }
     catch (Exception e)
     {
-      logger.error(getSlotPath().toString() + e.getMessage());
+      logger.log(Level.SEVERE, getSlotPath().toString() + e.getMessage());
       e.printStackTrace();
     }
     
@@ -191,9 +196,9 @@ public class BStringBufferAndSelect extends BComponent
     }
     catch (Exception e)
     {
-      logger.error(getSlotPath().toString() + e.getMessage());
+      logger.log(Level.SEVERE, getSlotPath().toString() + e.getMessage());
       e.printStackTrace();
     }
   }
-  public static final Log logger = Log.getLog(TYPE.getModule().getModuleName() + "." + TYPE.getTypeName());
+  public static final Logger logger = Logger.getLogger(TYPE.getModule().getModuleName() + "." + TYPE.getTypeName());
 }

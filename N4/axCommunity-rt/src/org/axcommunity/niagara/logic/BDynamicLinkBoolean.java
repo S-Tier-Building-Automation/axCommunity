@@ -12,8 +12,13 @@ package org.axcommunity.niagara.logic;
 * <br><br>Updates:<br>
 * 2015-01-26 - Added started and atSteadyState overrides, which force an update after the<br>
 *              object is created, copied, and when the station is started.
+*              
+*	Update 6/29/2017 by James Johnson to move to current logger syntax              
 */
-import javax.baja.log.Log;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.baja.naming.BOrd;
 import javax.baja.status.*;
 import javax.baja.sys.*;
@@ -94,7 +99,7 @@ extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error("\n slotPath = " + getSlotPath() + "\n getMessage = " + e.getMessage() + "\n getStackTrace = " + e.getStackTrace() + "\n toString = " + e.toString());
+			logger.log(Level.SEVERE, "\n slotPath = " + getSlotPath() + "\n getMessage = " + e.getMessage() + "\n getStackTrace = " + e.getStackTrace() + "\n toString = " + e.toString());
 		}
 	}
 
@@ -108,7 +113,7 @@ extends BComponent
 		}
 		catch(Exception e)
 		{
-			logger.trace("\n slotPath = " + getSlotPath() + "\n getMessage = " + e.getMessage() + "\n getStackTrace = " + e.getStackTrace() + "\n toString = " + e.toString());
+			logger.log(Level.FINE, "\n slotPath = " + getSlotPath() + "\n getMessage = " + e.getMessage() + "\n getStackTrace = " + e.getStackTrace() + "\n toString = " + e.toString());
 			return false;
 		}
 
@@ -153,7 +158,7 @@ extends BComponent
 	public void setOrdIn(BStatusString v) {set(ordIn,v);}
 
 
-	public static final Log logger = Log.getLog("axCommunity.DynamicLinkBoolean");
+	public static final Logger logger = Logger.getLogger("axCommunity.DynamicLinkBoolean");
 
 
 	public BIcon getIcon() { return icon; }
