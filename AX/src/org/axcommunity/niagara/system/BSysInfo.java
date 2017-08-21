@@ -13,6 +13,7 @@ import javax.baja.sys.BInteger;
 import javax.baja.sys.BRelTime;
 import javax.baja.sys.BStation;
 import javax.baja.sys.Clock;
+import javax.baja.sys.Context;
 import javax.baja.sys.Flags;
 import javax.baja.sys.Property;
 import javax.baja.sys.Slot;
@@ -90,7 +91,7 @@ public class BSysInfo extends BComponent
 
 	public static final Property executePeriod = newProperty(Flags.SUMMARY,	BRelTime.make(60000));
 	public BRelTime getExecutePeriod() { return (BRelTime)get("executePeriod"); }
-	public void setExecutePeriod(javax.baja.sys.BRelTime v) { set("executePeriod", v); }
+	public void setExecutePeriod(BRelTime v) { set("executePeriod", v); }
 	
 	//events for the timer
 	public static final Action timerExpired = newAction(Flags.HIDDEN,null);
@@ -102,7 +103,17 @@ public class BSysInfo extends BComponent
 		sysObject =(BSystemPlatformService)Sys.getService(BSystemPlatformService.TYPE);
 		station=Sys.getStation();
 	}
-
+	
+	public void changed(Property p, Context cx)
+	{
+		if(!Sys.atSteadyState() || !isRunning()) return;
+		if(p.equals(executePeriod))
+		{
+			updateTimer();
+			calculate();
+		}
+	}
+	
 	public void doTimerExpired() throws Exception 
 	{
 		calculate();

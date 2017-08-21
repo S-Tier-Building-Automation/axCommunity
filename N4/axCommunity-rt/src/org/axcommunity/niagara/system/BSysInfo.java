@@ -14,6 +14,7 @@ import javax.baja.sys.BInteger;
 import javax.baja.sys.BRelTime;
 import javax.baja.sys.BStation;
 import javax.baja.sys.Clock;
+import javax.baja.sys.Context;
 import javax.baja.sys.Flags;
 import javax.baja.sys.Property;
 import javax.baja.sys.Slot;
@@ -104,6 +105,16 @@ public class BSysInfo extends BComponent
 		station=Sys.getStation();
 	}
 
+	public void changed(Property p, Context cx)
+	{
+		if(!Sys.atSteadyState() || !isRunning()) return;
+		if(p.equals(executePeriod))
+		{
+			updateTimer();
+			calculate();
+		}
+	}
+	
 	public void doTimerExpired() throws Exception 
 	{
 		calculate();
