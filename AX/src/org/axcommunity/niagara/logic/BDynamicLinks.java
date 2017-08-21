@@ -1,15 +1,10 @@
 package org.axcommunity.niagara.logic;
 
-
-import java.nio.charset.Charset;
-
 import javax.baja.log.*;
 import javax.baja.naming.*;
 import javax.baja.status.*;
 import javax.baja.sys.*;
 import javax.baja.util.*;
-
-import com.tridium.util.StringEscapeUtils;
 
 /**
  * The primary function of this object is to be able to link from several objects anywhere on the station using a list of ords and/or
@@ -42,6 +37,19 @@ import com.tridium.util.StringEscapeUtils;
  * %parent.parent.parent.name%,,WorkcenterName<br>
  * station:|slot:/Global/ProprietaryData/CSVData,out,ProprietaryDataCsv<br>
  * station:|%parent.parent.slotPath%/Machine_Status/Status_Manual,out,Manual<br>
+ * <br>
+ * <br>
+ * Other hidden jems:<br>
+ * &nbsp; %seguinZonePath% returns the path to the subfolder within the points folder. <br>&nbsp; &nbsp; Ex: <b>station:|</b>slot:/Drivers/OpcNetwork/KEPServerEX/points/Training<br>
+ * &nbsp; %seguinZoneSlotPath% returns the slot path to the subfolder within the points folder. <br>&nbsp; &nbsp; Ex: slot:/Drivers/OpcNetwork/KEPServerEX/points/Training<br>
+ * &nbsp; %seguinZone% returns the BComponent instance of the subfolder within the points folder. This is useful when you need to use the folder path in a BFormat string.<br>
+ * <br>
+ * <br>
+ * &nbsp; The following are the exact same as the "Zone" options above, except they return the sub-subfolder within the points folder:<br>
+ * &nbsp; %seguinStationPath% returns the path to the sub-subfolder within the points folder. <br>&nbsp; &nbsp; Ex: <b>station:|</b>slot:/Drivers/OpcNetwork/KEPServerEX/points/Training/L1_0010_L2<br>
+ * &nbsp; %seguinStationSlotPath% returns the slot path to the sub-subfolder within the points folder. <br>&nbsp; &nbsp; Ex: slot:/Drivers/OpcNetwork/KEPServerEX/points/Training/L1_0010_L2<br>
+ * &nbsp; %seguinStation% returns the BComponent instance of the sub-subfolder within the points folder. This is useful when you need to use the folder path in a BFormat string.<br>
+ * <br>
  * <br>
  * <br>
  * Notes:<br>
@@ -153,18 +161,22 @@ public class BDynamicLinks extends BComponent
 	
 	/**This is fired every time the links are refreshed regardless if any changes occurred.*/
 	public static final Topic LinksRefreshed = newTopic(0);
+    /**This is fired every time the links are refreshed regardless if any changes occurred.*/
 	public void fireLinksRefreshed(BBoolean event){fire(LinksRefreshed,event,null);}
 	
 	/**This is fired every time outDelimitedSlotNames or outDelimitedSlotValues is updated.*/
 	public static final Topic CsvSlotNames = newTopic(0);
+    /**This is fired every time outDelimitedSlotNames or outDelimitedSlotValues is updated.*/
 	public void fireCsvSlotNames(BString event){fire(CsvSlotNames,event,null);}
 	
 	/**This is fired every time outDelimitedSlotNames or outDelimitedSlotValues is updated.*/
 	public static final Topic CsvSlotValues = newTopic(0);
+    /**This is fired every time outDelimitedSlotNames or outDelimitedSlotValues is updated.*/
 	public void fireCsvSlotValues(BString event){fire(CsvSlotValues,event,null);}
 	
 	/**This is fired every time outDelimitedSlotNames or outDelimitedSlotValues is updated.*/
 	public static final Topic CsvSlotNameValuePairs = newTopic(0);
+    /**This is fired every time outDelimitedSlotNames or outDelimitedSlotValues is updated.*/
 	public void fireCsvSlotNameValuePairs(BString event){fire(CsvSlotNameValuePairs,event,null);}
 	
 	
@@ -193,36 +205,24 @@ public class BDynamicLinks extends BComponent
 	Clock.Ticket refreshTimer;
 	
 	//This just makes it easier to copy this source into a program object.
-	BComponent destinationComp = this;
+	final BComponent destinationComp = this;
 	
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	public void started() throws Exception
 	{
-		if(!Sys.atSteadyState() || !isRunning()) return;
+		if(!Sys.atSteadyState() || !destinationComp.isRunning()) return;
 		//At this point, we know the object was just created (or copied).
-		try
-		{
-			startupRoutine();
-		}
-		catch (Exception e) 
-		{
-			logger.error("\n" + getSlotPath() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
-		}
+		try{startupRoutine();}
+		catch (Exception e) {logger.error("\n" + destinationComp.getSlotPath() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString());}
 	}
 	
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	public void atSteadyState() throws Exception
 	{
-		if(!Sys.atSteadyState() || !isRunning()) return;
+		if(!Sys.atSteadyState() || !destinationComp.isRunning()) return;
 
-		try
-		{
-			startupRoutine();
-		}
-		catch (Exception e) 
-		{
-			logger.error("\n" + getSlotPath() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
-		}
+		try{startupRoutine();}
+		catch (Exception e) {logger.error("\n" + destinationComp.getSlotPath() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString());}
 	}
 	
 	/*------------------------------------------------------------------------------------------------------------------------*/
@@ -295,7 +295,7 @@ public class BDynamicLinks extends BComponent
 						{
 							if(destinationComp.getProperty(targetSlotName).isDynamic())
 							{
-								destinationComp.reorderToBottom(destinationComp.getProperty(SlotPath.escape(targetSlotName)));
+								destinationComp.reorderToBottom(destinationComp.getProperty(escape(targetSlotName)));
 							}
 						}
 						catch (Exception e)
@@ -323,14 +323,11 @@ public class BDynamicLinks extends BComponent
 			makeDelimitedOutput();
 			return;
 		}
-		
-		
-		
-		
 	}
 	
-	String escape(String s){return com.tridium.util.EscUtil.slot.escape(s);}
-	String unescape(String s){return com.tridium.util.EscUtil.slot.unescape(s);}
+	
+	String escape(String s){return SlotPath.escape(s);}
+	String unescape(String s){return SlotPath.unescape(s);}
 	
 	
 	/*------------------------------------------------------------------------------------------------------------------------*/
@@ -355,8 +352,8 @@ public class BDynamicLinks extends BComponent
 					if(getInDelimiter().substring(0, 2).toString().equalsIgnoreCase("\\u"))
 					{
 						String tempDelim = getInDelimiter();
-						tempDelim = tempDelim.replace("\\","");
-						String[] arr = tempDelim.split("u");
+						tempDelim = replaceString(tempDelim, "\\", "");
+						String[] arr = split(tempDelim, "u");
 						delim = "";
 						for(int i = 1; i < arr.length; i++)
 						{
@@ -375,8 +372,8 @@ public class BDynamicLinks extends BComponent
 					if(getInPairsDelimiter().substring(0, 2).toString().equalsIgnoreCase("\\u"))
 					{
 						String tempPairsDelim = getInPairsDelimiter();
-						tempPairsDelim = tempPairsDelim.replace("\\","");
-						String[] arr = tempPairsDelim.split("u");
+						tempPairsDelim = replaceString(tempPairsDelim, "\\", "");
+						String[] arr = split(tempPairsDelim, "u");
 						parsDelim = "";
 						for(int i = 1; i < arr.length; i++)
 						{
@@ -389,13 +386,13 @@ public class BDynamicLinks extends BComponent
 				
 				
 				//Iterate through each slot and build our delimited values...
-				Property[] dyProps = this.getDynamicPropertiesArray();
+				Property[] dyProps = destinationComp.getDynamicPropertiesArray();
 				
 				for(int i = 0; i < dyProps.length; i++)
 				{
 					Property property = dyProps[i];
 					
-					if(  !property.isAction() && !property.isTopic() && !property.getType().is(BLink.TYPE) && !property.getType().is(BWsAnnotation.TYPE) )
+					if(!property.isAction() && !property.isTopic() && !property.getType().is(BLink.TYPE) && !property.getType().is(BWsAnnotation.TYPE) && !property.getType().is(BStatus.TYPE))
 					{
 						String name = unescape(property.getName());
 						String value = "";
@@ -407,7 +404,7 @@ public class BDynamicLinks extends BComponent
 						}
 						else{value = get(property).asValue().toString();}
 						
-						logger.trace("\t" + getSlotPath() + "\t" + "slotName: '" + name + "', slotValue: '" + value + "', Type: " + property.getType().toString() );
+						logger.trace("\t" + destinationComp.getSlotPath() + "\t" + "slotName: '" + name + "', slotValue: '" + value + "', Type: " + property.getType().toString() );
 		
 						if(csvNames.length()<=0){csvNames = name;}
 						else{csvNames = csvNames + delim + name;}
@@ -420,11 +417,11 @@ public class BDynamicLinks extends BComponent
 					}
 					else
 					{
-						logger.trace("\t" + getSlotPath() + "\t" + "'" + property.getName() + "' is type: '" + property.getType() + "' and will not be included in csv.");
+						logger.trace("\t" + destinationComp.getSlotPath() + "\t" + "'" + property.getName() + "' is type: '" + property.getType() + "' and will not be included in csv.");
 					}
 				}
 
-				logger.trace("\n" + getSlotPath() + "\n" + "Names:\n" + csvNames + "\nValues:\n" + csvValues);
+				logger.trace("\n" + destinationComp.getSlotPath() + "\n" + "Names:\n" + csvNames + "\nValues:\n" + csvValues);
 
 				setOutDelimitedSlotNames(csvNames);
 				setOutDelimitedSlotValues(csvValues);
@@ -435,7 +432,7 @@ public class BDynamicLinks extends BComponent
 			}
 			catch (Exception e)
 			{
-				logger.error("\n" + getSlotPath() + "\n" + "makeCsvOutput()\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
+				logger.error("\n" + destinationComp.getSlotPath() + "\n" + "makeCsvOutput()\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
 			}
 		}
 		else
@@ -467,7 +464,7 @@ public class BDynamicLinks extends BComponent
 		}
 		catch (Exception e) 
 		{
-			logger.error("\n" + getSlotPath() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
+			logger.error("\n" + destinationComp.getSlotPath() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
 		}
 	}
 	
@@ -490,20 +487,20 @@ public class BDynamicLinks extends BComponent
 					offsetMillis = randomNumber % 1000;
 				}
 				else offsetMillis = randomNumber;
-				
-	      if(offsetSeconds > 59)
-	      {
-	        offsetMinutes = offsetSeconds / 60;
-	        offsetSeconds = offsetSeconds % 60;
-	      }
-	      
-	      BAbsTime nextMidnight = BAbsTime.now().timeOfDay(0, offsetMinutes, offsetSeconds, offsetMillis).nextDay();
+
+				if(offsetSeconds > 59)
+				{
+					offsetMinutes = offsetSeconds / 60;
+					offsetSeconds = offsetSeconds % 60;
+				}
+
+				BAbsTime nextMidnight = BAbsTime.now().timeOfDay(0, offsetMinutes, offsetSeconds, offsetMillis).nextDay();
 				midnightTimer = Clock.schedule(destinationComp, nextMidnight, midnightTimerExpired, null);
 			}
 		}
 		catch (Exception e) 
 		{
-			logger.error("\n" + getSlotPath() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
+			logger.error("\n" + destinationComp.getSlotPath() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace() + "\n" + "TO STRING: \n" + e.toString()); 
 		}
 	}
 	
@@ -518,6 +515,13 @@ public class BDynamicLinks extends BComponent
 	public void doRefreshLinks()
 	{
 		if(!Sys.atSteadyState() || !destinationComp.isRunning()) return;
+		
+		if(getSlotInfoCsv().length() < 4)
+		{
+			logger.error(destinationComp.getSlotPath().toString() + " - Invalid CSV string! Please read the DymanicLinks Bajadoc!");
+			return;
+		}
+		
 		String[][] strOrds;
 
 		try {strOrds = split(BFormat.make(getSlotInfoCsv()).format(destinationComp), "\n", ",");}
@@ -560,7 +564,7 @@ public class BDynamicLinks extends BComponent
 			
 			formatOrd = formatOrd.trim();
 			if(sourceSlotName != null) sourceSlotName = sourceSlotName.trim();
-			targetSlotName = SlotPath.escape(targetSlotName);
+			targetSlotName = escape(targetSlotName);
 			
 			if(formatOrd.length() > 0 && sourceSlotName.length() > 0)
 			{
@@ -659,7 +663,7 @@ public class BDynamicLinks extends BComponent
 						
 						if(formatOrd.equals(oldFormatOrd) && sourceSlotName.equals(oldSourceSlotName))
 						{
-							oldTargetSlotName = SlotPath.escape(oldTargetSlotName);
+							oldTargetSlotName = escape(oldTargetSlotName);
 							if(((BObject) destinationComp.get(oldTargetSlotName)) != null)
 							{
 								try
@@ -1026,13 +1030,13 @@ public class BDynamicLinks extends BComponent
 			String oldTargetSlotName = arrSlotInfo[i][colTargetSlotName];
 			if(oldTargetSlotName == null) continue;
 			
-			oldTargetSlotName = SlotPath.escape(oldTargetSlotName);
+			oldTargetSlotName = escape(oldTargetSlotName);
 			boolean foundSlot = false;
 			
 			if(strOrds.length > i)
 			{
 				String newTargetSlotName = strOrds[i][colTargetSlotName];
-				if(newTargetSlotName != null) if(oldTargetSlotName.equals(SlotPath.escape(newTargetSlotName))) foundSlot = true;
+				if(newTargetSlotName != null) if(oldTargetSlotName.equals(escape(newTargetSlotName))) foundSlot = true;
 			}
 
 			if(!foundSlot)
@@ -1040,7 +1044,7 @@ public class BDynamicLinks extends BComponent
 				for (int j = 0; j < strOrds.length; j++)
 				{
 					String newTargetSlotName = strOrds[j][colTargetSlotName];
-					if(newTargetSlotName != null) if(oldTargetSlotName.equals(SlotPath.escape(newTargetSlotName)))
+					if(newTargetSlotName != null) if(oldTargetSlotName.equals(escape(newTargetSlotName)))
 					{
 						foundSlot = true;
 						break;
@@ -1147,32 +1151,32 @@ public class BDynamicLinks extends BComponent
 	private static String[][] resizeArray(String[][] inArray, int len1, int len2)
 	{
 		if (len1 <= inArray.length && len2 <= inArray[0].length) return inArray;
-    
-    int newLength1 = 100;
-    
-    if(len1 <= inArray.length) newLength1 = inArray.length;
-    {
-      newLength1 = Math.max(newLength1, inArray.length + 50);
-      newLength1 = Math.min(newLength1, inArray.length * 2);
-      newLength1 = Math.max(newLength1, len1);
-    }
-    
-    
-    int newLength2 = 100;
-    
-    if(len2 <= inArray[0].length) newLength2 = inArray[0].length;
-    {
-      newLength2 = Math.max(newLength2, inArray[0].length + 50);
-      newLength2 = Math.min(newLength2, inArray[0].length * 2);
-      newLength2 = Math.max(newLength2, len2);
-    }
-    
+
+		int newLength1 = 100;
+
+		if(len1 <= inArray.length) newLength1 = inArray.length;
+		{
+			newLength1 = Math.max(newLength1, inArray.length + 50);
+			newLength1 = Math.min(newLength1, inArray.length * 2);
+			newLength1 = Math.max(newLength1, len1);
+		}
+
+
+		int newLength2 = 100;
+
+		if(len2 <= inArray[0].length) newLength2 = inArray[0].length;
+		{
+			newLength2 = Math.max(newLength2, inArray[0].length + 50);
+			newLength2 = Math.min(newLength2, inArray[0].length * 2);
+			newLength2 = Math.max(newLength2, len2);
+		}
+
 		String[][] expand = new String[newLength1][newLength2];
-		
+
 		for(int i = 0; i < inArray.length; i++)
 			for(int j = 0; j < inArray[i].length; j++)
 				expand[i][j] = inArray[i][j];
-		
+
 		return expand;
 	}
 	
@@ -1236,17 +1240,17 @@ public class BDynamicLinks extends BComponent
 	{
 		if (len < inArray.length) return inArray;
 		//int newLength = Math.min(100, inArray.length*2);
-    int newLength = 100;
-    newLength = Math.max(newLength, inArray.length + 50);
-    newLength = Math.min(newLength, inArray.length * 2);
-    newLength = Math.max(newLength, len);
-    
+		int newLength = 100;
+		newLength = Math.max(newLength, inArray.length + 50);
+		newLength = Math.min(newLength, inArray.length * 2);
+		newLength = Math.max(newLength, len);
+
 		String[] expand = new String[newLength];
 		System.arraycopy(inArray, 0, expand, 0, inArray.length);
 		return expand;
 	}
-	
-	
+
+
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	private static String replaceString(String sourceStr, String oldStr, String newStr)
 	{
@@ -1256,15 +1260,15 @@ public class BDynamicLinks extends BComponent
 			StringBuffer results = new StringBuffer(sourceStr);
 			results.replace( idx, idx+oldStr.length(), newStr);
 			while( (idx=sourceStr.lastIndexOf(oldStr, idx-1)) != -1 ) results.replace(idx, idx+oldStr.length(), newStr);
-			
+
 			return results.toString();
 		}
 		else return sourceStr;
 	}
 
-	
-	
-	
+
+
+
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	/**
 	 * This is a custom string that can be used in the source ord BFormat input.
@@ -1278,7 +1282,7 @@ public class BDynamicLinks extends BComponent
 		return station;
 	}
 
-	
+
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	/**
 	 * This is a custom string that can be used in the source ord BFormat input.
@@ -1287,23 +1291,23 @@ public class BDynamicLinks extends BComponent
 	{
 		String pointsString = "points";
 		String thisSlotPath = destinationComp.getSlotPath().getBody();
-		
+
 		String station = null;
-		
+
 		if(getUseAreaZoneStation()==true)
 		{
 			int areaFolderStringBegin = thisSlotPath.indexOf(pointsString) + pointsString.length() + 1;
 			int areaFolderStringLength = (thisSlotPath.substring(areaFolderStringBegin)).indexOf("/");
 			int areaFolderStringEnd	 = areaFolderStringLength + areaFolderStringBegin;
-			
+
 			int zoneFolderStringBegin = areaFolderStringEnd + 1;
 			int zoneFolderStringLength = (thisSlotPath.substring(zoneFolderStringBegin)).indexOf("/");
 			int zoneFolderStringEnd	 = zoneFolderStringLength + zoneFolderStringBegin;
-			
+
 			int stationFolderStringBegin = zoneFolderStringEnd + 1;
 			int stationFolderStringLength = (thisSlotPath.substring(stationFolderStringBegin)).indexOf("/");
 			int stationFolderStringEnd	 = stationFolderStringLength + stationFolderStringBegin;
-			
+
 			if(stationFolderStringLength > 0) station = thisSlotPath.substring(0, stationFolderStringEnd);
 		}
 		else
@@ -1311,17 +1315,17 @@ public class BDynamicLinks extends BComponent
 			int zoneFolderStringBegin = thisSlotPath.indexOf(pointsString) + pointsString.length() + 1;
 			int zoneFolderStringLength = (thisSlotPath.substring(zoneFolderStringBegin)).indexOf("/");
 			int zoneFolderStringEnd	 = zoneFolderStringLength + zoneFolderStringBegin;
-			
+
 			int stationFolderStringBegin = zoneFolderStringEnd + 1;
 			int stationFolderStringLength = (thisSlotPath.substring(stationFolderStringBegin)).indexOf("/");
 			int stationFolderStringEnd	 = stationFolderStringLength + stationFolderStringBegin;
-			
+
 			if(stationFolderStringLength > 0) station = thisSlotPath.substring(0, stationFolderStringEnd);
 		}
-		
+
 		return new SlotPath("slot", station);
 	}
-	
+
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	/**
 	 * This is a custom string that can be used in the source ord BFormat input.
@@ -1334,7 +1338,7 @@ public class BDynamicLinks extends BComponent
 				zone = "station:|" + zone;
 		return zone;
 	}
-	
+
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	/**
 	 * This is a custom string that can be used in the source ord BFormat input.
@@ -1344,17 +1348,17 @@ public class BDynamicLinks extends BComponent
 		String pointsString = "points";
 		String thisSlotPath = destinationComp.getSlotPath().getBody();
 		String zone = null;
-		
+
 		if(getUseAreaZoneStation()==true)
 		{
 			int areaFolderStringBegin = thisSlotPath.indexOf(pointsString) + pointsString.length() + 1;
 			int areaFolderStringLength = (thisSlotPath.substring(areaFolderStringBegin)).indexOf("/");
 			int areaFolderStringEnd	 = areaFolderStringLength + areaFolderStringBegin;
-			
+
 			int zoneFolderStringBegin = areaFolderStringEnd + 1;
 			int zoneFolderStringLength = (thisSlotPath.substring(zoneFolderStringBegin)).indexOf("/");
 			int zoneFolderStringEnd	 = zoneFolderStringLength + zoneFolderStringBegin;
-			
+
 			if(zoneFolderStringLength > 0) zone = thisSlotPath.substring(0, zoneFolderStringEnd);
 		}
 		else
@@ -1362,13 +1366,13 @@ public class BDynamicLinks extends BComponent
 			int zoneFolderStringBegin = thisSlotPath.indexOf(pointsString) + pointsString.length() + 1;
 			int zoneFolderStringLength = (thisSlotPath.substring(zoneFolderStringBegin)).indexOf("/");
 			int zoneFolderStringEnd	 = zoneFolderStringLength + zoneFolderStringBegin;
-			
+
 			if(zoneFolderStringLength > 0) zone = thisSlotPath.substring(0, zoneFolderStringEnd);
 		}
-		
+
 		return new SlotPath("slot", zone);
 	}
-	
+
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	/**
 	 * This is a custom string that can be used in the source ord BFormat input.
@@ -1377,7 +1381,7 @@ public class BDynamicLinks extends BComponent
 	{
 		return getComponentFromPath(seguinZonePath());
 	}
-	
+
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	/**
 	 * This is a custom string that can be used in the source ord BFormat input.
@@ -1386,7 +1390,7 @@ public class BDynamicLinks extends BComponent
 	{
 		return getComponentFromPath(seguinStationPath());
 	}
-	
+
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	private BComponent getComponentFromPath(String path)
 	{
@@ -1404,14 +1408,14 @@ public class BDynamicLinks extends BComponent
 		}
 		return com;
 	}
-	
+
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	private void addSlotFlag(Property inPropertyName, int flag)
 	{
 		Slot updateSlot = destinationComp.getSlot(inPropertyName.getName());
 		destinationComp.setFlags(updateSlot, (destinationComp.getFlags(updateSlot) | flag));
 	}
-	
+
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	private void removeSlotFlag(Property inPropertyName, int flag)
 	{
@@ -1419,4 +1423,3 @@ public class BDynamicLinks extends BComponent
 		destinationComp.setFlags(updateSlot, (destinationComp.getFlags(updateSlot) & ~flag));
 	}
 }
-

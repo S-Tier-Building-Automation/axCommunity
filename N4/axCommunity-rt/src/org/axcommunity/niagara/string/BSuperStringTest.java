@@ -33,6 +33,10 @@ public class BSuperStringTest extends BComponent
   public BStatusString getIn() { return (BStatusString)get(in); }
   public void setIn(BStatusString v) { set(in, v); }
   
+	public final static Property outAnyMatch = newProperty(Flags.READONLY, new BStatusBoolean(false));
+	public BStatusBoolean getOutAnyMatch() { return (BStatusBoolean)get(outAnyMatch); }
+	public void setOutAnyMatch(BStatusBoolean v) { set(outAnyMatch, v); }
+
   public Type getType() { return TYPE; }
   public static final Type TYPE = Sys.loadType(BSuperStringTest.class);
 
@@ -69,43 +73,49 @@ public class BSuperStringTest extends BComponent
   private void myCode()
   {
     if(!Sys.atSteadyState() || !isRunning()) return;
+		boolean tempAnyMatch = false;
+		boolean tempCurrentMatch = false;
 
-    if(!getIn().getStatus().isNull() && getIn().getValue().length() > 0 && getNumberOfTests() > 0)
+		if(getNumberOfTests() > 0)
     {
       try
       {
         for(int i=1; i<getNumberOfTests()+1; i++)
         {
-          if(!((BStatusString) ((BObject)get("in"+i))).getStatus().isNull() && ((BStatusString) ((BObject)get("in"+i))).getValue().length() > 0)
-          {
-            if(!getIn().getStatus().isValid() | getIn().getValue().length() <= 0) ((BStatusBoolean) ((BObject)get("out"+i))).setValue(false);
-            else
-            {
-              if(((BStatusString) ((BObject)get("in"+i))).getStatus().isNull() || ((BStatusString) ((BObject)get("in"+i))).getValue().length() == 0) ((BStatusBoolean) ((BObject)get("out"+i))).setStatus(BStatus.NULL);
+					tempCurrentMatch = false;
+					if(((BStatusString) ((BObject)get("in"+i))).getStatus().isNull() || ((BStatusString) ((BObject)get("in"+i))).getValue().length() == 0)
+					{
+						((BStatusBoolean) ((BObject)get("out"+i))).setValue(false);
+						((BStatusBoolean) ((BObject)get("out"+i))).setStatus(BStatus.NULL);
+					}
+					
+					else if(!getIn().getStatus().isValid() || getIn().getValue().length() == 0 || !((BStatusString) ((BObject)get("in"+i))).getStatus().isValid())
+						((BStatusBoolean) ((BObject)get("out"+i))).setValue(false);
               else
               {
                 ((BStatusBoolean) ((BObject)get("out"+i))).setStatus(0);
                 switch(getTestSelect().getOrdinal())
                 {
                   case 0:
-                    ((BStatusBoolean) ((BObject)get("out"+i))).setValue(getIn().getValue().equals(((BStatusString) ((BObject)get("in"+i))).getValue()));
+								tempCurrentMatch = getIn().getValue().equals(((BStatusString) ((BObject)get("in"+i))).getValue());
                     break;
                   case 1:
-                    ((BStatusBoolean) ((BObject)get("out"+i))).setValue(getIn().getValue().equalsIgnoreCase(((BStatusString) ((BObject)get("in"+i))).getValue()));
+								tempCurrentMatch = getIn().getValue().equalsIgnoreCase(((BStatusString) ((BObject)get("in"+i))).getValue());
                     break;
                   case 2:
-                    ((BStatusBoolean) ((BObject)get("out"+i))).setValue(getIn().getValue().startsWith(((BStatusString) ((BObject)get("in"+i))).getValue()));
+								tempCurrentMatch = getIn().getValue().startsWith(((BStatusString) ((BObject)get("in"+i))).getValue());
                     break;
                   case 3:
-                    ((BStatusBoolean) ((BObject)get("out"+i))).setValue(getIn().getValue().endsWith(((BStatusString) ((BObject)get("in"+i))).getValue()));
+								tempCurrentMatch = getIn().getValue().endsWith(((BStatusString) ((BObject)get("in"+i))).getValue());
                     break;
                   case 4:
-                    ((BStatusBoolean) ((BObject)get("out"+i))).setValue(getIn().getValue().indexOf(((BStatusString) ((BObject)get("in"+i))).getValue()) >= 0);
+								tempCurrentMatch = getIn().getValue().indexOf(((BStatusString) ((BObject)get("in"+i))).getValue()) >= 0;
                     break;
                 }
               }
-            }
-          }
+					
+					if(tempCurrentMatch) tempAnyMatch = true;
+					((BStatusBoolean) ((BObject)get("out"+i))).setValue(tempCurrentMatch);
         }
       }
       catch (Exception e)
@@ -116,6 +126,8 @@ public class BSuperStringTest extends BComponent
         e.printStackTrace();
       }
     }
+		
+		getOutAnyMatch().setValue(tempAnyMatch);
   }
   
   
@@ -123,19 +135,16 @@ public class BSuperStringTest extends BComponent
   {
     try
     {
-      for(int i=1;i<(SlotCount+1);i++)
+			for(int i=1; i<(SlotCount+1); i++)
       {
-        if(((BObject)get("in"+i))       ==null)  {this.add(("in"+i),        new BStatusString("", BStatus.nullStatus), Flags.SUMMARY);}
-        if(((BObject)get("out"+i))==null)  {this.add(("out"+i), new BStatusBoolean(false, BStatus.nullStatus), Flags.SUMMARY);}
+				if(((BObject)get("in"+i))  == null) this.add(("in"+i), new BStatusString("", BStatus.nullStatus), Flags.SUMMARY);
+				if(((BObject)get("out"+i)) == null) this.add(("out"+i), new BStatusBoolean(false, BStatus.nullStatus), Flags.SUMMARY);
       }
       
-      for(int i=SlotCount+1;
-          (BObject)get("in"+i)!=null | 
-          (BObject)get("out"+i)!=null; 
-          i++)
+			for(int i=SlotCount+1; (BObject)get("in"+i) != null || (BObject)get("out"+i) != null; i++)
       {
-        if(((BObject)get("in"+i))!=null) {this.remove("in"+i);}             
-        if(((BObject)get("out"+i))!=null) {this.remove("out"+i);}             
+				if(((BObject)get("in"+i))  != null) this.remove("in"+i);             
+				if(((BObject)get("out"+i)) != null) this.remove("out"+i);             
       }
     }
     catch (Exception e)

@@ -193,7 +193,7 @@ public class BDynamicLinks extends BComponent
 	Clock.Ticket refreshTimer;
 	
 	//This just makes it easier to copy this source into a program object.
-	BComponent destinationComp = this;
+	final BComponent destinationComp = this;
 	
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	public void started() throws Exception
@@ -518,6 +518,13 @@ public class BDynamicLinks extends BComponent
 	public void doRefreshLinks()
 	{
 		if(!Sys.atSteadyState() || !destinationComp.isRunning()) return;
+		
+		if(getSlotInfoCsv().length() < 4)
+		{
+			logger.error(destinationComp.getSlotPath().toString() + " - Invalid CSV string! Please read the DymanicLinks Bajadoc!");
+			return;
+		}
+		
 		String[][] strOrds;
 
 		try {strOrds = split(BFormat.make(getSlotInfoCsv()).format(destinationComp), "\n", ",");}
