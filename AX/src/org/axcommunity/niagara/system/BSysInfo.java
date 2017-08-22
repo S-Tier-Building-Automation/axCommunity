@@ -89,7 +89,7 @@ public class BSysInfo extends BComponent
 		calculate();
 	}
 
-	public static final Property executePeriod = newProperty(Flags.SUMMARY,	BRelTime.make(60000));
+	public static final Property executePeriod = newProperty(Flags.SUMMARY,	BRelTime.make(60000), BFacets.make(BFacets.MIN, BRelTime.makeSeconds(0)));
 	public BRelTime getExecutePeriod() { return (BRelTime)get("executePeriod"); }
 	public void setExecutePeriod(BRelTime v) { set("executePeriod", v); }
 	
@@ -122,7 +122,7 @@ public class BSysInfo extends BComponent
 	void updateTimer()
 	{						
 		if (ticket != null) ticket.cancel();
-		ticket = Clock.schedulePeriodically(this, getExecutePeriod(), timerExpired, null);
+		if(getExecutePeriod().getMillis() > 0) ticket = Clock.schedulePeriodically(this, getExecutePeriod(), timerExpired, null);
 	}		
 
 	public void calculate()
