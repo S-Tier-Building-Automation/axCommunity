@@ -2,20 +2,33 @@
  * Copyright (c) 2014 Tridium, Inc. All Rights Reserved.
  */
 
+description		= "Open source AX Community module"
+
+/*	Declare module name and project properties	*/
 ext
 {
-	// Declare module name and project properties
 	name			= 'axCommunity'
 	project.group	= 'Community'
-	description		= "Open source AX Community module"
 }
 
-// Declare niagaraModule properties
+/*	Declare niagaraModule properties	*/
 niagaraModule
 {
-	preferredSymbol	= "axc4"
 	moduleName		= "axCommunity"
+	preferredSymbol	= "axc4"
 	runtimeProfile	= "doc"
+	
+	modulePart 
+	{
+		name			= "axCommunity-wb"
+		runtimeProfile	= "wb"
+	}
+	
+	modulePart 
+	{
+		name			= "axCommunity-ux"
+		runtimeProfile	= "ux"
+	}
 }
 
 
@@ -31,13 +44,14 @@ bajadoc
 	includePattern "org/axcommunity/niagara/**/*.java"
 }
 
-// Include additional files in module jar
+/*	Include additional files in module jar	*/
 jar
 {
 	from('src')
 	{
 		include 'doc/*.*'
+		include 'doc/images/*.*'
 	}
 }
 
-// Declare compile and test dependencies
+/*	Declare compile and test dependencies	*/

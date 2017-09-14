@@ -1,0 +1,282 @@
+
+
+
+
+
+
+/***************************************************************
+* Body
+***************************************************************/
+
+body
+{
+	background: #ffffff;
+	font-family: 'Source Sans Pro', 'Helvetica', sans-serif; 
+	font-size: 14px;
+}
+
+/***************************************************************
+* Headers
+***************************************************************/
+ 
+h1 
+{ 
+	color: #0088ce;
+	background: #ffffff;
+	border: 1px solid #0088ce;
+	border-left: 0;
+	border-right: 0;
+	border-top: 0;
+	font-size: 20px;
+	padding: 3px;
+}
+
+h1.title
+{
+	color: #0088ce;
+	background: none;	
+	font-size: 26px;
+	border: none;
+}
+
+h2
+{ 
+	font-size: 16px;
+	color: #0088ce;
+	background: #ffffff;
+	padding: 3px;
+}
+
+h3, h4, h5, h6
+{
+	color: #5a5a5a;
+	font-size: 14px;
+}
+
+/***************************************************************
+* Paragraphs
+***************************************************************/
+
+p
+{
+	line-height: 1.6em;
+	text-align: justify;
+	padding: 0px 8px 0px 8px;
+}
+
+p.note, p.tip, p.warning, p.important, p.caution
+{
+	margin: 15px 15px 15px 15px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border: 1px solid;
+	border-radius: 8px;
+	background-color: #f7f7f7;
+	border-color: #f7f7f7;
+	color: #000000;
+}
+
+p.important
+{
+	border-left: 8px solid #ed8b00;
+}				
+
+p.note
+{
+	border-left: 8px solid #0088ce;
+}
+
+p.tip
+{
+	border-left: 8px solid #b4c82a;
+}		 
+
+p.warning, p.caution
+{
+	border-left: 8px solid #e82c2a;
+}		 
+
+p.navbar
+{ 
+	background: #1188c9;
+	color: #ffffff;
+	text-align: left;
+	padding: 5px;
+	font-size: 14px;
+	font-weight: bold;
+	box-shadow: 0 0 4px rgba(0,0,0,0.5);
+}					
+
+p.navbar a
+{
+	color: #ffffff;
+} 
+
+p.copyright
+{ 
+	margin: 0;
+	text-align: center;
+}				
+
+/***************************************************************
+* Pre
+***************************************************************/
+
+pre
+{ 
+	font-family: monospace;
+	padding-left: 4em;
+	color: #008000;
+}
+
+pre.doc-code-example
+{
+	background: #fafafa;
+	margin: 10px;
+	padding: 10px 10px 10px 10px;
+	border: 1px solid #969696;
+}
+
+/***************************************************************
+* Lists
+***************************************************************/
+
+ul
+{
+	padding-left: 2em;
+}
+
+ol
+{
+	padding-left: 2em;
+}
+
+li
+{
+	line-height: 1.6em;
+	margin: 0.6em;
+}
+
+/***************************************************************
+* Tables
+***************************************************************/
+
+table
+{
+	font-size: 14px;
+	border-collapse: collapse;
+	border: 0px;
+	width: 100%;	
+}
+
+th
+{
+	text-align: left;
+	border: 1px solid #d6d6d6;
+	border-left: 0px;
+	border-right: 0px;
+	border-bottom: 0px;
+	padding: 5px 0px 5px 0px;
+	background-color: #ebebeb;
+	color: #606060;
+	font-weight: normal;
+	font-size: 15px;
+}
+
+th:first-of-type, td:first-of-type 
+{
+	padding-left: 25px;
+}
+*/
+
+td
+{
+	border: 1px solid #ebebeb;
+	border-left: 0px;
+	border-right: 0px;
+	border-top: 0px;
+	/*padding: 5px 0px 5px 0px;*/
+	padding: 0px 0px 0px 0px;
+	line-height: 1.6em;
+	
+}
+
+/***************************************************************
+* Font Styles
+***************************************************************/
+
+font.index
+{ 
+	font-style: bold;
+}
+
+
+
+/****************************************************************************************************************************
+* Kors' Styles	*************************************************************************************************************
+*****************************************************************************************************************************/
+.titleModuleName
+{
+	font-family:			tahoma;	
+	font-size:				65pt;
+	text-align:				center;
+	font-weight:			bold;
+	color:					#006D67;
+}
+
+.createdBy
+{
+	font-size:				medium;
+	text-align:				center;
+	font-style:				italic;
+	color:					#006D67;
+}
+
+
+
+.KorsStyle 
+{
+	text-align:				left;
+/* 	font-family:			tahoma; */
+	padding-top:			0px;
+	padding-right:			0px;
+	padding-bottom:			0px;
+	padding-left:			0px;
+	background-color: 		#D9D9D9;
+	border-collapse:		collapse;
+	border:					none;
+	outline:				none;
+
+}
+
+table
+{
+	border-collapse:		collapse;
+	border:					none;
+	outline:				none;
+}
+
+code
+{
+	font-family:			monospace;
+	color:					#515151;
+	font-weight:			bold;
+	font-style:				normal;
+	font-size:				smaller
+
+}
+li
+{
+	line-height:			1.6em;
+	margin:					0;
+	padding:				0.0em;
+	display:				compact;
+}
+
+
+
+
+
+
+
+

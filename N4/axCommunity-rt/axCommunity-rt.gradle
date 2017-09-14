@@ -2,19 +2,20 @@
  * Copyright (c) 2014 Tridium, Inc. All Rights Reserved.
  */
 
-ext 
+description		= "Open source AX Community module"
+
+/*	Declare module name and project properties	*/
+ext
 {
-	// Declare module name and project properties
-	name				= 'axCommunity'
-	project.group		= 'Community'
-	description			= "Open source AX Community module"
+	name			= 'axCommunity'
+	project.group	= 'Community'
 }
 
-// Declare niagaraModule properties
-niagaraModule 
+/*	Declare niagaraModule properties	*/
+niagaraModule
 {
-	preferredSymbol		= "axc4"
 	moduleName			= "axCommunity"
+	preferredSymbol		= "axc4"
 	runtimeProfile		= "rt"
 
 	modulePart 
@@ -28,9 +29,26 @@ niagaraModule
 		name			= "axCommunity-doc"
 		runtimeProfile	= "doc"
 	}
+	
+	modulePart 
+	{
+		name			= "axCommunity-ux"
+		runtimeProfile	= "ux"
+	}
 }
 
+repositories 
+{
+	mavenCentral()
+	mavenLocal()
+	
+	flatDir 
+	{
+		dirs 'libs'
+	}
+}
 
+/*	Declare compile and test dependencies	*/
 dependencies
 {
 	compile "Tridium:baja:4.0.0"
@@ -45,13 +63,28 @@ dependencies
 	compile "Tridium:nre:4.0.0"
 }
 
-// Include additional files in module jar
+/*	Include additional files in module jar	*/
 jar 
 {
-	from('src') 
+	doFirst 
+	{
+        from { configurations.uberjar.collect { it.isDirectory() ? it : zipTree(it) } } 
+    }
+    exclude '*META-INF/*.RSA', '*META-INF/*.SF','*META-INF/*.DSA' 
+	
+	from("src") 
 	{
 		include 'relNotes/*.*'
+		include "org/axcommunity/niagara/graphics/*.*"
+		include "org/axcommunity/niagara/bogs/*.*"
 	}
 }
 
-// Declare compile and test dependencies
+/*	Declare compile and test dependencies	*/
+moduleTestJar 
+{
+	from('srcTest') 
+	{
+		
+	}
+}
