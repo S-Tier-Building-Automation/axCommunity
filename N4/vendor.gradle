@@ -3,7 +3,7 @@
  */
 
 group					= 'Community'
-def moduleVersion		= '17.09.14.01'
+def moduleVersion		= '17.09.20.01'
 def moduleVersionPatch	= [:]
 moduleVersionPatch		= '.0'
 version					= "${moduleVersion}${moduleVersionPatch}"

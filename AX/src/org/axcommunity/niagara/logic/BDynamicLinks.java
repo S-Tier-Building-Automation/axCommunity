@@ -65,6 +65,13 @@ public class BDynamicLinks extends BComponent
 {
 	private static BFacets fctStrMulti = BFacets.make(BFacets.MULTI_LINE, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100));
 	
+	
+	public static final Property enableLinks = newProperty(Flags.HIDDEN, true);
+	public boolean getEnableLinks() { return getBoolean(enableLinks); }
+	public void setEnableLinks(boolean v) { setBoolean(enableLinks, v, null); }
+
+	
+	
 	/**See the class description for more information*/
 	public static final Property slotInfoCsv = newProperty(0, "%parent.name%,,MyParentName\nstation:|%slotPath%,,SampleSlotPath", fctStrMulti);
 	/**See the class description for more information*/
@@ -237,7 +244,7 @@ public class BDynamicLinks extends BComponent
 	{
 		if(!Sys.atSteadyState() || !destinationComp.isRunning()) return;
 		
-		if(p.equals(slotInfoCsv) || p.equals(statusForInvalidOrds) || p.equals(useAreaZoneStation)) 
+		if(p.equals(slotInfoCsv) || p.equals(statusForInvalidOrds) || p.equals(useAreaZoneStation) || p.equals(enableLinks)) 
 		{
 			doRefreshLinks();
 			return;
@@ -328,11 +335,107 @@ public class BDynamicLinks extends BComponent
 	
 	String escape(String s){return SlotPath.escape(s);}
 	String unescape(String s){return SlotPath.unescape(s);}
+
+
 	
 	
-	/*------------------------------------------------------------------------------------------------------------------------*/
 	/**
-	 * makeCsvOutput was added on 2017.05.04 by Justin Koffler
+	 * Removes the link to all dynamic slots on this component.
+	 * 
+	 * @since September 20, 2017
+	 * @author Justin Koffler
+	 */
+	private void removeLinks()
+	{
+		BLink[] links = this.getLinks();
+				
+		for(int i=0; i < links.length; i++)
+		{
+			if( (this.getSlot( links[i].getTargetSlot().getName() ).isDynamic()) == true )
+			{
+				this.remove(links[i].getName());
+			}
+			
+		}
+		
+		updateSlotStatus();
+	}
+	
+	/**
+	 * Updates all dynamic slots status to status from slot 'statusForInvalidOrds'.</br></br>
+	 * <i>&nbsp&nbsp&nbsp&nbsp(This logic was copied and modified from the 'doRefreshLinks()' method.)</i>
+	 * 
+	 * @since September 20, 2017
+	 * @author Justin Koffler
+	 */
+	private void updateSlotStatus()
+	{
+		Property[] properties = this.getDynamicPropertiesArray();
+		
+		for(int i=0; i<properties.length; i++)
+		{
+			
+			BObject 	targetSlotAsObject 			= null;
+			BValue 		targetSlotAsValue 			= null;
+			boolean 	targetSlotIsStatusValue 	= false;
+			String 		targetSlotName 				= properties[i].getName().toString();
+					
+			try
+			{
+				targetSlotAsObject = ((BObject) destinationComp.get(targetSlotName));
+				
+				if(targetSlotAsObject != null)
+				{
+					if(targetSlotAsObject instanceof BIStatusValue)
+					{
+						targetSlotIsStatusValue = true;
+					}
+				}
+			}
+			catch (Exception e){}
+			
+			try
+			{
+				targetSlotAsValue = destinationComp.get(targetSlotName);
+			}
+			catch (Exception e){}
+	
+			
+			if(targetSlotIsStatusValue)
+			{
+				if(targetSlotAsValue != null)
+				{
+					if(targetSlotAsValue instanceof BStatusBoolean)
+					{
+						destinationComp.set(targetSlotName, new BStatusBoolean(false, getStatusForInvalidOrds()));
+					}
+					else if(targetSlotAsValue instanceof BStatusNumeric)
+					{
+						destinationComp.set(targetSlotName, new BStatusNumeric(0, getStatusForInvalidOrds()));
+					}
+					else if(targetSlotAsValue instanceof BStatusEnum)
+					{
+						destinationComp.set(targetSlotName, new BStatusEnum(BDynamicEnum.DEFAULT, getStatusForInvalidOrds()));
+					}
+					else if(targetSlotAsValue instanceof BStatusString)
+					{
+						destinationComp.set(targetSlotName, new BStatusString("", getStatusForInvalidOrds()));
+					}
+				}
+				
+				try {((BStatusValue) ((BObject) destinationComp.get(targetSlotName))).setStatus(getStatusForInvalidOrds());}
+				catch (Exception e){}
+			}
+		}
+	}
+	
+	
+	
+	/**
+	 * Creates the delimited string output.
+	 * 
+	 * @since May 4, 2017
+	 * @author Justin Koffler
 	 */
 	public void makeDelimitedOutput()
 	{
@@ -349,16 +452,19 @@ public class BDynamicLinks extends BComponent
 				String delim = getInDelimiter();
 				try
 				{
-					if(getInDelimiter().substring(0, 2).toString().equalsIgnoreCase("\\u"))
+					if(getInDelimiter().length() >= 2)
 					{
-						String tempDelim = getInDelimiter();
-						tempDelim = replaceString(tempDelim, "\\", "");
-						String[] arr = split(tempDelim, "u");
-						delim = "";
-						for(int i = 1; i < arr.length; i++)
+						if(getInDelimiter().substring(0, 2).toString().equalsIgnoreCase("\\u"))
 						{
-							int hexVal = Integer.parseInt(arr[i], 16);
-							delim += (char)hexVal;
+							String		tempDelim	= getInDelimiter();
+							tempDelim 				= replaceString(tempDelim, "\\", "");
+							String[] 	arr 		= split(tempDelim, "u");
+							delim 					= "";
+							for(int i = 1; i < arr.length; i++)
+							{
+								int hexVal = Integer.parseInt(arr[i], 16);
+								delim += (char)hexVal;
+							}
 						}
 					}
 				}
@@ -369,16 +475,19 @@ public class BDynamicLinks extends BComponent
 				String parsDelim = getInPairsDelimiter();
 				try
 				{
-					if(getInPairsDelimiter().substring(0, 2).toString().equalsIgnoreCase("\\u"))
+					if(getInPairsDelimiter().length() >= 2)
 					{
-						String tempPairsDelim = getInPairsDelimiter();
-						tempPairsDelim = replaceString(tempPairsDelim, "\\", "");
-						String[] arr = split(tempPairsDelim, "u");
-						parsDelim = "";
-						for(int i = 1; i < arr.length; i++)
+						if(getInPairsDelimiter().substring(0, 2).toString().equalsIgnoreCase("\\u"))
 						{
-							int hexVal = Integer.parseInt(arr[i], 16);
-							parsDelim += (char)hexVal;
+							String 		tempPairsDelim 	= getInPairsDelimiter();
+							tempPairsDelim 				= replaceString(tempPairsDelim, "\\", "");
+							String[] 	arr 			= split(tempPairsDelim, "u");
+							parsDelim 					= "";
+							for(int i = 1; i < arr.length; i++)
+							{
+								int hexVal = Integer.parseInt(arr[i], 16);
+								parsDelim += (char)hexVal;
+							}
 						}
 					}
 				}
@@ -387,6 +496,8 @@ public class BDynamicLinks extends BComponent
 				
 				//Iterate through each slot and build our delimited values...
 				Property[] dyProps = destinationComp.getDynamicPropertiesArray();
+				
+				int item = 0;
 				
 				for(int i = 0; i < dyProps.length; i++)
 				{
@@ -406,14 +517,19 @@ public class BDynamicLinks extends BComponent
 						
 						logger.trace("\t" + destinationComp.getSlotPath() + "\t" + "slotName: '" + name + "', slotValue: '" + value + "', Type: " + property.getType().toString() );
 		
-						if(csvNames.length()<=0){csvNames = name;}
+						//if(csvNames.length()<=0){csvNames = name;}
+						if(item<=0){csvNames = name;}
 						else{csvNames = csvNames + delim + name;}
 		
-						if(csvValues.length()<=0){csvValues = value;}
+						//if(csvValues.length()<=0){csvValues = value;}
+						if(item<=0){csvValues = value;}
 						else{csvValues = csvValues + delim + value;}
 						
-						if(pairs.length()<=0){pairs = name + parsDelim + value;}
+						//if(pairs.length()<=0){pairs = name + parsDelim + value;}
+						if(item<=0){pairs = name + parsDelim + value;}
 						else{pairs = pairs + delim + name + parsDelim + value;}
+						
+						item++;
 					}
 					else
 					{
@@ -449,8 +565,11 @@ public class BDynamicLinks extends BComponent
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	void startupRoutine()
 	{
-		scheduleMidnightTimer();
-		updateTimer();
+		if( getEnableLinks()==true )
+		{
+			scheduleMidnightTimer();
+			updateTimer();
+		}
 		doRefreshLinks();
 	}
 	
@@ -516,6 +635,8 @@ public class BDynamicLinks extends BComponent
 	{
 		if(!Sys.atSteadyState() || !destinationComp.isRunning()) return;
 		
+		if( getEnableLinks()==true )
+		{
 		if(getSlotInfoCsv().length() < 4)
 		{
 			logger.error(destinationComp.getSlotPath().toString() + " - Invalid CSV string! Please read the DymanicLinks Bajadoc!");
@@ -827,6 +948,14 @@ public class BDynamicLinks extends BComponent
 					try
 					{
 						((BStatusString) ((BObject) destinationComp.get(targetSlotName))).setValue(BFormat.make(formatOrd).format(destinationComp));
+							
+							
+							if( !(((BStatusValue) ((BObject) destinationComp.get(targetSlotName))).getStatus().isValid()) )
+							{
+								((BStatusValue) ((BObject) destinationComp.get(targetSlotName))).setStatus( BStatus.ok  );
+							}
+							
+							
 					}
 					catch (Exception f)
 					{
@@ -1070,7 +1199,18 @@ public class BDynamicLinks extends BComponent
 		fireLinksRefreshed(BBoolean.make(true));
 		
 		makeDelimitedOutput();
+		
+		}
+		else
+		{
+			removeLinks();
+			updateSlotStatus();
+			makeDelimitedOutput();
+		}
 	}
+	
+	
+	
 	
 	
 	/*------------------------------------------------------------------------------------------------------------------------*/
