@@ -37,7 +37,7 @@ public class BStopwatch extends BComponent
 {
   private long startTime = -1;
   private long stopTime = -1;
-  private boolean running, reset, gotStart, risingOnly;
+  private boolean running, gotStart, risingOnly;
   private int hours, minutes, seconds, milliseconds, hr, min, sec, ms;
   private long time;
   private String strHr = "0", strMin = "0", strSec = "0", strMsec = "0";
@@ -212,7 +212,6 @@ public class BStopwatch extends BComponent
   {
     if (getInReset().getValue())
       {
-        reset = true;
         running = false;
         getOutRunning().setValue(running);
         
@@ -251,7 +250,6 @@ public class BStopwatch extends BComponent
         
         
         getOutCurrentMillisec().setValue(System.currentTimeMillis());
-        reset = false;
       }
   
   }

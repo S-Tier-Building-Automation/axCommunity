@@ -24,7 +24,6 @@ import javax.baja.sys.*;
 public class BOneShotBooleanSelect extends BComponent
 {
 	private boolean last;
-	private boolean fired;
 	private boolean triggered;
 	Clock.Ticket ticket;	
 	
@@ -36,7 +35,6 @@ public class BOneShotBooleanSelect extends BComponent
 	public void fire() { invoke(fire,null,null); }
 	public void doFire()
 	{
-		fired = true;
 		getOut().setValue(getInTrue().getValue());
 		
 		getOutTimerActive().setValue(true);
@@ -50,7 +48,6 @@ public class BOneShotBooleanSelect extends BComponent
 	{
 		getOut().setValue(getInFalse().getValue());
 		getOutTimerActive().setValue(false);
-		fired = false;
 	}
 	
 	

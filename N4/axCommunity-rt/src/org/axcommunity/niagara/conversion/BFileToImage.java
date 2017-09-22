@@ -1,6 +1,6 @@
 package org.axcommunity.niagara.conversion;
 
-import javax.baja.file.BIFile;
+//import javax.baja.file.BIFile;
 import javax.baja.gx.BImage;
 import javax.baja.naming.BOrd;
 import javax.baja.status.BStatusString;
@@ -29,7 +29,7 @@ public class BFileToImage
     }
     try
     {
-      BIFile file = (BIFile)BOrd.make(getInFileOrd().getValue()).get();
+      //BIFile file = (BIFile)BOrd.make(getInFileOrd().getValue()).get();
       //byte[] imgText = new byte[0];
       //imgText = file.read();
       //BImage img = BImage.make(imgText);

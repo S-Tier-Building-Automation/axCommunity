@@ -107,6 +107,7 @@ extends BComponent
 		{
 			//try to create the component - if it fails, false
 			BComponent com = (BComponent)ord.relativizeToHost().get();
+			com = (BComponent)com;
 			return true;
 		}
 		catch(Exception e)

@@ -14,7 +14,6 @@ import javax.baja.sys.BFacets;
 import javax.baja.sys.BIcon;
 import javax.baja.sys.BRelTime;
 import javax.baja.sys.BTime;
-import javax.baja.sys.BValue;
 import javax.baja.sys.Clock;
 import javax.baja.sys.Context;
 import javax.baja.sys.Flags;

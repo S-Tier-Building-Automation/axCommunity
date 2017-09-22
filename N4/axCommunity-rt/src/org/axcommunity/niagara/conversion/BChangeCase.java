@@ -43,8 +43,8 @@ extends BComponent
 						String upper = temp.toUpperCase();
 						String lower = temp.toLowerCase();
 
-						String firstLetter = "";
-						firstLetter = lower.substring(0, 1).toUpperCase();
+						//String firstLetter = "";
+						//firstLetter = lower.substring(0, 1).toUpperCase();
 
 						StringBuffer sb = new StringBuffer(temp);
 

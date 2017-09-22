@@ -556,7 +556,7 @@ public class BReplaceString extends BComponent
 		log.finest("\t" + getSlotPath()	+ "\t" + "removeNonAlphaNumeric() called with input = '" + input + "'");
 		
 		String			replacementString	= getInNonAlphaNumericReplacementString().getValue();
-		StringBuffer	inputChars			= new StringBuffer( input );
+		//StringBuffer	inputChars			= new StringBuffer( input );
 		String			output				= input;
 
 		try
@@ -597,7 +597,7 @@ public class BReplaceString extends BComponent
 		log.finest("\t" + getSlotPath()	+ "\t" + "removeDuplicateReplacements() called with input = '" + input + "'");
 		
 		String	output	= input;
-		int		idx		= input.lastIndexOf( stringToReplace );
+		//int		idx		= input.lastIndexOf( stringToReplace );
 		
 		try
 		{

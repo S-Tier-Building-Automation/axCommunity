@@ -25,7 +25,6 @@ import javax.baja.sys.*;
 public class BOneShotMultiSelect extends BComponent
 {
 	private boolean last;
-	private boolean fired;
 	private boolean triggered;
 	Clock.Ticket ticket;	
 	
@@ -37,7 +36,6 @@ public class BOneShotMultiSelect extends BComponent
 	public void fire() { invoke(fire,null,null); }
 	public void doFire()
 	{
-		fired = true;
 		getOutBool().setValue(		getInBoolTrue().getValue());
 		getOutNum().setValue(		getInNumTrue().getValue());
 		getOutString().setValue(	getInStringTrue().getValue());
@@ -56,7 +54,6 @@ public class BOneShotMultiSelect extends BComponent
 		getOutString().setValue(	getInStringFalse().getValue());
 		
 		getOutTimerActive().setValue(false);
-		fired = false;
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
