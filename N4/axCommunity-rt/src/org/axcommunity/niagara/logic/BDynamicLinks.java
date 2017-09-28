@@ -108,6 +108,11 @@ public class BDynamicLinks extends BComponent
 {
 	private static BFacets fctStrMulti = BFacets.make(BFacets.MULTI_LINE, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100));
 	
+	/**These facets will get applied to all dynamic slots of this component.*/
+	public static final Property facetsForDynamicSlots = newProperty(0, BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)),null);
+	public BFacets getFacetsForDynamicSlots() { return (BFacets)get(facetsForDynamicSlots); }
+	public void setFacetsForDynamicSlots(BFacets v) { set(facetsForDynamicSlots,v,null); }
+	
 	/**This should be the format slotPath comma slotName to the component you wish to link to this component's 'enableLinks' slot.*/
 	public static final Property pathToEnableLinks = newProperty(Flags.HIDDEN, "station:|slot:/Path_To_Your_Component/Your_Component_Name,Slot_Name", BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	/**This should be the format slotPath comma slotName to the component you wish to link to this component's 'enableLinks' slot.*/
@@ -122,8 +127,7 @@ public class BDynamicLinks extends BComponent
 	/**When this is false all links to any dynamic slot on this component will be removed and the slot's status will be set to the status of slot 'statusForInvalidOrds'.*/
 	public void setEnableLinks(boolean v) { setBoolean(enableLinks, v, null); }
 
-	
-	
+
 	/**See the class description for more information*/
 	public static final Property slotInfoCsv = newProperty(0, "%parent.name%,,MyParentName\nstation:|%slotPath%,,SampleSlotPath", fctStrMulti);
 	/**See the class description for more information*/
@@ -240,6 +244,14 @@ public class BDynamicLinks extends BComponent
 	
 	
 	
+	private static final BFacets statusForInvalidOrdsFacets =	BFacets.make(BFacets.FIELD_EDITOR, BString.make("kitControl:PropagateFlagsFE"));
+	public BFacets getSlotFacets(Slot slot)
+	{
+		if (slot.getName().equals(statusForInvalidOrds)){ return statusForInvalidOrdsFacets;}
+		else if(slot.isDynamic()){return getFacetsForDynamicSlots();}
+		else {return super.getSlotFacets(slot);}
+	}
+	
 	public Type getType() { return TYPE; }
 	public static final Type TYPE = Sys.loadType(BDynamicLinks.class);
 
@@ -247,12 +259,8 @@ public class BDynamicLinks extends BComponent
 	private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/EB.png");
 	public static final Logger logger = Logger.getLogger(TYPE.getModule().getModuleName() + "." + TYPE.getTypeName());
 	
-	private static final BFacets statusForInvalidOrdsFacets =	BFacets.make(BFacets.FIELD_EDITOR, BString.make("kitControl:PropagateFlagsFE"));
-	public BFacets getSlotFacets(Slot slot)
-	{
-		if (slot.getName().equals(statusForInvalidOrds)) return statusForInvalidOrdsFacets;
-		else return super.getSlotFacets(slot);
-	}
+	
+	
 	
 	/**Represents the column number within the csv that contains the source ord path.*/
 	static int colSourceOrd = 0;
@@ -1137,7 +1145,7 @@ public class BDynamicLinks extends BComponent
 						if(!renamedOldSlot && !invalidSourceOrd)
 						{
 							messageHandler(Level.FINE, "Adding new slot name: " + targetSlotName);
-							destinationComp.add(targetSlotName, sourceBValue.newCopy(), Flags.SUMMARY, null, null);
+							destinationComp.add(targetSlotName, sourceBValue.newCopy(), Flags.SUMMARY, BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)), null);
 							slotAdded = true;
 						}
 					}
@@ -1180,7 +1188,7 @@ public class BDynamicLinks extends BComponent
 							continue;
 						}
 						
-						try {destinationComp.add(targetSlotName, sourceBValue.newCopy(), Flags.SUMMARY, null, null);}
+						try {destinationComp.add(targetSlotName, sourceBValue.newCopy(), Flags.SUMMARY, BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)), null);}
 						catch (Exception e)
 						{
 							String msg = "Could not create new slot: " + targetSlotName;

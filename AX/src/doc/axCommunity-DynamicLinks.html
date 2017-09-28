@@ -1,0 +1,185 @@
+<html>
+	<head>
+		<title>OpcWriteAndValidate</title>
+		<link rel='StyleSheet' href='stylesheet.css' type='text/css' />
+		<style type="text/css"> ul{} li{margin:0; padding:0.0em; display:compact;}</style>
+	</head>
+
+	<body class="AxCommStyle" style="width: 800px">
+		<table style="border:0;">
+			<tr>
+				<td style="height: 212px; border:0;">
+					<table style="border:0">
+						<tr>
+							<td style="width: 600px; border:0;">
+							
+							<table>
+								<tr style="border:0">
+									<td rowspan="2" style="border:0">
+										<img src="images/logos/EB.png" alt="" height="120">
+										
+									</td>
+									<td rowspan="2" style="width: 25px; border:0;"></td>
+									<td class="titleModuleName" style="border:0">DynamicLinks</td>
+								</tr>
+								<tr>
+								</tr>
+							</table>
+							
+							</td>
+						</tr>
+						<tr><td style="width: 600px; height: 40px; border:0;"></td></tr>
+						<tr>
+							<td style="width: 600px; border:0;">
+								<br>
+								<h2>Description:</h2>
+								 The primary function of this object is to be able to link from several objects anywhere on the station using a list of ords and/or
+format ords, and slots.	In the CSV list, the ord or format ord is the first value, then the source slot, then the target slot.	The
+target slot is automatically created using the name you specify, and the type is automatically determined by the source slot type.<br>
+<br>
+The secondary function of this object is to resolve formats to strings.	This is done by leaving the source slot empty in the CSV
+string.	These slots will not have a link shown on the object.<br>
+<br>
+<br>
+Provide a CSV string structured as such:<br>
+[format ord or string],[source slot name (leave blank if the ord is a string)],[Target slot name]<i>\n</i><br>
+[format ord or string],[source slot name (leave blank if the ord is a string)],[Target slot name]<i>\n</i><br>
+etc...<br>
+<br>
+<br>
+If the format ord is a string output (such as %parent.name%, which would return the parent folder's name),
+leave the source slot name blank.	The target slot name, however, must always be provided.<br>
+<br>
+If the intention is to link the slot to another object, the proper formatting for the ord
+(or the value returned by the format ord) should be "station:|slot:/dir/object"<br>
+<br>
+<br>
+Example:<br>
+station:|%parent.sampleObject.slotPath%,out,someSlotFromAnObjectInMyParentFolder<br>
+%parent.parent.name.substring(8,11)%,,PartOfANameInMyPath<br>
+<br>
+<br>
+Eric's example from a production server:<br>
+%parent.parent.parent.name%,,WorkcenterName<br>
+station:|slot:/Global/ProprietaryData/CSVData,out,ProprietaryDataCsv<br>
+station:|%parent.parent.slotPath%/Machine_Status/Status_Manual,out,Manual<br>
+<br>
+<br>
+Other hidden jems:<br>
+&nbsp; %seguinZonePath% returns the path to the subfolder within the points folder. <br>&nbsp; &nbsp; Ex: <b>station:|</b>slot:/Drivers/OpcNetwork/KEPServerEX/points/Training<br>
+&nbsp; %seguinZoneSlotPath% returns the slot path to the subfolder within the points folder. <br>&nbsp; &nbsp; Ex: slot:/Drivers/OpcNetwork/KEPServerEX/points/Training<br>
+&nbsp; %seguinZone% returns the BComponent instance of the subfolder within the points folder. This is useful when you need to use the folder path in a BFormat string.<br>
+<br>
+<br>
+&nbsp; The following are the exact same as the "Zone" options above, except they return the sub-subfolder within the points folder:<br>
+&nbsp; %seguinStationPath% returns the path to the sub-subfolder within the points folder. <br>&nbsp; &nbsp; Ex: <b>station:|</b>slot:/Drivers/OpcNetwork/KEPServerEX/points/Training/L1_0010_L2<br>
+&nbsp; %seguinStationSlotPath% returns the slot path to the sub-subfolder within the points folder. <br>&nbsp; &nbsp; Ex: slot:/Drivers/OpcNetwork/KEPServerEX/points/Training/L1_0010_L2<br>
+&nbsp; %seguinStation% returns the BComponent instance of the sub-subfolder within the points folder. This is useful when you need to use the folder path in a BFormat string.<br>
+<br>
+<br>
+<br>
+Notes:<br>
+*		- If the only the ord changes (source and target slot names remain the same), the link on the existing slot will be updated to the new ord<br>
+*		- If the only the target slot name changes (source ord and slot name remain the same), the target slot name will be renamed (not removed) and any links in or out of that slot will be updated to the new name.<br>
+*		- If the source slot name changes and the new source slot is the same type as the old source slot, the link is updated to the new source slot.<br>
+*		- If the source slot name changes and the new source slot is a different type, the old target slot is removed and a new one is created using the new type.<br>
+<br>
+								<br>
+								
+								<h2>Properties:</h2>
+								
+								<li><b>facetsForDynamicSlots</b>
+								</li>
+								
+								 <li><b>validateDelay</b>
+								</li>
+
+								<li><b>pathToEnableLinks</b>
+									<ul><li>This should be the format slotPath comma slotName to the component you wish to link to this component&#x27;s &#x27;enableLinks&#x27; slot.</li>	</ul>
+								</li>
+
+								<li><b>enableLinks</b>
+									<ul><li>When this is false all links to any dynamic slot on this component will be removed and the slot&#x27;s status will be set to the status of slot &#x27;statusForInvalidOrds&#x27;.</li></ul>
+								</li>
+
+								<li><b>slotInfoCsv</b>
+									<ul><li>See the class description for more information</li></ul>
+								</li>
+
+								<li><b>enableDynamicKnobs</b>
+									<ul><li>Under development.&#x9;This doesn&#x27;t do anything yet, so it is hidden.</li></ul>
+								</li>
+
+								<li><b>knobInfoCsv</b>
+									<ul><li>Under development.&#x9;This doesn&#x27;t do anything yet.</li></ul>
+								</li>
+
+								<li><b>executeFindAndReplace</b>
+								</li>
+
+								<li><b>findStringInCsv</b>
+								</li>
+
+								<li><b>replaceStringInCsv</b>
+								</li>
+
+								<li><b>refreshInterval</b>
+									<ul><li>Set to zero seconds to disable</li></ul>
+								</li>
+
+								<li><b>refreshLinksAtMidnight</b>
+								</li>
+
+								<li><b>ignoreMissingObjects</b>
+								</li>
+
+								<li><b>statusForInvalidOrds</b>
+								</li>
+
+								<li><b>reorderSlotsBasedOnCsvString</b>
+								</li>
+
+								<li><b>useAreaZoneStation</b>
+								</li>
+
+								<li><b>enableDelimittedValues</b>
+								</li>
+
+								<li><b>outDelimitedSlotNames</b>
+								</li>
+
+								<li><b>outDelimitedSlotValues</b>
+								</li>
+
+								<li><b>outDelimitedSlotNameValuePairs</b>
+								</li>
+
+								<li><b>inPairsDelimiter</b>
+								</li>
+
+								<li><b>inDelimiter</b>
+								</li>
+
+								<li><b>refreshLinks</b>
+									<ul><li>This will refresh any links and any string values</li></ul>
+								</li>
+
+								<li><b>midnightTimerExpired</b>
+								</li>
+
+								<br>
+								
+								
+		
+								
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		
+		
+			
+	</body>
+</html>

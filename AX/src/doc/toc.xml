@@ -1,3 +1,4 @@
 <toc version="1.0">
-<tocitem text="Module Description" target="index.html" />  
+	<tocitem text="Module Description"			target="index.html"								/>
+	<tocitem text="DynamicLinks"				target="axCommunity-DynamicLinks.html"			/>
 </toc>

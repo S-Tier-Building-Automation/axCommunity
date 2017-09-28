@@ -1,41 +1,72 @@
-ï»¿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
+<head>
+<title>AxCommunity</title>
+<link rel="stylesheet" href="stylesheet.css">
 
-	<head>
-		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-		<title>AxCommunity Change Log</title>
-		<link rel="stylesheet" href="stylesheet.css">
-	</head>
+</head>
 
-	<body>
-		<br>
-		<p>This module is an open source effort for AX developers.<br>
-		For more information, go to <a href="http://sourceforge.net/projects/niagaraaxcommun/">Sourceforge axCommunity Website</a> </p>
-
-
-		<h1>AxCommunity Change Log</h1>
+<body class="AxCommStyle" style="width: 800px">
+	
+	<table style="border:0;">
+		<tr>
+			<td style="height: 212px; border:0;">
+				<table style="border:0">
+					<tr>
+						<td style="width: 600px; border:0;">
+						
+						<table>
+							<tr style="border:0">
+								<td rowspan="2" style="border:0">
+									<img src="images/logos/AxCommLogo_120x120.png" alt="AxCommunity" height="120">
+									
+								</td>
+								<td rowspan="2" style="width: 25px; border:0;"></td>
+								<td class="titleModuleName" style="border:0">AxCommunity</td>
+							</tr>
+							
+						</table>
+						
+						</td>
+					</tr>
+					<tr><td style="width: 600px; height: 40px; border:0;"></td></tr>
+					<tr>
+						<td style="width: 600px; height: 40px; border:0;">
+							<p>
+								This module is an open source effort for AX/N4 developers.<br>
+								For more information, go to <a href="http://sourceforge.net/projects/niagaraaxcommun/">Sourceforge axCommunity Website</a> 
+							</p>
+							<h1>AxCommunity Change Log</h1>
+						</td>
+					</tr>
+					<tr>
+						<td style="width: 600px; border:0;">
+					
 		<pre>
 			<code>
-<hr>
-<b>V17.09.22.01 September 22, 2017</b><i></b><i> - Justin Koffler</i></i>
+<b>V17.09.26.01 September 22, 2017</b><i> - Justin Koffler</i>
+	- MODIFIED 'BDynamicLinks'
+		* Added new slot 'facetsForDynamicSlots' which can be applied to all dynamic slots.
+	- MODIFIED Documentation stuff.
+<hr>			
+<b>V17.09.22.01 September 22, 2017</b><i> - Justin Koffler</i>
 	- MODIFIED 'BDynamicLinks'
 		* Added new slot 'pathToEnableLinks'
 			* Can be used to dynamically link a component to the enableLinks slot created in previous revision.
 		* Changed logging method to make code comparison between AX and N4 easier.
 	- MODIFIED several other files to fix warnings exclipse was producing.
 <hr>
-<b>V17.09.20.01 September 20, 2017</b><i></b><i> - Justin Koffler</i></i>
+<b>V17.09.20.01 September 20, 2017</b><i> - Justin Koffler</i>
 	- MODIFIED 'BDynamicLinks'
 		* Added new slot 'enableLinks'
 			* When false all links are removed and slot statuses are set to status from slot 'statusForInvalidOrds'.
 		* Fixed an issue with the delimited values where if the first slots were string slots and has empty/null values it would delimit them correctly.
 <hr>
-<b>V17.09.14.01 September 14, 2017</b><i></b><i> - Justin Koffler</i></i>
+<b>V17.09.14.01 September 14, 2017</b><i> - Justin Koffler</i>
 	- ADDED 'module-permissions.xml' files to eliminate security errors in 4.3.
 	- ADDED ux runtime profile.
 	- MODIFIED .gradle files to correct some formatting issues.
 <hr>
-<b>V17.08.22.01 August 22, 2017</b><i></b><i> - Eric Bishop</i></i>
+<b>V17.08.22.01 August 22, 2017</b><i> - Eric Bishop</i>
 	- MODIFIED 'BSysInfo'
 		* Added minimum time facet to the 'executePeriod' slot
 		* Setting the 'executePeriod' time to zero will now shut off the schedule. 
@@ -43,12 +74,12 @@
 		* Replicated the changes that were left out between the AX and N4 versions
 		* Move to current logger syntax to support 4.3
 <hr>
-<b>V17.08.21.02 August 21, 2017</b><i></b><i> - Eric Bishop</i></i>
+<b>V17.08.21.02 August 21, 2017</b><i> - Eric Bishop</i>
 	- MODIFIED 'BSysInfo'
 		* Resolved the bug Gary Roussak noticed on 2017-03-29
 			* Added 'changed' override to update the reoccurring schedule.  This will allow updates to the 'executePeriod' slot to take affect.
 <hr>
-<b>V17.08.21.01 August 21, 2017</b><i></b><i> - Eric Bishop</i></i>
+<b>V17.08.21.01 August 21, 2017</b><i> - Eric Bishop</i>
 	- MODIFED 'BDynamicLinks'
 		* Added destination component variable so the source can be used in a program object easier.
 		* Finally fixed the indentation.
@@ -59,13 +90,13 @@
 		* Bug fix: Resolved an issue with updating the dynamic (non-frozen) string input slots.
 		* Added 'outAnyMatch' slot.
 <hr>
-<b>V17.06.29.02 June 29, 2017</b><i></b><i> - Mike Arnott</i></i>
+<b>V17.06.29.02 June 29, 2017</b><i> - Mike Arnott</i>
 	- MODIFED 'BOneSHotBooleanSelect'
 		*previous commit had code from the wrong object
 	- MODIFED 'BTrendAnalyzer','BDynamicTrendAnalyzer'
 		*removed non utf8 characters from description		
 <hr>
-<b>V17.06.29.01 June 29, 2017</b><i></b><i> - Mike Arnott</i></i>
+<b>V17.06.29.01 June 29, 2017</b><i> - Mike Arnott</i>
 	- MODIFED 
 		'BBqlNumericRecap'
 		'BAbsTimeToDateparts'
@@ -97,7 +128,7 @@
 	- MODIFED 'BTrendAnalyzer','BDynamicTrendAnalyzer'
 		*replace the '|bql:historyFunc:HistoryRollup' syntax with '|bql:history:HistoryRollup'
 <hr>
-<b>V17.05.15.01 May 15, 2017</b><i></b><i> - Justin Koffler</i></i>
+<b>V17.05.15.01 May 15, 2017</b><i> - Justin Koffler</i>
 	- MODIFED 'BDynamicLinks'
 		* Added boolean slot 'enableDelimittedValues' with default value of false.
 			* Not enabling this field will reduce the its processing overhead and reduce the memory used to store the string values.
@@ -109,7 +140,7 @@
 			* On non-softJaces some of these variables don't exist, hence the use of the try/catch.
 			* If this poses a problem for anything please let me know and will remedy asap.
 <hr>
-<b>V17.05.04.02 May 04, 2017</b><i></b><i> - Justin Koffler</i></i>
+<b>V17.05.04.02 May 04, 2017</b><i> - Justin Koffler</i>
 	- MODIFED 'BDynamicLinks'
 		* Added string output slots outDelimitedSlotNames, outDelimitedSlotValues and outDelimitedSlotNameValuePairs.
 		* Added topic output slots CsvSlotNames, CsvSlotValues and CsvSlotNameValuePairs.
@@ -117,27 +148,27 @@
 	- MODIFIED BProductionCounter
 		* Fixed wrong import for N4 version.
 <hr>
-<b>V17.05.04.01 May 04, 2017</b><i></b><i> - Eric Bishop</i></i>
+<b>V17.05.04.01 May 04, 2017</b><i> - Eric Bishop</i>
 	- MODIFED 'BDynamicLinks'
 		* Resolved bug that prevented more than 96 slots
 		* Resolved issue with midnight timer
 <hr>
-<b>V17.02.28.01 February 28, 2017</b><i></b><i> - Eric Bishop</i></i>
+<b>V17.02.28.01 February 28, 2017</b><i> - Eric Bishop</i>
 	- MODIFED 'BProductionCounter'
 		* Resolved the issue causing some values to go negative.
 <hr>
-<b>V17.02.17.00 February 17, 2017</b><i></b><i> - Justin Koffler</i></i>
+<b>V17.02.17.00 February 17, 2017</b><i> - Justin Koffler</i>
 	- Modified 'BDynamicLinks'
 		* Added new boolean topic slot 'LinksRefreshed' which is fired every time the links are refreshed regardless if any changes occurred.
 <hr>
-<b>V17.02.10.00 February 10, 2017</b><i></b><i> - Justin Koffler</i></i>
+<b>V17.02.10.00 February 10, 2017</b><i> - Justin Koffler</i>
 	- MODIFED 'BSysInfo'
 		* Added new action slot 'SaveStation'. When trigger it will initial a station save.
 		* Added new slots 'facetsNumerics' and 'facetsStrings' to allow formatting of the slots.
 	- Modified 'BDynamicLinks'
 		* Added try/catch blocks to a couple of methods that were throwing errors on startup.
 <hr>
-<b>V17.02.01.00 February 01, 2017</b><i></b><i> - Justin Koffler</i></i>
+<b>V17.02.01.00 February 01, 2017</b><i> - Justin Koffler</i>
 	- MODIFED 'BDynamicLinks'
 		* Added new boolean slot 'useAreaZoneStation'. When true the %seguinStationPath% format will utilize the structure ...points|area|zone|workcenter and when false will use ...points|zone|workcenter.
 	- MODIFED 'BReplaceString'
@@ -149,48 +180,48 @@
 	- MODIFED 'BSuperConcat'
 		* Use thread for calculate, convert to StringBuilder.
 <hr>
-<b>V16.11.02.00 November 02, 2016</b><i></b><i> - Eric Bishop</i></i>
+<b>V16.11.02.00 November 02, 2016</b><i> - Eric Bishop</i>
 	- MODIFED 'BDynamicLinks'
 		* Minor changes made to trace logging.
 		* Added some dynamic knob slots to be used for testing (there is no code behind them yet, and they are currently hidden).
 		* Fixed an issue with writing a slot's default value when the source ord is invalid.
 <hr>
-<b>V16.09.30.01 September 30, 2016</b><i></b><i> - Eric Bishop</i></i>
+<b>V16.09.30.01 September 30, 2016</b><i> - Eric Bishop</i>
 	- MODIFED 'BDynamicLinks'
 		* Fixed an issue with the reorder option
 <hr>
-<b>V16.09.22.01 September 22, 2016</b><i></b><i> - Eric Bishop</i></i>
+<b>V16.09.22.01 September 22, 2016</b><i> - Eric Bishop</i>
 	- MODIFED 'BDynamicLinks'
 		* New functionality that sets any slots with invalid links to the default value for that slot type.
 		* Added find & replace option
 		* Added option to sort slots based on the order of the CSV string
 <hr>
-<b>V16.08.24.01 August 24, 2016</b><i></b><i> - Eric Bishop</i></i>
+<b>V16.08.24.01 August 24, 2016</b><i> - Eric Bishop</i>
 	- MODIFED 'BDynamicLinks'
 		* Fixed error that occured when format strings in the CSV input contained commas
 		* Fixed error that occurred when the CSV input string didn't contain at least 3 "columns" worth of data
 		* Fixed error that occurred when both the source ord and source slot name are changed at the same time for the same link that already exists and the old source slot type is the same as the new slot type.
 		* Fixed a bug that prevented recreation of a slot when the source slot name was changed and the new source slot type was an action or event slot.
 <hr>
-<b>V16.08.12.01 August 12, 2016</b><i></b><i> - Justin Koffler</i></i>
+<b>V16.08.12.01 August 12, 2016</b><i> - Justin Koffler</i>
 	- MODIFED 'BBoundLabelHighlight', 'BSimpleTstat' and 'BTrendAnalyzer'
 		* added icon.
 <hr>
-<b>V16.08.09.01 August 09, 2016</b><i></b><i> - Eric Bishop</i></i>
+<b>V16.08.09.01 August 09, 2016</b><i> - Eric Bishop</i>
 	- MODIFED 'BStatusStringToString'
 		* added 'atSteadyState' override.
 <hr>
-<b>V16.08.05.01 August 05, 2016</b><i></b><i> - Eric Bishop</i></i>
+<b>V16.08.05.01 August 05, 2016</b><i> - Eric Bishop</i>
 	- MODIFED 'BDynamicLinks'
 		* Several of bug fixes
 		* Added status option for slots with invalid ords specified
 <hr>
-<b>V16.08.01.01 August 01, 2016</b><i></b><i> - Eric Bishop</i></i>
+<b>V16.08.01.01 August 01, 2016</b><i> - Eric Bishop</i>
 	- ADDED 'BDynamicLinks'
 	- ADDED 'BShiftTargets' to the new AX & N4 strucures.
 	- MODIFED 'BProductionCounter' in both the AX and N4 directories to match the current source.
 <hr>
-<b>V16.07.21.01 July 21, 2016</b><i></b><i> - Justin Koffler</i></i>
+<b>V16.07.21.01 July 21, 2016</b><i> - Justin Koffler</i>
 	- MODIFIED 'BSpecialHtmlCharStringToString'
 		* change encoding to UTF-8
 		* modified how the replacement was being done to avoid conflicts with encoding types.
@@ -201,7 +232,7 @@
 	- MODIFIED the change log file location so it will show up in the bajadocs when compiled thus can be view through workbench.
 	- (N4 Only) MODIFIED gradle build scripts to allow creation of the bajadocs when building the project.
 <hr>
-<b>V16.07.11.01 July 11, 2016</b><i></b><i> - Justin Koffler</i></i>
+<b>V16.07.11.01 July 11, 2016</b><i> - Justin Koffler</i>
 	- MODIFIED 'BEnumFromCommaSepVar'
 		* modified logic to prevent errors as a result of duplicate ordinal or tag values. The duplicate entries will get skipped and the enum range will still get applied to the facets.
 		* added new StatusString slot 'outString' and StatusNumeric 'outNumeric' which outputs the string value and numeric values of the selected enum.
@@ -304,7 +335,7 @@
 <b>V13.02.01 Feb 7, 2013</b><i> - Eric Bishop</i>
 	- ADDED BRevolvingTextLabel2 as an enhanced version of the BRevolvingTextLabel
 		* fixed the default height so that it defaults to the height of the font
-		* Removed the default colors, so it doesnâ€™t constantly revert to a green background.
+		* Removed the default colors, so it doesn’t constantly revert to a green background.
 		* added scroll speed setting.
 		* added an optional pause at the beginning of the string.
 		* added end-of-string input (to change from the default ????).
@@ -342,8 +373,8 @@
 	- MODIFIED Palette, Alphabetized most of the palette, sorry this was driving me nuts but hope this doesn't confuse anyone.
 <hr>
 <b>V12.07.01 July 10, 2012</b>
-	- MODIFIED BTstatA extension â€“ reverse acting version. Goes 'on' at Setpoint - differential, and 'off' at Setpoint - Dean Mynott
-	- ADDED    BLimitOutput â€“ takes StatusNumeric input and applies high and  low limits. Ignores limits if they are null - Dean Mynott
+	- MODIFIED BTstatA extension – reverse acting version. Goes 'on' at Setpoint - differential, and 'off' at Setpoint - Dean Mynott
+	- ADDED    BLimitOutput – takes StatusNumeric input and applies high and  low limits. Ignores limits if they are null - Dean Mynott
 <hr>
 <b>V12.06.02 June 29, 2012</b>
 	- MODIFIED 'BFireOnChange' by adding try|catch block to changed method and added error level logging when exception is caught.
@@ -584,6 +615,19 @@
 	-initial release
 			</code>
 		</pre>	
-	</body>
-
+				
+							
+							
+							
+							
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	
+	
+		
+</body>
 </html>

@@ -1,50 +1,84 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<html>
 <head>
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-<title>AxCommunity Change Log</title>
-
-
-
-
-
-
+<title>AxCommunity</title>
+<link rel='StyleSheet' href='stylesheet.css' type='text/css' />
+<style type="text/css"> ul{} li{margin:0; padding:0.0em; display:compact;}</style>
 </head>
 
-<body>
-<br>
-<p>This module is an open source effort for AX developers.<br>
-For more information, go to <a href="http://sourceforge.net/projects/niagaraaxcommun/">Sourceforge axCommunity Website</a> </p>
+<body class="AxCommStyle" style="width: 800px">
+	<table style="border:0;">
+		<tr>
+			<td style="height: 212px; border:0;">
+				<table style="border:0">
+					<tr>
+						<td style="width: 600px; border:0;">
 
+						<table>
+							<tr style="border:0">
+								<td rowspan="2" style="border:0">
+									<img src="images/logos/AxCommLogo_120x120.png" alt="AxCommunity" height="120">
 
-<h1>AxCommunity Change Log</h1>
-<pre>
-<code>
-<hr>
-<b>V17.09.22.01 September 22, 2017</b><i></b><i> - Justin Koffler</i></i>
+								</td>
+								<td rowspan="2" style="width: 25px; border:0;"></td>
+								<td class="titleModuleName" style="border:0">AxCommunity</td>
+							</tr>
+
+						</table>
+
+						</td>
+					</tr>
+					<tr><td style="width: 600px; height: 40px; border:0;"></td></tr>
+					<tr>
+						<td style="width: 600px; height: 40px; border:0;">
+							<p>
+								This module is an open source effort for AX/N4 developers.<br>
+								For more information, go to <a href="http://sourceforge.net/projects/niagaraaxcommun/">Sourceforge axCommunity Website</a>
+							</p>
+							<h1>AxCommunity Change Log</h1>
+						</td>
+					</tr>
+					<tr>
+						<td style="width: 600px; border:0;">
+
+		<pre>
+			<code>
+<b>V17.09.26.01 September 26, 2017</b><i> - Justin Koffler</i>
+	- MODIFIED 'BDynamicLinks'
+		* Fixed method levelToInt which was throwing error at compile time.
+	- MODIFIED Documentation stuff.
+<hr>			
+<b>V17.09.22.01 September 22, 2017</b><i> - Justin Koffler</i>
 	- MODIFIED 'BDynamicLinks'
 		* Added new slot 'pathToEnableLinks'
 			* Can be used to dynamically link a component to the enableLinks slot created in previous revision.
 		* Changed logging method to make code comparison between AX and N4 easier.
+	- MODIFIED several other files to fix warnings exclipse was producing.
 <hr>
-<b>V17.09.20.01 September 20, 2017</b><i></b><i> - Justin Koffler</i></i>
+<b>V17.09.20.01 September 20, 2017</b><i> - Justin Koffler</i>
 	- MODIFIED 'BDynamicLinks'
 		* Added new slot 'enableLinks'
 			* When false all links are removed and slot statuses are set to status from slot 'statusForInvalidOrds'.
 		* Fixed an issue with the delimited values where if the first slots were string slots and has empty/null values it would delimit them correctly.
 <hr>
-<b>V17.08.22.01 August 22, 2017</b><i></b><i> - Eric Bishop</i></i>
+<b>V17.09.14.01 September 14, 2017</b><i> - Justin Koffler</i>
+	- ADDED 'module-permissions.xml' files to eliminate security errors in 4.3.
+	- ADDED ux runtime profile.
+	- MODIFIED .gradle files to correct some formatting issues.
+<hr>
+<b>V17.08.22.01 August 22, 2017</b><i> - Eric Bishop</i>
 	- MODIFIED 'BSysInfo'
 		* Added minimum time facet to the 'executePeriod' slot
-		* Setting the 'executePeriod' time to zero will now shut off the schedule. 
+		* Setting the 'executePeriod' time to zero will now shut off the schedule.
+	- MODIFIED 'BDynamicLinks'
+		* Replicated the changes that were left out between the AX and N4 versions
+		* Move to current logger syntax to support 4.3
 <hr>
-<b>V17.08.21.02 August 21, 2017</b><i></b><i> - Eric Bishop</i></i>
+<b>V17.08.21.02 August 21, 2017</b><i> - Eric Bishop</i>
 	- MODIFIED 'BSysInfo'
 		* Resolved the bug Gary Roussak noticed on 2017-03-29
 			* Added 'changed' override to update the reoccurring schedule.  This will allow updates to the 'executePeriod' slot to take affect.
 <hr>
-<b>V17.08.21.01 August 21, 2017</b><i></b><i> - Eric Bishop</i></i>
+<b>V17.08.21.01 August 21, 2017</b><i> - Eric Bishop</i>
 	- MODIFED 'BDynamicLinks'
 		* Added destination component variable so the source can be used in a program object easier.
 		* Finally fixed the indentation.
@@ -55,96 +89,138 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 		* Bug fix: Resolved an issue with updating the dynamic (non-frozen) string input slots.
 		* Added 'outAnyMatch' slot.
 <hr>
-<b>V17.05.16.01 May 16, 2017</b><i></b><i> - Mike Arnott</i></i>
-	- MODIFED 'BWhoWhenBooleanSetpoint'
-		* Bug fix: logic driven changes were being ignored because the cxin was null and it was being used in a logger.trace method
-	- MODIFED 'BWhoWhenStringSetpoint'
-		* Bug fix: logic driven changes were being ignored because the cxin was null and it was being used in a logger.trace method
+<b>V17.06.29.02 June 29, 2017</b><i> - Mike Arnott</i>
+	- MODIFED 'BOneSHotBooleanSelect'
+		*previous commit had code from the wrong object
+	- MODIFED 'BTrendAnalyzer','BDynamicTrendAnalyzer'
+		*removed non utf8 characters from description
 <hr>
-<b>V17.05.15.01 May 15, 2017</b><i></b><i> - Justin Koffler</i></i>
+<b>V17.06.29.01 June 29, 2017</b><i> - Mike Arnott</i>
+	- MODIFED
+		'BBqlNumericRecap'
+		'BAbsTimeToDateparts'
+		'BAsciiHexDecConversion'
+		'BChangeCase'
+		'BEnumFromCommaSepVar'
+		'BEnumFromMultiString'
+		'BStatusEnumToStatusString'
+		'BDynamicLinkBoolean'
+		'BDynamicLinkNumeric'
+		'BDynamicLinkString'
+		'BFireOnChange'
+		'BLatestNumber'
+		'BLastestStringNotMatching'
+		'BOneSHotBooleanSelect'
+		'BOneShotMultiSelect'
+		'BSuperOr'
+		'BWhoWhenBooleanSetpoint'
+		'BProductionCounter'
+		'BShiftTargets'
+		'BConcatLogData'
+		'BStringBufferAndSelect'
+		'BSuperConcatPlus'
+		'BStringToFile'
+		'BEventAtTime'
+		'BStopwatch_v2'
+		'BFireFoxxWeather'
+			* By James Johnson: Move to current logger syntax to support 4.3
+	- MODIFED 'BTrendAnalyzer','BDynamicTrendAnalyzer'
+		*replace the '|bql:historyFunc:HistoryRollup' syntax with '|bql:history:HistoryRollup'
+<hr>
+<b>V17.05.15.01 May 15, 2017</b><i> - Justin Koffler</i>
 	- MODIFED 'BDynamicLinks'
 		* Added boolean slot 'enableDelimittedValues' with default value of false.
 			* Not enabling this field will reduce the its processing overhead and reduce the memory used to store the string values.
 			* The overhead and memory is minimal, but in the event you have a large number of slots, the usage could have a negative impacting depending upon your setting.
+	- MODIFED 'BSysInfo' (N4 version only)
+		* Added new string slots 'niagaraHome', 'niagaraUserHome', 'protectedStationHome' and 'stationHome'
+			* This will output the file system path for the given niagara variable.
+			* A try/catch method is used for setting these and in the catch method the slots are set to an empty string.
+			* On non-softJaces some of these variables don't exist, hence the use of the try/catch.
+			* If this poses a problem for anything please let me know and will remedy asap.
 <hr>
-<b>V17.05.04.02 May 04, 2017</b><i></b><i> - Justin Koffler</i></i>
+<b>V17.05.04.02 May 04, 2017</b><i> - Justin Koffler</i>
 	- MODIFED 'BDynamicLinks'
 		* Added string output slots outDelimitedSlotNames, outDelimitedSlotValues and outDelimitedSlotNameValuePairs.
 		* Added topic output slots CsvSlotNames, CsvSlotValues and CsvSlotNameValuePairs.
 		* string input slots inPairsDelimiter and inDelimiter which allow you configure the character used as delimiters.
+	- MODIFIED BProductionCounter
+		* Fixed wrong import for N4 version.
 <hr>
-<b>V17.05.04.01 May 04, 2017</b><i></b><i> - Eric Bishop</i></i>
+<b>V17.05.04.01 May 04, 2017</b><i> - Eric Bishop</i>
 	- MODIFED 'BDynamicLinks'
 		* Resolved bug that prevented more than 96 slots
 		* Resolved issue with midnight timer
 <hr>
-<b>V17.02.28.01 February 28, 2017</b><i></b><i> - Eric Bishop</i></i>
+<b>V17.02.28.01 February 28, 2017</b><i> - Eric Bishop</i>
 	- MODIFED 'BProductionCounter'
 		* Resolved the issue causing some values to go negative.
 <hr>
-<b>V17.02.17.00 February 17, 2017</b><i></b><i> - Justin Koffler</i></i>
+<b>V17.02.17.00 February 17, 2017</b><i> - Justin Koffler</i>
 	- Modified 'BDynamicLinks'
 		* Added new boolean topic slot 'LinksRefreshed' which is fired every time the links are refreshed regardless if any changes occurred.
 <hr>
-<b>V17.02.10.00 February 10, 2017</b><i></b><i> - Justin Koffler</i></i>
+<b>V17.02.10.00 February 10, 2017</b><i> - Justin Koffler</i>
 	- MODIFED 'BSysInfo'
 		* Added new action slot 'SaveStation'. When trigger it will initial a station save.
 		* Added new slots 'facetsNumerics' and 'facetsStrings' to allow formatting of the slots.
 	- Modified 'BDynamicLinks'
 		* Added try/catch blocks to a couple of methods that were throwing errors on startup.
 <hr>
-<b>V17.02.01.00 February 01, 2017</b><i></b><i> - Justin Koffler</i></i>
+<b>V17.02.01.00 February 01, 2017</b><i> - Justin Koffler</i>
 	- MODIFED 'BDynamicLinks'
 		* Added new boolean slot 'useAreaZoneStation'. When true the %seguinStationPath% format will utilize the structure ...points|area|zone|workcenter and when false will use ...points|zone|workcenter.
 	- MODIFED 'BReplaceString'
-		* Fixed method 'trimReplacements' which was throwing an error when called with an empty string.	
+		* Fixed method 'trimReplacements' which was throwing an error when called with an empty string.
+		* Fixed error in logic preventing the regular expression replacement from working correctly.
+		* Added new numeric output slots: outLengthInput, outLengthOutput, outLengthDifference.
 <hr>
-<b>V17.01.03.00 January 03, 2017</b><i></b><i> - Mike Arnott</i></i>
-	- MODIFED 'BGetHTTP'
-		* Added Username and Password slots
+<b>V17.01.10.00 Jan 10, 2017</b><i> - MLA</i>
+	- MODIFED 'BSuperConcat'
+		* Use thread for calculate, convert to StringBuilder.
 <hr>
-<b>V16.11.02.00 November 02, 2016</b><i></b><i> - Eric Bishop</i></i>
+<b>V16.11.02.00 November 02, 2016</b><i> - Eric Bishop</i>
 	- MODIFED 'BDynamicLinks'
 		* Minor changes made to trace logging.
 		* Added some dynamic knob slots to be used for testing (there is no code behind them yet, and they are currently hidden).
 		* Fixed an issue with writing a slot's default value when the source ord is invalid.
 <hr>
-<b>V16.09.30.01 September 30, 2016</b><i></b><i> - Eric Bishop</i></i>
+<b>V16.09.30.01 September 30, 2016</b><i> - Eric Bishop</i>
 	- MODIFED 'BDynamicLinks'
 		* Fixed an issue with the reorder option
 <hr>
-<b>V16.09.22.01 September 22, 2016</b><i></b><i> - Eric Bishop</i></i>
+<b>V16.09.22.01 September 22, 2016</b><i> - Eric Bishop</i>
 	- MODIFED 'BDynamicLinks'
 		* New functionality that sets any slots with invalid links to the default value for that slot type.
 		* Added find & replace option
- 		* Added option to sort slots based on the order of the CSV string
+		* Added option to sort slots based on the order of the CSV string
 <hr>
-<b>V16.08.24.01 August 24, 2016</b><i></b><i> - Eric Bishop</i></i>
+<b>V16.08.24.01 August 24, 2016</b><i> - Eric Bishop</i>
 	- MODIFED 'BDynamicLinks'
 		* Fixed error that occured when format strings in the CSV input contained commas
 		* Fixed error that occurred when the CSV input string didn't contain at least 3 "columns" worth of data
- 		* Fixed error that occurred when both the source ord and source slot name are changed at the same time for the same link that already exists and the old source slot type is the same as the new slot type.
- 		* Fixed a bug that prevented recreation of a slot when the source slot name was changed and the new source slot type was an action or event slot.
+		* Fixed error that occurred when both the source ord and source slot name are changed at the same time for the same link that already exists and the old source slot type is the same as the new slot type.
+		* Fixed a bug that prevented recreation of a slot when the source slot name was changed and the new source slot type was an action or event slot.
 <hr>
-<b>V16.08.12.01 August 12, 2016</b><i></b><i> - Justin Koffler</i></i>
+<b>V16.08.12.01 August 12, 2016</b><i> - Justin Koffler</i>
 	- MODIFED 'BBoundLabelHighlight', 'BSimpleTstat' and 'BTrendAnalyzer'
 		* added icon.
 <hr>
-<b>V16.08.09.01 August 09, 2016</b><i></b><i> - Eric Bishop</i></i>
+<b>V16.08.09.01 August 09, 2016</b><i> - Eric Bishop</i>
 	- MODIFED 'BStatusStringToString'
 		* added 'atSteadyState' override.
 <hr>
-<b>V16.08.05.01 August 05, 2016</b><i></b><i> - Eric Bishop</i></i>
+<b>V16.08.05.01 August 05, 2016</b><i> - Eric Bishop</i>
 	- MODIFED 'BDynamicLinks'
 		* Several of bug fixes
 		* Added status option for slots with invalid ords specified
 <hr>
-<b>V16.08.01.01 August 01, 2016</b><i></b><i> - Eric Bishop</i></i>
+<b>V16.08.01.01 August 01, 2016</b><i> - Eric Bishop</i>
 	- ADDED 'BDynamicLinks'
 	- ADDED 'BShiftTargets' to the new AX & N4 strucures.
 	- MODIFED 'BProductionCounter' in both the AX and N4 directories to match the current source.
 <hr>
-<b>V16.07.21.01 July 21, 2016</b><i></b><i> - Justin Koffler</i></i>
+<b>V16.07.21.01 July 21, 2016</b><i> - Justin Koffler</i>
 	- MODIFIED 'BSpecialHtmlCharStringToString'
 		* change encoding to UTF-8
 		* modified how the replacement was being done to avoid conflicts with encoding types.
@@ -155,17 +231,17 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 	- MODIFIED the change log file location so it will show up in the bajadocs when compiled thus can be view through workbench.
 	- (N4 Only) MODIFIED gradle build scripts to allow creation of the bajadocs when building the project.
 <hr>
-<b>V16.07.11.01 July 11, 2016</b><i></b><i> - Justin Koffler</i></i>
+<b>V16.07.11.01 July 11, 2016</b><i> - Justin Koffler</i>
 	- MODIFIED 'BEnumFromCommaSepVar'
 		* modified logic to prevent errors as a result of duplicate ordinal or tag values. The duplicate entries will get skipped and the enum range will still get applied to the facets.
 		* added new StatusString slot 'outString' and StatusNumeric 'outNumeric' which outputs the string value and numeric values of the selected enum.
 <hr>
-<b>V16.06.28.02 June 28, 2016</b><i> - Justin Koffler</i>			
-	- MODIFIED 'BParentFolderInfo', 
-		* Added logic to prevent slot 'inFormat' becoming blank or null which would produce errors. 
+<b>V16.06.28.02 June 28, 2016</b><i> - Justin Koffler</i>
+	- MODIFIED 'BParentFolderInfo',
+		* Added logic to prevent slot 'inFormat' becoming blank or null which would produce errors.
 		* If 'inFormat' is blank or null it will be defaulted to '%parent.displayName%' which mimics its past behavior.
 <hr>
-<b>V16.06.28.01 June 28, 2016</b><i> - Justin Koffler</i>	
+<b>V16.06.28.01 June 28, 2016</b><i> - Justin Koffler</i>
 	- MODIFIED 'BAbsTimeToDateParts'
 		* rriemer mentioned he was getting the error "Unknown pattern character - 'X'" which I can only trace to possibly being how the GMT time string was being formated.
 		* Added new slot 'inSimpleDateFormat' which is used to customize the string output of the date time in slots 'stringDateOut' and 'outGMTTime'. I'm hoping this will fix the above isuue.
@@ -173,28 +249,28 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 				* For more details on the formating update your help database and look at the following doc under properties 'String BAbsTimeToDateParts.inSimpleDateFormat': local:|module://axCommunity/doc/org/axcommunity/niagara/conversion/BAbsTimeToDateParts.bajadoc
 		* If you still experience errors please let me know and I will continue to investigate.
 	- MODIFIED BRelTimeToStatusNumeric
-		* Changed how the seconds/minutes/hours were being calculate to be more precise. 
+		* Changed how the seconds/minutes/hours were being calculate to be more precise.
 		* Added slots 'facetsRelTime' and 'facetsNumeric' to allow adjusting how values are displayed.
 	- MODIFIED BParentFolderInfo
 		* Added new BFormat slot 'inFormat' that can be edited to modify value displayed in the 'parentName' slot.
 		* Added new BRelTime slot 'startupDelay' which is used to control how long after startup that the values are calculated.
 		* Added new Boolean Topic slot 'changed' which is fired only when the value of slot 'parentName' changes.
-		* Added new String Topic slot 'ParentName' which is fired after every refresh or startup.		
+		* Added new String Topic slot 'ParentName' which is fired after every refresh or startup.
 <hr>
 <b>V16.05.26.01 May 26, 2016</b><i> - Mike Arnott</i>
 	- MODIFIED BDynamicLinkNumeric, BDynamicLinkBoolean, BDynamicLinkString	change the link created to use handles rather than slots
 <hr>
-<b>V16.03.17.01 March 09, 2016</b><i> - Justin Koffler</i>	
+<b>V16.03.17.01 March 09, 2016</b><i> - Justin Koffler</i>
 	- MODIFIED BDynamicLinkBoolean, BDynamicLinkString and BDynamicLinkNumeric, added new action slot 'RemoveThenUpdateLink' that will force the link to update by first removing the link then relinking it. Be aware this will result in a change of value on the 'out' slot.
 <hr>
-<b>V16.03.09.01 March 09, 2016</b><i> - Justin Koffler</i>	
-	- MODIFIED BSuperOr, added started() and atSteadyState() methods to better handle calculating results at station startup or object creation.	
+<b>V16.03.09.01 March 09, 2016</b><i> - Justin Koffler</i>
+	- MODIFIED BSuperOr, added started() and atSteadyState() methods to better handle calculating results at station startup or object creation.
 <hr>
 <b>V16.02.18.01 February 18, 2016</b><i> - Justin Koffler</i>
-	- MODIFIED BSuperOr 
-		* added new Topic slots 'True' and 'False' and new BRelTime slot 'time'. 
+	- MODIFIED BSuperOr
+		* added new Topic slots 'True' and 'False' and new BRelTime slot 'time'.
 		* The 'True' slot if fired with true value when 'Out' is true and 'False' is fired with true value when 'OutRev' is true.
-		* The 'time' slot allows you to control the calculated delay time. This used to be hard coded to 1 second. 
+		* The 'time' slot allows you to control the calculated delay time. This used to be hard coded to 1 second.
 		* I left the default value at 1 second as not to change the default behavior.
 <hr>
 <b>V16.01.06.01 January 06, 2016</b><i> - Justin Koffler</i>
@@ -206,8 +282,8 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 <b>V15.11.19.02 Nov 19, 2015</b><i> - Eric Bishop</i>
 	- ADDED BSpecialHtmlCharStringToString - Converts a string containing HTML character codes (ex: &amp; &lt; &gt;) to the correct characters.
 	- ADDED BOrdToPxView - Sets a PXView slot using an ord input.  Allows the user to programmatically specify a custom view for each folder or object.
-	- ADDED BProductionCounter - This object tracks part counts and based on shift and break schedules, provides parts per shift as well as calculate parts per hour and cycle time.  Also outputs total breaks and total time on break. For more information, see this object's documentation.  
-	- ADDED BConcatLogData - Concatenate 0 to 60 strings together, use prefixes and suffixes for each string, specify a delimiter, line up the results using spaces, enable & disable individual inputs, and specify a global prefix and suffix.   
+	- ADDED BProductionCounter - This object tracks part counts and based on shift and break schedules, provides parts per shift as well as calculate parts per hour and cycle time.  Also outputs total breaks and total time on break. For more information, see this object's documentation.
+	- ADDED BConcatLogData - Concatenate 0 to 60 strings together, use prefixes and suffixes for each string, specify a delimiter, line up the results using spaces, enable & disable individual inputs, and specify a global prefix and suffix.
 	- ADDED BReplaceNullOrBlankString - Replaces the input string with another string if the input is null of blank
 	- ADDED BRetainLastValidString - Retains the last valid, non-blank string.
 	- ADDED BStringBufferAndSelect - Buffers a multi-dimensional array of strings and select outputs. Inputs and outputs function independently from each other, so an input can be written while a different output is selected.
@@ -246,13 +322,13 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 	- FIXED BFireFoxxWeather now works in a versions < 3.5
 <hr>
 <b>V13.04.02 April 3, 2013</b>
-	- FIXED BFireFoxxWeather always reverted to the N. Canada location selected in the dropdown listbox.  Added a new choice for "Other" - you have to use that to manually put in other locations.	
+	- FIXED BFireFoxxWeather always reverted to the N. Canada location selected in the dropdown listbox.  Added a new choice for "Other" - you have to use that to manually put in other locations.
 <hr>
 <b>V13.04.01 April 3, 2013</b><i> - Ron Lea (FireFoxx)</i>
 	- MODIFIED BSysInfo to better handle errors thrown by getLocalHost() based commands
-	- ADDED BFireFoxxWeather - 
-		* a new weather object that uses the Yahoo weather API.  
-		* The weather module is accessing Yahoo weather, there is a drop down list for western Canada.  
+	- ADDED BFireFoxxWeather -
+		* a new weather object that uses the Yahoo weather API.
+		* The weather module is accessing Yahoo weather, there is a drop down list for western Canada.
 		* For those people in the rest of the world, they will have to lookup the city code and enter it manually.
 <hr>
 <b>V13.02.01 Feb 7, 2013</b><i> - Eric Bishop</i>
@@ -261,7 +337,7 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 		* Removed the default colors, so it doesn’t constantly revert to a green background.
 		* added scroll speed setting.
 		* added an optional pause at the beginning of the string.
-		* added end-of-string input (to change from the default “…”).
+		* added end-of-string input (to change from the default ????).
 <hr>
 <b>V13.03.01 March 20, 2013</b><i> - Mike Arnott</i>
 	- ADDED BScale - Numeric point extension which scales the output
@@ -273,8 +349,8 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 	- ADDED BWhoWhenFontSetpoint - Font setpoint that monitors when the last change was made and who made it
 <hr>
 <b>V13.01.02 January 28, 2013</b><i> - Justin Koffler</i>
-	- MODIFIED 'BWhoWhenBooleanSetpoint' to include new slots: 'SetTrue' (action), 'SetFalse' (action), 
-		'outLogString' (status string), 'Value' (topic), 'LogString' (topic) and   'absTimeFacets' (facet) 
+	- MODIFIED 'BWhoWhenBooleanSetpoint' to include new slots: 'SetTrue' (action), 'SetFalse' (action),
+		'outLogString' (status string), 'Value' (topic), 'LogString' (topic) and   'absTimeFacets' (facet)
 		and fixed logic so that facets are applied.
 	- MODIFIED 'BWhoWhenStringSetpoint' to include new slots: 'outLogString' (status string), 'Value' (topic), 'LogString' (topic) and 'absTimeFacets' (facet)
 <hr>
@@ -287,11 +363,11 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 			   Higher values offer very smoot out put at the expense of response time... but still great. - Dean Mynott
 <hr>
 <b>V12.09.01 September 23, 2012</b>
-	- MODIFIED 'BBqlNumericRecap' 
+	- MODIFIED 'BBqlNumericRecap'
 		* added new slots queryAndCalculate, calculating, lastQuery, error, calculated, errorOccured.
 <hr>
 <b>V12.07.02 July 14, 2012</b><i> - Justin Koffler</i>
-	- ADDED 'BStopwatch_v2' as a replacement for BStopwatch. 
+	- ADDED 'BStopwatch_v2' as a replacement for BStopwatch.
 		* The first version didn't seem to work very well but in case anyone is actively using it I didn't want to make drastic modifications and screw up any of their logic so I made a new one.
 	- MODIFIED Palette, Alphabetized most of the palette, sorry this was driving me nuts but hope this doesn't confuse anyone.
 <hr>
@@ -303,13 +379,13 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 	- MODIFIED 'BFireOnChange' by adding try|catch block to changed method and added error level logging when exception is caught.
 <hr>
 <b>V12.06.01 June 3, 2012</b><i> - Justin Koffler</i>
-	- MODIFIED 'BAsciiHexDecConversion' to fix an error that would occur if the decimal or Hex input included commas. 
+	- MODIFIED 'BAsciiHexDecConversion' to fix an error that would occur if the decimal or Hex input included commas.
 	- MODIFIED 'BAsciiHexDecConversion' to fix an issue that when the ASCII, decimal and hex inputs were blank the outputs would not change. The outputs will not reflect the inputs when the inputs are blank.
 	- MODIFIED 'BAsciiHexDecConversion'
-		* added two slots 'inBytesLong' and 'inUseBytesLong' which can be used to set pad or truncate the decimal and hex output to a specified byte length. 
+		* added two slots 'inBytesLong' and 'inUseBytesLong' which can be used to set pad or truncate the decimal and hex output to a specified byte length.
 		* also when used the outputs of the decimal and hex slots will contain zeros to null the byte.
 	- MODIFIED 'BSuperConcatPlus' to eliminate error thrown if all input slots are blank and the 'concatenate' action is triggered.
-	- ADDED BUnAckAlarmState extension - provides Alarm Ack on parent point of Unacked Alarm - Dean Mynott 
+	- ADDED BUnAckAlarmState extension - provides Alarm Ack on parent point of Unacked Alarm - Dean Mynott
 <hr>
 <b>V12.05.02 May 14, 2012</b><i> - Justin Koffler</i>
 	- MODIFIED 'BAvgMinMax_v1' to include new slot 'sum' that is the sum of all the 'in' slots within the min/max range.
@@ -319,7 +395,7 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 <hr>
 <b>V12.05.01 May 10, 2012</b><i> - Justin Koffler</i>
 	- MODIFIED 'BLatestStringNotMatching' to include new slot 'inUseExclusionList' with a default value of true.
-	- MODIFIED 'BBooleanRotateOnExecute' by removing the TRANSIENT flag on the 'out' slot so it would retain its value 
+	- MODIFIED 'BBooleanRotateOnExecute' by removing the TRANSIENT flag on the 'out' slot so it would retain its value
 		upon station restart.
 <hr>
 <b>V12.04.04 April 29, 2012</b><i> - Justin Koffler</i>
@@ -333,12 +409,12 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 	- NODIFIED 'BStringToFile', added status boolean slots "outSuccess" and "outFail"
 <hr>
 <b>V12.04.02 April 15, 2012</b>
-	-Minor tweaks to eliminate some unused code in the following objects: BLatestNumber, BLatestStringNotMatching, BOneShotBooleanSelect, 
+	-Minor tweaks to eliminate some unused code in the following objects: BLatestNumber, BLatestStringNotMatching, BOneShotBooleanSelect,
 		BOneShotMultiSelect, BReplaceString, BSuperConcatPlus.
 <hr>
 <b>V12.04.01 April 4, 2012</b><i> - Mike Arnott</i>
 	-moved the BSysInfoView to new package, org.axcommunity.niagara.views
-	- ADDED BSetBooleanActionView; a workbench view of the BSetBooleanAction button that works like a momentary push-button.  
+	- ADDED BSetBooleanActionView; a workbench view of the BSetBooleanAction button that works like a momentary push-button.
 		Finally, a momentary PB in Niagara!
 <hr>
 <b>V12.03.06 March 30, 2012</b><i> - Mike Arnott</i>
@@ -352,14 +428,14 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 <b>V12.03.04 March 16, 2012</b><i> - Mike Arnott</i>
 	-modified BEventAtTime; Added timeOffset BRelTime to allow time-zone or other offsets to the event time.
 	- ADDED BEnumFromMultiString; An Enum extension that lets you input a variable number of statusstrings that become the
-		enum facets.    
+		enum facets.
 <hr>
 <b>V12.03.03 March 15, 2012</b><i> - Mike Arnott</i>
-	- ADDED BEventAtTime; Object accepts time of day as hours, minutes, seconds or a time string.  Fires an event (topic) at that time. 
+	- ADDED BEventAtTime; Object accepts time of day as hours, minutes, seconds or a time string.  Fires an event (topic) at that time.
 <hr>
 <b>V12.03.02 March 6, 2012</b><i> - Justin Koffler</i>
-	- ADDED BOneShotMultiSelect; 
-		* When 'trigger' input or 'fire' action slot are true the value set in the 'inXTrue' slot will be represented in the 'out' slot for the amount of time configured in the 'time' slot. 
+	- ADDED BOneShotMultiSelect;
+		* When 'trigger' input or 'fire' action slot are true the value set in the 'inXTrue' slot will be represented in the 'out' slot for the amount of time configured in the 'time' slot.
 		* When the timer expires the value in the 'inXFalse' slot will be represented in the 'out' slot.
 <hr>
 <b>V12.03.01 March 2, 2012</b><i> - Mike Arnott</i>
@@ -368,8 +444,8 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 	- ADDED DynamicLinkString; A Simple String in/out with an ordIn string - if the ordIn changes the object will try to create or change the in link source to the out slot of the object in ordIn
 <hr>
 <b>V12.02.06 Feb 28, 2012</b><i> - Justin Koffler</i>
-	- ADDED BOneShotBooleanSelect; 
-		* When 'trigger' input or 'fire' action slot are true the value set in the 'inTrue' slot will be represented in the 'out' slot for the amount of time configured in the 'time' slot. 
+	- ADDED BOneShotBooleanSelect;
+		* When 'trigger' input or 'fire' action slot are true the value set in the 'inTrue' slot will be represented in the 'out' slot for the amount of time configured in the 'time' slot.
 		* When the timer expires the value in the 'inFalse' slot will be represented in the 'out' slot.
 <hr>
 <b>V12.02.05 Feb 18, 2012</b><i> - Justin Koffler</i>
@@ -385,7 +461,7 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 	- ADDED BLatestNumber; Accepts up to 24 Status Numeric inputs and will output the latest value if it meets the minimum required value as configured in the "inMinValue" slot.
 <hr>
 <b>V12.02.02 Feb 05, 2012</b><i> - Justin Koffler</i>
-	- MODIFIED BSysInfo to include the "OsName" slot and I also added the action slots "RestartStation" and "RebootStation" 
+	- MODIFIED BSysInfo to include the "OsName" slot and I also added the action slots "RestartStation" and "RebootStation"
 		which as the name suggests will restart or reboot the station.
 <hr>
 <b>V12.02.01 Feb 05, 2012</b><i> - Justin Koffler</i>
@@ -416,7 +492,7 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 	- ADDED BBooleanToggle by Dean Mynott @ Ronin: Toggles ON/OFF via Trigger or Action input
 <hr>
 <b>V11.09.01 Sept 1, 2011</b>
-	- MODIFIED comments on Kors Engineering submitted objects 
+	- MODIFIED comments on Kors Engineering submitted objects
 <hr>
 <b>V11.08.01 Aug 15, 2011</b>
 	- ADDED BSuperOr by Christopher Howard @ xen-com: This is an OrGate on steroids!  This OrGate can be generated to accommodate any number of points.
@@ -457,10 +533,10 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 <hr>
 <b>V09.11.01 November 6, 2009:</b>
 	Not released as a jar yet, source only
-	- ADDED BEnumWithStringOutput: it's an extension of the enumwritable that also accepts a numeric in and has a string output equivalent of the enum value.  
+	- ADDED BEnumWithStringOutput: it's an extension of the enumwritable that also accepts a numeric in and has a string output equivalent of the enum value.
 <hr>
 <b>V09.10.01 September 17, 2009: </b><i>Tyler Long, McKenney's Inc.</i>
-	- ADDED BAvgMinMax_v1: This is a build upon Crabill's AvgMinMax type on version v09.01.03.  Added two inputs to exclude 
+	- ADDED BAvgMinMax_v1: This is a build upon Crabill's AvgMinMax type on version v09.01.03.  Added two inputs to exclude
 		values above and below set points inMaximum and inMinimum. Enabled actions so that the inputs (ie. InMinimum, InMaximum, & inCount)
 		may be configured outside of the property sheet.
 	- ADDED BParentFolderInfo: simple object that gets the parent folder name and outputs it as a String.
@@ -468,15 +544,15 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 <hr>
 <b>V09.09.01 Sept 09, 2009</b><i> - Christopher Howard, Xen-Com</i>
 	- MODIFIED 'BFireOnChange', was not passing the value in the "New Numeric Input" event
-	- ADDED 'BHistoryToCSV', exports a history to a CSV file. 
+	- ADDED 'BHistoryToCSV', exports a history to a CSV file.
 <hr>
 <b>V09.08.01 August 14, 2009</b>
 	- ADDED BGetHTTP, simple object to retrieve a web page as a StatusString
-	- MODIFIED BSysInfo, added Heap Total, Heap Used and Heap Free fields						  
+	- MODIFIED BSysInfo, added Heap Total, Heap Used and Heap Free fields
 	- figured out how to add BajaDoc!
 <hr>
 <b>V09.07.01 July 6, 2009</b>
-	- ADDED BAbsTimesToAbsTimeRange, takes two abs time inputs, creates an abs time range output  	
+	- ADDED BAbsTimesToAbsTimeRange, takes two abs time inputs, creates an abs time range output
 	- ADDED BAbsTimeOffset, takes one abs time and one number as seconds, adds seconds (positive or negative) to time input to create time output.
 <hr>
 <b>V09.04.03 June 22, 2009</b><i> - Vance Hensley, Hoffman Building Technologies</i>
@@ -486,14 +562,14 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 <hr>
 <b>V09.04.02 May 3, 2009</b><i> - Vance Hensley, Hoffman Building Technologies</i>
 	- ADDED 'StatusBooleanToStatusEnum'
-		* takes StatusBoolean input and converts true/false to correct integers for StatusEnum output via two actions to set True Value & False Value. 
+		* takes StatusBoolean input and converts true/false to correct integers for StatusEnum output via two actions to set True Value & False Value.
 		* Handy for LON enums; occupancy is true via "0" (mostly) but SatSwitchs are often true via "1" or however the controller is programmed.
 	- ADDED 'BooleanRotateOnExecute', very simple boolean rotation object, use a trigger to execute.
 <hr>
 <b>V09.04.01 Apr 17, 2009</b><i> - Mike Arnott & Vance Hensley, Hoffman Building Technologies</i>
 	<i>from Vance Hensley</i>
-	- ADDED BBooleanCompareCmdStatus, (Note: This has a bug - after station restarts, all go out go true. Anyone want to take a look?) 
-		* compares the status to the command over the defined time period. 
+	- ADDED BBooleanCompareCmdStatus, (Note: This has a bug - after station restarts, all go out go true. Anyone want to take a look?)
+		* compares the status to the command over the defined time period.
 		* If status does not match by the end of the elapsed time from, sets output to true (for alarm).
 	<i>from Mike Arnott</i>
 	- ADDED BFireOnChange, Accepts a StatusString, StatusNumeric or StatusBoolean input, fires the appropriate event when String changes or Number changes or Boolean changes from False to True.
@@ -502,12 +578,12 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 	- ADDED BStatusNumericFifo, takes a status numeric input and puts it into a FIFO that shifts with a trigger input.  calculates min/max/avg of buffered values.
 <hr>
 <b>V09.02.03 Feb 22, 2009</b><i> - Tucker Watson, Activelogix</i>
-	- ADDED BPasswordReveal - Returns stored passwords for all users in UserService or stations in NiagaraNetwork 
+	- ADDED BPasswordReveal - Returns stored passwords for all users in UserService or stations in NiagaraNetwork
 	- ADDED BTrendAnalyzer - Displays min,max,avg,count for selected trend/history
 <hr>
 <b>V09.02.02 Feb 16, 2009</b><i> - B. Collins,Electro Controls, Inc.</i>
-	- ADDED BBqlNumericRecap, Executes a BQL query based on the Execute Period for one or more NumericPoint values.  
-						 Object calculates the Count, Average, Minimum, Maximum and Sum of the values returned by the BQL query 
+	- ADDED BBqlNumericRecap, Executes a BQL query based on the Execute Period for one or more NumericPoint values.
+						 Object calculates the Count, Average, Minimum, Maximum and Sum of the values returned by the BQL query
 	- ADDED BSysInfo, gets system information every X time period.  Linkable!
 <hr>
 <b>V09.01.04 Jan 21, 2009</b>
@@ -515,29 +591,42 @@ For more information, go to <a href="http://sourceforge.net/projects/niagaraaxco
 <hr>
 <b>V09.01.03 Jan 13, 2009</b><i> - Kevin Crabill, Cochrane Supply</i>
 	- ADDED AvgMinMax: Determines the minimum, maximum and average based on variable amount of inputs.
-	- ADDED NumericLatchCustom:	
-		* This is a modification to the existing latch object.  Currently you can only store one value for latching.  
+	- ADDED NumericLatchCustom:
+		* This is a modification to the existing latch object.  Currently you can only store one value for latching.
 		* This object can store the previous X values.  A good example is monthly metering that is triggered at the end of the month.
 	- ADDED NumericLatchObject:	Same as Tridium's Latch object except the out property doesn't have transient flag set so value is maintained through a reboot.
 	- ADDED PingHealthConverter: Takes a BPingHealth input from a driver device and splits it into three different outputs.
 	- ADDED BTimeSplitter: Executes every updateTime and displays the current time in seven different outputs out, hours, minutes, seconds, day, month and year.
 	- ADDED BToggleLatch: This object has two different actions on it.  The latch action sets the out property to true while the unlatch action sets it to false.
-	- ADDED BToggleSwitch: The outputs for Analog and Boolean switch to either the NormalOpen input or the NormalClose input.  This is determined by booleanCmd input.						
+	- ADDED BToggleSwitch: The outputs for Analog and Boolean switch to either the NormalOpen input or the NormalClose input.  This is determined by booleanCmd input.
 <hr>
 <b>V09.01.02 Jan 06, 2009</b>
 	- ADDED graphics package from John Siebert
-	- ADDED Modulo 
-	- ADDED RoundUp 
-	- ADDED TriggeredAdd 
-	- ADDED TriggeredSubtract 
-	- ADDED TriggeredMultiply 
-	- ADDED TriggeredDivide 
+	- ADDED Modulo
+	- ADDED RoundUp
+	- ADDED TriggeredAdd
+	- ADDED TriggeredSubtract
+	- ADDED TriggeredMultiply
+	- ADDED TriggeredDivide
 	- ADDED TriggerdCopy
 <hr>
 <b>V09.01.01 Jan 01, 2009</b>
 	-initial release
-</pre>	
-</code>
-<body>
+			</code>
+		</pre>
 
+
+
+
+
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+
+
+
+</body>
 </html>

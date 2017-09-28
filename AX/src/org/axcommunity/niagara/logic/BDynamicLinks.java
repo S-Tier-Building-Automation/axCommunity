@@ -437,19 +437,18 @@ public class BDynamicLinks extends BComponent
 	private int levelToInt(Level level)
 	{
 		int result = 4;
-		switch (level.getName()) 
-		{
-			case "OFF"		: result = 4; break;
-			case "SEVERE"	: result = 3; break;
-			case "WARNING"	: result = 2; break;
-			case "INFO"		: result = 1; break;
-			case "CONFIG"	: result = 1; break;
-			case "FINE"		: result = 0; break;
-			case "FINER"	: result = 0; break;
-			case "FINEST"	: result = 0; break;
-			case "ALL"		: result = 0; break;
-		}
+		String strLevel = level.getName().toString();
 		
+		if(strLevel.equalsIgnoreCase("OFF"))			{result = 4;}
+		else if(strLevel.equalsIgnoreCase("SEVERE"))	{result = 3;}
+		else if(strLevel.equalsIgnoreCase("WARNING"))	{result = 2;}
+		else if(strLevel.equalsIgnoreCase("INFO"))		{result = 1;}
+		else if(strLevel.equalsIgnoreCase("CONFIG"))	{result = 1;}
+		else if(strLevel.equalsIgnoreCase("FINE"))		{result = 0;}
+		else if(strLevel.equalsIgnoreCase("FINER"))		{result = 0;}
+		else if(strLevel.equalsIgnoreCase("FINEST"))	{result = 0;}
+		else if(strLevel.equalsIgnoreCase("ALL"))		{result = 0;}
+
 		return result;
 	}
 

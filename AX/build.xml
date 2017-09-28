@@ -6,7 +6,7 @@
 	preferredSymbol	= "axc"
 	description		= "AX Community Objects"
 	vendor			= "org.axcommunity"
-	vendorVersion	= "17.09.22.01"
+	vendorVersion	= "17.09.26.01"
 	edition			= "j2se-headless"
 	>
 
@@ -44,5 +44,8 @@
 
 	<resources name="doc/*.*" install="doc" />
 	<resources name="org/axcommunity/niagara/graphics/*.*"/>
+	<resources name="doc/images/*.*"/>
+	<resources name="doc/images/logos/*.*"/>
+	
 
 </module>
