@@ -1,5 +1,8 @@
 package org.axcommunity.niagara.string;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,8 +14,10 @@ import javax.baja.sys.BAbsTime;
 import javax.baja.sys.BBoolean;
 import javax.baja.sys.BComponent;
 import javax.baja.sys.BDouble;
+import javax.baja.sys.BDynamicEnum;
 import javax.baja.sys.BFacets;
 import javax.baja.sys.BIcon;
+import javax.baja.sys.BInteger;
 import javax.baja.sys.BObject;
 import javax.baja.sys.BString;
 import javax.baja.sys.BValue;
@@ -37,8 +42,6 @@ import javax.baja.sys.Type;
  *
  * @author		Justin Koffler
  * @creation	5 Feb 12
- * 
- * 	Update 6/29/2017 by James Johnson to move to current logger syntax
  */
 
 
@@ -57,10 +60,11 @@ public class BSuperConcatPlus extends BComponent
 	}
 
 
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/** ACTION, "VariableCount", SETS THE NUMBER OF STRING INPUTS	*//////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public static final Action VariableCount = newAction(0, (BValue)BDouble.TYPE.getInstance(), null);
+	public static final Action VariableCount = newAction(0, (BValue)BDouble.TYPE.getInstance(), BFacets.make(BFacets.PRECISION, BInteger.make(0)) );
 	public void VariableCount(BDouble v){ invoke(VariableCount, v, null); }
 	public void doVariableCount(BDouble v) throws Exception
 	{
@@ -74,10 +78,51 @@ public class BSuperConcatPlus extends BComponent
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/** STATUS STRING INPUT, "inDelimiter", STRING USED TO DELIMIT THE OUTPUT STRING *//////////////////////
-	public static final Property inDelimiter = newProperty(0, new BStatusString(","), null);
+	public static final Property inDelimiter = newProperty(0, new BStatusString(","), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getInDelimiter() { return (BStatusString)get(inDelimiter); }
 	public void setInDelimiter(BStatusString v) { set(inDelimiter, v, null); }
 
+	/**Represents the location where the timestamp should be place.*/
+	public static final Property inTimestampLocation = newProperty(0, (BValue)BDynamicEnum.TYPE.getInstance(), BFacets.tryMake("range=E:{Put$20timestamp$20at$20end$20of$20string=0,Put$20timestamp$20at$20begining$20of$20string=1}"));
+	public BDynamicEnum getInTimestampLocation() { return (BDynamicEnum)get(inTimestampLocation); }
+	public void setInTimestampLocation(BDynamicEnum v) { set(inTimestampLocation, v, null); }
+	
+	/** This is the format the time string output should be written in. <br>
+	 * <p>Available Fields Include: <br>
+	 * 
+	 * <blockquote><table border='1' bordercolor='#505050' cellspacing='0'>
+	 * <tr><th bgcolor='#666699' align=left><font color='#ffffff'>Letter</font></th><th bgcolor='#666699' align=left><font color='#ffffff'>Component</font></th><th bgcolor='#666699' align=left><font color='#ffffff'>Type</font></th><th bgcolor='#666699' align=left><font color='#ffffff'>Examples</font></th></tr>
+	 * <tr><td><code>G</code></td><td>Era designator</td><td>Text</td><td><code>AD</code></td></tr>
+	 * <tr><td><code>y</code></td><td>Year</td><td>Year</td><td><code>yyyy=1996</code>, <code>yy=96</code></td></tr>
+	 * <tr><td><code>Y</code></td><td>Week year</td><td>Year</td><td><code>YYYY=2009</code>, <code>YY=09</code></td></tr>
+	 * <tr><td><code>M</code></td><td>Month in year</td><td>Month</td><td><code>MMMM=July</code>, <code>MMM=Jul</code>, <code>MM=07</code></td></tr>
+	 * <tr><td><code>w</code></td><td>Week in year</td><td>Number</td><td><code>27</code></td></tr>
+	 * <tr><td><code>W</code></td><td>Week in month</td><td>Number</td><td><code>2</code></td></tr>
+	 * <tr><td><code>D</code></td><td>Day in year</td><td>Number</td><td><code>189</code></td></tr>
+	 * <tr><td><code>d</code></td><td>Day in month</td><td>Number</td><td><code>10</code></td></tr>
+	 * <tr><td><code>F</code></td><td>Day of week in month</td><td>Number</td><td><code>2</code></td></tr>
+	 * <tr><td><code>E</code></td><td>Day name in week</td><td>Text</td><td><code>EEEE=Tuesday</code>, <code>E=Tue</code></td></tr>
+	 * <tr><td><code>u</code></td><td>Day number of week</td><td>Number</td><td><code>1</code></td></tr>
+	 * <tr><td><code>a</code></td><td>AM/PM marker</td><td>Text</td><td><code>PM</code></td></tr>
+	 * <tr><td><code>H</code></td><td>Hour in day (0-23)</td><td>Number</td><td><code>0</code></td></tr>
+	 * <tr><td><code>k</code></td><td>Hour in day (1-24)</td><td>Number</td><td><code>24</code></td></tr>
+	 * <tr><td><code>K</code></td><td>Hour in am/pm (0-11)</td><td>Number</td><td><code>0</code></td></tr>
+	 * <tr><td><code>h</code></td><td>Hour in am/pm (1-12)</td><td>Number</td><td><code>12</code></td></tr>
+	 * <tr><td><code>m</code></td><td>Minute in hour</td><td>Number</td><td><code>30</code></td></tr>
+	 * <tr><td><code>s</code></td><td>Second in minute</td><td>Number</td><td><code>55</code></td></tr>
+	 * <tr><td><code>S</code></td><td>Millisecond</td><td>Number</td><td><code>978</code></td></tr>
+	 * <tr><td><code>z</code></td><td>Time zone</td><td>General time zone</td><td><code>zzzz=Pacific Standard Time</code>, <code>z=PST</code></td></tr>
+	 * <tr><td><code>Z</code></td><td>Time zone</td><td>RFC 822 time zone</td><td><code>-0800</code></td></tr>
+	 * <tr><td><code>X</code></td><td>Time zone</td><td>ISO 8601 time zone</td><td><code>X=-08</code>, <code>XX=-0800</code>,  <code>XXX=-08:00</code></td></tr>
+	 * </table></blockquote>
+	 * <br>
+	 * <p>EXAMPLE: MM/dd/yyyy hh:mm:ss.S a <br>
+	 * 
+	 */
+	public static final Property inTimestampFormat = newProperty(0, BString.make("MM/dd/yyyy hh:mm:ss.S a"), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public String getInTimestampFormat() { return getString(inTimestampFormat); }
+	public void setInTimestampFormat(String v) { setString(inTimestampFormat,v,null); }
+	
 	/** STATUS BOOLEAN INPUT, "inNullOnNoLink", SET UNLINKED INPUTS TO NULL UPON EXECUTION *///////////////
 	public final static Property inNullOnNoLink = newProperty(0, new BStatusBoolean(false));
 	public BStatusBoolean getInNullOnNoLink() { return (BStatusBoolean)get(inNullOnNoLink); }
@@ -105,32 +150,32 @@ public class BSuperConcatPlus extends BComponent
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/** STATUS NUMERIC OUTPUT, "numberOfValues", NUMBER OF INPUT STRING SLOTS *////////////////////////////
-	public static final Property numberOfValues = newProperty(0|Flags.HIDDEN|Flags.READONLY, new BStatusNumeric(), null);
+	public static final Property numberOfValues = newProperty(Flags.HIDDEN|Flags.READONLY, new BStatusNumeric(), null);
 	public BStatusNumeric getNumberOfValues() { return (BStatusNumeric)get(numberOfValues); }
 	public void setNumberOfValues(BStatusNumeric v) { set(numberOfValues, v, null); }
 
 	/** STATUS STRING OUTPUT, "outNoDelimeters", THIS WILL CONCAT ALL VALUES WITH NO DELIMETERS */////////////////////
-	public static final Property outNoDelimeters = newProperty(0|Flags.SUMMARY, new BStatusString(""), null);
+	public static final Property outNoDelimeters = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(""), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getOutNoDelimeters() { return (BStatusString)get(outNoDelimeters); }
 	public void setOutNoDelimeters(BStatusString v) { set(outNoDelimeters, v, null); }
 
 	/** STATUS STRING OUTPUT, "outDelimitValuesOnly" *, THIS WILL CONCAT ONLY NON-BLANK AND NON-NULL VALUES WITH DELIMETERS*/
-	public static final Property outDelimitValuesOnly = newProperty(0|Flags.SUMMARY, new BStatusString(""), null);
+	public static final Property outDelimitValuesOnly = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(""), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getOutDelimitValuesOnly() { return (BStatusString)get(outDelimitValuesOnly); }
 	public void setOutDelimitValuesOnly(BStatusString v) { set(outDelimitValuesOnly, v, null); }
 
 	/** STATUS STRING OUTPUT, "outDelimitAll", THIS WILL CONCAT ALL VALUES WITH DELIMETERS*/////////////////////////
-	public static final Property outDelimitAll = newProperty(0|Flags.SUMMARY, new BStatusString(""), null);
+	public static final Property outDelimitAll = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(""), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getOutDelimitAll() { return (BStatusString)get(outDelimitAll); }
 	public void setOutDelimitAll(BStatusString v) { set(outDelimitAll, v, null); }
 
 	/** STATUS STRING OUTPUT, "outDelimitValuesOnlyPlusTimestamp", SAME AS "outDelimitValuesOnly" EXCEPT THE A TIMESTAMP IS ADDED TO THE END *//////////
-	public static final Property outDelimitValuesOnlyPlusTimestamp = newProperty(0|Flags.SUMMARY, new BStatusString(""), null);
+	public static final Property outDelimitValuesOnlyPlusTimestamp = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(""), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getOutDelimitValuesOnlyPlusTimestamp() { return (BStatusString)get(outDelimitValuesOnlyPlusTimestamp); }
 	public void setOutDelimitValuesOnlyPlusTimestamp(BStatusString v) { set(outDelimitValuesOnlyPlusTimestamp, v, null); }
 
 	/** STATUS STRING OUTPUT, "outDelimitAllPlusTimestamp", SAME AS "outDelimitAll" EXCEPT THE A TIMESTAMP IS ADDED TO THE END *//////////
-	public static final Property outDelimitAllPlusTimestamp = newProperty(0|Flags.SUMMARY, new BStatusString(""), null);
+	public static final Property outDelimitAllPlusTimestamp = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(""), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getOutDelimitAllPlusTimestamp() { return (BStatusString)get(outDelimitAllPlusTimestamp); }
 	public void setOutDelimitAllPlusTimestamp(BStatusString v) { set(outDelimitAllPlusTimestamp, v, null); }
 
@@ -170,14 +215,29 @@ public class BSuperConcatPlus extends BComponent
 	public final BComponent getComponent() { return this; }
 	public final BComponent getProgram() { return this; }
 
-
+	
+	/*------------------------------------------------------------------------------------------------------------------*/
+	/**
+	 * The logic in this method should only be executed if the station is running and at steadyState.</br>
+	 * This means this will only get ran when this object is initially added to a running station or duplicated/copied from an existing object.
+	 */
+	public void started()
+	{
+		if(!Sys.atSteadyState() || !isRunning()){return;}
+		
+		Thread t = new Thread(new calculate());
+		t.start();
+	}
+	
+	
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/** DETERMINES HOW MANY NEW SLOTS TO CREATE.   *///////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public void onVariableCount(BDouble NV) throws Exception
 	{                                              
-		if(NV.getDouble() > 60.0) getNumberOfValues().setValue(60.0);
-		else getNumberOfValues().setValue(NV.getDouble());      
+		if(NV.getDouble() > 120.0) getNumberOfValues().setValue(120.0);
+		else getNumberOfValues().setValue(NV.getDouble()); 
 		slots(getNumberOfValues().getValue());
 	} 
 
@@ -200,7 +260,6 @@ public class BSuperConcatPlus extends BComponent
 				try
 				{
 					onVariableCount(BDouble.make(getNumberOfSlots().getValue()));
-
 				}
 				catch(Exception e)
 				{
@@ -247,7 +306,7 @@ public class BSuperConcatPlus extends BComponent
 		{
 			if(((BObject)get("In_"+i))==null) 
 			{
-				getProgram().add(("In_"+i), new BStatusString(""), Flags.SUMMARY);
+				getProgram().add(("In_"+i), new BStatusString(""), Flags.SUMMARY, BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)), null);
 			}
 		}
 
@@ -271,15 +330,16 @@ public class BSuperConcatPlus extends BComponent
 	{
 		public void run()
 		{
-			String	delim									= getInDelimiter().getValue();
-			boolean	nullOnNoLink							= getInNullOnNoLink().getValue();
-			int		slotCount								= (int) getNumberOfValues().getValue();
-			String	strOutNoDelimeters						= ""; //1 ONLY GOOD VALUES NO DELIMETER
-			String	strOutDelimitValuesOnly					= ""; //2 ONLY GOOD VALUES ALONG WITH DELIMETER
-			String	strOutDelimitAll						= ""; //3 ALL VALUES ALONG WITH DELIMETER
-			String	strOutDelimitValuesOnlyPlusTimestamp	= ""; //4 LIKE strOutDelimitValuesOnly BUT WITH TIMESTAMP
-			String	strOutDelimitAllPlusTimestamp			= ""; //5 LIKE strOutDelimitAll BUT WITH TIMESTAMP
-			String	temp			= "";
+			BAbsTime	dtNow									= BAbsTime.now();
+			String		delim									= getInDelimiter().getValue();
+			boolean		nullOnNoLink							= getInNullOnNoLink().getValue();
+			int			slotCount								= (int) getNumberOfValues().getValue();
+			String		strOutNoDelimeters						= ""; //1 ONLY GOOD VALUES NO DELIMETER
+			String		strOutDelimitValuesOnly					= ""; //2 ONLY GOOD VALUES ALONG WITH DELIMETER
+			String		strOutDelimitAll						= ""; //3 ALL VALUES ALONG WITH DELIMETER
+			String		strOutDelimitValuesOnlyPlusTimestamp	= ""; //4 LIKE strOutDelimitValuesOnly BUT WITH TIMESTAMP
+			String		strOutDelimitAllPlusTimestamp			= ""; //5 LIKE strOutDelimitAll BUT WITH TIMESTAMP
+			String		temp									= "";
 
 			for(int i=1;i<=slotCount;i++)
 			{
@@ -360,17 +420,35 @@ public class BSuperConcatPlus extends BComponent
 						strOutNoDelimeters						= strOutNoDelimeters					+ inValue.getValue();
 						strOutDelimitValuesOnly					= strOutDelimitValuesOnly				+ inValue.getValue();
 						strOutDelimitAll						= strOutDelimitAll						+ inValue.getValue();
-						strOutDelimitValuesOnlyPlusTimestamp	= strOutDelimitValuesOnlyPlusTimestamp	+ inValue.getValue() + delim + currentTime();
-						strOutDelimitAllPlusTimestamp			= strOutDelimitAllPlusTimestamp			+ inValue.getValue() + delim + currentTime();
+						
+						if(getInTimestampLocation().getOrdinal()==0)
+						{
+							strOutDelimitValuesOnlyPlusTimestamp	= strOutDelimitValuesOnlyPlusTimestamp	+ inValue.getValue() + delim + timestampAsString(dtNow);
+							strOutDelimitAllPlusTimestamp			= strOutDelimitAllPlusTimestamp			+ inValue.getValue() + delim + timestampAsString(dtNow);
+						}
+						else
+						{
+							strOutDelimitValuesOnlyPlusTimestamp	= timestampAsString(dtNow) + delim + strOutDelimitValuesOnlyPlusTimestamp	+ inValue.getValue();
+							strOutDelimitAllPlusTimestamp			= timestampAsString(dtNow) + delim + strOutDelimitAllPlusTimestamp			+ inValue.getValue();
+						}
 					}
 					else
 					{
 						if(strOutDelimitValuesOnly.length()>0)
 						{
-							strOutDelimitValuesOnly = strOutDelimitValuesOnly.substring(0,(strOutDelimitValuesOnly.length()-delim.length()));
+							strOutDelimitValuesOnly = strOutDelimitValuesOnly.substring( 0,(strOutDelimitValuesOnly.length()-delim.length()) );
 						}
-						strOutDelimitValuesOnlyPlusTimestamp	= strOutDelimitValuesOnlyPlusTimestamp	+ currentTime();
-						strOutDelimitAllPlusTimestamp			= strOutDelimitAllPlusTimestamp			+ delim + currentTime();
+						
+						if(getInTimestampLocation().getOrdinal()==0)
+						{
+							strOutDelimitValuesOnlyPlusTimestamp	= strOutDelimitValuesOnlyPlusTimestamp	+			timestampAsString(dtNow);
+							strOutDelimitAllPlusTimestamp			= strOutDelimitAllPlusTimestamp			+ delim +	timestampAsString(dtNow);
+						}
+						else
+						{
+							strOutDelimitValuesOnlyPlusTimestamp	= timestampAsString(dtNow) + delim + strOutDelimitValuesOnlyPlusTimestamp.substring( 0,(strOutDelimitValuesOnlyPlusTimestamp.length()-delim.length()) );
+							strOutDelimitAllPlusTimestamp			= timestampAsString(dtNow) + delim + strOutDelimitAllPlusTimestamp;
+						}
 					}
 				}
 				logger.log(Level.FINE, "\r\n\t\t" + getSlotPath()	+ "\r\n\t\tEND OF FOR LOOP..."
@@ -402,13 +480,30 @@ public class BSuperConcatPlus extends BComponent
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/**    ASSIGN CURRENT TIME TO STRING VALUE   */////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public String currentTime()
+	public String timestampAsString(BAbsTime input)
 	{
-		BFacets facets1 = BFacets.make("timeFormat", BString.make("MM//DD//YYYY hh:mm:ss a"));
-		BFacets facets2 = BFacets.make("showMilliseconds", true);
-		BFacets facets3 = BFacets.make(facets1,facets2);
+		String time = input.encodeToString();
 
-		String time = BAbsTime.now().toString(facets3);  
+		try
+		{
+    		Calendar cal = Calendar.getInstance();
+    		cal.setTimeInMillis(input.getMillis());
+    		
+    		String formatDate = getInTimestampFormat();
+    		
+    		if( formatDate.length() <= 0 )
+    		{
+    			formatDate = "MM/dd/yyyy hh:mm:ss.S a";
+    		}
+    		
+    		DateFormat df = new SimpleDateFormat( formatDate );
+    		time = df.format(cal.getTime());
+    	}
+    	catch (Exception e) 
+    	{
+    		logger.log(Level.SEVERE, "\r\n\t\t" + getSlotPath() + "\r\n\t\t" + e.getStackTrace(), e);
+    	}
+		
 		return time;
 	}
 
