@@ -69,6 +69,11 @@
 			<name>UI</name>
 			<purposeKey>AxCommunity</purposeKey>
 		</req-permission>
+		<req-permission>
+			<name>UI</name>
+			<purposeKey>AxCommunity</purposeKey>
+		</req-permission>
+		
 	</niagara-permission-groups>
 </permissions>
 

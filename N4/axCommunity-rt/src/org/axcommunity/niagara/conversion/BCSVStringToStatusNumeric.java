@@ -1,5 +1,7 @@
 package org.axcommunity.niagara.conversion;
 
+import java.nio.ByteBuffer;
+
 import javax.baja.status.*;
 import javax.baja.sys.*;
 
@@ -94,15 +96,36 @@ public class BCSVStringToStatusNumeric extends BComponent {
 	        		}
 	        		
 	        		//convert byte array to chars
-	        		char bs[] = new char[(int)getNumberOfItems().getValue()];
+	        		char bs[];
+	        		if(getIsTwoAsciiPerNumber())
+	        		{
+	        		 bs = new char[(int)getNumberOfItems().getValue()*2];
+	        		}
+	        		else bs = new char[(int)getNumberOfItems().getValue()];
+	        		
 	        		
 	        		for(int s = 0;s < getNumberOfItems().getValue();s++){
 	        			double a;
 		        		a = ((BStatusNumeric)get(getProperty(slotNames[s]))).getValue();
-		        		bs[s]=(char)a;
+	        			if(getIsTwoAsciiPerNumber())
+	        			{
+	        				//make a 2 byte array from the string
+	        				short ai = (short)a;
+	        				byte[] bytes = ByteBuffer.allocate(2).putShort(ai).array();
+        					//for 2 byte arrays, add characters in either forward or reverse order
+        					if(getSwapCharacters())
+        					{
+        						bs[s*2]=(char)bytes[1];
+        						bs[s*2 + 1]=(char)bytes[0];
+        					}
+        					else
+        					{
+        						bs[s*2]=(char)bytes[0];
+        						bs[s*2 + 1]=(char)bytes[1];	        							
+        					}
+	        			}
+	        			else bs[s]=(char)a;
 	        		}
-	        		
-	        		
 	        		String bstring = new String(bs);
 	        		getStringOut().setValue(bstring);
 	        	}
@@ -137,6 +160,17 @@ public class BCSVStringToStatusNumeric extends BComponent {
     
     public void setNumberOfItems(BStatusNumeric v) { set(numberOfItems, v); }
     public void setStartingAtElement(BStatusNumeric v) { set(startingAtElement, v); }
+    
+	/**If true, set the output string assuming 2 characters per number, else 1 character per number*/
+	public static final Property isTwoAsciiPerNumber = newProperty(0, true);
+	public boolean getIsTwoAsciiPerNumber() { return getBoolean(isTwoAsciiPerNumber);}
+	public void setIsTwoAsciiPerNumber(boolean v) {setBoolean(isTwoAsciiPerNumber,v);}
+
+	/**If true, characters are swapped per number (only applies if isTwoAsciiPerNumber==true)*/
+	public static final Property swapCharacters = newProperty(0, false);
+	public boolean getSwapCharacters() { return getBoolean(swapCharacters);}
+	public void setSwapCharacters(boolean v) {setBoolean(swapCharacters,v);}
+   
     
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");
