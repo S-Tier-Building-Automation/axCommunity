@@ -544,21 +544,21 @@ public class BSysInfo extends BComponent
 	public void setFreeHeap(javax.baja.status.BStatusNumeric v) { set(freeHeap, v); }
 		
 	
-	public static final Property executingSave = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusBoolean(Boolean.FALSE, BStatus.ok), null);
+	public static final Property executingSave = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusBoolean(Boolean.FALSE, BStatus.ok), null);
 	public BStatusBoolean getExecutingSave() { return (BStatusBoolean) get(executingSave); }
 	public void setExecutingSave(BStatusBoolean v) { set(executingSave, v); }
 	
 	
-	public static final Topic Updated = newTopic(0|Flags.SUMMARY);
+	public static final Topic Updated = newTopic(0);
 	public void fireUpdated(BBoolean event){fire(Updated,event,null);}
 
 	
 		
-	public static final Topic StationSaveSuccess = newTopic(0|Flags.SUMMARY);
+	public static final Topic StationSaveSuccess = newTopic(0);
 	public void fireStationSaveSuccess(BBoolean event){fire(StationSaveSuccess,event,null);}
 	
 		
-	public static final Topic StationSaveFailed = newTopic(0|Flags.SUMMARY);
+	public static final Topic StationSaveFailed = newTopic(0);
 	public void fireStationSaveFailed(BBoolean event){fire(StationSaveFailed,event,null);}
 	
 	
