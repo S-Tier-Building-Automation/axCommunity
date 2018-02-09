@@ -1,5 +1,7 @@
 package org.axcommunity.niagara.string;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,9 +50,8 @@ import javax.baja.sys.Type;
 
 public class BSuperConcatPlus extends BComponent
 {
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/** ACTION, "concatenate", PERFORMS THE CONCATENATION OF THE INPUTS   */////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*----------------------------------------------------------------------------------------------------------------*/
+	/** ACTION, "concatenate", PERFORMS THE CONCATENATION OF THE INPUTS   */
 	public static final Action concatenate = newAction(Flags.SUMMARY|Flags.ASYNC|Flags.DEFAULT_ON_CLONE,null);
 	public void concatenate(){invoke(concatenate,null,null);}
 	public void doConcatenate()
@@ -59,23 +60,59 @@ public class BSuperConcatPlus extends BComponent
 		t.start();		
 	}
 
-
 	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/** ACTION, "VariableCount", SETS THE NUMBER OF STRING INPUTS	*//////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*----------------------------------------------------------------------------------------------------------------*/
+	/** ACTION, "VariableCount", SETS THE NUMBER OF STRING INPUTS	*/
+	public static BDouble _VariableCount = BDouble.make(5);
 	public static final Action VariableCount = newAction(0, (BValue)BDouble.TYPE.getInstance(), BFacets.make(BFacets.PRECISION, BInteger.make(0)) );
-	public void VariableCount(BDouble v){ invoke(VariableCount, v, null); }
-	public void doVariableCount(BDouble v) throws Exception
+	public BDouble VariableCount(BDouble _VariableCount){return (BDouble)invoke(VariableCount,_VariableCount,null);}
+	public BDouble doVariableCount(BDouble v)
 	{
-		try { onVariableCount(v); }
-		catch (Throwable t) { throw new Exception(t); }
+		try 
+		{ 
+			var = true;
+			if(v.getDouble() > 256.0)
+			{
+				_VariableCount = BDouble.make(256);
+				if( getNumberOfSlots().getValue()  != _VariableCount.getDouble() ){ getNumberOfSlots().setValue(256.0);}
+				if( getNumberOfValues().getValue() != _VariableCount.getDouble() ){ getNumberOfValues().setValue(256.0);}
+			}
+			else
+			{
+				_VariableCount = v;
+				if( getNumberOfSlots().getValue()  != _VariableCount.getDouble() ){ getNumberOfSlots().setValue(v.getDouble());}
+				if( getNumberOfValues().getValue() != _VariableCount.getDouble() ){ getNumberOfValues().setValue(v.getDouble());}
+			}
+			
+			slots(getNumberOfSlots().getValue());
+			var = false;
+		}
+		catch (Exception e) {}
+		
+		return _VariableCount;
+	}
+	
+	
+	
+	/*----------------------------------------------------------------------------------------------------------------*/
+	/** Gets Action parameter defaults */
+	public BValue getActionParameterDefault(Action paramAction)
+	{
+		if (paramAction == VariableCount)
+		{
+			Double		inValue		= new Double(getNumberOfValues().getValue());
+			BValue		outValue	= (BValue)BDouble.make(inValue);
+			
+			return outValue;
+		}
+		
+		return super.getActionParameterDefault(paramAction);
 	}
 
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// INPUTS		///////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*----------------------------------------------------------------------------------------------------------------*/
+	/* INPUTS  -------------------------------------------------------------------------------------------------------*/
+	/*----------------------------------------------------------------------------------------------------------------*/
 
 	/** STATUS STRING INPUT, "inDelimiter", STRING USED TO DELIMIT THE OUTPUT STRING *//////////////////////
 	public static final Property inDelimiter = newProperty(0, new BStatusString(","), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
@@ -144,10 +181,9 @@ public class BSuperConcatPlus extends BComponent
 	public void setTrigger(BStatusBoolean v) { set(trigger, v); }
 
 
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// OUTPUTS		///////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*----------------------------------------------------------------------------------------------------------------*/
+	/* OUTPUTS  ------------------------------------------------------------------------------------------------------*/
+	/*----------------------------------------------------------------------------------------------------------------*/
 
 	/** STATUS NUMERIC OUTPUT, "numberOfValues", NUMBER OF INPUT STRING SLOTS *////////////////////////////
 	public static final Property numberOfValues = newProperty(Flags.HIDDEN|Flags.READONLY, new BStatusNumeric(), null);
@@ -179,10 +215,10 @@ public class BSuperConcatPlus extends BComponent
 	public BStatusString getOutDelimitAllPlusTimestamp() { return (BStatusString)get(outDelimitAllPlusTimestamp); }
 	public void setOutDelimitAllPlusTimestamp(BStatusString v) { set(outDelimitAllPlusTimestamp, v, null); }
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//    TOPIC SLOTS   ///////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+	/*----------------------------------------------------------------------------------------------------------------*/
+	/* TOPICS  -------------------------------------------------------------------------------------------------------*/
+	/*----------------------------------------------------------------------------------------------------------------*/
+	
 	/** OUTPUT HAS CHANGED VALUE */
 	public static final Topic changed = newTopic(0);
 	public void fireChanged(BBoolean event){fire(changed,event,null);}
@@ -207,14 +243,12 @@ public class BSuperConcatPlus extends BComponent
 	public static final Topic SetDelimitAllPlusTimestamp = newTopic(0);
 	public void fireSetDelimitAllPlusTimestamp(BString event){fire(SetDelimitAllPlusTimestamp,event,null);}
 
-	//----CODE BELOW HERE--------------------------------------------------------------------------------------
 
-	////////////////////////////////////////////////////////////////
-	// Access
-	////////////////////////////////////////////////////////////////
-	public final BComponent getComponent() { return this; }
-	public final BComponent getProgram() { return this; }
-
+	public	final	BComponent	getComponent() { return this; }
+	public	final	BComponent	getProgram() { return this; }
+	
+	private			boolean		last	= false;
+	private			boolean		var		= false;
 	
 	/*------------------------------------------------------------------------------------------------------------------*/
 	/**
@@ -230,22 +264,7 @@ public class BSuperConcatPlus extends BComponent
 	}
 	
 	
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/** DETERMINES HOW MANY NEW SLOTS TO CREATE.   *///////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public void onVariableCount(BDouble NV) throws Exception
-	{                                              
-		if(NV.getDouble() > 120.0) getNumberOfValues().setValue(120.0);
-		else getNumberOfValues().setValue(NV.getDouble()); 
-		slots(getNumberOfValues().getValue());
-	} 
-
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/** ON CHANGE EVENT		*//////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	private boolean last = false;
+	/*------------------------------------------------------------------------------------------------------------------*/
 	public void changed(Property p, Context cx)
 	{
 		if(!Sys.atSteadyState() || !isRunning())return;
@@ -259,18 +278,21 @@ public class BSuperConcatPlus extends BComponent
 			{
 				try
 				{
-					onVariableCount(BDouble.make(getNumberOfSlots().getValue()));
+					if(!var)
+					{
+						doVariableCount(BDouble.make(getNumberOfSlots().getValue()));
+					}
 				}
 				catch(Exception e)
 				{
-					logger.log(Level.SEVERE, "\r\n\t\t" + getSlotPath() + "\r\n\t\t" + e.getStackTrace(), e);
+					logger.log(Level.SEVERE, "\n" + getSlotPath() + "\n" + e.getStackTrace(), e);
 				}
 			}
 
 			// ONE OF THE STRING INPUTS HAS CHANGED ///////////////////////////////////////////////////////////
 			if(calcOnChange==true && p!=numberOfSlots && p!=numberOfValues && p!=outNoDelimeters && p!=outDelimitValuesOnly && p!=outDelimitAll && p!=outDelimitValuesOnlyPlusTimestamp && p!=outDelimitAllPlusTimestamp)
 			{
-				logger.log(Level.FINE, "\r\n\t\t" + getSlotPath()	+ "\r\n\t\tCalculating because " + p.getName() + " changed");
+				logger.log(Level.FINE, "\n" + getSlotPath()	+ "\nCalculating because " + p.getName() + " changed");
 
 				Thread t = new Thread(new calculate());
 				t.start();
@@ -297,25 +319,37 @@ public class BSuperConcatPlus extends BComponent
 
 
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/** CREATES THE REQUIRED SLOTS.   *////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public void slots(double MD) throws Exception
+	/*------------------------------------------------------------------------------------------------------------------*/
+	/*-- CREATES THE REQUIRED SLOTS ------------------------------------------------------------------------------------*/
+	private void slots(double MD)
 	{
-		for(int i=1; i<(MD+1 ); i++)
+		logger.log(Level.FINE, "\t" + getSlotPath()	+ "\t" + "slots() methods called with value: '" + MD + "'");
+		
+		try
 		{
-			if(((BObject)get("In_"+i))==null) 
+			for (int i = 1; i < (MD + 1); i++)
 			{
-				getProgram().add(("In_"+i), new BStatusString(""), Flags.SUMMARY, BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)), null);
+				if (((BObject) get("In_" + i)) == null)
+				{
+					getProgram().add(("In_" + i), new BStatusString(""), Flags.SUMMARY, BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)), null);
+				}
+			}
+			for (int i = (int) MD + 1; ((BObject) get("In_" + i)) != null; i++)
+			{
+				if (((BObject) get("In_" + i)) != null)
+				{
+					getProgram().remove("In_" + i);
+				}
 			}
 		}
-
-		for(int i=(int)MD+1;((BObject)get("In_"+i))!=null;i++)
+		catch (Exception e)
 		{
-			if(((BObject)get("In_"+i))!=null) 
-			{
-				getProgram().remove("In_"+i);
-			}            
+			String errMsg = "Exception in slots() method!";
+			errMsg = errMsg.trim() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace();
+			StringWriter errors = new StringWriter();
+			e.printStackTrace(new PrintWriter(errors));
+			errMsg = errMsg.trim() + "\n" + "PRINTSTACKTRACE: \n" + errors.toString();
+			logger.severe("\n" + getSlotPath() + "\n" + errMsg);
 		}
 	}
 
@@ -323,9 +357,8 @@ public class BSuperConcatPlus extends BComponent
 
 
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/** CONCAT ALL THE INPUTS TOGETHER   */////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*------------------------------------------------------------------------------------------------------------------*/
+	/*-- CONCAT ALL THE INPUTS TOGETHER --------------------------------------------------------------------------------*/
 	class calculate implements Runnable
 	{
 		public void run()
@@ -345,14 +378,14 @@ public class BSuperConcatPlus extends BComponent
 			{
 				BStatusString inValue = ((BStatusString) ((BObject)get("In_"+i)));
 
-				logger.log(Level.FINE, "\r\n\t\t" + getSlotPath()	+ "\r\n\t\tBEGINING OF FOR LOOP..."
-						+ "\r\n\t\tSLOT  = " + i 
-						+ "\r\n\t\tVALUE = " + inValue
-						+ "\r\n\t\tOUT1  = " + strOutNoDelimeters
-						+ "\r\n\t\tOUT2  = " + strOutDelimitValuesOnly
-						+ "\r\n\t\tOUT3  = " + strOutDelimitAll
-						+ "\r\n\t\tOUT4  = " + strOutDelimitValuesOnlyPlusTimestamp
-						+ "\r\n\t\tOUT5  = " + strOutDelimitAllPlusTimestamp);
+				logger.log(Level.FINE, "\n" + getSlotPath()	+ "\nBEGINING OF FOR LOOP..."
+						+ "\nSLOT  = " + i 
+						+ "\nVALUE = " + inValue
+						+ "\nOUT1  = " + strOutNoDelimeters
+						+ "\nOUT2  = " + strOutDelimitValuesOnly
+						+ "\nOUT3  = " + strOutDelimitAll
+						+ "\nOUT4  = " + strOutDelimitValuesOnlyPlusTimestamp
+						+ "\nOUT5  = " + strOutDelimitAllPlusTimestamp);
 
 				/** TESTS WHETHER THE SLOT IS LINKED. IF NOT, THE VALUE IS SET TO NULL **/
 				if ( (getProgram().getLinks(getProperty("In_"+i)).length == 0) && (nullOnNoLink==true))
@@ -451,14 +484,14 @@ public class BSuperConcatPlus extends BComponent
 						}
 					}
 				}
-				logger.log(Level.FINE, "\r\n\t\t" + getSlotPath()	+ "\r\n\t\tEND OF FOR LOOP..."
-						+ "\r\n\t\tSLOT  = " + i 
-						+ "\r\n\t\tVALUE = " + inValue
-						+ "\r\n\t\tOUT1  = " + strOutNoDelimeters
-						+ "\r\n\t\tOUT2  = " + strOutDelimitValuesOnly
-						+ "\r\n\t\tOUT3  = " + strOutDelimitAll
-						+ "\r\n\t\tOUT4  = " + strOutDelimitValuesOnlyPlusTimestamp
-						+ "\r\n\t\tOUT5  = " + strOutDelimitAllPlusTimestamp);
+				logger.log(Level.FINE, "\n" + getSlotPath()	+ "\nEND OF FOR LOOP..."
+						+ "\nSLOT  = " + i 
+						+ "\nVALUE = " + inValue
+						+ "\nOUT1  = " + strOutNoDelimeters
+						+ "\nOUT2  = " + strOutDelimitValuesOnly
+						+ "\nOUT3  = " + strOutDelimitAll
+						+ "\nOUT4  = " + strOutDelimitValuesOnlyPlusTimestamp
+						+ "\nOUT5  = " + strOutDelimitAllPlusTimestamp);
 			}
 			getOutNoDelimeters().setValue(strOutNoDelimeters);
 			getOutDelimitValuesOnly().setValue(strOutDelimitValuesOnly);
@@ -477,9 +510,8 @@ public class BSuperConcatPlus extends BComponent
 	}
 
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/**    ASSIGN CURRENT TIME TO STRING VALUE   */////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*------------------------------------------------------------------------------------------------------------------*/
+	/*-- ASSIGN CURRENT TIME TO STRING VALUE ---------------------------------------------------------------------------*/
 	public String timestampAsString(BAbsTime input)
 	{
 		String time = input.encodeToString();
@@ -501,16 +533,14 @@ public class BSuperConcatPlus extends BComponent
     	}
     	catch (Exception e) 
     	{
-    		logger.log(Level.SEVERE, "\r\n\t\t" + getSlotPath() + "\r\n\t\t" + e.getStackTrace(), e);
+    		logger.log(Level.SEVERE, "\n" + getSlotPath() + "\n" + e.getStackTrace(), e);
     	}
 		
 		return time;
 	}
 
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	/** Type	*//////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*------------------------------------------------------------------------------------------------------------------*/
 	public static final Logger logger = Logger.getLogger("axCommunity.SuperConcatPlus");
 
 	public Type getType() { return TYPE; }

@@ -43,8 +43,23 @@
 					
 		<pre>
 			<code>
-			
-<b>V18.01.15.01 January 15, 2018</b><i> - Mike Arnott/i>
+	
+<b>V18.02.08.01 February 8, 2018</b><i> - Justin Koffler</i>
+	- MODIFIED 'BSuperConcatPlus'
+		* The 'VariableCount' action slot will now default to the existing slot count value.
+	- MODIFIED 'BOneShotMultiSelect'
+		* Added new topic slots:
+		  'NewBoolValue', 'NewNumValue', 'NewStringValue',
+		  'TimerActiveBoolValue', 'TimerInactiveBoolValue',
+		  'TimerActiveNumValue', 'TimerInactiveNumValue',
+		  'TimerActiveStringValue', 'TimerInactiveStringValue'.
+	- MODIFIED 'BSysInfo'
+		* Added new boolean slots 'populateNetworkInfo' and 'populateHostId' to control if those related fields get populated.
+		* Added new boolean slot 'executingSave' which is true when the station is active being saved as a result of the 'SaveStation' action being used.
+		* Added new topic slots 'StationSaveSuccess' and 'StationSaveFailed' which are fired when the station save is complete.
+		* Modified some of the other internal variables and logic that may have contributed to the reported memory leak that required frequent station restarts.
+<hr>	
+<b>V18.01.15.01 January 15, 2018</b><i> - Mike Arnott</i>
 	- MODIFIED 'BCSVStringToStatusNumeric'
 		* Added new slot 'isTwoAsciiPerNumber' to control how the numbers are converted to ascii - as 1 character or 2 per number.
 		* Added new slot 'swapCharacters' when true and if isTwoAsciiPerNumber is true, characters are swapped per number (ABCD becomes BADC).

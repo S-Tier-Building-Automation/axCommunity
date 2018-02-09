@@ -48,8 +48,8 @@ gradle.beforeProject
 			apply from: vendorSettings
 		}
 		
-		apply from: "${System.getenv("niagara_home")}/etc/gradle/docmodule.gradle"
 		apply from: "${System.getenv("niagara_home")}/etc/gradle/niagara.gradle"
+		apply from: "${System.getenv("niagara_home")}/etc/gradle/docmodule.gradle"
 	}
 }
 
