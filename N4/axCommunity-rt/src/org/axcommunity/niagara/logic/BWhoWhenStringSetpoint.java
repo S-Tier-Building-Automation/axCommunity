@@ -35,9 +35,7 @@ extends BComponent
 	/**String showing username of who changed the point*/
 	public static final Property changedBy = newProperty(Flags.READONLY + Flags.SUMMARY + Flags.DEFAULT_ON_CLONE, new BStatusString());
 	public void setChangedBy(BStatusString v) { set(changedBy, v); }
-	public BStatusString getChangedBy() { 
-	return (BStatusString)get(changedBy); 
-	}
+	public BStatusString getChangedBy() { return (BStatusString)get(changedBy);}
 
 	/**Absolute Time of change*/
 	public final static Property timeChanged = newProperty(Flags.SUMMARY + Flags.READONLY+ Flags.DEFAULT_ON_CLONE, BAbsTime.DEFAULT);
@@ -59,11 +57,12 @@ extends BComponent
 	public void doSetValue(BString v, Context cxin)
 	{
 		valueCurrent = getOut().getValue();
+		String by = "logic";
 		
 		if(cxin==null)
 		{
 		//for wiresheet invokes, set username to "logic"
-		getChangedBy().setValue("logic");
+		getChangedBy().setValue(by);
 		}
 
 		else 
@@ -79,7 +78,7 @@ extends BComponent
 		getOut().setStatus(BStatus.ok);
 		setTimeChanged(BAbsTime.make());
 		
-		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + cxin.getUser().getUsername() + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
+		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + by + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
 		getOutLogString().setValue(stringToLog);
 		fireLogString(BString.make(stringToLog));
 	}

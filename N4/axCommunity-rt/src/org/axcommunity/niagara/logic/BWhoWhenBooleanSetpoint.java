@@ -67,23 +67,26 @@ extends BComponent
 	
 	/**invokable action to set the current value to true*/
 	public static final Action SetTrue = newAction(Flags.OPERATOR,null);
-	public void SetTrue(){invoke(SetTrue,null,null);}
+	public void SetTrue(){invoke(SetTrue,null);}
 	public void doSetTrue(Context cxin)
 	{
-		logger.log(Level.FINE, "\t\t" + getSlotPath()	+ "\t\tTRIGGERED TRUE BY: " + cxin.getUser().getUsername());
 		
 		valueCurrent = getOut().getValue();
-		
+		String by = "logic";
 		if(cxin==null)
 		{
 			//for wiresheet invokes, set username to "logic"
-			getChangedBy().setValue("logic");
+			getChangedBy().setValue(by);
 		}
 		else 
 		{
 			//for any user invokes, get the context username
-			getChangedBy().setValue(cxin.getUser().getUsername());
+			by = cxin.getUser().getUsername();
+			getChangedBy().setValue(by);
 		}
+		
+		logger.log(Level.FINE, "\t\t" + getSlotPath()	+ "\t\tTRIGGERED TRUE BY: " + by);
+		
 		//set value and timestamp
 		getOut().setValue(true);
 		fireValue(BBoolean.make(true));
@@ -92,30 +95,32 @@ extends BComponent
 		getOut().setStatus(BStatus.ok);
 		setTimeChanged(BAbsTime.make());
 		
-		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + cxin.getUser().getUsername() + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
+		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + by + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
 		getOutLogString().setValue(stringToLog);
 		fireLogString(BString.make(stringToLog));
 	}
 	
 	/**invokable action to set the current value to false*/
 	public static final Action SetFalse = newAction(Flags.OPERATOR,null);
-	public void SetFalse(){invoke(SetFalse,null,null);}
+	public void SetFalse(){invoke(SetFalse,null);}
 	public void doSetFalse(Context cxin)
 	{
-		logger.log(Level.FINE, "\t\t" + getSlotPath()	+ "\t\tTRIGGERED FALSE BY: " + cxin.getUser().getUsername());
-		
 		valueCurrent = getOut().getValue();
+		String by = "logic";
 		
 		if(cxin==null)
 		{
 			//for wiresheet invokes, set username to "logic"
-			getChangedBy().setValue("logic");
+			getChangedBy().setValue(by);
 		}
 		else 
 		{
 			//for any user invokes, get the context username
-			getChangedBy().setValue(cxin.getUser().getUsername());
+			by = cxin.getUser().getUsername();
+			getChangedBy().setValue(by);
 		}
+		
+		logger.log(Level.FINE, "\t\t" + getSlotPath()	+ "\t\tTRIGGERED FALSE BY: " + by);
 		//set value and timestamp
 		getOut().setValue(false);
 		fireValue(BBoolean.make(false));
@@ -124,7 +129,7 @@ extends BComponent
 		getOut().setStatus(BStatus.ok);
 		setTimeChanged(BAbsTime.make());
 		
-		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + cxin.getUser().getUsername() + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
+		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + by + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
 		getOutLogString().setValue(stringToLog);
 		fireLogString(BString.make(stringToLog));
 	}
@@ -135,21 +140,22 @@ extends BComponent
 	public void SetValue(BBoolean v){invoke(SetValue, null);}
 	public void doSetValue(BBoolean v, Context cxin)
 	{
-		logger.log(Level.FINE, "\t\t" + getSlotPath()	+ "\t\tTRIGGERED " + v.getBoolean() + " BY: " + cxin.getUser().getUsername());
-		
 		valueCurrent = getOut().getValue();
+		String by = "logic";
 		
 		if(cxin==null)
 		{
 			//for wiresheet invokes, set username to "logic"
-			getChangedBy().setValue("logic");
+			getChangedBy().setValue(by);
 		}
-
 		else 
 		{
 			//for any user invokes, get the context username
-			getChangedBy().setValue(cxin.getUser().getUsername());
+			by = cxin.getUser().getUsername();
+			getChangedBy().setValue(by);
 		}
+		
+		logger.log(Level.FINE, "\t\t" + getSlotPath()	+ "\t\tTRIGGERED " + v.getBoolean() + " BY: " + by);
 		//set value and timestamp
 		getOut().setValue(v.getBoolean());
 		fireValue(BBoolean.make(v.getBoolean()));
@@ -158,7 +164,7 @@ extends BComponent
 		getOut().setStatus(BStatus.ok);
 		setTimeChanged(BAbsTime.make());
 		
-		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + cxin.getUser().getUsername() + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
+		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + by + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
 		getOutLogString().setValue(stringToLog);
 		fireLogString(BString.make(stringToLog));
 	}
