@@ -197,10 +197,12 @@ public class BSysInfo extends BComponent
 			getTotalPhysicalMemory().setValue((double) sysObject.getTotalPhysicalMemory()); //INT VALUE
 			long totalMem = Runtime.getRuntime().totalMemory() / 1024;
 			long freeMem = Runtime.getRuntime().freeMemory() / 1024;
+			long maxMem = Runtime.getRuntime().maxMemory() / 1024;
 			long usedMem = totalMem - freeMem;
 			getTotalHeap().setValue(totalMem);
 			getUsedHeap().setValue(usedMem);
 			getFreeHeap().setValue(freeMem);
+			getMaxHeap().setValue(maxMem);
 			
 			try{getNiagaraHome().setValue(Sys.getNiagaraHome().toString());}
 			catch (Exception e){getNiagaraHome().setValue("");}
@@ -321,7 +323,18 @@ public class BSysInfo extends BComponent
 
 				try
 				{
-					getDomain().setValue(InetAddress.getLocalHost().getCanonicalHostName().substring(InetAddress.getLocalHost().getHostName().length() + 1));
+					String canonicalHostName = InetAddress.getLocalHost().getCanonicalHostName();
+					String hostAddress = InetAddress.getLocalHost().getHostAddress();
+					String hostName = InetAddress.getLocalHost().getHostName();
+					
+					if(!canonicalHostName.equalsIgnoreCase(hostAddress) && !canonicalHostName.equalsIgnoreCase(hostName) )
+					{
+						getDomain().setValue(InetAddress.getLocalHost().getCanonicalHostName().substring(InetAddress.getLocalHost().getHostName().length() + 1));
+					}
+					else
+					{
+						getDomain().setValue("");
+					}
 				}
 				catch (Exception e)
 				{
@@ -533,6 +546,11 @@ public class BSysInfo extends BComponent
 	public BStatusNumeric getUsedHeap() { return (BStatusNumeric)get(usedHeap); }
 	public void setUsedHeap(javax.baja.status.BStatusNumeric v) { set(usedHeap, v); }
 
+	/***/
+	public static final Property maxHeap = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public BStatusNumeric getMaxHeap() { return (BStatusNumeric)get(maxHeap); }
+	public void setMaxHeap(javax.baja.status.BStatusNumeric v) { set(maxHeap, v); }
+	
 	/***/
 	public static final Property totalHeap = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusNumeric getTotalHeap() { return (BStatusNumeric)get(totalHeap); }
