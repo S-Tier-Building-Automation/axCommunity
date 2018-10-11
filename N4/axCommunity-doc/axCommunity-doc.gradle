@@ -35,13 +35,15 @@ niagaraModule
 bajadoc
 {
 	source project(":axCommunity-rt")
-	includePattern "org/axcommunity/niagara/**/*.java"
+	// includePattern "org/axcommunity/niagara/**/*.java"
+	includePattern "**/*.*"
 }
 
 bajadoc
 {
 	source project(":axCommunity-wb")
-	includePattern "org/axcommunity/niagara/**/*.java"
+	// includePattern "org/axcommunity/niagara/**/*.java"
+	includePattern "**/*.*"
 }
 
 /*	Include additional files in module jar	*/

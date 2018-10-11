@@ -1,0 +1,33 @@
+/*
+ * Copyright (c) 2014 Tridium Inc., All Rights Reserved
+ */
+subprojects {
+  apply plugin: 'eclipse'
+  apply plugin: 'java'
+
+  eclipse
+  {
+    classpath
+    {
+      //customizing the classes output directory:
+      //defaultOutputDir = file('build-eclipse')
+      defaultOutputDir = file('build')
+      
+      file {
+    
+        whenMerged {  classpath -> 
+        
+          //Remove the test folder from the classpath entry list
+          classpath.entries.removeAll {entry -> entry.path == "srcTest" }
+          
+          //Remove the test folder from the classpath entry list
+          classpath.entries.removeAll {entry -> (entry.kind == "output" && entry.path == "bin") }
+        
+          //Remove generated-resources as a dependency
+          classpath.entries.removeAll {entry -> entry.path.endsWith("generated-resources") }
+        
+        }
+      }
+    }
+  }
+}

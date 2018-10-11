@@ -1,9 +1,27 @@
 /*
- * Copyright (c) 2014 Tridium Inc., All Rights Reserved
+  Copyright 2018 Koffler, All Rights Reserved.
  */
+
 import groovy.io.FileVisitResult
 import groovy.io.FileType
 
+pluginManagement {
+  apply from: 'environment.gradle'
+
+  resolutionStrategy {
+    eachPlugin {
+      if (requested.id.namespace == 'com.tridium') {
+        useModule('com.tridium.tools:niagara-plugins:4.1.5')
+      }
+    }
+  }
+  repositories {
+    maven {
+      url "${gradle.ext.niagara_home}/etc/m2/repository"
+    }
+    gradlePluginPortal()
+  }
+}
 
 def discoveredProjects = [:] as Map<String, File>
 
@@ -31,6 +49,11 @@ if (mySettings.exists()) {
   apply from: mySettings
 }
 
+def environment = file('environment.gradle')
+if (environment.exists()) {
+  apply from: environment
+}
+
 // DO NOT MODIFY the niagaraRoots configuration
 niagaraRoots.collect({ file(it) }).findAll({ it.exists() }).each { File projectRoot ->
   projectRoot.traverse(
@@ -53,10 +76,28 @@ niagaraRoots.collect({ file(it) }).findAll({ it.exists() }).each { File projectR
 }
 
 // Can we change the rootproject.name?
-rootProject.name = 'niagara'
+rootProject.name = 'AxCommunity'
 rootProject.children.each { project ->
   project.projectDir = discoveredProjects[project.name]
   project.buildFileName = "${project.name}.gradle"
   assert project.projectDir.isDirectory()
   assert project.buildFile.isFile()
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

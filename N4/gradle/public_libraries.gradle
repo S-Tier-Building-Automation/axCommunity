@@ -1,0 +1,31 @@
+/*
+ *
+ * Copyright (c) 2015. Tridium, Inc. All Rights Reserved.
+ *
+ * Common file for setting versions for various plugins and libraries
+ */
+
+ext {
+  libraries = [
+    bctls: "org.bouncycastle:bctls-fips:1.0.4",
+    bcpkix_fips: "org.bouncycastle:bcpkix-fips:1.0.0",
+    bc_fips: "org.bouncycastle:bc-fips:1.0.1",
+    signing: "com.tridium:niagara-signing-plugin:1.0.10",
+    module: "com.tridium:niagara-module-plugin:3.0.18",
+    niagararjs: "com.tridium:niagara-rjs-plugin:2.0.4",
+    eclipse_core_commands: "org.eclipse.core:org.eclipse.core.commands:3.6.100",
+    eclipse_core_contenttype: "org.eclipse.core:org.eclipse.core.contenttype:3.4.200",   
+    eclipse_core_expressions: "org.eclipse.core:org.eclipse.core.expressions:3.4.600",
+    eclipse_core_filesystem: "org.eclipse.core:org.eclipse.core.filesystem:1.4.100",
+    eclipse_core_jobs: "org.eclipse.core:org.eclipse.core.jobs:3.6.1",
+    eclipse_core_resources: "org.eclipse.core:org.eclipse.core.resources:3.9.1",
+    eclipse_core_runtime: "org.eclipse.core:org.eclipse.core.runtime:3.10.0",
+    eclipse_equinox_app: "org.eclipse.equinox:org.eclipse.equinox.app:1.3.200",
+    eclipse_equinox_common: "org.eclipse.equinox:org.eclipse.equinox.common:3.6.200",
+    eclipse_equinox_preferences: "org.eclipse.equinox:org.eclipse.equinox.preferences:3.5.200",
+    eclipse_equinox_registry: "org.eclipse.equinox:org.eclipse.equinox.registry:3.5.400",
+    eclipse_jdt: "org.eclipse.jdt:org.eclipse.jdt.core:3.10.2",
+    eclipse_osgi: "org.eclipse.osgi:org.eclipse.osgi:3.10.2",
+    eclipse_text: "org.eclipse.text:org.eclipse.text:3.5.300"
+  ]
+}

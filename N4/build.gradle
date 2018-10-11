@@ -2,56 +2,55 @@
 * Copyright (c) 2014 Tridium, Inc. All Rights Reserved.
 */
 
-ext 
+plugins 
 {
-	niagaraHome = System.getenv("niagara_home")
-	if (niagaraHome == null) 
+	id 'com.tridium.niagara-signing'
+	id 'com.tridium.niagara' apply false
+	id 'com.tridium.niagara-module' apply false
+	id 'com.tridium.niagara-rjs' apply false
+}
+
+import com.tridium.gradle.plugins.niagara.task.RunNiagaraTestTask
+
+def getGradleProperty(String propName) 
+{
+	if (gradle.hasProperty(propName)) 
 	{
-		logger.error('niagara_home environment variable not set')
+		gradle.getProperty(propName)
+	} 
+	else 
+	{
+		// Get system property, or, failing that, fall back to environment variable
+		// This allows setting, e.g., -Pniagara_home=blah
+		System.getProperty(propName) ?: System.getenv(propName)
 	}
 }
 
-buildscript 
-{
-	repositories 
-	{
-		mavenCentral()
-		mavenLocal()
+ext.niagara_home = getGradleProperty('niagara_home')
+ext.niagara_dev_home = getGradleProperty('niagara_dev_home')
+ext.niagara_user_home = getGradleProperty('niagara_user_home')
 
-		// Declare a file repo here that points to the !/plugins jar files
-		flatDir 
-		{
-			dirs "${System.getenv("niagara_home")}/etc/gradle/plugins"
-		}
-	}
-
-	dependencies 
-	{
-		// classpath 'com.tridium:niagara-module-plugin:1.2.0-SNAPSHOT'
-		// classpath 'com.eriwen:gradle-js-plugin:1.9.2-trid'
-		// classpath 'com.tridium:niagara-rjs-plugin:1.0.8-SNAPSHOT'
-	}
-}
-
-apply from: "${System.getenv("niagara_home")}/etc/gradle/eclipse.gradle"
-apply from: "${System.getenv("niagara_home")}/etc/gradle/idea.gradle"
+apply from: "${rootDir}/gradle/eclipse.gradle"
+apply from: "${rootDir}/gradle/idea.gradle"
 
 gradle.beforeProject 
-{
+{ 
 	p ->
 	configure(p) 
 	{
 		def vendorSettings = file("${rootDir}/vendor.gradle")
-		
 		if (vendorSettings.exists()) 
 		{
 			apply from: vendorSettings
 		}
-		
-		apply from: "${System.getenv("niagara_home")}/etc/gradle/niagara.gradle"
-		apply from: "${System.getenv("niagara_home")}/etc/gradle/docmodule.gradle"
+		apply from: "${rootDir}/gradle/niagara.gradle"
+		apply from: "${rootDir}/gradle/docmodule.gradle"
+		tasks.withType(RunNiagaraTestTask) { RunNiagaraTestTask task ->
+			task.groups = []
+		}
 	}
 }
+
 
 
 tasks.addRule("""Pattern: [jar[Test]|clean|<any gradle task>]/[path]: Run a Gradle task against a set of modules rooted at path.""") 

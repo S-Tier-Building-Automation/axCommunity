@@ -108,6 +108,15 @@ public class BDynamicLinks extends BComponent
 {
 	private static BFacets fctStrMulti = BFacets.make(BFacets.MULTI_LINE, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100));
 	
+	/**These facets will get applied to all dynamic slots of this component.*/
+	public static final Property facetsForDynamicSlots = newProperty(0, BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)),null);
+	public BFacets getFacetsForDynamicSlots() { return (BFacets)get(facetsForDynamicSlots); }
+	public void setFacetsForDynamicSlots(BFacets v) { set(facetsForDynamicSlots,v,null); }
+	
+	public static final Property inDebug = newProperty(0, false);
+	public boolean getInDebug() { return getBoolean(inDebug); }
+	public void setInDebug(boolean v) { setBoolean(inDebug, v, null); }
+	
 	/**This should be the format slotPath comma slotName to the component you wish to link to this component's 'enableLinks' slot.*/
 	public static final Property pathToEnableLinks = newProperty(Flags.HIDDEN, "station:|slot:/Path_To_Your_Component/Your_Component_Name,Slot_Name", BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	/**This should be the format slotPath comma slotName to the component you wish to link to this component's 'enableLinks' slot.*/
@@ -122,7 +131,6 @@ public class BDynamicLinks extends BComponent
 	/**When this is false all links to any dynamic slot on this component will be removed and the slot's status will be set to the status of slot 'statusForInvalidOrds'.*/
 	public void setEnableLinks(boolean v) { setBoolean(enableLinks, v, null); }
 
-	
 	
 	/**See the class description for more information*/
 	public static final Property slotInfoCsv = newProperty(0, "%parent.name%,,MyParentName\nstation:|%slotPath%,,SampleSlotPath", fctStrMulti);
@@ -238,7 +246,13 @@ public class BDynamicLinks extends BComponent
     /**This is fired every time outDelimitedSlotNames or outDelimitedSlotValues is updated.*/
 	public void fireCsvSlotNameValuePairs(BString event){fire(CsvSlotNameValuePairs,event,null);}
 	
-	
+	private static final BFacets statusForInvalidOrdsFacets =	BFacets.make(BFacets.FIELD_EDITOR, BString.make("kitControl:PropagateFlagsFE"));
+	public BFacets getSlotFacets(Slot slot)
+	{
+		if (slot.getName().equals(statusForInvalidOrds)){ return statusForInvalidOrdsFacets;}
+		else if(slot.isDynamic()){return getFacetsForDynamicSlots();}
+		else {return super.getSlotFacets(slot);}
+	}
 	
 	public Type getType() { return TYPE; }
 	public static final Type TYPE = Sys.loadType(BDynamicLinks.class);
@@ -246,13 +260,6 @@ public class BDynamicLinks extends BComponent
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/EB.png");
 	public static final Log logger = Log.getLog(TYPE.getModule().getModuleName() + "." + TYPE.getTypeName());
-	
-	private static final BFacets statusForInvalidOrdsFacets =	BFacets.make(BFacets.FIELD_EDITOR, BString.make("kitControl:PropagateFlagsFE"));
-	public BFacets getSlotFacets(Slot slot)
-	{
-		if (slot.getName().equals(statusForInvalidOrds)) return statusForInvalidOrdsFacets;
-		else return super.getSlotFacets(slot);
-	}
 	
 	/**Represents the column number within the csv that contains the source ord path.*/
 	static int colSourceOrd = 0;
@@ -470,7 +477,7 @@ public class BDynamicLinks extends BComponent
 		msg = "\n" + msg.trim() + "\n" + "PRINTSTACKTRACE: \n" + errors.toString().trim();
 		messageHandler( level, msg );
 	}
-	
+
 	/**
 	 * 
 	 * @param level - Level of log you want to create.
@@ -481,7 +488,15 @@ public class BDynamicLinks extends BComponent
 	 */
 	private void messageHandler(Level level, String msg)
 	{
-		logger.log(levelToInt(level), "\t" + destinationComp.getSlotPath() + "\t" + msg, null);
+		msg = "\t" + destinationComp.getSlotPath() + "\t" + msg;
+		if(getInDebug())
+		{
+			System.out.println(msg);
+		}
+		else
+		{
+			logger.log(levelToInt(level), msg, null);
+		}
 	}
 	
 	
@@ -959,6 +974,8 @@ public class BDynamicLinks extends BComponent
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	public void doRefreshLinks()
 	{
+		messageHandler( Level.FINEST, "\t" + "doRefreshLinks() method called.");
+		
 		if(!Sys.atSteadyState() || !destinationComp.isRunning()) return;
 		
 		if( getEnableLinks()==true )
@@ -971,6 +988,11 @@ public class BDynamicLinks extends BComponent
 		
 		String[][] strOrds;
 
+			messageHandler( Level.FINEST, "\t" + "doRefreshLinks(), getSlotInfoCsv():                                       '" + getSlotInfoCsv() + "'");
+			messageHandler( Level.FINEST, "\t" + "doRefreshLinks(), BFormat.make(getSlotInfoCsv()):                         '" + BFormat.make(getSlotInfoCsv()) + "'");
+			messageHandler( Level.FINEST, "\t" + "doRefreshLinks(), BFormat.make(getSlotInfoCsv()).format(destinationComp): '" + BFormat.make(getSlotInfoCsv()).format(destinationComp) + "'");
+			
+			
 		try {strOrds = split(BFormat.make(getSlotInfoCsv()).format(destinationComp), "\n", ",");}
 		catch (Exception e)
 		{
@@ -1006,6 +1028,9 @@ public class BDynamicLinks extends BComponent
 			boolean invalidSourceOrd = false;
 			boolean linkAdded = false;
 			
+				messageHandler( Level.FINEST, "\t" + "doRefreshLinks(), formatOrd: '" + formatOrd + "'");
+				
+				
 				if(formatOrd == null || targetSlotName == null)
 				{
 					continue;
@@ -1176,7 +1201,7 @@ public class BDynamicLinks extends BComponent
 					if(!renamedOldSlot && !invalidSourceOrd)
 					{
 							messageHandler(Level.FINE, "Adding new slot name: " + targetSlotName);
-						destinationComp.add(targetSlotName, sourceBValue.newCopy(), Flags.SUMMARY, null, null);
+							destinationComp.add(targetSlotName, sourceBValue.newCopy(), Flags.SUMMARY, BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)), null);
 						slotAdded = true;
 					}
 				}
@@ -1219,7 +1244,7 @@ public class BDynamicLinks extends BComponent
 						continue;
 					}
 					
-					try {destinationComp.add(targetSlotName, sourceBValue.newCopy(), Flags.SUMMARY, null, null);}
+						try {destinationComp.add(targetSlotName, sourceBValue.newCopy(), Flags.SUMMARY, BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)), null);}
 					catch (Exception e)
 					{
 							String msg = "Could not create new slot: " + targetSlotName;
@@ -1235,7 +1260,7 @@ public class BDynamicLinks extends BComponent
 				{
 					if(destinationComp.getProperty(targetSlotName).isDynamic())
 					{
-							messageHandler(Level.FINE, "\t[doRefreshLinks()]\t" + "Reordering slot: " + targetSlotName);
+							messageHandler(Level.FINE, "\t" + "doRefreshLinks(), Reordering slot: " + targetSlotName);
 						destinationComp.reorderToBottom(destinationComp.getProperty(targetSlotName));
 					}
 				}
@@ -1542,103 +1567,22 @@ public class BDynamicLinks extends BComponent
 		}
 	}
 	
+	
 	/*------------------------------------------------------------------------------------------------------------------------*/
-	private static String[][] split(String inString, String delim1, String delim2)
+	private String[] split(String inString, String delim)
 	{									
-		if(inString.indexOf(delim1) == -1 && inString.indexOf(delim2) == -1) 
-		{
-			if (inString.length() == 0) return new String[0][0];
-			else
-			{
-				String[][] outputArray;
-				if(inString.indexOf(delim1) == -1 && inString.indexOf(delim2) > -1)
-				{
-					String[] tempArray = split(inString, delim2);
-					outputArray = new String[1][tempArray.length];
-					
-					for(int i = 0; i < tempArray.length; i++) outputArray[0][i] = tempArray[i];
-					return outputArray;
-				}
-				else
-				{
-					String[] tempArray = split(inString, delim1);
-					outputArray = new String[tempArray.length][1];
-					
-					for(int i = 0; i < tempArray.length; i++) outputArray[i][0] = tempArray[i];
-					return outputArray;
-				}
-			}
-		}
-		else
-		{
-			String[] arrDelim1 = split(inString, delim1);
-			String[][] list = new String[arrDelim1.length][8];
-			String[] arrDelim2;
-			int secondDimensionSize = 0;
-			
-			for (int i = 0; i < arrDelim1.length; i++)
-			{
-				arrDelim2 = split(arrDelim1[i], delim2);
-				secondDimensionSize = Math.max(secondDimensionSize, arrDelim2.length);
-				list = resizeArray(list, arrDelim1.length, secondDimensionSize);
-				
-				for (int j = 0; j < arrDelim2.length; j++) list[i][j] = arrDelim2[j];
-			}
-			
-			if(list[0].length == secondDimensionSize) return list;
-			else
-			{
-				String[][] trim = new String[list.length][secondDimensionSize];
-				for(int i = 0; i < trim.length; i++)
-					for(int j = 0; j < trim[i].length; j++)
-						trim[i][j] = list[i][j];
-				
-				return trim;
-			}
-		}
-	}
-	
-	/*------------------------------------------------------------------------------------------------------------------------*/
-	private static String[][] resizeArray(String[][] inArray, int len1, int len2)
-	{
-		if (len1 <= inArray.length && len2 <= inArray[0].length) return inArray;
-
-		int newLength1 = 100;
-
-		if(len1 <= inArray.length) newLength1 = inArray.length;
-		{
-			newLength1 = Math.max(newLength1, inArray.length + 50);
-			newLength1 = Math.min(newLength1, inArray.length * 2);
-			newLength1 = Math.max(newLength1, len1);
-		}
-
-
-		int newLength2 = 100;
-
-		if(len2 <= inArray[0].length) newLength2 = inArray[0].length;
-		{
-			newLength2 = Math.max(newLength2, inArray[0].length + 50);
-			newLength2 = Math.min(newLength2, inArray[0].length * 2);
-			newLength2 = Math.max(newLength2, len2);
-		}
-
-		String[][] expand = new String[newLength1][newLength2];
-
-		for(int i = 0; i < inArray.length; i++)
-			for(int j = 0; j < inArray[i].length; j++)
-				expand[i][j] = inArray[i][j];
-
-		return expand;
-	}
-	
-	
-	/*------------------------------------------------------------------------------------------------------------------------*/
-	private static String[] split(String inString, String delim)
-	{									
+		messageHandler( Level.FINEST, "\t" + "split() method called with inString: '" + inString + "'.");
+		
 		if (inString.indexOf(delim) == -1) 
 		{
-			if (inString.length() == 0) return new String[0];
-			else return new String[] { inString };
+			if (inString.length() == 0)
+			{
+				return new String[0];
+			}
+			else
+			{
+				return new String[] { inString };
+			}
 		}
 
 		String[] list = new String[8];
@@ -1649,6 +1593,7 @@ public class BDynamicLinks extends BComponent
 		if(inString.startsWith("\""))
 		{
 			int secondQuote = inString.lastIndexOf("\"" + delim);
+			
 			if(secondQuote > 2)
 			{
 				//quoted string found, set the value
@@ -1672,12 +1617,20 @@ public class BDynamicLinks extends BComponent
 				lastChar = lastChar + delim.length();
 				firstChar = lastChar;
 			}
-			else lastChar++;
+			else
+			{
+				lastChar++;
+			}
 		}
+		
+		
 		list = resizeArray(list, index);
 		list[index++] = inString.substring(firstChar, inString.length());
 
-		if (index == list.length) return list;
+		if (index == list.length)
+		{
+			return list;
+		}
 		else
 		{
 			String[] trim = new String[index];
@@ -1687,9 +1640,97 @@ public class BDynamicLinks extends BComponent
 	}
 	
 	/*------------------------------------------------------------------------------------------------------------------------*/
-	private static String[] resizeArray(String[] inArray, int len)
+	
+	/*------------------------------------------------------------------------------------------------------------------------*/
+	private String[][] split(String inString, String delim1, String delim2)
+	{									
+		messageHandler( Level.FINEST, "\t" + "split(String inString, String delim1, String delim2) method called.");
+		
+		if(inString.indexOf(delim1) == -1 && inString.indexOf(delim2) == -1) 
+		{
+			if (inString.length() == 0)
+			{
+				return new String[0][0];
+			}
+			else
+			{
+				String[][] outputArray;
+				if(inString.indexOf(delim1) == -1 && inString.indexOf(delim2) > -1)
+				{
+					String[] tempArray = split(inString, delim2);
+					outputArray = new String[1][tempArray.length];
+					
+					for (int i = 0; i < tempArray.length; i++)
+					{
+						outputArray[0][i] = tempArray[i];
+					}
+					return outputArray;
+				}
+				else
+				{
+					String[] tempArray = split(inString, delim1);
+					outputArray = new String[tempArray.length][1];
+					
+					for (int i = 0; i < tempArray.length; i++)
+					{
+						outputArray[i][0] = tempArray[i];
+					}
+					return outputArray;
+				}
+			}
+		}
+		else
+		{
+			String[] arrDelim1 = split(inString, delim1);
+			String[][] list = new String[arrDelim1.length][8];
+			String[] arrDelim2;
+			int secondDimensionSize = 0;
+			
+			for (int i = 0; i < arrDelim1.length; i++)
+			{
+				arrDelim2 = split(arrDelim1[i], delim2);
+				secondDimensionSize = Math.max(secondDimensionSize, arrDelim2.length);
+				list = resizeArray(list, arrDelim1.length, secondDimensionSize);
+				
+				for (int j = 0; j < arrDelim2.length; j++)
+				{
+					list[i][j] = arrDelim2[j];
+				}
+			}
+			
+			
+
+			if (list[0].length == secondDimensionSize)
+			{
+				return list;
+			}
+			else
+			{
+				String[][] trim = new String[list.length][secondDimensionSize];
+				
+				for(int i = 0; i < trim.length; i++)
+				{
+					for(int j = 0; j < trim[i].length; j++)
+					{
+						trim[i][j] = list[i][j];
+					}
+				}
+				
+				return trim;
+			}
+		}
+	}
+	
+	/*------------------------------------------------------------------------------------------------------------------------*/
+	/*------------------------------------------------------------------------------------------------------------------------*/
+	private String[] resizeArray(String[] inArray, int len)
 	{
-		if (len < inArray.length) return inArray;
+		messageHandler( Level.FINEST, "\t" + "resizeArray(String[] inArray, int len) method called.");
+		
+		if (len < inArray.length)
+		{
+			return inArray;
+		}
 		//int newLength = Math.min(100, inArray.length*2);
 		int newLength = 100;
 		newLength = Math.max(newLength, inArray.length + 50);
@@ -1700,11 +1741,55 @@ public class BDynamicLinks extends BComponent
 		System.arraycopy(inArray, 0, expand, 0, inArray.length);
 		return expand;
 	}
+	
+	/*------------------------------------------------------------------------------------------------------------------------*/
+	/*------------------------------------------------------------------------------------------------------------------------*/
+	private String[][] resizeArray(String[][] inArray, int len1, int len2)
+	{
+		messageHandler( Level.FINEST, "\t" + "resizeArray(String[][] inArray, int len1, int len2) method called.");
+		
+		if (len1 <= inArray.length && len2 <= inArray[0].length)
+			return inArray;
+
+		int newLength1 = 100;
+
+		if (len1 <= inArray.length)
+			newLength1 = inArray.length;
+		{
+			newLength1 = Math.max(newLength1, inArray.length + 50);
+			newLength1 = Math.min(newLength1, inArray.length * 2);
+			newLength1 = Math.max(newLength1, len1);
+		}
+
+		int newLength2 = 100;
+
+		if (len2 <= inArray[0].length)
+			newLength2 = inArray[0].length;
+		{
+			newLength2 = Math.max(newLength2, inArray[0].length + 50);
+			newLength2 = Math.min(newLength2, inArray[0].length * 2);
+			newLength2 = Math.max(newLength2, len2);
+		}
+
+		String[][] expand = new String[newLength1][newLength2];
+
+		for(int i = 0; i < inArray.length; i++)
+			for(int j = 0; j < inArray[i].length; j++)
+				expand[i][j] = inArray[i][j];
+
+		return expand;
+	}
 
 
 	/*------------------------------------------------------------------------------------------------------------------------*/
-	private static String replaceString(String sourceStr, String oldStr, String newStr)
+	
+	
+
+	/*------------------------------------------------------------------------------------------------------------------------*/
+	private String replaceString(String sourceStr, String oldStr, String newStr)
 	{
+		messageHandler( Level.FINEST, "\t" + "replaceString() method called with sourceStr: '" + sourceStr + "', oldStr: '" + oldStr + "', newStr: '" + newStr + "'.");
+		
 		int idx = sourceStr.lastIndexOf(oldStr);
 		if (idx != -1) 
 		{
@@ -1718,8 +1803,6 @@ public class BDynamicLinks extends BComponent
 	}
 
 
-
-
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	/**
 	 * This is a custom string that can be used in the source ord BFormat input.
@@ -1728,8 +1811,13 @@ public class BDynamicLinks extends BComponent
 	{
 		String station = seguinStationSlotPath().toString();
 		if(station != null)
+		{
 			if(station.length() > 0)
+			{
 				station = "station:|" + station;
+			}
+		}
+		
 		return station;
 	}
 
@@ -1785,8 +1873,13 @@ public class BDynamicLinks extends BComponent
 	{
 		String zone = seguinZoneSlotPath().toString();
 		if(zone != null)
+		{
 			if(zone.length() > 0)
+			{
 				zone = "station:|" + zone;
+			}
+		}
+		
 		return zone;
 	}
 
@@ -1856,8 +1949,63 @@ public class BDynamicLinks extends BComponent
 		{
 			messageHandler(Level.FINEST, "Exception from method 'getComponentFromPath()'.", e);
 		}
+		
 		return com;
 	}
+	
+	
+	/*------------------------------------------------------------------------------------------------------------------------*/
+	public String wcRootPath()
+	{
+		String result = "";
+		
+		try
+		{
+			result = wcRoot().getSlotPath().toString();
+		}
+		catch (Exception e)
+		{
+		}
+		
+		return result;
+	}
+	
+	
+	
+	/*------------------------------------------------------------------------------------------------------------------------*/
+	public BComponent wcRoot()
+	{
+		BComponent result = new BComponent();
+		
+		try
+		{
+			BComponent  comp   = (BComponent) this.getParent().getParentComponent();
+			
+			boolean found = false;
+			while( !comp.getType().toString().equalsIgnoreCase("baja:Station") && !found )
+			{
+				if( comp.getType().toString().equalsIgnoreCase("korsComponentManager:WorkcenterFolder"))
+				{
+					found = true;
+				}
+				else
+				{
+					comp   = (BComponent) comp.getParent().getParentComponent();
+				}
+			}
+			
+			if(found)
+			{
+				result = comp;
+			}
+		}
+		catch (Exception e)
+		{
+		}
+		
+		return result;
+	}
+	
 
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	private void addSlotFlag(Property inPropertyName, int flag)

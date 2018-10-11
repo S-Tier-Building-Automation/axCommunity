@@ -405,24 +405,24 @@ public class BSysInfoView extends BWbComponentView
 	private	BBargraph		barCountForTotalHeap			= new BBargraph();
 	private	BBargraph		barCountForFreeHeap				= new BBargraph();
 	
-	private	Double			BarXoffset			= 80D;
-	private	Double			x0					= 5D;
-	private	Double			x1					= BarXoffset * 1 + x0;
-	private	Double			x2					= BarXoffset * 2 + x0;
-	private	Double			x3					= BarXoffset * 3 + x0;
-	private	Double			x4					= BarXoffset * 4 + x0;
-	private	Double			x5					= BarXoffset * 5 + x0;
-	private	Double			x6					= BarXoffset * 6 + x0;
-	private	Double			x7					= BarXoffset * 7 + x0;
+	private	double			BarXoffset			= 80D;
+	private	double			x0					= 5D;
+	private	double			x1					= BarXoffset * 1 + x0;
+	private	double			x2					= BarXoffset * 2 + x0;
+	private	double			x3					= BarXoffset * 3 + x0;
+	private	double			x4					= BarXoffset * 4 + x0;
+	private	double			x5					= BarXoffset * 5 + x0;
+	private	double			x6					= BarXoffset * 6 + x0;
+	private	double			x7					= BarXoffset * 7 + x0;
 		
-	private	Double			barY				= 40D;
-	private	Double			lblY				= 265D;
+	private	double			barY				= 40D;
+	private	double			lblY				= 265D;
 		
-	private	Double			barW				= 75D;
-	private	Double			barH				= 220D;
+	private	double			barW				= 75D;
+	private	double			barH				= 220D;
 		
-	private	Double			lblW				= barW;
-	private	Double			lblH				= 50D;
+	private	double			lblW				= barW;
+	private	double			lblH				= 50D;
 	
 	private	BFont			barFont				= BFont.make("Tahoma", 14, BFont.BOLD);
 	private	BBrush			barFore				= BBrush.makeSolid(BColor.make(0,0,0,255));				//#ff000000, black
