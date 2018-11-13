@@ -3,6 +3,7 @@ package org.axcommunity.niagara.system;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetAddress;
+import java.util.logging.Level;
 
 import javax.baja.log.Log;
 import javax.baja.status.BStatus;
@@ -295,6 +296,15 @@ public class BSysInfo extends BComponent
 		log.error("\n" + getSlotPath() + "\n" + errMsg);
 	}
 	
+	private void errorHandlerTrace(String msgPrefix, Exception e)
+	{
+		String errMsg = msgPrefix.trim() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace();
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		errMsg = errMsg.trim() + "\n" + "PRINTSTACKTRACE: \n" + errors.toString();
+		log.trace("\n" + getSlotPath() + "\n" + errMsg);
+	}
+	
 	
 	class InetInfo implements Runnable
 	{
@@ -308,7 +318,7 @@ public class BSysInfo extends BComponent
 				}
 				catch (Exception e)
 				{
-					errorHandler("Exception in InetInfo.run().getHostName() method!", e);
+					errorHandlerTrace("Exception in InetInfo.run().getHostName() method!", e);
 					getHostName().setValue("ERROR");
 				}
 
@@ -318,7 +328,7 @@ public class BSysInfo extends BComponent
 				}
 				catch (Exception e)
 				{
-					errorHandler("Exception in InetInfo.run().getFqdn() method!", e);
+					errorHandlerTrace("Exception in InetInfo.run().getFqdn() method!", e);
 					getFqdn().setValue("ERROR");
 				}
 
@@ -328,9 +338,23 @@ public class BSysInfo extends BComponent
 					String hostAddress = InetAddress.getLocalHost().getHostAddress();
 					String hostName = InetAddress.getLocalHost().getHostName();
 					
-					if(!canonicalHostName.equalsIgnoreCase(hostAddress) && !canonicalHostName.equalsIgnoreCase(hostName) )
+					if(canonicalHostName.length()>0 && hostName.length()>0)
 					{
-						getDomain().setValue(InetAddress.getLocalHost().getCanonicalHostName().substring(InetAddress.getLocalHost().getHostName().length() + 1));
+						if(!canonicalHostName.equalsIgnoreCase(hostAddress)	&& !canonicalHostName.equalsIgnoreCase(hostName) )
+						{
+							if(canonicalHostName.indexOf(hostName)>=0 && canonicalHostName.length() > hostName.length()+1)
+							{
+								getDomain().setValue(canonicalHostName.substring(hostName.length() + 1));
+							}
+							else
+							{
+								getDomain().setValue("");
+							}
+						}
+						else
+						{
+							getDomain().setValue("");
+						}
 					}
 					else
 					{
@@ -339,7 +363,7 @@ public class BSysInfo extends BComponent
 				}
 				catch (Exception e)
 				{
-					errorHandler("Exception in InetInfo.run().getDomain() method!", e);
+					errorHandlerTrace("Exception in InetInfo.run().getDomain() method!", e);
 					getDomain().setValue("ERROR");
 				}
 
@@ -349,14 +373,14 @@ public class BSysInfo extends BComponent
 				}
 				catch (Exception e)
 				{
-					errorHandler("Exception in InetInfo.run().getIpAddress() method!", e);
+					errorHandlerTrace("Exception in InetInfo.run().getIpAddress() method!", e);
 					
 					getIpAddress().setValue("ERROR");
 				}
 			}
 			catch (Exception e)
 			{
-				errorHandler("Exception in InetInfo.run() method!", e);
+				errorHandlerTrace("Exception in InetInfo.run() method!", e);
 			}
 			
 			fireUpdated(BBoolean.make(true));
@@ -373,7 +397,6 @@ public class BSysInfo extends BComponent
 	{
 		try
 		{
-			
 			Station.addSaveListener(saveListener);
 			getExecutingSave().setValue(true);
 			System.out.println("\nA Station Save Has Been Invoked From:\t\t" + getSlotPath());

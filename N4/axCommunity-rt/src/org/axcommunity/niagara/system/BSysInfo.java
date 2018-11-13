@@ -2,7 +2,13 @@ package org.axcommunity.niagara.system;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.baja.status.BStatus;
@@ -147,6 +153,7 @@ public class BSysInfo extends BComponent
 				getFqdn().setValue("");
 				getDomain().setValue("");
 				getIpAddress().setValue("");
+				getIpAddressList().setValue("");
 			}
 			else
 			{
@@ -236,6 +243,7 @@ public class BSysInfo extends BComponent
 				getFqdn().setValue("");
 				getDomain().setValue("");
 				getIpAddress().setValue("");
+				getIpAddressList().setValue("");
 				
 				fireUpdated(BBoolean.make(true));
 			}
@@ -284,14 +292,18 @@ public class BSysInfo extends BComponent
 		}
 	};
 	
-	
 	private void errorHandler(String msgPrefix, Exception e)
+	{
+		errorHandler(Level.SEVERE, msgPrefix, e);
+	}
+	
+	private void errorHandler(Level inLevel, String msgPrefix, Exception e)
 	{
 		String errMsg = msgPrefix.trim() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace();
 		StringWriter errors = new StringWriter();
 		e.printStackTrace(new PrintWriter(errors));
 		errMsg = errMsg.trim() + "\n" + "PRINTSTACKTRACE: \n" + errors.toString();
-		log.severe("\n" + getSlotPath() + "\n" + errMsg);
+		log.log(inLevel, "\n" + getSlotPath() + "\n" + errMsg);
 	}
 	
 	
@@ -307,7 +319,7 @@ public class BSysInfo extends BComponent
 				}
 				catch (Exception e)
 				{
-					errorHandler("Exception in InetInfo.run().getHostName() method!", e);
+					errorHandler(Level.FINEST, "Exception in InetInfo.run().getHostName() method!", e);
 					getHostName().setValue("ERROR");
 				}
 
@@ -317,7 +329,7 @@ public class BSysInfo extends BComponent
 				}
 				catch (Exception e)
 				{
-					errorHandler("Exception in InetInfo.run().getFqdn() method!", e);
+					errorHandler(Level.FINEST, "Exception in InetInfo.run().getFqdn() method!", e);
 					getFqdn().setValue("ERROR");
 				}
 
@@ -327,9 +339,23 @@ public class BSysInfo extends BComponent
 					String hostAddress = InetAddress.getLocalHost().getHostAddress();
 					String hostName = InetAddress.getLocalHost().getHostName();
 					
-					if(!canonicalHostName.equalsIgnoreCase(hostAddress) && !canonicalHostName.equalsIgnoreCase(hostName) )
+					if(canonicalHostName.length()>0 && hostName.length()>0)
 					{
-						getDomain().setValue(InetAddress.getLocalHost().getCanonicalHostName().substring(InetAddress.getLocalHost().getHostName().length() + 1));
+						if(!canonicalHostName.equalsIgnoreCase(hostAddress)	&& !canonicalHostName.equalsIgnoreCase(hostName) )
+						{
+							if(canonicalHostName.indexOf(hostName)>=0 && canonicalHostName.length() > hostName.length()+1)
+							{
+								getDomain().setValue(canonicalHostName.substring(hostName.length() + 1));
+							}
+							else
+							{
+								getDomain().setValue("");
+							}
+						}
+						else
+						{
+							getDomain().setValue("");
+						}
 					}
 					else
 					{
@@ -338,30 +364,80 @@ public class BSysInfo extends BComponent
 				}
 				catch (Exception e)
 				{
-					errorHandler("Exception in InetInfo.run().getDomain() method!", e);
+					errorHandler(Level.FINEST, "Exception in InetInfo.run().getDomain() method!", e);
 					getDomain().setValue("ERROR");
 				}
 
+				
+				
+				
 				try
 				{
 					getIpAddress().setValue(InetAddress.getLocalHost().getHostAddress());
 				}
 				catch (Exception e)
 				{
-					errorHandler("Exception in InetInfo.run().getIpAddress() method!", e);
+					errorHandler(Level.FINEST, "Exception in InetInfo.run().getIpAddress() method!", e);
 					
 					getIpAddress().setValue("ERROR");
 				}
+				
+				
+				
+				try
+				{
+					StringBuilder					ipList	= new StringBuilder();
+					String 							ipDelim	= ",";
+					Enumeration<NetworkInterface>	nets	= NetworkInterface.getNetworkInterfaces();
+					
+			        for (NetworkInterface netint : Collections.list(nets))
+			        {
+			            if(netint.isUp() && !netint.isLoopback())
+			        	{
+					        Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
+					        
+					        for (InetAddress inetAddress : Collections.list(inetAddresses)) 
+					        {
+					        	if (inetAddress instanceof Inet4Address && !inetAddress.isLoopbackAddress())
+					        	{
+						        	ipList.append(inetAddress.getHostAddress()+ipDelim);
+					        	}
+					        }
+			        	}
+			        }
+			        
+			        
+			        String ipCsv = ipList.toString();
+			        
+			        if(ipCsv.length() > ipDelim.length())
+			        {
+			        	ipCsv = ipCsv.substring(0, ipCsv.length() - ipDelim.length());
+			        	getIpAddressList().setValue(ipCsv);
+			        }
+			        else
+			        {
+			        	getIpAddressList().setValue("");
+			        }
+				}
+				catch (Exception e)
+				{
+					errorHandler(Level.FINEST, "Exception in InetInfo.run().getIpAddressList() method!", e);
+					getIpAddressList().setValue("ERROR");
+				}
+				
+				
+				
 			}
 			catch (Exception e)
 			{
-				errorHandler("Exception in InetInfo.run() method!", e);
+				errorHandler(Level.FINEST, "Exception in InetInfo.run() method!", e);
 			}
 			
 			fireUpdated(BBoolean.make(true));
 		}
 	}
 
+	
 	/** 
 	 * This will initiate a station save.
 	 * The "CONFIRM_REQUIRED" flag is set by default but when used from logic this confirmation isn't required (that I can tell at least).
@@ -488,6 +564,11 @@ public class BSysInfo extends BComponent
 	public void setIpAddress(BStatusString v) { set(ipAddress, v); }
 	public BStatusString getIpAddress() {return (BStatusString)get(ipAddress);}
 
+	/***/
+	public static final Property ipAddressList = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public void setIpAddressList(BStatusString v) { set(ipAddressList, v); }
+	public BStatusString getIpAddressList() {return (BStatusString)get(ipAddressList);}
+	
 	/***/
 	public static final Property hostName = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setHostName(BStatusString v) { set(hostName, v); }
