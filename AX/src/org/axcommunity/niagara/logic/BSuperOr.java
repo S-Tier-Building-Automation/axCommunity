@@ -91,6 +91,17 @@ extends BComponent implements Runnable
 	public void fireFalse(BBoolean event){fire(False,event,null);}
 	
 	
+	/*----------------------------------------------------------------------------------------------------------------*/
+	public BValue getActionParameterDefault(Action paramAction)
+	{
+		if (paramAction == VariableCount)
+		{
+			return (BDouble) BDouble.make(getNumberOfValues().getValue());
+		}
+		
+		return super.getActionParameterDefault(paramAction);
+	}
+	
 
 	//----------------------------------------------------------------------------------------------------------
 	public void started()
@@ -298,20 +309,18 @@ extends BComponent implements Runnable
 			/** Turns Output On **/
 			if (ValFlag1)
 			{
-				getOut().setValue(true);
-				getOut().setStatusNull(false);
+				
 				
 				if(getToNull()) 
 				{
-					getOutRev().setStatusNull(true);
+					setOutRev(new BStatusBoolean(true, BStatus.nullStatus));
 				}
 				else
 				{
-					getOutRev().setStatusNull(false);
+					setOutRev(new BStatusBoolean(false, BStatus.ok));
 				}
 				
-				getOutRev().setValue(false);
-
+				setOut(new BStatusBoolean(true, BStatus.ok));
 				fireTrue(BBoolean.make(true));
 				
 				ValFlag1=false;      
@@ -321,18 +330,13 @@ extends BComponent implements Runnable
 			{
 				if(!getToNull())
 				{
-					getOut().setValue(false); 
-					getOutRev().setValue(true);
-
-					getOut().setStatusNull(false); 
-					getOutRev().setStatusNull(false);
+					setOutRev(new BStatusBoolean(true, BStatus.ok));
+					setOut(new BStatusBoolean(false, BStatus.ok));
 				}
 				else 
 				{
-					getOut().setStatusNull(true);
-					getOutRev().setValue(true);
-					getOutRev().setStatusNull(false);
-					
+					setOutRev(new BStatusBoolean(true, BStatus.nullStatus));
+					setOut(new BStatusBoolean(false, BStatus.nullStatus));
 				}
 				
 				fireFalse(BBoolean.make(true));

@@ -42,6 +42,23 @@
 
 		<pre>
 			<code>
+<b>V19.01.31.01 January 31, 2019</b><i> - Justin Koffler</i>
+	- MODIFIED 'BDynamicLinks'
+		* Added ability to link TO other components.
+		* Added two optional parameters to the csv for each link.
+		* The two additional parameters are the path of the component you want to link to and the slot on that component.
+		* So the parameters should be:
+		  '1.	Source component path
+		  '2.	Slot name on source component
+		  '3.	Slot name you want on the DynamicLinks component
+		  '4.	Destination component path
+		  '5.	Slot name on destination component
+	- MODIFIED 'BSetNumericAction'
+		* Fixed issue with 'outLastValueSet' value not getting updated.
+	- MODIFIED 'BSuperOr'
+		* Added 'getActionParameterDefault' method so set actions get a default value.
+		* Improved how the 'out' and 'outRev' values and status are getting set.
+<hr>
 <b>V18.11.13.01 November 13, 2018</b><i> - Justin Koffler</i>
 	- MODIFIED 'BSysInfo'
 		* Added new string slot 'ipAddressList' which is a csv list of all IPv4 addresses on station.

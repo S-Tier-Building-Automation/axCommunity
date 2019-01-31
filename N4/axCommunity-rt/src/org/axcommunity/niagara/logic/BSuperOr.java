@@ -93,6 +93,17 @@ extends BComponent implements Runnable
 	public void fireFalse(BBoolean event){fire(False,event,null);}
 	
 	
+	/*----------------------------------------------------------------------------------------------------------------*/
+	public BValue getActionParameterDefault(Action paramAction)
+	{
+		if (paramAction == VariableCount)
+		{
+			return (BDouble) BDouble.make(getNumberOfValues().getValue());
+		}
+		
+		return super.getActionParameterDefault(paramAction);
+	}
+	
 
 	//----------------------------------------------------------------------------------------------------------
 	public void started()
@@ -300,20 +311,18 @@ extends BComponent implements Runnable
 			/** Turns Output On **/
 			if (ValFlag1)
 			{
-				getOut().setValue(true);
-				getOut().setStatusNull(false);
+				
 				
 				if(getToNull()) 
 				{
-					getOutRev().setStatusNull(true);
+					setOutRev(new BStatusBoolean(Boolean.FALSE, BStatus.nullStatus));
 				}
 				else
 				{
-					getOutRev().setStatusNull(false);
+					setOutRev(new BStatusBoolean(Boolean.FALSE, BStatus.ok));
 				}
 				
-				getOutRev().setValue(false);
-
+				setOut(new BStatusBoolean(Boolean.TRUE, BStatus.ok));
 				fireTrue(BBoolean.make(true));
 				
 				ValFlag1=false;      
@@ -323,18 +332,13 @@ extends BComponent implements Runnable
 			{
 				if(!getToNull())
 				{
-					getOut().setValue(false); 
-					getOutRev().setValue(true);
-
-					getOut().setStatusNull(false); 
-					getOutRev().setStatusNull(false);
+					setOutRev(new BStatusBoolean(Boolean.TRUE, BStatus.ok));
+					setOut(new BStatusBoolean(Boolean.FALSE, BStatus.ok));
 				}
 				else 
 				{
-					getOut().setStatusNull(true);
-					getOutRev().setValue(true);
-					getOutRev().setStatusNull(false);
-					
+					setOutRev(new BStatusBoolean(Boolean.TRUE, BStatus.nullStatus));
+					setOut(new BStatusBoolean(Boolean.FALSE, BStatus.nullStatus));
 				}
 				
 				fireFalse(BBoolean.make(true));
@@ -388,14 +392,13 @@ extends BComponent implements Runnable
 	////////////////////////////////////////////////////////////////
 	// Type
 	////////////////////////////////////////////////////////////////
-	
-	public static final Logger logger = Logger.getLogger("axCommunity.SuperOr");
-
 	public Type getType() { return TYPE; }
 	public static final Type TYPE = Sys.loadType(BSuperOr.class);
 
 	/** Get the icon. */
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/SuperOr2.png");
+	
+	public static final Logger logger = Logger.getLogger(TYPE.getModule().getModuleName() + "." + TYPE.getTypeName());
 
 }

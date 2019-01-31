@@ -39,6 +39,7 @@ public class BSetNumericAction extends BComponent
 	public void SetValue(){invoke(SetValue, null);}
 	public void doSetValue()
 	{
+		getOutLastValueSet().setValue(getInNumber().getValue());
 		this.fireNewNumericInput(BDouble.make(getInNumber().getValue()));	
 	}
 	

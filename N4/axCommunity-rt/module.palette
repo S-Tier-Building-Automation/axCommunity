@@ -79,7 +79,9 @@
 				<p n="SetBrushAction"					m="k=axCommunity" t="k:SetBrushAction"/>
 				<p n="SetFontAction"					m="k=axCommunity" t="k:SetFontAction"/>
 				<p n="SetNumericAction"					m="k=axCommunity" t="k:SetNumericAction"/>
-				<p n="SuperOr"							m="k=axCommunity" t="k:SuperOr"/>
+				<p n="SuperOr"							m="k=axCommunity" t="k:SuperOr">
+							<p n="time" f="" t="b:RelTime" v="0"/>
+				</p>
 				<p n="ToggleLatch"						m="k=axCommunity" t="k:ToggleLatch"/>
 				<p n="ToggleSwitch"						m="k=axCommunity" t="k:ToggleSwitch">
 							<p n="booleanCmd" f="s"/>
