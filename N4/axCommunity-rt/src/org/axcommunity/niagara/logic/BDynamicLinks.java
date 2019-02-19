@@ -589,7 +589,7 @@ public class BDynamicLinks extends BComponent
 				{
 					try
 					{
-						sourceOrd = BOrd.make(BFormat.make(sourceOrdString).format(thisComp));
+						sourceOrd = BOrd.make( BFormat.make(sourceOrdString).format(thisComp).replaceAll("//", "/") );
 						if( isOrdValid(sourceOrd) )
 						{
 							sourceComp = (BComponent)sourceOrd.relativizeToHost().get();
@@ -604,7 +604,7 @@ public class BDynamicLinks extends BComponent
 					{
 						try
 						{
-							sourceOrd = BOrd.make(BFormat.make("station:|" + sourceOrdString).format(thisComp));
+							sourceOrd = BOrd.make(BFormat.make("station:|" + sourceOrdString).format(thisComp).replaceAll("//", "/"));
 							if(isOrdValid(sourceOrd))
 							{
 								sourceComp = (BComponent)sourceOrd.relativizeToHost().get();
@@ -998,7 +998,7 @@ public class BDynamicLinks extends BComponent
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	public void doRefreshLinks()
 	{
-		messageHandler( Level.FINEST, "\t" + "doRefreshLinks() method called.");
+		messageHandler( Level.FINEST, "doRefreshLinks() method called.");
 		
 		if(!Sys.atSteadyState() || !thisComp.isRunning()) return;
 		
@@ -1012,9 +1012,9 @@ public class BDynamicLinks extends BComponent
 			
 			String[][] strOrds;
 	
-			messageHandler( Level.FINEST, "\t" + "doRefreshLinks(), getSlotInfoCsv():                                       '" + getSlotInfoCsv() + "'");
-			messageHandler( Level.FINEST, "\t" + "doRefreshLinks(), BFormat.make(getSlotInfoCsv()):                         '" + BFormat.make(getSlotInfoCsv()) + "'");
-			messageHandler( Level.FINEST, "\t" + "doRefreshLinks(), BFormat.make(getSlotInfoCsv()).format(destinationComp): '" + BFormat.make(getSlotInfoCsv()).format(thisComp) + "'");
+			messageHandler( Level.FINEST, "doRefreshLinks(), getSlotInfoCsv():                                       '" + getSlotInfoCsv() + "'");
+			messageHandler( Level.FINEST, "doRefreshLinks(), BFormat.make(getSlotInfoCsv()):                         '" + BFormat.make(getSlotInfoCsv()) + "'");
+			messageHandler( Level.FINEST, "doRefreshLinks(), BFormat.make(getSlotInfoCsv()).format(destinationComp): '" + BFormat.make(getSlotInfoCsv()).format(thisComp).replaceAll("//", "/") + "'");
 			
 			
 			try {strOrds = split(BFormat.make(getSlotInfoCsv()).format(thisComp), "\n", ",");}
@@ -1059,7 +1059,7 @@ public class BDynamicLinks extends BComponent
 				boolean 	invalidSourceOrd 		= false;
 				boolean 	linkAdded 				= false;
 				
-				messageHandler( Level.FINEST, "\t" + "doRefreshLinks(), formatOrd: '" + sourceFormatOrd + "'");
+				messageHandler( Level.FINEST, "doRefreshLinks(), formatOrd: '" + sourceFormatOrd + "'");
 				
 				
 				boolean formatOrdBad 		= true;
@@ -1081,7 +1081,10 @@ public class BDynamicLinks extends BComponent
 								outgoingSrcSlotName 	= escape(targetSlotName.trim());
 								outgoingTrgFormatOrd 	= strOrds[i][colOutTargetOrd];
 								outgoingTrgSlotName 	= strOrds[i][colOutTargetSlotName];
-								createOutgoingLink(outgoingSrcSlotName, outgoingTrgFormatOrd, outgoingTrgSlotName);
+								if(outgoingTrgFormatOrd.length()>0 && outgoingTrgSlotName.length()>0)
+								{
+									createOutgoingLink(outgoingSrcSlotName, outgoingTrgFormatOrd, outgoingTrgSlotName);
+								}
 								continue;
 							}
 							else
@@ -1120,7 +1123,7 @@ public class BDynamicLinks extends BComponent
 				{
 					try
 					{
-						sourceOrd = BOrd.make(BFormat.make(sourceFormatOrd).format(thisComp));
+						sourceOrd = BOrd.make(BFormat.make(sourceFormatOrd).format(thisComp).replaceAll("//", "/"));
 						if(isOrdValid(sourceOrd))
 						{
 							sourceComp = (BComponent)sourceOrd.relativizeToHost().get();
@@ -1134,7 +1137,7 @@ public class BDynamicLinks extends BComponent
 						{
 							try
 							{
-								sourceOrd = BOrd.make(BFormat.make("station:|" + sourceFormatOrd).format(thisComp));
+								sourceOrd = BOrd.make(BFormat.make("station:|" + sourceFormatOrd).format(thisComp).replaceAll("//", "/"));
 								if(isOrdValid(sourceOrd))
 								{
 									sourceComp = (BComponent)sourceOrd.relativizeToHost().get();
@@ -1331,7 +1334,7 @@ public class BDynamicLinks extends BComponent
 					{
 						if(thisComp.getProperty(targetSlotName).isDynamic())
 						{
-							messageHandler(Level.FINE, "\t" + "doRefreshLinks(), Reordering slot: " + targetSlotName);
+							messageHandler(Level.FINE, "doRefreshLinks(), Reordering slot: " + targetSlotName);
 							thisComp.reorderToBottom(thisComp.getProperty(targetSlotName));
 						}
 					}
@@ -1365,7 +1368,7 @@ public class BDynamicLinks extends BComponent
 						messageHandler(Level.FINE, "Setting static value to : " + targetSlotName);
 						try
 						{
-							((BStatusString) ((BObject) thisComp.get(targetSlotName))).setValue(BFormat.make(sourceFormatOrd).format(thisComp));
+							((BStatusString) ((BObject) thisComp.get(targetSlotName))).setValue(BFormat.make(sourceFormatOrd).format(thisComp).replaceAll("//", "/"));
 							
 							
 							if( !(((BStatusValue) ((BObject) thisComp.get(targetSlotName))).getStatus().isValid()) )
@@ -1453,10 +1456,17 @@ public class BDynamicLinks extends BComponent
 				{
 					if (strOrds[i].length == 5)
 					{
-						outgoingSrcSlotName = targetSlotName;
-						outgoingTrgFormatOrd = strOrds[i][colOutTargetOrd];
-						outgoingTrgSlotName = strOrds[i][colOutTargetSlotName];
-						createOutgoingLink(outgoingSrcSlotName, outgoingTrgFormatOrd, outgoingTrgSlotName);
+						if (strOrds[i][colOutTargetOrd] != null && strOrds[i][colOutTargetSlotName] != null && targetSlotName != null)
+						{
+							outgoingSrcSlotName = targetSlotName;
+							outgoingTrgFormatOrd = strOrds[i][colOutTargetOrd];
+							outgoingTrgSlotName = strOrds[i][colOutTargetSlotName];
+							
+							if(outgoingTrgFormatOrd.length()>0 && outgoingTrgSlotName.length()>0)
+							{
+								createOutgoingLink(outgoingSrcSlotName, outgoingTrgFormatOrd, outgoingTrgSlotName);
+							}
+						}
 					} 
 				}
 				catch (Exception e)
@@ -1712,7 +1722,7 @@ public class BDynamicLinks extends BComponent
 		{
 			boolean validOrd = false;
 			
-			BOrd targetOrd = BOrd.make(BFormat.make(inTargetOrdStr).format(thisComp));
+			BOrd targetOrd = BOrd.make(BFormat.make(inTargetOrdStr).format(thisComp).replaceAll("//", "/"));
 			
 			if(isOrdValid(targetOrd))
 			{
@@ -1720,7 +1730,7 @@ public class BDynamicLinks extends BComponent
 			}
 			else
 			{
-				targetOrd = BOrd.make(BFormat.make("station:|" + inTargetOrdStr).format(thisComp));
+				targetOrd = BOrd.make(BFormat.make("station:|" + inTargetOrdStr).format(thisComp).replaceAll("//", "/"));
 				
 				if(isOrdValid(targetOrd))
 				{
@@ -1825,7 +1835,7 @@ public class BDynamicLinks extends BComponent
 						messageHandler(Level.FINEST, "");
 						return;
 					}
-					else if( targetIsNormal && !hasLinks(targetComp, inTargetSlotName) )
+					else if( targetIsNormal && hasLinks(targetComp, inTargetSlotName) )
 					{
 						try{messageHandler(Level.FINEST, "createOutgoingLink(), target slot already has a link, target: '" + targetComp.getName()+":"+targetSlot.getName() + "', source: '" + thisComp.getName()+":"+sourceSlot.getName());}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), target slot already has a link!");}
 						messageHandler(Level.FINEST, div);
@@ -1918,7 +1928,7 @@ public class BDynamicLinks extends BComponent
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	private String[] split(String inString, String delim)
 	{									
-		messageHandler( Level.FINEST, "\t" + "split() method called with inString: '" + inString + "'.");
+		//messageHandler( Level.FINEST, "split() method called with inString: '" + inString + "'.");
 		
 		if (inString.indexOf(delim) == -1) 
 		{
@@ -1960,7 +1970,7 @@ public class BDynamicLinks extends BComponent
 			{
 				list = resizeArray(list, index);
 				list[index++] = inString.substring(firstChar, lastChar);
-				messageHandler( Level.FINE, "Parameter found in CSV string: " + inString.substring(firstChar, lastChar));
+				//messageHandler( Level.FINE, "Parameter found in CSV string: " + inString.substring(firstChar, lastChar));
 				lastChar = lastChar + delim.length();
 				firstChar = lastChar;
 			}
@@ -1991,7 +2001,7 @@ public class BDynamicLinks extends BComponent
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	private String[][] split(String inString, String delim1, String delim2)
 	{
-		messageHandler( Level.FINEST, "\t" + "split(String inString, String delim1, String delim2) method called.");
+		//messageHandler( Level.FINEST, "split(String inString, String delim1, String delim2) method called.");
 		
 		if (inString.indexOf(delim1) == -1 && inString.indexOf(delim2) == -1)
 		{
@@ -2072,7 +2082,7 @@ public class BDynamicLinks extends BComponent
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	private String[] resizeArray(String[] inArray, int len)
 	{
-		messageHandler( Level.FINEST, "\t" + "resizeArray(String[] inArray, int len) method called.");
+		//messageHandler( Level.FINEST, "resizeArray(String[] inArray, int len) method called.");
 		
 		if (len < inArray.length)
 		{
@@ -2093,7 +2103,7 @@ public class BDynamicLinks extends BComponent
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	private String[][] resizeArray(String[][] inArray, int len1, int len2)
 	{
-		messageHandler( Level.FINEST, "\t" + "resizeArray(String[][] inArray, int len1, int len2) method called.");
+		//messageHandler( Level.FINEST, "resizeArray(String[][] inArray, int len1, int len2) method called.");
 		
 		if (len1 <= inArray.length && len2 <= inArray[0].length)
 			return inArray;
@@ -2135,7 +2145,7 @@ public class BDynamicLinks extends BComponent
 	/*------------------------------------------------------------------------------------------------------------------------*/
 	private String replaceString(String sourceStr, String oldStr, String newStr)
 	{
-		messageHandler( Level.FINEST, "\t" + "replaceString() method called with sourceStr: '" + sourceStr + "', oldStr: '" + oldStr + "', newStr: '" + newStr + "'.");
+		//messageHandler( Level.FINEST, "replaceString() method called with sourceStr: '" + sourceStr + "', oldStr: '" + oldStr + "', newStr: '" + newStr + "'.");
 		
 		int idx = sourceStr.lastIndexOf(oldStr);
 		if (idx != -1) 
@@ -2208,16 +2218,20 @@ public class BDynamicLinks extends BComponent
 	 */
 	private boolean hasLinks(BComponent inComp, String inSlotName) throws Exception
 	{
+		messageHandler(Level.FINEST, "hasLinks(), method called with inComp: '" + inComp.getSlotPath() + "', inSlotName: '" + inSlotName + "'");
 		boolean result = false;
 		try
 		{
+			messageHandler(Level.FINEST, "hasLinks(), method called with link count: '" + inComp.getLinks(inComp.getSlot(inSlotName)).length + "'");
 			result = (inComp.getLinks(inComp.getSlot(inSlotName)).length > 0);
 		}
 		catch (Exception e)
 		{
+			messageHandler(Level.FINEST, "hasLinks()", e);
 			throw e;
 		}
 		
+		messageHandler(Level.FINEST, "hasLinks(), method done and returning value: '" + result + "'");
 		return result;
 	}
 	
@@ -2441,7 +2455,7 @@ public class BDynamicLinks extends BComponent
 		BComponent com = null;
 		try
 		{
-			ord = BOrd.make(BFormat.make(path).format(thisComp));
+			ord = BOrd.make(BFormat.make(path).format(thisComp).replaceAll("//", "/"));
 			com = (BComponent)ord.relativizeToHost().get();
 		}
 		catch (Exception e)
