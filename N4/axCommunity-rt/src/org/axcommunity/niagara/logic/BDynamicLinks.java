@@ -1017,7 +1017,7 @@ public class BDynamicLinks extends BComponent
 			messageHandler( Level.FINEST, "doRefreshLinks(), BFormat.make(getSlotInfoCsv()).format(destinationComp): '" + BFormat.make(getSlotInfoCsv()).format(thisComp).replaceAll("//", "/") + "'");
 			
 			
-			try {strOrds = split(BFormat.make(getSlotInfoCsv()).format(thisComp), "\n", ",");}
+			try {strOrds = split(BFormat.make(getSlotInfoCsv()).format(thisComp).replaceAll("//", "/"), "\n", ",");}
 			catch (Exception e)
 			{
 				String msg = "Could not parse CSV string!";
@@ -1996,6 +1996,24 @@ public class BDynamicLinks extends BComponent
 		}
 	}
 	
+	
+	
+	/*------------------------------------------------------------------------------------------------------------------------*/
+	public String[][] getSlotInfoCsvOrdArray() throws Exception
+	{
+		String[][] strOrds = null;
+		
+		try
+		{
+			strOrds = split(BFormat.make(getSlotInfoCsv()).format(thisComp).replaceAll("//", "/"), "\n", ",");
+		}
+		catch(Exception e)
+		{
+			throw e;
+		}
+		
+		return strOrds;
+	}
 	
 	
 	/*------------------------------------------------------------------------------------------------------------------------*/

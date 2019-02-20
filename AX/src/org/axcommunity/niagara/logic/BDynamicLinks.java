@@ -479,21 +479,28 @@ public class BDynamicLinks extends BComponent
 	 */
 	private void messageHandler(Level level, String msg, Exception e)
 	{
-		String MESSAGE = "";
-		String STACKTRACE = "";
-		String PRINTSTACKTRACE = "";
-		
-		try{MESSAGE = e.getMessage().trim();}catch(Exception ex) {}
-		try{STACKTRACE = e.getStackTrace().toString().trim();}catch(Exception ex) {}
 		try
 		{
-			StringWriter errors = new StringWriter();
-			e.printStackTrace(new PrintWriter(errors));
-			PRINTSTACKTRACE = errors.toString().trim();
-		}catch(Exception ex) {}
-		
-		msg	= "\n\n" + msg + "\n" + "MESSAGE: \n" + MESSAGE + "\n" + "STACKTRACE: \n" + STACKTRACE + "\n" + "PRINTSTACKTRACE: \n" + PRINTSTACKTRACE;
-		messageHandler( level, msg.trim());
+			String MESSAGE = "";
+			String STACKTRACE = "";
+			String PRINTSTACKTRACE = "";
+			
+			try{MESSAGE = e.getMessage().trim();}catch(Exception ex) {}
+			try{STACKTRACE = e.getStackTrace().toString().trim();}catch(Exception ex) {}
+			try
+			{
+				StringWriter errors = new StringWriter();
+				e.printStackTrace(new PrintWriter(errors));
+				PRINTSTACKTRACE = errors.toString().trim();
+			}catch(Exception ex) {}
+			
+			msg	= "\n\n" + msg + "\n" + "MESSAGE: \n" + MESSAGE + "\n" + "STACKTRACE: \n" + STACKTRACE + "\n" + "PRINTSTACKTRACE: \n" + PRINTSTACKTRACE;
+			messageHandler( level, msg.trim());
+		}
+		catch (Exception e1)
+		{
+			messageHandler(level, msg);
+		}
 	}
 
 	/**
@@ -1011,7 +1018,7 @@ public class BDynamicLinks extends BComponent
 			messageHandler( Level.FINEST, "doRefreshLinks(), BFormat.make(getSlotInfoCsv()).format(destinationComp): '" + BFormat.make(getSlotInfoCsv()).format(thisComp).replaceAll("//", "/") + "'");
 			
 			
-			try {strOrds = split(BFormat.make(getSlotInfoCsv()).format(thisComp), "\n", ",");}
+			try {strOrds = split(BFormat.make(getSlotInfoCsv()).format(thisComp).replaceAll("//", "/"), "\n", ",");}
 			catch (Exception e)
 			{
 				String msg = "Could not parse CSV string!";
@@ -1990,6 +1997,24 @@ public class BDynamicLinks extends BComponent
 		}
 	}
 	
+	
+	
+	/*------------------------------------------------------------------------------------------------------------------------*/
+	public String[][] getSlotInfoCsvOrdArray() throws Exception
+	{
+		String[][] strOrds = null;
+		
+		try
+		{
+			strOrds = split(BFormat.make(getSlotInfoCsv()).format(thisComp).replaceAll("//", "/"), "\n", ",");
+		}
+		catch(Exception e)
+		{
+			throw e;
+		}
+		
+		return strOrds;
+	}
 	
 	
 	/*------------------------------------------------------------------------------------------------------------------------*/
