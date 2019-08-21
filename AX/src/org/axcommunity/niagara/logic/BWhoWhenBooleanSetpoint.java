@@ -72,7 +72,7 @@ extends BComponent
 		if(cxin==null)
 		{
 			//for wiresheet invokes, set username to "logic"
-			getChangedBy().setValue("logic");
+			getChangedBy().setValue(by);
 		}
 		else 
 		{
@@ -86,6 +86,7 @@ extends BComponent
 		//set value and timestamp
 		getOut().setValue(true);
 		fireValue(BBoolean.make(true));
+		fireIsTrue(BBoolean.make(true));
 
 		//some day would love to add override status to this object also...
 		getOut().setStatus(BStatus.ok);
@@ -101,14 +102,13 @@ extends BComponent
 	public void SetFalse(){invoke(SetFalse,null,null);}
 	public void doSetFalse(Context cxin)
 	{
-		String by = "logic";
-		
 		valueCurrent = getOut().getValue();
+		String by = "logic";
 		
 		if(cxin==null)
 		{
 			//for wiresheet invokes, set username to "logic"
-			getChangedBy().setValue("logic");
+			getChangedBy().setValue(by);
 		}
 		else 
 		{
@@ -117,11 +117,11 @@ extends BComponent
 			getChangedBy().setValue(by);
 		}
 
-		logger.trace("\t\t" + getSlotPath()	+ "\t\tTRIGGERED FALSE BY: " + by);
-
+		logger.trace("\t\t" + getSlotPath()	+ "\t\tTRIGGERED FALSE BY: " + by);	  
 		//set value and timestamp
 		getOut().setValue(false);
 		fireValue(BBoolean.make(false));
+		fireIsFalse(BBoolean.make(true));
 
 		//some day would love to add override status to this object also...
 		getOut().setStatus(BStatus.ok);
@@ -138,28 +138,28 @@ extends BComponent
 	public void SetValue(BBoolean v){invoke(SetValue, null);}
 	public void doSetValue(BBoolean v, Context cxin)
 	{
-		
 		valueCurrent = getOut().getValue();
 		String by = "logic";
+		
 		if(cxin==null)
 		{
 			//for wiresheet invokes, set username to "logic"
-			getChangedBy().setValue("logic");
+			getChangedBy().setValue(by);
 		}
-
 		else 
 		{
 			//for any user invokes, get the context username
 			by = cxin.getUser().getUsername();
 			getChangedBy().setValue(by);
-			
 		}
 
 		logger.trace("\t\t" + getSlotPath()	+ "\t\tTRIGGERED " + v.getBoolean() + " BY: " + by);
-
 		//set value and timestamp
 		getOut().setValue(v.getBoolean());
 		fireValue(BBoolean.make(v.getBoolean()));
+
+		if(v.getBoolean()==true) {fireIsTrue(BBoolean.make(true));}
+		else {fireIsFalse(BBoolean.make(true));}
 
 		//some day would love to add override status to this object also...
 		getOut().setStatus(BStatus.ok);
@@ -173,6 +173,14 @@ extends BComponent
 	
 	public static final Topic Value = newTopic(0);
 	public void fireValue(BBoolean event){fire(Value,event,null);}
+	
+		
+	public static final Topic IsTrue = newTopic(0);
+	public void fireIsTrue(BBoolean event){fire(IsTrue,event,null);}
+		
+	public static final Topic IsFalse = newTopic(0);
+	public void fireIsFalse(BBoolean event){fire(IsFalse,event,null);}
+	
 	
 	public static final Topic LogString = newTopic(0);
 	public void fireLogString(BString event){fire(LogString,event,null);}

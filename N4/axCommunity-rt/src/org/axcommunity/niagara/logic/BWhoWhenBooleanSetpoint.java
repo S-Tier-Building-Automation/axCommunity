@@ -11,8 +11,6 @@ import javax.baja.sys.*;
 *
 * @author    Mike Arnott
 * @creation  9 Dec 11
-* 
-* 	Update 6/29/2017 by James Johnson to move to current logger syntax
 */
 public class BWhoWhenBooleanSetpoint
 extends BComponent
@@ -67,7 +65,7 @@ extends BComponent
 	
 	/**invokable action to set the current value to true*/
 	public static final Action SetTrue = newAction(Flags.OPERATOR,null);
-	public void SetTrue(){invoke(SetTrue,null);}
+	public void SetTrue(){invoke(SetTrue,null,null);}
 	public void doSetTrue(Context cxin)
 	{
 		
@@ -90,6 +88,7 @@ extends BComponent
 		//set value and timestamp
 		getOut().setValue(true);
 		fireValue(BBoolean.make(true));
+		fireIsTrue(BBoolean.make(true));
 
 		//some day would love to add override status to this object also...
 		getOut().setStatus(BStatus.ok);
@@ -102,7 +101,7 @@ extends BComponent
 	
 	/**invokable action to set the current value to false*/
 	public static final Action SetFalse = newAction(Flags.OPERATOR,null);
-	public void SetFalse(){invoke(SetFalse,null);}
+	public void SetFalse(){invoke(SetFalse,null,null);}
 	public void doSetFalse(Context cxin)
 	{
 		valueCurrent = getOut().getValue();
@@ -124,7 +123,8 @@ extends BComponent
 		//set value and timestamp
 		getOut().setValue(false);
 		fireValue(BBoolean.make(false));
-
+		fireIsFalse(BBoolean.make(true));
+		
 		//some day would love to add override status to this object also...
 		getOut().setStatus(BStatus.ok);
 		setTimeChanged(BAbsTime.make());
@@ -159,6 +159,9 @@ extends BComponent
 		//set value and timestamp
 		getOut().setValue(v.getBoolean());
 		fireValue(BBoolean.make(v.getBoolean()));
+		
+		if(v.getBoolean()==true) {fireIsTrue(BBoolean.make(true));}
+		else {fireIsFalse(BBoolean.make(true));}
 
 		//some day would love to add override status to this object also...
 		getOut().setStatus(BStatus.ok);
@@ -172,6 +175,14 @@ extends BComponent
 	
 	public static final Topic Value = newTopic(0);
 	public void fireValue(BBoolean event){fire(Value,event,null);}
+	
+		
+	public static final Topic IsTrue = newTopic(0);
+	public void fireIsTrue(BBoolean event){fire(IsTrue,event,null);}
+		
+	public static final Topic IsFalse = newTopic(0);
+	public void fireIsFalse(BBoolean event){fire(IsFalse,event,null);}
+	
 	
 	public static final Topic LogString = newTopic(0);
 	public void fireLogString(BString event){fire(LogString,event,null);}

@@ -43,6 +43,35 @@
 					
 		<pre>
 			<code>
+<b>V19.08.21.01 August 21, 2019</b><i> - Justin Koffler</i>
+	- MODIFIED 'BSysInfo'
+		* Added StatusBoolean slot 'autoSaveEnabled'.
+		* Added RelTime slot 'autoSaveFrequency'.
+		* Added BStatusNumeric slot 'saveBackupCount'.
+		* Added BAbsTime slot 'bootTime'.
+		* Added BRelTime slot 'uptime'.
+		* Added BStatusString slot 'lastSaveDuration'.
+		* Added BAbsTime slot 'lastSuccessfulSaveTime'.
+		* Added BRelTime slot 'lastSaveSpan'.
+		* Added boolean Topic slot 'Started'.
+		* Added boolean Topic slot 'AtSteadyState'.
+	- MODIFIED 'BSuperOr'
+		* Added DynamicEnum slot 'getWhenToFireTopics'.
+		  'This was to provide an option fix a bug that would fire the topic slot each time a slot when true instead of only on the rising edge of the 'out' slot.
+		  'Default behavior is unchanged. You must choose a new option from the 'getWhenToFireTopics' slot to have fix applied.
+	- MODIFIED 'BSuperConcatPlus'
+		* Fixed index out of range error that would occur when the timestamp was configured for the beginning of the string and all input slots were blank or null.
+	- MODIFIED 'BBooleanRotateOnExecute'
+		* Added StatusBoolean slot 'outNot'.
+		* Added boolean Topic slot 'currentValue'.
+		* Added boolean Topic slot 'isTrue'.
+		* Added boolean Topic slot 'isFalse'.
+	- MODIFIED 'BWhoWhenBooleanSetpoint'
+		* Added boolean Topic slot 'IsTrue'.
+		* Added boolean Topic slot 'IsFalse'.
+	- MODIFIED 'BWhoWhenNumericSetpoint' and 'BWhoWhenStringSetpoint'
+		* Modified so the facets get applied correctly.
+<hr>
 <b>V19.02.19.01 February 19, 2019</b><i> - Justin Koffler</i>
 	- MODIFIED 'BDynamicLinks'
 		* Fixed minor bug in the new link to function.

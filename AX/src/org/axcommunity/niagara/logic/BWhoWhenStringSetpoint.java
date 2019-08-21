@@ -1,7 +1,7 @@
 package org.axcommunity.niagara.logic;
 
-import javax.baja.sys.*;
 import javax.baja.status.*;
+import javax.baja.sys.*;
 
 /**
 * String Setpoint object that remembers the username/timestamp of the last change
@@ -9,8 +9,7 @@ import javax.baja.status.*;
 * @author    Mike Arnott
 * @creation  9 Dec 11
 */
-public class BWhoWhenStringSetpoint
-extends BComponent
+public class BWhoWhenStringSetpoint extends BComponent
 {
 	public static final Property absTimeFacets			= newProperty(0, BFacets.make(BFacets.SHOW_DATE,			BBoolean.make(true), 
 	                                          			                              BFacets.SHOW_TIME,			BBoolean.make(true), 
@@ -26,6 +25,30 @@ extends BComponent
 	public BFacets getFacets() { return (BFacets)get(facets); }
 	public void setFacets(BFacets v) { set(facets, v); }
 
+	public BFacets getSlotFacets(Slot slot)
+	{
+		try
+		{
+			if (slot == out || slot == SetValue)
+			{
+				if(getFacets()==null || getFacets().isNull())	
+				{ return slot.getFacets();	}
+				else											
+				{ return getFacets();		}
+			}
+			else if (slot == timeChanged)
+			{
+				if(getAbsTimeFacets()==null || getAbsTimeFacets().isNull())	
+				{ return slot.getFacets();	}
+				else											
+				{ return getAbsTimeFacets();		}
+			}
+		}
+		catch (Exception e){}
+		
+		return super.getSlotFacets(slot);
+	}
+	
 	/**The output setpoint*/
 	public static final Property out = newProperty(Flags.SUMMARY, new BStatusString());
 	public void setOut(BStatusString v) {     set(out, v);   }
@@ -35,9 +58,7 @@ extends BComponent
 	/**String showing username of who changed the point*/
 	public static final Property changedBy = newProperty(Flags.READONLY + Flags.SUMMARY + Flags.DEFAULT_ON_CLONE, new BStatusString());
 	public void setChangedBy(BStatusString v) { set(changedBy, v); }
-	public BStatusString getChangedBy() { 
-	return (BStatusString)get(changedBy); 
-	}
+	public BStatusString getChangedBy() { return (BStatusString)get(changedBy);}
 
 	/**Absolute Time of change*/
 	public final static Property timeChanged = newProperty(Flags.SUMMARY + Flags.READONLY+ Flags.DEFAULT_ON_CLONE, BAbsTime.DEFAULT);
@@ -60,27 +81,27 @@ extends BComponent
 	{
 		valueCurrent = getOut().getValue();
 		String by = "logic";
-		if(cxin==null)
+		
+		if (cxin == null)
 		{
-		//for wiresheet invokes, set username to "logic"
-		getChangedBy().setValue("logic");
+			// for wiresheet invokes, set username to "logic"
+			getChangedBy().setValue(by);
 		}
-
-		else 
+		
+		else
 		{
-		//for any user invokes, get the context username
-			by = cxin.getUser().getUsername();
-		getChangedBy().setValue(by);
+			// for any user invokes, get the context username
+			getChangedBy().setValue(cxin.getUser().getUsername());
 		}
-		//set value and timestamp
+		// set value and timestamp
 		getOut().setValue(v.getString());
 		fireValue(BString.make(v.getString()));
-
-		//some day would love to add override status to this object also...
+		
+		// some day would love to add override status to this object also...
 		getOut().setStatus(BStatus.ok);
 		setTimeChanged(BAbsTime.make());
 		
-		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + by + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
+		stringToLog = getTimeChanged().toString(getAbsTimeFacets()) + "," + by + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
 		getOutLogString().setValue(stringToLog);
 		fireLogString(BString.make(stringToLog));
 	}
@@ -89,19 +110,8 @@ extends BComponent
 	public static final Topic Value = newTopic(0);
 	public void fireValue(BString event){fire(Value,event,null);}
 	
-	
 	public static final Topic LogString = newTopic(0);
 	public void fireLogString(BString event){fire(LogString,event,null);}
-
-
-	public BIcon getIcon() { return icon; }
-	private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");
-
-
-	public Type getType() { return TYPE; }
-	public static final Type TYPE = Sys.loadType(BWhoWhenStringSetpoint.class);
-
-
 
 	public BValue getActionParameterDefault(Action action)
 	{
@@ -109,4 +119,16 @@ extends BComponent
 		return getOut().getValueValue();
 		return super.getActionParameterDefault(action);
 	}
+	
+
+	public BIcon getIcon() { return icon; }
+	private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");
+
+
+	public Type getType() { return TYPE; }
+	public static final Type TYPE = Sys.loadType(BWhoWhenStringSetpoint.class);
+
+
+
+	
 }

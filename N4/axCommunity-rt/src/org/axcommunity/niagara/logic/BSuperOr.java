@@ -8,14 +8,19 @@ import javax.baja.status.*;
 import javax.baja.sys.*;
 
 
-public class BSuperOr
-extends BComponent implements Runnable
+public class BSuperOr extends BComponent implements Runnable
 {
-
+	public static final Property whenToFireTopics = newProperty(0, (BValue)BDynamicEnum.TYPE.getInstance(), BFacets.tryMake("range=E:{"+escape("Fire 'True' when any input changes and out value is true (legacy behavior)")+"=0,"+escape("Fire 'True' only when out value transitions from false to true (rising edge)")+"=1}"));
+	public BDynamicEnum getWhenToFireTopics() { return (BDynamicEnum)get(whenToFireTopics); }
+	public void setWhenToFireTopics(BDynamicEnum v) { set(whenToFireTopics, v, null); }
+	
+	static String escape(String s){return com.tridium.util.EscUtil.slot.escape(s);}
+	static String unescape(String s){return com.tridium.util.EscUtil.slot.unescape(s);}
+	
 	////////////////////////////////////////////////////////////////
 	// Property "toNull"
 	////////////////////////////////////////////////////////////////
-	public static final Property toNull = newProperty(0|Flags.EXECUTE_ON_CHANGE, (BValue)BBoolean.TYPE.getInstance(), null);
+	public static final Property toNull = newProperty(Flags.EXECUTE_ON_CHANGE, (BValue)BBoolean.TYPE.getInstance(), null);
 	public boolean getToNull() { return getBoolean(toNull); }
 	public void setToNull(boolean v) { setBoolean(toNull, v, null); }
 
@@ -29,24 +34,31 @@ extends BComponent implements Runnable
 	////////////////////////////////////////////////////////////////
 	// Property "numberOfValues"
 	////////////////////////////////////////////////////////////////
-	public static final Property numberOfValues = newProperty(0|Flags.HIDDEN|Flags.READONLY, new BStatusNumeric(), null);
+	public static final Property numberOfValues = newProperty(Flags.HIDDEN|Flags.READONLY, new BStatusNumeric(), null);
 	public BStatusNumeric getNumberOfValues() { return (BStatusNumeric)get(numberOfValues); }
 	public void setNumberOfValues(BStatusNumeric v) { set(numberOfValues, v, null); }
 
 	////////////////////////////////////////////////////////////////
 	// Property "Out"
 	////////////////////////////////////////////////////////////////
-	public static final Property Out = newProperty(0|Flags.READONLY|Flags.SUMMARY, new BStatusBoolean(), null);
+	public static final Property Out = newProperty(Flags.READONLY|Flags.SUMMARY, new BStatusBoolean(), null);
 	public BStatusBoolean getOut() { return (BStatusBoolean)get(Out); }
 	public void setOut(BStatusBoolean v) { set(Out, v, null); }
 
 	////////////////////////////////////////////////////////////////
 	// Property "OutRev"
 	////////////////////////////////////////////////////////////////
-	public static final Property OutRev = newProperty(0|Flags.READONLY|Flags.SUMMARY, new BStatusBoolean(), null);
+	public static final Property OutRev = newProperty(Flags.READONLY|Flags.SUMMARY, new BStatusBoolean(), null);
 	public BStatusBoolean getOutRev() { return (BStatusBoolean)get(OutRev); }
 	public void setOutRev(BStatusBoolean v) { set(OutRev, v, null); }
 
+	
+	
+	public static final Property outLastValue = newProperty(Flags.HIDDEN|Flags.READONLY, new BStatusBoolean(), null);
+	public BStatusBoolean getOutLastValue() { return (BStatusBoolean) get(outLastValue); }
+	public void setOutLastValue(BStatusBoolean v) { set(outLastValue, v); }
+	
+	
 	////////////////////////////////////////////////////////////////
 	// Action "execute"
 	////////////////////////////////////////////////////////////////
@@ -134,7 +146,8 @@ extends BComponent implements Runnable
 	{
 		// super.changed(prop, cx);
 		if(!Sys.atSteadyState() || !isRunning()){return;}
-		if(prop.toString().startsWith("In") || prop.toString().startsWith("toNull")) 
+		
+		if(prop.toString().startsWith("In") || prop==toNull) 
 		{
 			try
 			{
@@ -146,7 +159,25 @@ extends BComponent implements Runnable
 				logger.log(Level.SEVERE, "\t" + getSlotPath()	+ "\n'changed()' method had an error.\n" + e.getMessage() + "\n" + e.getStackTrace());
 			}
 		}
-		// if (Flags.isExecuteOnChange(this, prop)) execute();
+		else if(prop==Out)
+		{
+			if(getOut().getValue()==true) 
+			{
+				if(getOutLastValue().getValue()==false) 
+				{
+					if(getWhenToFireTopics().getOrdinal()==1){ fireTrue(BBoolean.make(true)); }
+					getOutLastValue().setValue(true);
+				}
+			}
+			else if(getOut().getValue()==false) 
+			{
+				if(getOutLastValue().getValue()==true) 
+				{
+					if(getWhenToFireTopics().getOrdinal()==1){ fireFalse(BBoolean.make(true)); }
+					getOutLastValue().setValue(false);
+				}
+			}
+		}
 	}
 
 
@@ -194,24 +225,6 @@ extends BComponent implements Runnable
 	Note2:  If the linked point becomes inValid, it will not be used by the logic.
 	Note3:  The Max number of variables you can add is 60.
 
-	Revisions:
-	April 29, 2012 - Justin Koffler
-		Added logging to find cause of null exception errors I was getting on station restarts.
-		Modified logic to eliminate the infinite 1 second delay loop upon first execution.
-		Moved the onExecute processes to a new method named onCalculate to help with the infinite loop issue.
-		Modified logic to NOT allow the onCalculate processes to take place if the system was not in a running 
-			state (this is where I was getting the null exception errors before I added this).  
-	
-	February 18, 2016 - Justin Koffler
-		Added new Topic slots 'True' and 'False' and new BRelTime slot 'time'. 
-		The 'True' slot if fired with true value when 'Out' is true and 'False' is fired with true value when 'OutRev' is true.
-		The 'time' slot allows you to control the calculated delay time. This used to be hard coded to 1 second. 
-			I left the default value at 1 second as not to change the default behavior.
-	
-	March 09, 2016 - Justin Koffler	
-		Added started() and atSteadyState() methods to better handle calculating results at station startup or object creation.
-			
-	Update 6/29/2017 by James Johnson to move to current logger syntax
 	**/
 
 	private int				count = 1;      
@@ -311,19 +324,30 @@ extends BComponent implements Runnable
 			/** Turns Output On **/
 			if (ValFlag1)
 			{
-				
-				
 				if(getToNull()) 
 				{
-					setOutRev(new BStatusBoolean(Boolean.FALSE, BStatus.nullStatus));
+					//setOutRev(new BStatusBoolean(Boolean.FALSE, BStatus.nullStatus));	
+					getOutRev().setValue(Boolean.FALSE);
+					if( getOutRev().getStatus()!=BStatus.nullStatus ){ getOutRev().setStatus(BStatus.nullStatus); }
 				}
 				else
 				{
-					setOutRev(new BStatusBoolean(Boolean.FALSE, BStatus.ok));
+					//setOutRev(new BStatusBoolean(Boolean.FALSE, BStatus.ok));
+					getOutRev().setValue(Boolean.FALSE);
+					if( getOutRev().getStatus()!=BStatus.ok ){ getOutRev().setStatus(BStatus.ok); }
 				}
 				
-				setOut(new BStatusBoolean(Boolean.TRUE, BStatus.ok));
-				fireTrue(BBoolean.make(true));
+				
+				
+				//setOut(new BStatusBoolean(Boolean.TRUE, BStatus.ok));
+				getOut().setValue(Boolean.TRUE);
+				if( getOut().getStatus()!=BStatus.ok ){ getOut().setStatus(BStatus.ok); }
+				
+				
+				if(getWhenToFireTopics().getOrdinal()==0)
+				{
+					fireTrue(BBoolean.make(true));
+				}
 				
 				ValFlag1=false;      
 			}
@@ -332,16 +356,32 @@ extends BComponent implements Runnable
 			{
 				if(!getToNull())
 				{
-					setOutRev(new BStatusBoolean(Boolean.TRUE, BStatus.ok));
-					setOut(new BStatusBoolean(Boolean.FALSE, BStatus.ok));
+					//setOutRev(new BStatusBoolean(Boolean.TRUE, BStatus.ok));
+					//setOut(new BStatusBoolean(Boolean.FALSE, BStatus.ok));
+					
+					getOutRev().setValue(Boolean.TRUE);
+					if( getOutRev().getStatus()!=BStatus.ok ){ getOutRev().setStatus(BStatus.ok); }
+					
+					getOut().setValue(Boolean.FALSE);
+					if( getOut().getStatus()!=BStatus.ok ){ getOut().setStatus(BStatus.ok); }
+					
 				}
 				else 
 				{
-					setOutRev(new BStatusBoolean(Boolean.TRUE, BStatus.nullStatus));
-					setOut(new BStatusBoolean(Boolean.FALSE, BStatus.nullStatus));
+					//setOutRev(new BStatusBoolean(Boolean.TRUE, BStatus.nullStatus));
+					//setOut(new BStatusBoolean(Boolean.FALSE, BStatus.nullStatus));
+					
+					getOutRev().setValue(Boolean.TRUE);
+					if( getOutRev().getStatus()!=BStatus.nullStatus ){ getOutRev().setStatus(BStatus.nullStatus); }
+					
+					getOut().setValue(Boolean.FALSE);
+					if( getOut().getStatus()!=BStatus.nullStatus ){ getOut().setStatus(BStatus.nullStatus); }
 				}
 				
-				fireFalse(BBoolean.make(true));
+				if(getWhenToFireTopics().getOrdinal()==0)
+				{
+					fireFalse(BBoolean.make(true));
+				}
 			}
 
 			ValFlag1	= false;  

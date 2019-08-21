@@ -50,6 +50,12 @@ import javax.baja.sys.Type;
 
 public class BSuperConcatPlus extends BComponent
 {
+	
+	public static final Property inDebug = newProperty(Flags.HIDDEN, false);
+	public boolean getInDebug() { return getBoolean(inDebug); }
+	public void setInDebug(boolean v) { setBoolean(inDebug, v, null); }
+
+	
 	/*----------------------------------------------------------------------------------------------------------------*/
 	/** ACTION, "concatenate", PERFORMS THE CONCATENATION OF THE INPUTS   */
 	public static final Action concatenate = newAction(Flags.SUMMARY|Flags.ASYNC|Flags.DEFAULT_ON_CLONE,null);
@@ -363,152 +369,212 @@ public class BSuperConcatPlus extends BComponent
 	{
 		public void run()
 		{
-			BAbsTime	dtNow									= BAbsTime.now();
-			String		delim									= getInDelimiter().getValue();
-			boolean		nullOnNoLink							= getInNullOnNoLink().getValue();
-			int			slotCount								= (int) getNumberOfValues().getValue();
-			String		strOutNoDelimeters						= ""; //1 ONLY GOOD VALUES NO DELIMETER
-			String		strOutDelimitValuesOnly					= ""; //2 ONLY GOOD VALUES ALONG WITH DELIMETER
-			String		strOutDelimitAll						= ""; //3 ALL VALUES ALONG WITH DELIMETER
-			String		strOutDelimitValuesOnlyPlusTimestamp	= ""; //4 LIKE strOutDelimitValuesOnly BUT WITH TIMESTAMP
-			String		strOutDelimitAllPlusTimestamp			= ""; //5 LIKE strOutDelimitAll BUT WITH TIMESTAMP
-			String		temp									= "";
-
-			for(int i=1;i<=slotCount;i++)
+			try
 			{
-				BStatusString inValue = ((BStatusString) ((BObject)get("In_"+i)));
-
-				logger.log(Level.FINE, "\n" + getSlotPath()	+ "\nBEGINING OF FOR LOOP..."
-						+ "\nSLOT  = " + i 
-						+ "\nVALUE = " + inValue
-						+ "\nOUT1  = " + strOutNoDelimeters
-						+ "\nOUT2  = " + strOutDelimitValuesOnly
-						+ "\nOUT3  = " + strOutDelimitAll
-						+ "\nOUT4  = " + strOutDelimitValuesOnlyPlusTimestamp
-						+ "\nOUT5  = " + strOutDelimitAllPlusTimestamp);
-
-				/** TESTS WHETHER THE SLOT IS LINKED. IF NOT, THE VALUE IS SET TO NULL **/
-				if ( (getProgram().getLinks(getProperty("In_"+i)).length == 0) && (nullOnNoLink==true))
+				BAbsTime	dtNow									= BAbsTime.now();
+				String		delim									= getInDelimiter().getValue();
+				boolean		nullOnNoLink							= getInNullOnNoLink().getValue();
+				int			slotCount								= (int) getNumberOfValues().getValue();
+				String		strTimeNow								= timestampAsString(dtNow);
+				String		strOutNoDelimeters						= ""; //1 ONLY GOOD VALUES NO DELIMETER
+				String		strOutDelimitValuesOnly					= ""; //2 ONLY GOOD VALUES ALONG WITH DELIMETER
+				String		strOutDelimitAll						= ""; //3 ALL VALUES ALONG WITH DELIMETER
+				String		strOutDelimitValuesOnlyPlusTimestamp	= ""; //4 LIKE strOutDelimitValuesOnly BUT WITH TIMESTAMP
+				String		strOutDelimitAllPlusTimestamp			= ""; //5 LIKE strOutDelimitAll BUT WITH TIMESTAMP
+				String		temp									= "";
+	
+				for(int i=1;i<=slotCount;i++)
 				{
-					inValue.setStatusNull(true); 
-				}
-
-				// CREATE TEMP STRING TO HOLD THE VALID VALUE OF THE INPUT SLOT ///////////////////////////////////
-				temp = "";
-				if(inValue.getStatus().isValid())
-				{
-					temp=inValue.getValue();
-				}
-				else
-				{
-					temp="";
-				}
-
-
-				/** HANDLER FOR THE FIRST SLOT *///////////////////////////////////////////////////////////////////
-				if( i==1 ) ////////////////////////////////////////////////////////////////////////////////////////
-				{
-					if (temp.length() > 0) //CONTAINS DATA
+					try
 					{
-
-						strOutNoDelimeters						= inValue.getValue();
-						strOutDelimitValuesOnly					= inValue.getValue() + delim;
-						strOutDelimitAll						= inValue.getValue() + delim;
-						strOutDelimitValuesOnlyPlusTimestamp	= inValue.getValue() + delim;
-						strOutDelimitAllPlusTimestamp			= inValue.getValue() + delim;
-					}
-					else
-					{
-						strOutNoDelimeters						= "";
-						strOutDelimitValuesOnly					= "";
-						strOutDelimitAll						= "" + delim;
-						strOutDelimitValuesOnlyPlusTimestamp	= "";
-						strOutDelimitAllPlusTimestamp			= "" + delim;
-					}
-				}
-
-				/** HANDLER FOR SLOTS AFTER THE FIRST BUT NOT THE LAST *///////////////////////////////////////////
-				if( i>1 && i<slotCount ) //////////////////////////////////////////////////////////////////////////
-				{
-					if (temp.length() > 0) //CONTAINS DATA
-					{
-						strOutNoDelimeters						= strOutNoDelimeters					+ inValue.getValue();
-						strOutDelimitValuesOnly					= strOutDelimitValuesOnly				+ inValue.getValue() + delim;
-						strOutDelimitAll						= strOutDelimitAll						+ inValue.getValue() + delim;
-						strOutDelimitValuesOnlyPlusTimestamp	= strOutDelimitValuesOnlyPlusTimestamp	+ inValue.getValue() + delim;
-						strOutDelimitAllPlusTimestamp			= strOutDelimitAllPlusTimestamp			+ inValue.getValue() + delim;
-					}
-					else
-					{
-						strOutDelimitAll				= strOutDelimitAll.trim()				+ delim;
-						strOutDelimitAllPlusTimestamp	= strOutDelimitAllPlusTimestamp.trim()	+ delim;
-					}
-				}
-
-				/** HANDLER FOR THE LAST SLOT *////////////////////////////////////////////////////////////////////
-				if( i==slotCount && slotCount>1  ) ////////////////////////////////////////////////////////////////
-				{
-					if (temp.length() > 0) //CONTAINS DATA
-					{
-						strOutNoDelimeters						= strOutNoDelimeters					+ inValue.getValue();
-						strOutDelimitValuesOnly					= strOutDelimitValuesOnly				+ inValue.getValue();
-						strOutDelimitAll						= strOutDelimitAll						+ inValue.getValue();
-						
-						if(getInTimestampLocation().getOrdinal()==0)
+						BStatusString inValue = ((BStatusString) ((BObject)get("In_"+i)));
+		
+						logger.log(Level.FINE, "\n" + getSlotPath()	+ "\nBEGINING OF FOR LOOP..."
+								+ "\nSLOT        = " + i 
+								+ "\nVALUE       = " + inValue
+								+ "\nOUT1        = " + strOutNoDelimeters
+								+ "\nOUT2        = " + strOutDelimitValuesOnly
+								+ "\nOUT3        = " + strOutDelimitAll
+								+ "\nOUT4        = " + strOutDelimitValuesOnlyPlusTimestamp
+								+ "\nOUT5        = " + strOutDelimitAllPlusTimestamp
+								);
+		
+						/** TESTS WHETHER THE SLOT IS LINKED. IF NOT, THE VALUE IS SET TO NULL **/
+						if ( (getProgram().getLinks(getProperty("In_"+i)).length == 0) && (nullOnNoLink==true))
 						{
-							strOutDelimitValuesOnlyPlusTimestamp	= strOutDelimitValuesOnlyPlusTimestamp	+ inValue.getValue() + delim + timestampAsString(dtNow);
-							strOutDelimitAllPlusTimestamp			= strOutDelimitAllPlusTimestamp			+ inValue.getValue() + delim + timestampAsString(dtNow);
+							inValue.setStatusNull(true); 
+						}
+		
+						// CREATE TEMP STRING TO HOLD THE VALID VALUE OF THE INPUT SLOT ///////////////////////////////////
+						temp = "";
+						if(inValue.getStatus().isValid())
+						{
+							temp=inValue.getValue();
 						}
 						else
 						{
-							strOutDelimitValuesOnlyPlusTimestamp	= timestampAsString(dtNow) + delim + strOutDelimitValuesOnlyPlusTimestamp	+ inValue.getValue();
-							strOutDelimitAllPlusTimestamp			= timestampAsString(dtNow) + delim + strOutDelimitAllPlusTimestamp			+ inValue.getValue();
+							temp="";
 						}
-					}
-					else
-					{
-						if(strOutDelimitValuesOnly.length()>0)
+		
+		
+						/** HANDLER FOR THE FIRST SLOT *///////////////////////////////////////////////////////////////////
+						if( i==1 ) ////////////////////////////////////////////////////////////////////////////////////////
 						{
-							strOutDelimitValuesOnly = strOutDelimitValuesOnly.substring( 0,(strOutDelimitValuesOnly.length()-delim.length()) );
+							if (temp.length() > 0) //CONTAINS DATA
+							{
+		
+								strOutNoDelimeters						= inValue.getValue();
+								strOutDelimitValuesOnly					= inValue.getValue() + delim;
+								strOutDelimitAll						= inValue.getValue() + delim;
+								strOutDelimitValuesOnlyPlusTimestamp	= inValue.getValue() + delim;
+								strOutDelimitAllPlusTimestamp			= inValue.getValue() + delim;
+							}
+							else
+							{
+								strOutNoDelimeters						= "";
+								strOutDelimitValuesOnly					= "";
+								strOutDelimitAll						= "" + delim;
+								strOutDelimitValuesOnlyPlusTimestamp	= "";
+								strOutDelimitAllPlusTimestamp			= "" + delim;
+							}
 						}
+		
+						/** HANDLER FOR SLOTS AFTER THE FIRST BUT NOT THE LAST *///////////////////////////////////////////
+						if( i>1 && i<slotCount ) //////////////////////////////////////////////////////////////////////////
+						{
+							if (temp.length() > 0) //CONTAINS DATA
+							{
+								strOutNoDelimeters						= strOutNoDelimeters					+ inValue.getValue();
+								strOutDelimitValuesOnly					= strOutDelimitValuesOnly				+ inValue.getValue() + delim;
+								strOutDelimitAll						= strOutDelimitAll						+ inValue.getValue() + delim;
+								strOutDelimitValuesOnlyPlusTimestamp	= strOutDelimitValuesOnlyPlusTimestamp	+ inValue.getValue() + delim;
+								strOutDelimitAllPlusTimestamp			= strOutDelimitAllPlusTimestamp			+ inValue.getValue() + delim;
+							}
+							else
+							{
+								strOutDelimitAll				= strOutDelimitAll.trim()				+ delim;
+								strOutDelimitAllPlusTimestamp	= strOutDelimitAllPlusTimestamp.trim()	+ delim;
+							}
+						}
+		
 						
-						if(getInTimestampLocation().getOrdinal()==0)
+						
+						/** HANDLER FOR THE LAST SLOT *////////////////////////////////////////////////////////////////////
+						if( i==slotCount && slotCount>1  ) ////////////////////////////////////////////////////////////////
 						{
-							strOutDelimitValuesOnlyPlusTimestamp	= strOutDelimitValuesOnlyPlusTimestamp	+			timestampAsString(dtNow);
-							strOutDelimitAllPlusTimestamp			= strOutDelimitAllPlusTimestamp			+ delim +	timestampAsString(dtNow);
+							if (temp.length() > 0) //CONTAINS DATA
+							{
+								strOutNoDelimeters						= strOutNoDelimeters					+ inValue.getValue();
+								strOutDelimitValuesOnly					= strOutDelimitValuesOnly				+ inValue.getValue();
+								strOutDelimitAll						= strOutDelimitAll						+ inValue.getValue();
+								
+								if(getInTimestampLocation().getOrdinal()==0)
+								{
+									strOutDelimitValuesOnlyPlusTimestamp	= strOutDelimitValuesOnlyPlusTimestamp	+ inValue.getValue() + delim + strTimeNow;
+									strOutDelimitAllPlusTimestamp			= strOutDelimitAllPlusTimestamp			+ inValue.getValue() + delim + strTimeNow;
+								}
+								else
+								{
+									strOutDelimitValuesOnlyPlusTimestamp	= timestampAsString(dtNow) + delim + strOutDelimitValuesOnlyPlusTimestamp	+ inValue.getValue();
+									strOutDelimitAllPlusTimestamp			= timestampAsString(dtNow) + delim + strOutDelimitAllPlusTimestamp			+ inValue.getValue();
+								}
+							}
+							else
+							{
+								if(strOutDelimitValuesOnly.length()>0)
+								{
+									strOutDelimitValuesOnly = strOutDelimitValuesOnly.substring( 0,(strOutDelimitValuesOnly.length()-delim.length()) );
+								}
+								
+								if(getInTimestampLocation().getOrdinal()==0)
+								{
+									strOutDelimitValuesOnlyPlusTimestamp	= strOutDelimitValuesOnlyPlusTimestamp	+			strTimeNow;
+									strOutDelimitAllPlusTimestamp			= strOutDelimitAllPlusTimestamp			+ delim +	strTimeNow;
+								}
+								else
+								{
+									int end = strOutDelimitValuesOnlyPlusTimestamp.length()>=delim.length()? strOutDelimitValuesOnlyPlusTimestamp.length()-delim.length() : 0;
+									strOutDelimitValuesOnlyPlusTimestamp	= strTimeNow + delim + strOutDelimitValuesOnlyPlusTimestamp.substring( 0, end );
+									strOutDelimitAllPlusTimestamp			= strTimeNow + delim + strOutDelimitAllPlusTimestamp;
+								}
+							}
 						}
-						else
-						{
-							strOutDelimitValuesOnlyPlusTimestamp	= timestampAsString(dtNow) + delim + strOutDelimitValuesOnlyPlusTimestamp.substring( 0,(strOutDelimitValuesOnlyPlusTimestamp.length()-delim.length()) );
-							strOutDelimitAllPlusTimestamp			= timestampAsString(dtNow) + delim + strOutDelimitAllPlusTimestamp;
-						}
+						logger.log(Level.FINE, "\n" + getSlotPath()	+ "\nEND OF FOR LOOP..."
+								+ "\nSLOT  = " + i 
+								+ "\nVALUE = " + inValue
+								+ "\nOUT1  = " + strOutNoDelimeters
+								+ "\nOUT2  = " + strOutDelimitValuesOnly
+								+ "\nOUT3  = " + strOutDelimitAll
+								+ "\nOUT4  = " + strOutDelimitValuesOnlyPlusTimestamp
+								+ "\nOUT5  = " + strOutDelimitAllPlusTimestamp);
+					}
+					catch(Exception e)
+					{
+						errorHandler(Level.FINE, "calculate().run()", e);
 					}
 				}
-				logger.log(Level.FINE, "\n" + getSlotPath()	+ "\nEND OF FOR LOOP..."
-						+ "\nSLOT  = " + i 
-						+ "\nVALUE = " + inValue
-						+ "\nOUT1  = " + strOutNoDelimeters
-						+ "\nOUT2  = " + strOutDelimitValuesOnly
-						+ "\nOUT3  = " + strOutDelimitAll
-						+ "\nOUT4  = " + strOutDelimitValuesOnlyPlusTimestamp
-						+ "\nOUT5  = " + strOutDelimitAllPlusTimestamp);
+				getOutNoDelimeters().setValue(strOutNoDelimeters);
+				getOutDelimitValuesOnly().setValue(strOutDelimitValuesOnly);
+				getOutDelimitAll().setValue(strOutDelimitAll);
+				getOutDelimitValuesOnlyPlusTimestamp().setValue(strOutDelimitValuesOnlyPlusTimestamp);
+				getOutDelimitAllPlusTimestamp().setValue(strOutDelimitAllPlusTimestamp);
+	
+				fireSetNoDelimeters(BString.make(strOutNoDelimeters));
+				fireSetDelimitValuesOnly(BString.make(strOutDelimitValuesOnly));
+				fireSetDelimitAll(BString.make(strOutDelimitAll));
+				fireSetDelimitValuesOnlyPlusTimestamp(BString.make(strOutDelimitValuesOnlyPlusTimestamp));
+				fireSetDelimitAllPlusTimestamp(BString.make(strOutDelimitAllPlusTimestamp));
+	
+				fireChanged(BBoolean.make(true));
 			}
-			getOutNoDelimeters().setValue(strOutNoDelimeters);
-			getOutDelimitValuesOnly().setValue(strOutDelimitValuesOnly);
-			getOutDelimitAll().setValue(strOutDelimitAll);
-			getOutDelimitValuesOnlyPlusTimestamp().setValue(strOutDelimitValuesOnlyPlusTimestamp);
-			getOutDelimitAllPlusTimestamp().setValue(strOutDelimitAllPlusTimestamp);
-
-			fireSetNoDelimeters(BString.make(strOutNoDelimeters));
-			fireSetDelimitValuesOnly(BString.make(strOutDelimitValuesOnly));
-			fireSetDelimitAll(BString.make(strOutDelimitAll));
-			fireSetDelimitValuesOnlyPlusTimestamp(BString.make(strOutDelimitValuesOnlyPlusTimestamp));
-			fireSetDelimitAllPlusTimestamp(BString.make(strOutDelimitAllPlusTimestamp));
-
-			fireChanged(BBoolean.make(true));
+			catch(Exception e)
+			{
+				errorHandler(Level.FINE, "calculate().run()", e);
+			}
 		}
 	}
 
+		
+	/*----------------------------------------------------------------------------------------------------------------*/
+	private String errorHandler(String msg, Exception e)
+	{
+		return errorHandler(Level.SEVERE, msg, e);
+	}
+		
+	/*----------------------------------------------------------------------------------------------------------------*/
+	private String errorHandler(Level level, String msg, Exception e)
+	{
+		try
+		{
+			String	MESSAGE			= "";
+			String	STACKTRACE		= "";
+			String	PRINTSTACKTRACE	= "";
+			
+			try{MESSAGE		= e.getMessage().trim();}catch(Exception ex) {}
+			try{STACKTRACE	= e.getStackTrace().toString().trim();}catch(Exception ex) {}
+			try{StringWriter errors = new StringWriter();
+				e.printStackTrace(new PrintWriter(errors));
+				PRINTSTACKTRACE = errors.toString().trim();
+			}catch(Exception ex) {}
+			
+			msg	= "\n\n" + msg + "\n" + "MESSAGE: \n" + MESSAGE + "\n" + "STACKTRACE: \n" + STACKTRACE + "\n" + "PRINTSTACKTRACE: \n" + PRINTSTACKTRACE;
+			
+			String tmp = "\n" + this.getSlotPath() + "\n" + msg;
+			if(getInDebug()) {System.out.println(tmp.substring(0, Math.min(tmp.length(), 3580)));}
+			else{logger.log(level, tmp.substring(0, Math.min(tmp.length(), 3580)));}
+		}
+		catch (Exception e1)
+		{
+			String tmp = "\n" + "EXCEPTION ERROR WITH '" + TYPE.getModule().getModuleName() + "." + TYPE.getTypeName() + "'";
+			if(getInDebug()) {System.out.println(tmp.substring(0, Math.min(tmp.length(), 3580)));}
+			else{logger.log(level, tmp.substring(0, Math.min(tmp.length(), 3580)));}
+		}
+		
+		return msg.trim();
+	}
+	
+	
+	
 
 	/*------------------------------------------------------------------------------------------------------------------*/
 	/*-- ASSIGN CURRENT TIME TO STRING VALUE ---------------------------------------------------------------------------*/
@@ -541,13 +607,12 @@ public class BSuperConcatPlus extends BComponent
 
 
 	/*------------------------------------------------------------------------------------------------------------------*/
-	public static final Logger logger = Logger.getLogger("axCommunity.SuperConcatPlus");
-
 	public Type getType() { return TYPE; }
 	public static final Type TYPE = Sys.loadType(BSuperConcatPlus.class);
 
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/JustinKoffler.png");
 
+	public static final Logger logger = Logger.getLogger(TYPE.getModule().getModuleName() + "." + TYPE.getTypeName());
 }
 

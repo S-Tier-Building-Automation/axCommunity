@@ -3,7 +3,6 @@ package org.axcommunity.niagara.system;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.Inet4Address;
-import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Collections;
@@ -16,12 +15,14 @@ import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
 import javax.baja.sys.Action;
+import javax.baja.sys.BAbsTime;
 import javax.baja.sys.BBoolean;
 import javax.baja.sys.BComponent;
 import javax.baja.sys.BFacets;
 import javax.baja.sys.BIcon;
 import javax.baja.sys.BInteger;
 import javax.baja.sys.BRelTime;
+import javax.baja.sys.BStation;
 import javax.baja.sys.Clock;
 import javax.baja.sys.Context;
 import javax.baja.sys.Flags;
@@ -32,7 +33,10 @@ import javax.baja.sys.Topic;
 import javax.baja.sys.Type;
 
 import com.tridium.platform.BSystemPlatformService;
+import com.tridium.sys.BIPlatform;
+import com.tridium.sys.Nre;
 import com.tridium.sys.station.Station;
+import com.tridium.sys.station.Station.SaveListener;
 
 
 /**
@@ -43,12 +47,7 @@ import com.tridium.sys.station.Station;
 
 public class BSysInfo extends BComponent	
 {
-
-	//private	BSystemPlatformService	sysObject			= new BSystemPlatformService();
-	//private	BStation				station				= new BStation();
 	Clock.Ticket					ticket;
-	//long							lastOnExecuteTicks;
-	
 	
 	/*----------------------------------------------------------------------------------------------------------*/
 	public static final Property facetsNumerics = newProperty(0, BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)), null);
@@ -59,7 +58,6 @@ public class BSysInfo extends BComponent
 	public BFacets getFacetsStrings() { return (BFacets)get(facetsStrings); }
 	public void setFacetsStrings(BFacets v) { set(facetsStrings,v,null); }
 	
-	
 	public static final Property populateNetworkInfo = newProperty(0, true);
 	public boolean getPopulateNetworkInfo() { return getBoolean(populateNetworkInfo); }
 	public void setPopulateNetworkInfo(boolean v) { setBoolean(populateNetworkInfo, v, null); }
@@ -67,6 +65,16 @@ public class BSysInfo extends BComponent
 	public static final Property populateHostId = newProperty(0, false);
 	public boolean getPopulateHostId() { return getBoolean(populateHostId); }
 	public void setPopulateHostId(boolean v) { setBoolean(populateHostId, v, null); }
+	
+	public static final Property populateStationManagerInfo = newProperty(0, false);
+	public boolean getPopulateStationManagerInfo() { return getBoolean(populateStationManagerInfo); }
+	public void setPopulateStationManagerInfo(boolean v) { setBoolean(populateStationManagerInfo, v, null); }
+	
+	public static final Property continuouslyMonitorSaveListener = newProperty(Flags.DEFAULT_ON_CLONE, false);
+	public boolean getContinuouslyMonitorSaveListener() { return getBoolean(continuouslyMonitorSaveListener); }
+	public void setContinuouslyMonitorSaveListener(boolean v) { setBoolean(continuouslyMonitorSaveListener, v, null); }
+
+	
 	
 	/*----------------------------------------------------------------------------------------------------------*/
 	public BFacets getSlotFacets(Slot slot)
@@ -103,18 +111,20 @@ public class BSysInfo extends BComponent
 		return super.getSlotFacets(slot);
 	}
 	
+	/**Forces slot values to be updated with most recent information.*/
 	public static final Action Update = newAction(Flags.SUMMARY|Flags.ASYNC|Flags.DEFAULT_ON_CLONE,null);
 	public void Update(){invoke(Update,null,null);}
 	public void doUpdate()
 	{
 		calculate();
 	}
-
+	
+	/**How often the slot values with be automatically updated.*/
 	public static final Property executePeriod = newProperty(Flags.SUMMARY,	BRelTime.make(60000), BFacets.make(BFacets.MIN, BRelTime.makeSeconds(0)));
 	public BRelTime getExecutePeriod() { return (BRelTime)get("executePeriod"); }
 	public void setExecutePeriod(BRelTime v) { set("executePeriod", v); }
 	
-	//events for the timer
+	/**Event for the update timer. Should be a hidden slot as it is not needed by the user.*/
 	public static final Action timerExpired = newAction(Flags.HIDDEN,null);
 	public void timerExpired() { invoke(timerExpired,null,null); }
 	public void doTimerExpired() throws Exception 
@@ -122,30 +132,50 @@ public class BSysInfo extends BComponent
 		calculate();
 	}
 	
-	public void atSteadyState()
-	{
-		if(!Sys.atSteadyState() || !isRunning()){return;}
-		calculate();
-		updateTimer();
-	}
 	
+	
+	/*----------------------------------------------------------------------------------------------------------------*/
 	public void started()
 	{
 		if(!Sys.atSteadyState() || !isRunning()){return;}
+		fireStarted(BBoolean.make(true));
+		startAndSteadyState();
+	}
+	
+	/*----------------------------------------------------------------------------------------------------------------*/
+	public void atSteadyState()
+	{
+		if(!Sys.atSteadyState() || !isRunning()){return;}
+		fireAtSteadyState(BBoolean.make(true));
+		startAndSteadyState();
+	}
+	
+	
+	/*----------------------------------------------------------------------------------------------------------------*/
+	public void startAndSteadyState()
+	{
+		if(!Sys.atSteadyState() || !isRunning()){return;}
+		
+		if(getContinuouslyMonitorSaveListener()==true) 
+		{
+			Station.addSaveListener(saveListener);
+		}
+		
 		calculate();
 		updateTimer();
 	}
 	
+	/*----------------------------------------------------------------------------------------------------------------*/
 	public void changed(Property p, Context cx)
 	{
 		if(!Sys.atSteadyState() || !isRunning()) return;
-		if(p.equals(executePeriod))
+		
+		if(p == executePeriod)
 		{
 			updateTimer();
 			calculate();
 		}
-
-		if(p.equals(populateNetworkInfo))
+		else if(p == populateNetworkInfo)
 		{
 			if(getPopulateNetworkInfo()==false)
 			{
@@ -160,8 +190,7 @@ public class BSysInfo extends BComponent
 				calculate();
 			}
 		}
-		
-		if(p.equals(populateHostId))
+		else if(p == populateHostId)
 		{
 			if(getPopulateHostId()==false)
 			{
@@ -172,16 +201,46 @@ public class BSysInfo extends BComponent
 				calculate();
 			}
 		}
+		else if(p == populateStationManagerInfo)
+		{
+			if(getPopulateStationManagerInfo()==false)
+			{
+				setAutoSaveEnabled(new BStatusBoolean(false, BStatus.nullStatus));
+			  	setAutoSaveFrequency(BRelTime.DEFAULT);
+			  	setSaveBackupCount(new BStatusNumeric(0, BStatus.nullStatus));
+			  	setBootTime(BAbsTime.DEFAULT);
+			  	setLastSaveDuration(new BStatusString("", BStatus.nullStatus));
+			  	setLastSuccessfulSaveTime(BAbsTime.DEFAULT);
+			  	setLastSaveSpan(BRelTime.DEFAULT);
+			  	setUptime(BRelTime.DEFAULT);
+			}
+			else
+			{
+				calculate();
+			}
+		}
+		else if(p == continuouslyMonitorSaveListener)
+		{
+			if(getContinuouslyMonitorSaveListener()==true)
+			{
+				addSaveListenerIfNeeded();
+			}
+			else
+			{
+				Station.removeSaveListener(saveListener);
+			}
+		}
 	}
 	
 	
-	
+	/*----------------------------------------------------------------------------------------------------------------*/
 	void updateTimer()
 	{						
 		if (ticket != null) ticket.cancel();
 		if(getExecutePeriod().getMillis() > 0) ticket = Clock.schedulePeriodically(this, getExecutePeriod(), timerExpired, null);
 	}		
 
+	/*----------------------------------------------------------------------------------------------------------------*/
 	public void calculate()
 	{
 		try
@@ -223,6 +282,7 @@ public class BSysInfo extends BComponent
 			try{getStationHome().setValue(Sys.getStationHome().toString());}
 			catch (Exception e){getStationHome().setValue("");}
 			
+			//Populate HostID if configure to do so...
 			if(getPopulateHostId()==true)
 			{
 				getStationHostId().setValue( sysObject.getHostId() );
@@ -232,6 +292,25 @@ public class BSysInfo extends BComponent
 				getStationHostId().setValue("");
 			}
 			
+			//Populate Station Manager Info if configure to do so...
+			if(getPopulateStationManagerInfo()==true)
+			{
+				getStationManagerInfo();
+			}
+			else
+			{
+				setAutoSaveEnabled(new BStatusBoolean(false, BStatus.nullStatus));
+			  	setAutoSaveFrequency(BRelTime.DEFAULT);
+			  	setSaveBackupCount(new BStatusNumeric(0, BStatus.nullStatus));
+			  	setBootTime(BAbsTime.DEFAULT);
+			  	setLastSaveDuration(new BStatusString("", BStatus.nullStatus));
+			  	setLastSuccessfulSaveTime(BAbsTime.DEFAULT);
+			  	setLastSaveSpan(BRelTime.DEFAULT);
+			  	setUptime(BRelTime.DEFAULT);
+			}
+			
+			//Populate Network info if configure to do so and if not fire the 'Updated' topic slot.
+			//Make sure this is the last thing execute in this method otherwise the 'Updated' topic may not get fired.
 			if(getPopulateNetworkInfo()==true)
 			{
 				Thread t = new Thread(new InetInfo());
@@ -247,6 +326,9 @@ public class BSysInfo extends BComponent
 				
 				fireUpdated(BBoolean.make(true));
 			}
+			
+			
+			
 		}
 		catch (Exception e)
 		{
@@ -254,8 +336,41 @@ public class BSysInfo extends BComponent
 		}
 	}
 
-
 	
+	
+	/*----------------------------------------------------------------------------------------------------------------*/
+	private void getStationManagerInfo()
+	{
+		try
+		{
+			BStation s = Station.station;
+		    BIPlatform plat = Nre.getPlatform();
+	      
+	      	try{setAutoSaveEnabled(new BStatusBoolean(plat.isStationAutoSaveEnabled(), BStatus.ok));		}catch(Exception e) {setAutoSaveEnabled(new BStatusBoolean(false, BStatus.nullStatus));}
+		  	try{setAutoSaveFrequency(BRelTime.make(plat.getStationAutoSaveFrequency()));					}catch(Exception e) {setAutoSaveFrequency(BRelTime.DEFAULT);}
+		  	try{setSaveBackupCount(new BStatusNumeric(plat.getStationSaveBackupCount(), BStatus.ok));		}catch(Exception e) {setSaveBackupCount(new BStatusNumeric(0, BStatus.nullStatus));}
+		  	try{setBootTime(BAbsTime.make(Nre.bootTime));													}catch(Exception e) {setBootTime(BAbsTime.DEFAULT);}
+		  	try{setLastSaveDuration(new BStatusString(Station.getLastSaveDurationString(), BStatus.ok));	}catch(Exception e) {setLastSaveDuration(new BStatusString("", BStatus.nullStatus));}
+		  	try{setLastSuccessfulSaveTime(Station.lastSuccessfulSaveTime);									}catch(Exception e) {setLastSuccessfulSaveTime(BAbsTime.DEFAULT);}
+		  	try{setLastSaveSpan(BRelTime.make(Station.lastSaveSpan));										}catch(Exception e) {setLastSaveSpan(BRelTime.DEFAULT);}
+		  	try{setUptime(BRelTime.make(BAbsTime.now().getMillis() - Nre.bootTime));						}catch(Exception e) {setUptime(BRelTime.DEFAULT);}
+		}
+		catch (Exception e)
+		{
+			errorHandler(Level.FINEST, "Exception in InetInfo.getStationManagerInfo() method!", e);
+			setAutoSaveEnabled(new BStatusBoolean(false, BStatus.nullStatus));
+		  	setAutoSaveFrequency(BRelTime.DEFAULT);
+		  	setSaveBackupCount(new BStatusNumeric(0, BStatus.nullStatus));
+		  	setBootTime(BAbsTime.DEFAULT);
+		  	setLastSaveDuration(new BStatusString("", BStatus.nullStatus));
+		  	setLastSuccessfulSaveTime(BAbsTime.DEFAULT);
+		  	setLastSaveSpan(BRelTime.DEFAULT);
+		  	setUptime(BRelTime.DEFAULT);
+		}
+	}
+	
+	
+	/*----------------------------------------------------------------------------------------------------------------*/
 	private final Station.SaveListener saveListener = new Station.SaveListener()
 	{
 		@Override
@@ -276,39 +391,70 @@ public class BSysInfo extends BComponent
 		public void stationSaveOk()
 		{
 			log.finest("\t" + getSlotPath() + "\t" + "stationSaveOk() method called.");
+			calculate();
 			getExecutingSave().setValue(false);
 			fireStationSaveSuccess(BBoolean.make(true));
-			Station.removeSaveListener(saveListener);
+			if(getContinuouslyMonitorSaveListener()==false) 
+			{
+				Station.removeSaveListener(saveListener);
+			}
 		}
 		
 		
 		@Override
 		public void stationSaveFail(String cause)
 		{
-			log.finest("\t" + getSlotPath() + "\t" + "stationSaveFail() method called.");
+			log.finest("\n" + getSlotPath() + "\n" + "stationSaveFail() method called with cause:\n"+ cause+"\n\n");
+			calculate();
 			getExecutingSave().setValue(false);
 			fireStationSaveFailed(BBoolean.make(true));
-			Station.removeSaveListener(saveListener);
+			if(getContinuouslyMonitorSaveListener()==false) 
+			{
+				Station.removeSaveListener(saveListener);
+			}
 		}
 	};
 	
+	
+	/*----------------------------------------------------------------------------------------------------------------*/
 	private void errorHandler(String msgPrefix, Exception e)
 	{
 		errorHandler(Level.SEVERE, msgPrefix, e);
 	}
 	
-	private void errorHandler(Level inLevel, String msgPrefix, Exception e)
+	/*----------------------------------------------------------------------------------------------------------------*/
+	private String errorHandler(Level level, String msg, Exception e)
 	{
-		String errMsg = msgPrefix.trim() + "\n" + "MESSAGE: \n" + e.getMessage() + "\n" + "STACKTRACE: \n" + e.getStackTrace();
-		StringWriter errors = new StringWriter();
-		e.printStackTrace(new PrintWriter(errors));
-		errMsg = errMsg.trim() + "\n" + "PRINTSTACKTRACE: \n" + errors.toString();
-		log.log(inLevel, "\n" + getSlotPath() + "\n" + errMsg);
+		try
+		{
+			String	MESSAGE			= "";
+			String	STACKTRACE		= "";
+			String	PRINTSTACKTRACE	= "";
+			
+			try{MESSAGE		= e.getMessage().trim();}catch(Exception ex) {}
+			try{STACKTRACE	= e.getStackTrace().toString().trim();}catch(Exception ex) {}
+			try{StringWriter errors = new StringWriter();
+				e.printStackTrace(new PrintWriter(errors));
+				PRINTSTACKTRACE = errors.toString().trim();
+			}catch(Exception ex) {}
+			
+			msg	= "\n\n" + msg + "\n" + "MESSAGE: \n" + MESSAGE + "\n" + "STACKTRACE: \n" + STACKTRACE + "\n" + "PRINTSTACKTRACE: \n" + PRINTSTACKTRACE;
+			log.log(level, "\n" + getSlotPath() + "\n" + msg);
+		}
+		catch (Exception e1)
+		{
+			log.log(Level.SEVERE, "\t" + "EXCEPTION ERROR WITH '" + TYPE.getModule().getModuleName() + "." + TYPE.getTypeName() + "'");
+		}
+		
+		return msg.trim();
 	}
+		
 	
 	
+	/*----------------------------------------------------------------------------------------------------------------*/
 	class InetInfo implements Runnable
 	{
+		/*----------------------------------------------------------------------------------------------------------------*/
 		public void run()
 		{
 			try
@@ -367,9 +513,6 @@ public class BSysInfo extends BComponent
 					errorHandler(Level.FINEST, "Exception in InetInfo.run().getDomain() method!", e);
 					getDomain().setValue("ERROR");
 				}
-
-				
-				
 				
 				try
 				{
@@ -378,11 +521,8 @@ public class BSysInfo extends BComponent
 				catch (Exception e)
 				{
 					errorHandler(Level.FINEST, "Exception in InetInfo.run().getIpAddress() method!", e);
-					
 					getIpAddress().setValue("ERROR");
 				}
-				
-				
 				
 				try
 				{
@@ -406,7 +546,6 @@ public class BSysInfo extends BComponent
 			        	}
 			        }
 			        
-			        
 			        String ipCsv = ipList.toString();
 			        
 			        if(ipCsv.length() > ipDelim.length())
@@ -424,9 +563,6 @@ public class BSysInfo extends BComponent
 					errorHandler(Level.FINEST, "Exception in InetInfo.run().getIpAddressList() method!", e);
 					getIpAddressList().setValue("ERROR");
 				}
-				
-				
-				
 			}
 			catch (Exception e)
 			{
@@ -448,7 +584,8 @@ public class BSysInfo extends BComponent
 	{
 		try
 		{
-			Station.addSaveListener(saveListener);
+			addSaveListenerIfNeeded();
+			
 			getExecutingSave().setValue(true);
 			System.out.println("\nA Station Save Has Been Invoked From:\t\t" + getSlotPath());
 			Sys.getStation().save();
@@ -461,6 +598,43 @@ public class BSysInfo extends BComponent
 			getExecutingSave().setValue(false);
 		}
 	}
+	
+	/*----------------------------------------------------------------------------------------------------------------*/
+	private void addSaveListenerIfNeeded()
+	{
+		try
+		{
+			boolean found = false;
+			SaveListener[] listeners = Station.getSaveListeners();
+			
+			for (int i = 0; i < listeners.length; i++)
+		    {
+		        try
+		        {
+		        	if(listeners[i]==saveListener)
+		        	{
+		        		found = true;
+		        		break;
+		        	}
+		        }
+		        catch(Exception e)
+		        {
+		        }
+		        
+		    }
+			
+			if(!found)
+			{
+				Station.addSaveListener(saveListener);
+			}
+		}
+		catch(Exception e)
+		{
+		}
+	}
+	
+	
+	
 	
 	/** 
 	 * This will cause the station to restart just as if you did it from the application director.
@@ -648,14 +822,56 @@ public class BSysInfo extends BComponent
 	public void setExecutingSave(BStatusBoolean v) { set(executingSave, v); }
 	
 	
+	
+	
+	
+	public static final Property autoSaveEnabled = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusBoolean(Boolean.FALSE, BStatus.ok), null);
+	public BStatusBoolean getAutoSaveEnabled() { return (BStatusBoolean) get(autoSaveEnabled); }
+	public void setAutoSaveEnabled(BStatusBoolean v) { set(autoSaveEnabled, v); }
+	
+	public static final Property autoSaveFrequency = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, BRelTime.DEFAULT, BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
+	public BRelTime getAutoSaveFrequency() { return (BRelTime) get(autoSaveFrequency); }
+	public void setAutoSaveFrequency(BRelTime v) { set(autoSaveFrequency, v); }
+	
+	public static final Property saveBackupCount = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public BStatusNumeric getSaveBackupCount() { return (BStatusNumeric) get(saveBackupCount); }
+	public void setSaveBackupCount(BStatusNumeric v) { set(saveBackupCount, v); }
+	
+	public static final Property bootTime = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, BAbsTime.DEFAULT, BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
+	public BAbsTime getBootTime() { return (BAbsTime) get(bootTime); }
+	public void setBootTime(BAbsTime v) { set(bootTime, v, null); }
+	
+	public static final Property uptime = newProperty(Flags.SUMMARY, BRelTime.DEFAULT, BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
+	public BRelTime getUptime() { return (BRelTime)get(uptime); }
+	public void setUptime(BRelTime v) { set(uptime, v, null); }
+	
+	public static final Property lastSaveDuration = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString("", BStatus.ok), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public BStatusString getLastSaveDuration() { return (BStatusString) get(lastSaveDuration); }
+	public void setLastSaveDuration(BStatusString v) { set(lastSaveDuration, v); }
+	
+	public static final Property lastSuccessfulSaveTime = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, BAbsTime.DEFAULT, BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
+	public BAbsTime getLastSuccessfulSaveTime() { return (BAbsTime) get(lastSuccessfulSaveTime); }
+	public void setLastSuccessfulSaveTime(BAbsTime v) { set(lastSuccessfulSaveTime, v, null); }
+	
+	public static final Property lastSaveSpan = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, BRelTime.DEFAULT, BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
+	public BRelTime getLastSaveSpan() { return (BRelTime) get(lastSaveSpan); }
+	public void setLastSaveSpan(BRelTime v) { set(lastSaveSpan, v); }
+	
+	
+	
+	
+	
 	public static final Topic Updated = newTopic(0);
 	public void fireUpdated(BBoolean event){fire(Updated,event,null);}
-
-	
+		
+	public static final Topic Started = newTopic(0);
+	public void fireStarted(BBoolean event){fire(Started,event,null);}
+		
+	public static final Topic AtSteadyState = newTopic(0);
+	public void fireAtSteadyState(BBoolean event){fire(AtSteadyState,event,null);}
 		
 	public static final Topic StationSaveSuccess = newTopic(0);
 	public void fireStationSaveSuccess(BBoolean event){fire(StationSaveSuccess,event,null);}
-	
 		
 	public static final Topic StationSaveFailed = newTopic(0);
 	public void fireStationSaveFailed(BBoolean event){fire(StationSaveFailed,event,null);}

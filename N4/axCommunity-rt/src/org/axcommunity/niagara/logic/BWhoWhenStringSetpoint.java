@@ -9,8 +9,7 @@ import javax.baja.sys.*;
 * @author    Mike Arnott
 * @creation  9 Dec 11
 */
-public class BWhoWhenStringSetpoint
-extends BComponent
+public class BWhoWhenStringSetpoint extends BComponent
 {
 	public static final Property absTimeFacets			= newProperty(0, BFacets.make(BFacets.SHOW_DATE,			BBoolean.make(true), 
 	                                          			                              BFacets.SHOW_TIME,			BBoolean.make(true), 
@@ -26,6 +25,30 @@ extends BComponent
 	public BFacets getFacets() { return (BFacets)get(facets); }
 	public void setFacets(BFacets v) { set(facets, v); }
 
+	public BFacets getSlotFacets(Slot slot)
+	{
+		try
+		{
+			if (slot == out || slot == SetValue)
+			{
+				if(getFacets()==null || getFacets().isEmpty())	
+				{ return slot.getFacets();	}
+				else											
+				{ return getFacets();		}
+			}
+			else if (slot == timeChanged)
+			{
+				if(getAbsTimeFacets()==null || getAbsTimeFacets().isEmpty())	
+				{ return slot.getFacets();	}
+				else											
+				{ return getAbsTimeFacets();		}
+			}
+		}
+		catch (Exception e){}
+		
+		return super.getSlotFacets(slot);
+	}
+	
 	/**The output setpoint*/
 	public static final Property out = newProperty(Flags.SUMMARY, new BStatusString());
 	public void setOut(BStatusString v) {     set(out, v);   }
@@ -59,26 +82,26 @@ extends BComponent
 		valueCurrent = getOut().getValue();
 		String by = "logic";
 		
-		if(cxin==null)
+		if (cxin == null)
 		{
-		//for wiresheet invokes, set username to "logic"
-		getChangedBy().setValue(by);
+			// for wiresheet invokes, set username to "logic"
+			getChangedBy().setValue(by);
 		}
-
-		else 
+		
+		else
 		{
-		//for any user invokes, get the context username
-		getChangedBy().setValue(cxin.getUser().getUsername());
+			// for any user invokes, get the context username
+			getChangedBy().setValue(cxin.getUser().getUsername());
 		}
-		//set value and timestamp
+		// set value and timestamp
 		getOut().setValue(v.getString());
 		fireValue(BString.make(v.getString()));
-
-		//some day would love to add override status to this object also...
+		
+		// some day would love to add override status to this object also...
 		getOut().setStatus(BStatus.ok);
 		setTimeChanged(BAbsTime.make());
 		
-		stringToLog	= getTimeChanged().toString(getAbsTimeFacets()) + "," + by + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
+		stringToLog = getTimeChanged().toString(getAbsTimeFacets()) + "," + by + ",FROM: " + valueCurrent + ",TO: " + getOut().getValue() + ",SLOTPATH: " + getSlotPath();
 		getOutLogString().setValue(stringToLog);
 		fireLogString(BString.make(stringToLog));
 	}
@@ -87,10 +110,16 @@ extends BComponent
 	public static final Topic Value = newTopic(0);
 	public void fireValue(BString event){fire(Value,event,null);}
 	
-	
 	public static final Topic LogString = newTopic(0);
 	public void fireLogString(BString event){fire(LogString,event,null);}
 
+	public BValue getActionParameterDefault(Action action)
+	{
+		if (action == SetValue) 
+		return getOut().getValueValue();
+		return super.getActionParameterDefault(action);
+	}
+	
 
 	public BIcon getIcon() { return icon; }
 	private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");
@@ -101,10 +130,5 @@ extends BComponent
 
 
 
-	public BValue getActionParameterDefault(Action action)
-	{
-		if (action == SetValue) 
-		return getOut().getValueValue();
-		return super.getActionParameterDefault(action);
-	}
+	
 }
