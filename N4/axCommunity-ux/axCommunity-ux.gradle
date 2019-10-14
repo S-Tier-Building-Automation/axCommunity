@@ -8,7 +8,7 @@ ext
 {
 	// Declare module name and project properties
 	name			= 'axCommunity'
-	project.group	= 'Community'
+	group			= 'Community'
 }
 
 // Declare niagaraModule properties

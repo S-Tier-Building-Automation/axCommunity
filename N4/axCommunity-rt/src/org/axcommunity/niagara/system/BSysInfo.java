@@ -35,6 +35,7 @@ import javax.baja.sys.Type;
 import com.tridium.platform.BSystemPlatformService;
 import com.tridium.sys.BIPlatform;
 import com.tridium.sys.Nre;
+import com.tridium.sys.metrics.Metrics;
 import com.tridium.sys.station.Station;
 import com.tridium.sys.station.Station.SaveListener;
 
@@ -354,6 +355,26 @@ public class BSysInfo extends BComponent
 		  	try{setLastSuccessfulSaveTime(Station.lastSuccessfulSaveTime);									}catch(Exception e) {setLastSuccessfulSaveTime(BAbsTime.DEFAULT);}
 		  	try{setLastSaveSpan(BRelTime.make(Station.lastSaveSpan));										}catch(Exception e) {setLastSaveSpan(BRelTime.DEFAULT);}
 		  	try{setUptime(BRelTime.make(BAbsTime.now().getMillis() - Nre.bootTime));						}catch(Exception e) {setUptime(BRelTime.DEFAULT);}
+			
+			
+			
+			try{setOutDevicesLimit(new BStatusNumeric(Metrics.getGlobalDevicesLimit(), BStatus.ok));		}catch(Exception e) {setOutDevicesLimit(new BStatusNumeric(0, BStatus.nullStatus));}
+			try{setOutDevicesUsed(new BStatusNumeric(Metrics.getGlobalDevicesUsed(), BStatus.ok));			}catch(Exception e) {setOutDevicesUsed(new BStatusNumeric(0, BStatus.nullStatus));}
+			
+			try{setOutHistoriesLimit(new BStatusNumeric(Metrics.getGlobalHistoriesLimit(), BStatus.ok));	}catch(Exception e) {setOutHistoriesLimit(new BStatusNumeric(0, BStatus.nullStatus));}
+			try{setOutHistoriesUsed(new BStatusNumeric(Metrics.getGlobalHistoriesUsed(), BStatus.ok));		}catch(Exception e) {setOutHistoriesUsed(new BStatusNumeric(0, BStatus.nullStatus));}
+			
+			try{setOutLinksLimit(new BStatusNumeric(Metrics.getGlobalLinksLimit(), BStatus.ok));			}catch(Exception e) {setOutLinksLimit(new BStatusNumeric(0, BStatus.nullStatus));}
+			try{setOutLinksUsed(new BStatusNumeric(Metrics.getGlobalLinksUsed(), BStatus.ok));				}catch(Exception e) {setOutLinksUsed(new BStatusNumeric(0, BStatus.nullStatus));}
+			
+			try{setOutNetworksLimit(new BStatusNumeric(Metrics.getGlobalNetworksLimit(), BStatus.ok));		}catch(Exception e) {setOutNetworksLimit(new BStatusNumeric(0, BStatus.nullStatus));}
+			try{setOutNetworksUsed(new BStatusNumeric(Metrics.getGlobalNetworksUsed(), BStatus.ok));		}catch(Exception e) {setOutNetworksUsed(new BStatusNumeric(0, BStatus.nullStatus));}
+			
+			try{setOutPointsLimit(new BStatusNumeric(Metrics.getGlobalPointsLimit(), BStatus.ok));			}catch(Exception e) {setOutPointsLimit(new BStatusNumeric(0, BStatus.nullStatus));}
+			try{setOutPointsUsed(new BStatusNumeric(Metrics.getGlobalPointsUsed(), BStatus.ok));			}catch(Exception e) {setOutPointsUsed(new BStatusNumeric(0, BStatus.nullStatus));}
+			
+			try{setOutSchedulesLimit(new BStatusNumeric(Metrics.getGlobalSchedulesLimit(), BStatus.ok));	}catch(Exception e) {setOutSchedulesLimit(new BStatusNumeric(0, BStatus.nullStatus));}
+			try{setOutSchedulesUsed(new BStatusNumeric(Metrics.getGlobalSchedulesUsed(), BStatus.ok));		}catch(Exception e) {setOutSchedulesUsed(new BStatusNumeric(0, BStatus.nullStatus));}
 		}
 		catch (Exception e)
 		{
@@ -368,6 +389,8 @@ public class BSysInfo extends BComponent
 		  	setUptime(BRelTime.DEFAULT);
 		}
 	}
+	
+	
 	
 	
 	/*----------------------------------------------------------------------------------------------------------------*/
@@ -858,6 +881,54 @@ public class BSysInfo extends BComponent
 	public void setLastSaveSpan(BRelTime v) { set(lastSaveSpan, v); }
 	
 	
+	public static final Property outDevicesLimit = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public BStatusNumeric getOutDevicesLimit() { return (BStatusNumeric) get(outDevicesLimit); }
+	public void setOutDevicesLimit(BStatusNumeric v) { set(outDevicesLimit, v); }
+	
+	public static final Property outDevicesUsed = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public BStatusNumeric getOutDevicesUsed() { return (BStatusNumeric) get(outDevicesUsed); }
+	public void setOutDevicesUsed(BStatusNumeric v) { set(outDevicesUsed, v); }
+	
+	public static final Property outHistoriesLimit = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public BStatusNumeric getOutHistoriesLimit() { return (BStatusNumeric) get(outHistoriesLimit); }
+	public void setOutHistoriesLimit(BStatusNumeric v) { set(outHistoriesLimit, v); }
+	
+	public static final Property outHistoriesUsed = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public BStatusNumeric getOutHistoriesUsed() { return (BStatusNumeric) get(outHistoriesUsed); }
+	public void setOutHistoriesUsed(BStatusNumeric v) { set(outHistoriesUsed, v); }
+	
+	public static final Property outLinksLimit = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public BStatusNumeric getOutLinksLimit() { return (BStatusNumeric) get(outLinksLimit); }
+	public void setOutLinksLimit(BStatusNumeric v) { set(outLinksLimit, v); }
+	
+	public static final Property outLinksUsed = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public BStatusNumeric getOutLinksUsed() { return (BStatusNumeric) get(outLinksUsed); }
+	public void setOutLinksUsed(BStatusNumeric v) { set(outLinksUsed, v); }
+	
+	public static final Property outNetworksLimit = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public BStatusNumeric getOutNetworksLimit() { return (BStatusNumeric) get(outNetworksLimit); }
+	public void setOutNetworksLimit(BStatusNumeric v) { set(outNetworksLimit, v); }
+	
+	public static final Property outNetworksUsed = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public BStatusNumeric getOutNetworksUsed() { return (BStatusNumeric) get(outNetworksUsed); }
+	public void setOutNetworksUsed(BStatusNumeric v) { set(outNetworksUsed, v); }
+	
+	public static final Property outPointsLimit = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public BStatusNumeric getOutPointsLimit() { return (BStatusNumeric) get(outPointsLimit); }
+	public void setOutPointsLimit(BStatusNumeric v) { set(outPointsLimit, v); }
+	
+	public static final Property outPointsUsed = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public BStatusNumeric getOutPointsUsed() { return (BStatusNumeric) get(outPointsUsed); }
+	public void setOutPointsUsed(BStatusNumeric v) { set(outPointsUsed, v); }
+	
+	public static final Property outSchedulesLimit = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public BStatusNumeric getOutSchedulesLimit() { return (BStatusNumeric) get(outSchedulesLimit); }
+	public void setOutSchedulesLimit(BStatusNumeric v) { set(outSchedulesLimit, v); }
+	
+	public static final Property outSchedulesUsed = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public BStatusNumeric getOutSchedulesUsed() { return (BStatusNumeric) get(outSchedulesUsed); }
+	public void setOutSchedulesUsed(BStatusNumeric v) { set(outSchedulesUsed, v); }
+
 	
 	
 	

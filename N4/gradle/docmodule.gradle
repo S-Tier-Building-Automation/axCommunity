@@ -31,8 +31,15 @@ buildscript {
 // bajadoc
 ///////////////////////////////////////////////////////////////////
 
-task cleanBajadocOutputDir << {
-  project.delete file("$buildDir/bajadoc/doc")
+// task cleanBajadocOutputDir << {
+  // project.delete file("$buildDir/bajadoc/doc")
+// }
+
+task cleanBajadocOutputDir {
+	doLast 
+	{
+		project.delete file("$buildDir/bajadoc/doc")
+	}
 }
 
 class PackageSpec

@@ -8,7 +8,7 @@ description		= "Open source AX Community module"
 ext
 {
 	name			= 'axCommunity'
-	project.group	= 'Community'
+	group			= 'Community'
 }
 
 /*	Declare niagaraModule properties	*/
