@@ -42,6 +42,14 @@
 
         <pre>
             <code>
+<b>V19.11.08.01 November 8, 2019</b><i> - Justin Koffler</i>
+    - MODIFIED 'BBqlNumericRecap'
+		* Made it a threaded process since queries can potentially be cpu intensive.
+	- ADDED 'BBatchLinkCreator'
+		* Creates links between component(s) and slots from a supplied csv list.
+		* Very similar to the BDynamicLinks component, but this one is totally independent 
+		  and creates the links directly on the components in the csv list.
+		* Csv list format is sourceOrd, sourceSlot, targetOrd, targetSlot each link on separate line.
 <b>V19.08.21.01 August 21, 2019</b><i> - Justin Koffler</i>
     - MODIFIED 'BSysInfo'
         * Added StatusBoolean slot 'autoSaveEnabled'.

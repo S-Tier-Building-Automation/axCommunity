@@ -2,6 +2,8 @@
 
 <!-- Types -->
 <types>
+	<type name="BatchLinkCreator"					class="org.axcommunity.niagara.batch.BBatchLinkCreator" />
+	
 	<type name="CSVStringToStatusNumeric"			class="org.axcommunity.niagara.conversion.BCSVStringToStatusNumeric" />
 	<type name="StatusEnumToStatusString"			class="org.axcommunity.niagara.conversion.BStatusEnumToStatusString" />
 	<type name="StatusNumericToStatusBoolean"		class="org.axcommunity.niagara.conversion.BStatusNumericToStatusBoolean" />

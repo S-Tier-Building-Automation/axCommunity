@@ -2,8 +2,19 @@
 <bajaObjectGraph version="1.0">
 	<p m="b=baja" t="b:Folder">
 	
+			<p m="b=baja" t="b:Folder" n="Batch">
+				<p n="BatchLinkCreator"				m="k=axCommunity" t="k:BatchLinkCreator">
+					<p n="wsAnnotation"	f=""	t="b:WsAnnotation"	v="2,2,20"/>	
+				</p>				
+			</p>
+			
+			
 			<p m="b=baja" t="b:Folder" n="BQL">
-				<p n="BqlNumericRecap"					m="k=axCommunity" t="k:BqlNumericRecap"/>
+				<p n="BqlNumericRecap"					m="k=axCommunity" t="k:BqlNumericRecap">
+							<p n="inBqlOrd"		f="h"/>
+							<p n="inBql"		f="s"	t="b:Ord"			v="station:|slot:/|bql:select out from control:NumericPoint where name = 'foo'"/>
+							<p n="wsAnnotation"	f=""	t="b:WsAnnotation"	v="2,2,15"/>	
+				</p>
 				<p n="HistoryToCSV"						m="k=axCommunity" t="k:HistoryToCSV"/>	 
 				<p n="TrendAnalyzer"					m="k=axCommunity" t="k:TrendAnalyzer"/>
 				<p n="TrendDynamicAnalyzer"				m="k=axCommunity" t="k:TrendDynamicAnalyzer"/>	 
