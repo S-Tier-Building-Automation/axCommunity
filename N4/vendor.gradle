@@ -3,10 +3,10 @@
  */
 
 group					= 'Community'
-def moduleVersion		= '19.11.08.01'
+def moduleVersion		= '19.12.05.01'
 def moduleVersionPatch	= [:]
 moduleVersionPatch		= '.0'
 version					= "${moduleVersion}${moduleVersionPatch}"
 ext.description			= "Open source AX Community module"
 ext.copyright			= 'Copyright \u00A9 2000-2019 AxCommunity Project. All rights reserved.'
-ext.releaseDate			= '2019-11-08'
+ext.releaseDate			= '2019-12-05'

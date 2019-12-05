@@ -119,6 +119,13 @@ public class BDynamicLinks extends BComponent
 	public boolean getInDebug() { return getBoolean(inDebug); }
 	public void setInDebug(boolean v) { setBoolean(inDebug, v, null); }
 	
+	/**Used to track any outgoing links that may have been configured in the csv.*/
+	public static final Property outgoingLinks = newProperty(Flags.HIDDEN|Flags.DEFAULT_ON_CLONE, BString.DEFAULT, BFacets.make(BFacets.MULTI_LINE, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public String getOutgoingLinks() { return getString(outgoingLinks); }
+	public void setOutgoingLinks(String v) { setString(outgoingLinks, v, null); }
+	
+	
+	
 	/**This should be the format slotPath comma slotName to the component you wish to link to this component's 'enableLinks' slot.*/
 	public static final Property pathToEnableLinks = newProperty(Flags.HIDDEN, "station:|slot:/Path_To_Your_Component/Your_Component_Name,Slot_Name", BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	/**This should be the format slotPath comma slotName to the component you wish to link to this component's 'enableLinks' slot.*/
@@ -502,7 +509,7 @@ public class BDynamicLinks extends BComponent
 			messageHandler(level, msg);
 		}
 	}
-
+	
 	/**
 	 * 
 	 * @param level - Level of log you want to create.
@@ -1038,6 +1045,11 @@ public class BDynamicLinks extends BComponent
 			if(strOrds.length < 1) return;
 			boolean validLinks = false;
 			
+			//if this point is reached, we "should" have a valid csv...
+			
+			//Clear the outgoing links list...
+			setOutgoingLinks("");
+			
 			for (int i = 0; i < strOrds.length; i ++)
 			{
 				validLinks 							= false;
@@ -1084,7 +1096,7 @@ public class BDynamicLinks extends BComponent
 								outgoingTrgSlotName 	= strOrds[i][colOutTargetSlotName];
 								if(outgoingTrgFormatOrd.length()>0 && outgoingTrgSlotName.length()>0)
 								{
-								createOutgoingLink(outgoingSrcSlotName, outgoingTrgFormatOrd, outgoingTrgSlotName);
+									createOutgoingLink(outgoingSrcSlotName, outgoingTrgFormatOrd, outgoingTrgSlotName);
 								}
 								continue;
 							}
@@ -1459,13 +1471,13 @@ public class BDynamicLinks extends BComponent
 					{
 						if (strOrds[i][colOutTargetOrd] != null && strOrds[i][colOutTargetSlotName] != null && targetSlotName != null)
 						{
-						outgoingSrcSlotName = targetSlotName;
-						outgoingTrgFormatOrd = strOrds[i][colOutTargetOrd];
-						outgoingTrgSlotName = strOrds[i][colOutTargetSlotName];
+							outgoingSrcSlotName = targetSlotName;
+							outgoingTrgFormatOrd = strOrds[i][colOutTargetOrd];
+							outgoingTrgSlotName = strOrds[i][colOutTargetSlotName];
 							
 							if(outgoingTrgFormatOrd.length()>0 && outgoingTrgSlotName.length()>0)
 							{
-						createOutgoingLink(outgoingSrcSlotName, outgoingTrgFormatOrd, outgoingTrgSlotName);
+								createOutgoingLink(outgoingSrcSlotName, outgoingTrgFormatOrd, outgoingTrgSlotName);
 							}
 						}
 					} 
@@ -1492,6 +1504,7 @@ public class BDynamicLinks extends BComponent
 		else
 		{
 			removeLinks();
+			removeOutgoingLinks();
 			updateSlotStatus();
 			makeDelimitedOutput();
 		}
@@ -1699,8 +1712,108 @@ public class BDynamicLinks extends BComponent
 	}
 	
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
+	private void removeOutgoingLinks()
+	{
+		String[] links = getOutgoingLinks().split("\n");
+		
+		for (int i = 0; i < links.length; i++) 
+		{
+			try
+			{
+				String[]	link				= links[i].split(",");
+				String		sourceSlotName		= link[0];
+				String		targetCompSlotPath	= link[1];
+				String		targetSlotName		= link[2];
+				Knob[]		knobs				= thisComp.getKnobs(thisComp.getSlot( sourceSlotName ));
+				
+				for (int k = 0; k < knobs.length; k++) 
+				{
+					try
+					{
+						String strKnob = knobs[k].getSourceSlotName() + "," + knobs[k].getTargetComponent().getSlotPath() + "," + knobs[k].getTargetSlotName();
+						
+						if( strKnob.equalsIgnoreCase(links[i]) )
+						{
+							BOrd	targetOrd	=  getValidOrd(targetCompSlotPath);
+							
+							if( targetOrd!=null && !targetOrd.isNull() && targetOrd!=BOrd.NULL)
+							{
+								BComponent	targetComp		= (BComponent)targetOrd.relativizeToHost().get();
+								BLink[]		linksOnTarget	= targetComp.getLinks(targetComp.getSlot(targetSlotName));
+								
+								for (int j = 0; j < linksOnTarget.length; j++) 
+								{
+									try
+									{
+										if( (linksOnTarget[j].getSourceComponent().getSlotPath()+","+linksOnTarget[j].getSourceSlotName()).equalsIgnoreCase( thisComp.getSlotPath()+","+sourceSlotName ) )
+										{
+											targetComp.remove(linksOnTarget[j].getName());
+										}
+									}
+									catch (Exception e)
+									{
+										messageHandler(Level.FINEST, "removeOutgoingLinks(), inner most loop, (for (int j = 0; j < linksOnTarget.length; j++) ).");
+									}
+								}
+							}
+						}
+					}
+					catch (Exception e)
+					{
+						messageHandler(Level.FINEST, "removeOutgoingLinks(), first inner loop, (for (int k = 0; k < knobs.length; k++)).");
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				messageHandler(Level.FINEST, "removeOutgoingLinks(), outer loop, (for (int i = 0; i < links.length; i++)).");
+			}
+		}
+	}
+	
+	/*------------------------------------------------------------------------------------------------------------------------*/
+	private BOrd getValidOrd(String ordString)
+	{
+		try
+		{
+			BOrd targetOrd = BOrd.make(BFormat.make(ordString).format(thisComp).replaceAll("//", "/"));
+			
+			if(isOrdValid(targetOrd))
+			{
+				return targetOrd;
+			}
+			else
+			{
+				targetOrd = BOrd.make(BFormat.make("station:|" + ordString).format(thisComp).replaceAll("//", "/"));
+				
+				if(isOrdValid(targetOrd))
+				{
+					return targetOrd;
+				}
+				else
+				{
+					return BOrd.NULL;
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			return BOrd.NULL;
+		}
+	}
 	
 	
+	/*------------------------------------------------------------------------------------------------------------------------*/
+	/**
+	 * Format should be:
+	 * thisCompSourceSlotName,targetCompSlotPath,targetSlotName
+	 * @param strLink
+	 */
+	private void addToOutgoingLinks(String strLink)
+	{
+		setOutgoingLinks( (getOutgoingLinks()+"\n"+strLink).trim() );
+	}
 	
 	
 	
@@ -1740,16 +1853,18 @@ public class BDynamicLinks extends BComponent
 			}
 			
 			
+			
 			if( validOrd )
 			{
-				BOrd		sourceOrd	= thisComp.getHandleOrd();
-				BComponent	targetComp	= (BComponent)targetOrd.relativizeToHost().get();
+				BOrd		sourceOrd			= thisComp.getHandleOrd();
+				BComponent	targetComp			= (BComponent)targetOrd.relativizeToHost().get();
 				
 				boolean		sourceSlotExists	= false;
 				boolean		targetSlotExists	= false;
 				
 				sourceSlotExists				= doesSlotExist(thisComp, inSourceSlotName);
 				targetSlotExists				= doesSlotExist(targetComp, inTargetSlotName);
+				
 				
 				if( sourceSlotExists && targetSlotExists )
 				{
@@ -1763,6 +1878,8 @@ public class BDynamicLinks extends BComponent
 						messageHandler(Level.FINEST, "createOutgoingLink(), ALREADY LINKED!, target: '" + targetComp.getName()+":"+targetSlot.getName() + "', source: '" + thisComp.getName()+":"+sourceSlot.getName());
 						messageHandler(Level.FINEST, div);
 						messageHandler(Level.FINEST, "");
+						//we've probably already created this link, but add it to our outgoing list...
+						addToOutgoingLinks( inSourceSlotName+","+targetComp.getSlotPath()+","+inTargetSlotName );
 						return;
 					}
 					
@@ -1787,25 +1904,23 @@ public class BDynamicLinks extends BComponent
 					
 					if(getInDebug())
 					{
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), targetComp: '" + targetComp.getName()+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR targetComp");}
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), targetSlot: '" + targetSlot.getName()+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR targetSlot");}
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), thisComp:   '" + thisComp.getName()+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR thisComp");}
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), sourceSlot: '" + sourceSlot.getName()+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR sourceSlot");}
-						
-						
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), srcType: '" + srcType+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR srcType");}
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), srcType: '" + srcType+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR srcType");}
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), trgType: '" + trgType+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR trgType");}
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), sourceIsAction: '" + sourceIsAction+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR sourceIsAction");}
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), sourceIsTopic: '" + sourceIsTopic+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR sourceIsTopic");}
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), targetIsAction: '" + targetIsAction+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR targetIsAction");}
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), targetIsTopic: '" + targetIsTopic+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR targetIsTopic");}
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), sourceIsActionOrTopic: '" + sourceIsActionOrTopic+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR sourceIsActionOrTopic");}
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), targetIsActionOrTopic: '" + targetIsActionOrTopic+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR targetIsActionOrTopic");}
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), targetIsNormal: '" + targetIsNormal+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR targetIsNormal");}
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), sourceIsNormal: '" + sourceIsNormal+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR sourceIsNormal");}
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), sourceSlotExists: '" + sourceSlotExists+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR sourceSlotExists");}
-						try{messageHandler(Level.FINEST, "createOutgoingLink(), targetSlotExists: '" + targetSlotExists+"'");}catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR targetSlotExists");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), targetComp:            '" + targetComp.getName()+"'");}		catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR targetComp");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), targetSlot:            '" + targetSlot.getName()+"'");}		catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR targetSlot");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), thisComp:              '" + thisComp.getName()+"'");}		catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR thisComp");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), sourceSlot:            '" + sourceSlot.getName()+"'");}		catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR sourceSlot");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), srcType:               '" + srcType+"'");}					catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR srcType");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), srcType:               '" + srcType+"'");}					catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR srcType");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), trgType:               '" + trgType+"'");}					catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR trgType");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), sourceIsAction:        '" + sourceIsAction+"'");}			catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR sourceIsAction");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), sourceIsTopic:         '" + sourceIsTopic+"'");}			catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR sourceIsTopic");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), targetIsAction:        '" + targetIsAction+"'");}			catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR targetIsAction");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), targetIsTopic:         '" + targetIsTopic+"'");}			catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR targetIsTopic");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), sourceIsActionOrTopic: '" + sourceIsActionOrTopic+"'");}	catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR sourceIsActionOrTopic");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), targetIsActionOrTopic: '" + targetIsActionOrTopic+"'");}	catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR targetIsActionOrTopic");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), targetIsNormal:        '" + targetIsNormal+"'");}			catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR targetIsNormal");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), sourceIsNormal:        '" + sourceIsNormal+"'");}			catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR sourceIsNormal");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), sourceSlotExists:      '" + sourceSlotExists+"'");}			catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR sourceSlotExists");}
+						try{messageHandler(Level.FINEST, "createOutgoingLink(), targetSlotExists:      '" + targetSlotExists+"'");}			catch(Exception e) {messageHandler(Level.FINEST, "createOutgoingLink(), ERROR targetSlotExists");}
 					}
 					
 					/*
@@ -1878,6 +1993,9 @@ public class BDynamicLinks extends BComponent
 							}
 						}
 					}
+					
+					//if we made it this far the links was probably made...
+					addToOutgoingLinks( inSourceSlotName+","+targetComp.getSlotPath()+","+inTargetSlotName );
 				}
 				else
 				{
