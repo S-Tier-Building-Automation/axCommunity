@@ -179,6 +179,50 @@ public class BSuperOr extends BComponent implements Runnable
 			}
 		}
 	}
+	
+	
+	/*----------------------------------------------------------------------------------------------------------------*/
+	public void removed(Property prop, BValue oldValue, Context context)
+	{
+		/** 
+		 * The purpose of this logic is to clear a slot's value 
+		 * when a link is deleted so it doesn't leave behind its old data. 
+		 */
+		try
+		{
+			if(prop.getType()==BLink.TYPE || prop.getType()==BConversionLink.TYPE)
+			{
+				String slotName = "";
+				
+				if(prop.getType()==BConversionLink.TYPE)
+				{
+					slotName = ((BConversionLink) oldValue).getTargetSlotName();
+				}
+				else
+				{
+					slotName = ((BLink) oldValue).getTargetSlotName();
+				}
+				
+				Slot 		slot 		= this.getSlot(slotName);
+				Property	targetProp	= this.getProperty(slot.getName());
+				
+				if( !slot.isAction() && !slot.isTopic() )
+				{
+					if(targetProp.isDynamic())
+					{
+						this.set(targetProp, (BValue) targetProp.getType().getInstance());
+					}
+					else
+					{
+						this.set(targetProp, (BValue) targetProp.getDefaultValue());
+					}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+		}
+	}
 
 
 	////////////////////////////////////////////////////////////////
