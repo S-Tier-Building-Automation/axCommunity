@@ -26,7 +26,7 @@ import javax.baja.sys.Type;
 * 
 * 	Update 6/29/2017 by James Johnson to move to current logger syntax
 */
-
+@SuppressWarnings("rawtypes")
 public class BEnumFromCommaSepVar extends BEnumWritable
 {
 	/**
@@ -510,6 +510,7 @@ public class BEnumFromCommaSepVar extends BEnumWritable
 	
 	
 	//----------------------------------------------------------------------------------------------------------
+	
 	private Object resizeArray (Object oldArray, int newSize) 
 	{
 		try

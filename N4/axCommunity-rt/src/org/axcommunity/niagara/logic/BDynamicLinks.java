@@ -257,7 +257,7 @@ public class BDynamicLinks extends BComponent
 	private static final BFacets statusForInvalidOrdsFacets =	BFacets.make(BFacets.FIELD_EDITOR, BString.make("kitControl:PropagateFlagsFE"));
 	public BFacets getSlotFacets(Slot slot)
 	{
-		if (slot.getName().equals(statusForInvalidOrds)){ return statusForInvalidOrdsFacets;}
+		if (slot.getName().equals(statusForInvalidOrds.getName())){ return statusForInvalidOrdsFacets;}
 		else if(slot.isDynamic()){return getFacetsForDynamicSlots();}
 		else {return super.getSlotFacets(slot);}
 	}
@@ -294,6 +294,7 @@ public class BDynamicLinks extends BComponent
 	final BComponent thisComp = this;
 	
 	/*------------------------------------------------------------------------------------------------------------------------*/
+	@SuppressWarnings("unused")
 	public void started() throws Exception
 	{
 		if(!Sys.atSteadyState() || !thisComp.isRunning()) return;
@@ -455,6 +456,7 @@ public class BDynamicLinks extends BComponent
 	 * @since September 22, 2017
 	 * @author Justin Koffler
 	 */
+	@SuppressWarnings("unused")
 	private int levelToInt(Level level)
 	{
 		int result = 4;
@@ -1887,10 +1889,10 @@ public class BDynamicLinks extends BComponent
 					boolean	targetIsAction 			= false;
 					boolean	targetIsTopic 			= false;
 					
-					try{sourceIsAction 				= sourceSlot.isAction();}catch(Exception e) {}
-					try{sourceIsTopic 				= sourceSlot.isTopic();}catch(Exception e) {}
-					try{targetIsAction 				= sourceSlot.isAction();}catch(Exception e) {}
-					try{targetIsTopic 				= sourceSlot.isTopic();}catch(Exception e) {}
+					try{sourceIsAction 				= sourceSlot.isAction(); messageHandler(Level.FINEST, "createOutgoingLink(), sourceSlot("+sourceSlot.getName()+").isAction: '" + sourceSlot.isAction()+"'"); }catch(Exception e) {}
+					try{sourceIsTopic 				= sourceSlot.isTopic();  messageHandler(Level.FINEST, "createOutgoingLink(), sourceSlot("+sourceSlot.getName()+").isTopic:  '" + sourceSlot.isTopic()+"'"); }catch(Exception e) {}
+					try{targetIsAction 				= targetSlot.isAction(); messageHandler(Level.FINEST, "createOutgoingLink(), targetSlot("+targetSlot.getName()+").isAction: '" + targetSlot.isAction()+"'"); }catch(Exception e) {}
+					try{targetIsTopic 				= targetSlot.isTopic();  messageHandler(Level.FINEST, "createOutgoingLink(), targetSlot("+targetSlot.getName()+").isTopic:  '" + targetSlot.isTopic()+"'"); }catch(Exception e) {}
 					
 					boolean	sourceIsActionOrTopic	= sourceIsAction || sourceIsTopic;
 					boolean	targetIsActionOrTopic	= targetIsAction || targetIsTopic;
@@ -2327,6 +2329,7 @@ public class BDynamicLinks extends BComponent
 	
 	
 	/*----------------------------------------------------------------------------------------------------------------*/
+	@SuppressWarnings("unused")
 	private static boolean isCompositeLink(BLink paramBLink)
 	{
 		if (paramBLink == null) 
@@ -2354,12 +2357,12 @@ public class BDynamicLinks extends BComponent
 	 */
 	private boolean hasLinks(BComponent inComp, String inSlotName) throws Exception
 	{
-		messageHandler(Level.FINEST, "hasLinks(), method called with inComp: '" + inComp.getSlotPath() + "', inSlotName: '" + inSlotName + "'");
 		boolean result = false;
+		int	links = 0;
 		try
 		{
-			messageHandler(Level.FINEST, "hasLinks(), method called with link count: '" + inComp.getLinks(inComp.getSlot(inSlotName)).length + "'");
-			result = (inComp.getLinks(inComp.getSlot(inSlotName)).length > 0);
+			links = inComp.getLinks(inComp.getSlot(inSlotName)).length;
+			result = links > 0;
 		}
 		catch (Exception e)
 		{
@@ -2367,7 +2370,7 @@ public class BDynamicLinks extends BComponent
 			throw e;
 		}
 		
-		messageHandler(Level.FINEST, "hasLinks(), method done and returning value: '" + result + "'");
+		messageHandler(Level.FINEST, "hasLinks(), method called with inComp: '" + inComp.getSlotPath() + "', inSlotName: '" + inSlotName + "' and returning value: '" + result + "'"+(result?", link count: "+links:""));
 		return result;
 	}
 	

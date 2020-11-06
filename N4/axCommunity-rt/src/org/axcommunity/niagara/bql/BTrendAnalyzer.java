@@ -20,7 +20,7 @@ import javax.baja.util.BAbsTimeRange;
  *	updated 06/29/17 by James Johnson: replace the '|bql:historyFunc:HistoryRollup' syntax with '|bql:history:HistoryRollup'. 
  *
  */
-
+@SuppressWarnings("rawtypes")
 public class BTrendAnalyzer extends BComponent
 {
 	/*-
@@ -252,7 +252,8 @@ public class BTrendAnalyzer extends BComponent
 /*+ ------------ END BAJA AUTO GENERATED CODE -------------- +*/
 
 
-  public void doExecute()
+  
+public void doExecute()
 	{
 		String fiftyYearsInMS = "1577846298735";
 
@@ -270,23 +271,23 @@ public class BTrendAnalyzer extends BComponent
 		// Run the BQL query
 		BITable result = (BITable) bqlOrd.resolve(Sys.getStation()).get();
 		ColumnList columns = result.getColumns();
-		TableCursor c =  result.cursor();
-
-		// We should only have one entry in the history since we're querying 50 years
-		c.next(); // Move to 1st (and only) record
-
-		// Grab the info from the corresponding rows
-		double count = Double.parseDouble(c.cell(columns.get(2)).toString().replace(',','.'));
-		double min = Double.parseDouble(c.cell(columns.get(3)).toString().replace(',','.'));
-		double max = Double.parseDouble(c.cell(columns.get(4)).toString().replace(',','.'));
-		double avg = Double.parseDouble(c.cell(columns.get(5)).toString().replace(',','.'));
-		double sum = Double.parseDouble(c.cell(columns.get(6)).toString().replace(',','.'));
-
-		// Set each value
-		getCount().setValue(count);
-		getMin().setValue(min);
-		getMax().setValue(max);
-		getAverage().setValue(avg);
-		getSum().setValue(sum);
+		try(TableCursor c =  result.cursor())
+		{
+			// We should only have one entry in the history since we're querying 50 years
+			c.next(); // Move to 1st (and only) record
+	
+			// Grab the info from the corresponding rows
+			double count = Double.parseDouble(c.cell(columns.get(2)).toString().replace(',','.'));
+			double min = Double.parseDouble(c.cell(columns.get(3)).toString().replace(',','.'));
+			double max = Double.parseDouble(c.cell(columns.get(4)).toString().replace(',','.'));
+			double avg = Double.parseDouble(c.cell(columns.get(5)).toString().replace(',','.'));
+			double sum = Double.parseDouble(c.cell(columns.get(6)).toString().replace(',','.'));
+			// Set each value
+			getCount().setValue(count);
+			getMin().setValue(min);
+			getMax().setValue(max);
+			getAverage().setValue(avg);
+			getSum().setValue(sum);
+		}
 	}
 }

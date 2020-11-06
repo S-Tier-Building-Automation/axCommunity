@@ -322,6 +322,7 @@ public class BBqlNumericRecap extends BComponent
 	private class threadedCalculate implements Runnable
 	{
 		/*----------------------------------------------------------------------------------------------------------------*/
+		@SuppressWarnings("rawtypes")
 		public void run()
 		{
 			startTime	= System.currentTimeMillis();
@@ -350,51 +351,51 @@ public class BBqlNumericRecap extends BComponent
 				
 				BITable 	result 	= (BITable)BOrd.make(ord).resolve(Sys.getStation()).get(); 	// execute bql into table
 				ColumnList	columns	= result.getColumns();										// get table cols data
-				TableCursor	cursor	= result.cursor();											// setup table cursor
-				
-				// walk bql rows
-				while (cursor.next()) 
+				try(TableCursor	cursor	= result.cursor())											// setup table cursor
 				{
-					// Provide a way to exit thread cleanly...
-					if( getCalculating().getValue()==false ) {return;}
-					
-					try
+					// walk bql rows
+					while (cursor.next()) 
 					{
-						// data is in 1st col
-						Column valueColumn = columns.get(0); 
+						// Provide a way to exit thread cleanly...
+						if( getCalculating().getValue()==false ) {return;}
 						
-						// is BSimple?
-						if (((BObject) cursor.cell(valueColumn)).isSimple())  
+						try
 						{
-							// handle result columns that are not complex type (aggregates for example)
-							Value = new BStatusNumeric((BDouble.make(cursor.cell(valueColumn).toString()).getDouble()));
-						}
-						else
-						{
-							// get BStatusNumeric from table
-							Value = (BStatusNumeric) cursor.cell(valueColumn);		
-						}
-						
-						// check to see if value=NaN, if yes then omit from calculation
-						if (BDouble.make(Value.getValue()) != BDouble.NaN)	
-						{
-							// get Status of point, check valid
-							if (Value.getStatus().isValid())
-							{				
-								min		= Math.min(min, Value.getValue());
-								max		= Math.max(max, Value.getValue());
-								sum		+= Value.getValue();
-								num++;
+							// data is in 1st col
+							Column valueColumn = columns.get(0); 
+							
+							// is BSimple?
+							if (((BObject) cursor.cell(valueColumn)).isSimple())  
+							{
+								// handle result columns that are not complex type (aggregates for example)
+								Value = new BStatusNumeric((BDouble.make(cursor.cell(valueColumn).toString()).getDouble()));
+							}
+							else
+							{
+								// get BStatusNumeric from table
+								Value = (BStatusNumeric) cursor.cell(valueColumn);		
+							}
+							
+							// check to see if value=NaN, if yes then omit from calculation
+							if (BDouble.make(Value.getValue()) != BDouble.NaN)	
+							{
+								// get Status of point, check valid
+								if (Value.getStatus().isValid())
+								{				
+									min		= Math.min(min, Value.getValue());
+									max		= Math.max(max, Value.getValue());
+									sum		+= Value.getValue();
+									num++;
+								}
 							}
 						}
+						catch (Exception e)
+						{
+							errorHandler( "ERROR in threadedCalculate.run() method while loop!", e );
+						}
 					}
-					catch (Exception e)
-					{
-						errorHandler( "ERROR in threadedCalculate.run() method while loop!", e );
-					}
+					// End of while loop.
 				}
-				// End of while loop.
-				
 				
 				
 				// Provide a way to exit thread cleanly...

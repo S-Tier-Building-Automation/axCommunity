@@ -344,7 +344,7 @@ public class BSysInfo extends BComponent
 	{
 		try
 		{
-			BStation s = Station.station;
+			//BStation s = Station.station;
 		    BIPlatform plat = Nre.getPlatform();
 	      
 	      	try{setAutoSaveEnabled(new BStatusBoolean(plat.isStationAutoSaveEnabled(), BStatus.ok));		}catch(Exception e) {setAutoSaveEnabled(new BStatusBoolean(false, BStatus.nullStatus));}
@@ -840,7 +840,7 @@ public class BSysInfo extends BComponent
 	public void setFreeHeap(javax.baja.status.BStatusNumeric v) { set(freeHeap, v); }
 		
 	
-	public static final Property executingSave = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusBoolean(Boolean.FALSE, BStatus.ok), null);
+	public static final Property executingSave = newProperty(Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusBoolean(Boolean.FALSE, BStatus.ok), null);
 	public BStatusBoolean getExecutingSave() { return (BStatusBoolean) get(executingSave); }
 	public void setExecutingSave(BStatusBoolean v) { set(executingSave, v); }
 	

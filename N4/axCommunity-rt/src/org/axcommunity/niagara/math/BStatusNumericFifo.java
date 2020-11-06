@@ -12,7 +12,9 @@ import javax.baja.units.BUnit;
  * by 1 and the value of the input written as the new value for 00
  * @author Mike Arnott, Kors Engineering
  */
-public class BStatusNumericFifo extends BComponent {
+@SuppressWarnings("rawtypes")
+public class BStatusNumericFifo extends BComponent 
+{
 
 	boolean fire = false;
     static String [] slotNames;
@@ -73,79 +75,95 @@ public class BStatusNumericFifo extends BComponent {
         }
 
 	}
-    public void changed(Property property, Context context){
-        if(!isRunning() || !Sys.atSteadyState()){
-		    		return;
-    	}
-        super.changed(property, context);
-
-
-        for (int x = 0; x < slotNames.length; ++x) {
-           	if(slotNames[x]==null){
-        		setNames();
-        	}
-        }
-        if (property == trigger && getTrigger().getValue() && fire == false){
-        	//linked = new BLink[getLinks(getSlot("input")).length];
-        	//linked = getLinks(getSlot("input"));
-        	try{
-	        	linked = new BLink[getLinks(getSlot(INPUT)).length];
-	        	linked = getLinks(getSlot(INPUT));
-	        	for (int x = 0; x < linked.length; ++x) {
-	        		BComponent bCom = new BComponent();
-	        		bCom = linked[x].getSourceComponent();
-	        		int ordEnd = bCom.getNavOrd().toString().indexOf(bCom.getName());
-	        		String ordStr = bCom.getNavOrd().toString().substring(7, ordEnd - 1);
-	        		BOrd ord = BOrd.make(ordStr +
-	        				"|bql:select from control:ControlPoint where displayName = '" +
-	        				bCom.getName() + "'");
-	        		BITable result = (BITable)ord.resolve().get();
-	        		Cursor c = result.cursor();
-	        		while (c.next()) {
-	        			BControlPoint point = (BControlPoint)c.get();
-	        			BStatusValue out = point.getOutStatusValue();
-	        			if (out instanceof BStatusString) {
-	        				((BStatusNumeric)get(getProperty(INPUT))).setStatus(BStatus.fault);
-	        			}
-	        			if (out instanceof BStatusBoolean) {
-	        				((BStatusNumeric)get(getProperty(INPUT))).setStatus(BStatus.fault);
-	        			}
-	        			if (out instanceof BStatusEnum) {
-	        				((BStatusNumeric)get(getProperty(INPUT))).setStatus(BStatus.fault);
-	        			}
-	        			if (out instanceof BStatusNumeric) {
-	        				double value = ((BStatusNumeric)out).getValue();
-	        				BFacets bfc = point.getFacets();
-	        				//System.out.println(bfc == null);
-	        				if(bfc == null){
-	        					shiftData(value);
-		        				minData();
-		        				maxData();
-		        				avgData();
-		        			}
-	        				else{
-	        					shiftData(value, bfc);
-	        					minData(bfc);
-	        					maxData(bfc);
-	        					avgData(bfc);
-	        				}
-	        			}
-	        		}
-	        	}
-        	}
-        	catch(Exception e){
-			System.out.println(BAbsTime.now().toString() +   ": Kors Component Error at " + this.getSlotPath().toString() + ":" + e.toString());
-        	}
-        	finally{
-            	fire = true;
-        	}
-        }
-    	else {
-    		fire = false;
-
-    	}
-}
-
+	
+	
+	public void changed(Property property, Context context)
+	{
+		if (!isRunning() || !Sys.atSteadyState())
+		{ return; }
+		super.changed(property, context);
+		
+		for (int x = 0; x < slotNames.length; ++x)
+		{
+			if (slotNames[x] == null)
+			{
+				setNames();
+			}
+		}
+		if (property == trigger && getTrigger().getValue() && fire == false)
+		{
+			// linked = new BLink[getLinks(getSlot("input")).length];
+			// linked = getLinks(getSlot("input"));
+			try
+			{
+				linked = new BLink[getLinks(getSlot(INPUT)).length];
+				linked = getLinks(getSlot(INPUT));
+				for (int x = 0; x < linked.length; ++x)
+				{
+					BComponent bCom = new BComponent();
+					bCom = linked[x].getSourceComponent();
+					int ordEnd = bCom.getNavOrd().toString().indexOf(bCom.getName());
+					String ordStr = bCom.getNavOrd().toString().substring(7, ordEnd - 1);
+					BOrd ord = BOrd.make(ordStr + "|bql:select from control:ControlPoint where displayName = '" + bCom.getName() + "'");
+					BITable result = (BITable) ord.resolve().get();
+					try(Cursor c = result.cursor())
+					{
+						while (c.next())
+						{
+							BControlPoint point = (BControlPoint) c.get();
+							BStatusValue out = point.getOutStatusValue();
+							if (out instanceof BStatusString)
+							{
+								((BStatusNumeric) get(getProperty(INPUT))).setStatus(BStatus.fault);
+							}
+							if (out instanceof BStatusBoolean)
+							{
+								((BStatusNumeric) get(getProperty(INPUT))).setStatus(BStatus.fault);
+							}
+							if (out instanceof BStatusEnum)
+							{
+								((BStatusNumeric) get(getProperty(INPUT))).setStatus(BStatus.fault);
+							}
+							if (out instanceof BStatusNumeric)
+							{
+								double value = ((BStatusNumeric) out).getValue();
+								BFacets bfc = point.getFacets();
+								// System.out.println(bfc == null);
+								if (bfc == null)
+								{
+									shiftData(value);
+									minData();
+									maxData();
+									avgData();
+								}
+								else
+								{
+									shiftData(value, bfc);
+									minData(bfc);
+									maxData(bfc);
+									avgData(bfc);
+								}
+							}
+						}
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				System.out.println(BAbsTime.now().toString() + ": Kors Component Error at " + this.getSlotPath().toString() + ":" + e.toString());
+			}
+			finally
+			{
+				fire = true;
+			}
+		}
+		else
+		{
+			fire = false;
+			
+		}
+	}
+	
     private void shiftData(double value, BFacets bfc){
     	double tempVal;
 		for (int x = slotNames.length - 2; x >= 0; --x){
