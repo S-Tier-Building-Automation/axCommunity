@@ -47,6 +47,7 @@
 	- MODIFIED 'BDynamicLinks'
 		* Fixed an issue when link to a component where a target slot would fail to be identified 
 		  as an action thus not allowing more than one link to exist.
+	- MODIFIED anything using a TableCursor by wrapping it in try with resources to make use of the AutoCloseable interface.
 <b>V20.03.09.01 March 3, 2020</b><i> - Justin Koffler</i>
 	- MODIFIED 'BSuperOr' and 'BSuperStringTest'
 		* Added logic so that when a link is removed the slot value is changed to its default value.
