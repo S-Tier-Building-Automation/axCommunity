@@ -22,7 +22,6 @@ import javax.baja.sys.BFacets;
 import javax.baja.sys.BIcon;
 import javax.baja.sys.BInteger;
 import javax.baja.sys.BRelTime;
-import javax.baja.sys.BStation;
 import javax.baja.sys.Clock;
 import javax.baja.sys.Context;
 import javax.baja.sys.Flags;
@@ -171,7 +170,14 @@ public class BSysInfo extends BComponent
 	{
 		if(!Sys.atSteadyState() || !isRunning()) return;
 		
-		if(p == executePeriod)
+		if(p == executingSave)
+		{
+			if(getExecutingSave().getValue()==true)
+			{
+				updateSaveTimer();
+			}
+		}
+		else if(p == executePeriod)
 		{
 			updateTimer();
 			calculate();
@@ -344,7 +350,6 @@ public class BSysInfo extends BComponent
 	{
 		try
 		{
-			//BStation s = Station.station;
 		    BIPlatform plat = Nre.getPlatform();
 	      
 	      	try{setAutoSaveEnabled(new BStatusBoolean(plat.isStationAutoSaveEnabled(), BStatus.ok));		}catch(Exception e) {setAutoSaveEnabled(new BStatusBoolean(false, BStatus.nullStatus));}
@@ -352,8 +357,25 @@ public class BSysInfo extends BComponent
 		  	try{setSaveBackupCount(new BStatusNumeric(plat.getStationSaveBackupCount(), BStatus.ok));		}catch(Exception e) {setSaveBackupCount(new BStatusNumeric(0, BStatus.nullStatus));}
 		  	try{setBootTime(BAbsTime.make(Nre.bootTime));													}catch(Exception e) {setBootTime(BAbsTime.DEFAULT);}
 		  	try{setLastSaveDuration(new BStatusString(Station.getLastSaveDurationString(), BStatus.ok));	}catch(Exception e) {setLastSaveDuration(new BStatusString("", BStatus.nullStatus));}
-		  	try{setLastSuccessfulSaveTime(Station.lastSuccessfulSaveTime);									}catch(Exception e) {setLastSuccessfulSaveTime(BAbsTime.DEFAULT);}
-		  	try{setLastSaveSpan(BRelTime.make(Station.lastSaveSpan));										}catch(Exception e) {setLastSaveSpan(BRelTime.DEFAULT);}
+
+		  	
+		  	try
+		  	{
+		  		if( Station.lastSaveSpan > 0)
+		  		{
+		  			setLastSaveSpan(BRelTime.make(Station.lastSaveSpan));
+		  			setLastSuccessfulSaveTime(Station.lastSuccessfulSaveTime);
+		  		}
+		  	}
+		  	catch(Exception e) 
+		  	{
+		  		setLastSaveSpan(BRelTime.DEFAULT);
+		  		setLastSuccessfulSaveTime(BAbsTime.DEFAULT);
+		  	}
+		  	
+		  	
+		  	
+		  	
 		  	try{setUptime(BRelTime.make(BAbsTime.now().getMillis() - Nre.bootTime));						}catch(Exception e) {setUptime(BRelTime.DEFAULT);}
 			
 			
@@ -390,6 +412,52 @@ public class BSysInfo extends BComponent
 		}
 	}
 	
+		
+	private			Clock.Ticket	SaveTimerTicket;
+	
+	/*----------------------------------------------------------------------------------------------------------------*/
+	public static final Action SaveTimerExpired = newAction(Flags.HIDDEN,null);
+	public void SaveTimerExpired() {invoke(SaveTimerExpired,null,null); }
+	public void doSaveTimerExpired() throws Exception 
+	{
+		if(!Sys.atSteadyState() || !isRunning()){return;}
+		
+		try
+		{
+			getExecutingSave().setValue(false);
+		}
+		catch (Exception e)
+		{
+			errorHandler("doSaveTimerExpired()", e);
+		}
+	}
+	
+	/*----------------------------------------------------------------------------------------------------------------*/
+	void updateSaveTimer()
+	{            
+		if(!Sys.atSteadyState() || !isRunning()){return;}
+		
+		try
+		{
+			long calculatedTimeout = Math.max( ((long) Math.round(getLastSaveSpan().getMillis()*2)), 120000);
+			BRelTime timeout = BRelTime.make(calculatedTimeout);
+			
+			if( timeout.getMillis() > 0 )
+			{
+				if (SaveTimerTicket != null) {SaveTimerTicket.cancel();}
+				SaveTimerTicket = Clock.schedule(this, timeout , SaveTimerExpired, null);
+			}
+			else
+			{
+				doSaveTimerExpired();
+			}
+		}
+		catch (Exception e) 
+		{
+			errorHandler("updateSaveTimer()", e);
+		}
+	}
+	
 	
 	
 	
@@ -415,6 +483,7 @@ public class BSysInfo extends BComponent
 		{
 			log.finest("\t" + getSlotPath() + "\t" + "stationSaveOk() method called.");
 			calculate();
+			if (SaveTimerTicket != null) {SaveTimerTicket.cancel();}
 			getExecutingSave().setValue(false);
 			fireStationSaveSuccess(BBoolean.make(true));
 			if(getContinuouslyMonitorSaveListener()==false) 
@@ -429,6 +498,7 @@ public class BSysInfo extends BComponent
 		{
 			log.finest("\n" + getSlotPath() + "\n" + "stationSaveFail() method called with cause:\n"+ cause+"\n\n");
 			calculate();
+			if (SaveTimerTicket != null) {SaveTimerTicket.cancel();}
 			getExecutingSave().setValue(false);
 			fireStationSaveFailed(BBoolean.make(true));
 			if(getContinuouslyMonitorSaveListener()==false) 
@@ -618,6 +688,7 @@ public class BSysInfo extends BComponent
 		catch (Exception e)
 		{
 			errorHandler("Exception in doSaveStation() method!", e);
+			if (SaveTimerTicket != null) {SaveTimerTicket.cancel();}
 			getExecutingSave().setValue(false);
 		}
 	}

@@ -2,12 +2,7 @@ package org.axcommunity.niagara.system;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.util.Collections;
-import java.util.Enumeration;
-//import java.util.logging.Level;
 
 import javax.baja.log.Log;
 import javax.baja.status.BStatus;
@@ -22,7 +17,6 @@ import javax.baja.sys.BFacets;
 import javax.baja.sys.BIcon;
 import javax.baja.sys.BInteger;
 import javax.baja.sys.BRelTime;
-import javax.baja.sys.BStation;
 import javax.baja.sys.Clock;
 import javax.baja.sys.Context;
 import javax.baja.sys.Flags;
@@ -170,7 +164,14 @@ public class BSysInfo extends BComponent
 	{
 		if(!Sys.atSteadyState() || !isRunning()) return;
 		
-		if(p == executePeriod)
+		if(p == executingSave)
+		{
+			if(getExecutingSave().getValue()==true)
+			{
+				updateSaveTimer();
+			}
+		}
+		else if(p == executePeriod)
 		{
 			updateTimer();
 			calculate();
@@ -344,7 +345,6 @@ public class BSysInfo extends BComponent
 	{
 		try
 		{
-			BStation s = Station.station;
 		    BIPlatform plat = Nre.getPlatform();
 	      
 	      	try{setAutoSaveEnabled(new BStatusBoolean(plat.isStationAutoSaveEnabled(), BStatus.ok));		}catch(Exception e) {setAutoSaveEnabled(new BStatusBoolean(false, BStatus.nullStatus));}
@@ -371,6 +371,49 @@ public class BSysInfo extends BComponent
 	}
 	
 	
+	private			Clock.Ticket	SaveTimerTicket;
+	/*----------------------------------------------------------------------------------------------------------------*/
+	public static final Action SaveTimerExpired = newAction(Flags.HIDDEN,null);
+	public void SaveTimerExpired() {invoke(SaveTimerExpired,null,null); }
+	public void doSaveTimerExpired() throws Exception 
+	{
+		if(!Sys.atSteadyState() || !isRunning()){return;}
+		try
+		{
+			getExecutingSave().setValue(false);
+		}
+		catch (Exception e)
+		{
+			errorHandler("doSaveTimerExpired()", e);
+		}
+	}
+	/*----------------------------------------------------------------------------------------------------------------*/
+	void updateSaveTimer()
+	{            
+		if(!Sys.atSteadyState() || !isRunning()){return;}
+		try
+		{
+			long calculatedTimeout = Math.max( ((long) Math.round(getLastSaveSpan().getMillis()*2)), 120000);
+			BRelTime timeout = BRelTime.make(calculatedTimeout);
+			if( timeout.getMillis() > 0 )
+			{
+				if (SaveTimerTicket != null) {SaveTimerTicket.cancel();}
+				SaveTimerTicket = Clock.schedule(this, timeout , SaveTimerExpired, null);
+			}
+			else
+			{
+				doSaveTimerExpired();
+			}
+		}
+		catch (Exception e) 
+		{
+			errorHandler("updateSaveTimer()", e);
+		}
+	}
+	
+	
+	
+	
 	/*----------------------------------------------------------------------------------------------------------------*/
 	private final Station.SaveListener saveListener = new Station.SaveListener()
 	{
@@ -393,6 +436,7 @@ public class BSysInfo extends BComponent
 		{
 			log.trace("\t" + getSlotPath() + "\t" + "stationSaveOk() method called.");
 			calculate();
+			if (SaveTimerTicket != null) {SaveTimerTicket.cancel();}
 			getExecutingSave().setValue(false);
 			fireStationSaveSuccess(BBoolean.make(true));
 			if(getContinuouslyMonitorSaveListener()==false) 
@@ -407,6 +451,7 @@ public class BSysInfo extends BComponent
 		{
 			log.trace("\n" + getSlotPath() + "\n" + "stationSaveFail() method called with cause:\n"+ cause+"\n\n");
 			calculate();
+			if (SaveTimerTicket != null) {SaveTimerTicket.cancel();}
 			getExecutingSave().setValue(false);
 			fireStationSaveFailed(BBoolean.make(true));
 			if(getContinuouslyMonitorSaveListener()==false) 
@@ -592,6 +637,7 @@ public class BSysInfo extends BComponent
 		catch (Exception e)
 		{
 			errorHandler("Exception in doSaveStation() method!", e);
+			if (SaveTimerTicket != null) {SaveTimerTicket.cancel();}
 			getExecutingSave().setValue(false);
 		}
 	}
@@ -814,7 +860,7 @@ public class BSysInfo extends BComponent
 	public void setFreeHeap(javax.baja.status.BStatusNumeric v) { set(freeHeap, v); }
 		
 	
-	public static final Property executingSave = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusBoolean(false),null);
+	public static final Property executingSave = newProperty(Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusBoolean(Boolean.FALSE, BStatus.ok), null);
 	public BStatusBoolean getExecutingSave() { return (BStatusBoolean) get(executingSave); }
 	public void setExecutingSave(BStatusBoolean v) { set(executingSave, v); }
 	
