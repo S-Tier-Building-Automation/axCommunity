@@ -6,18 +6,22 @@ package org.axcommunity.niagara.conversion;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.baja.status.BStatus;
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
+import javax.baja.sys.Action;
 import javax.baja.sys.BAbsTime;
+import javax.baja.sys.BBoolean;
 import javax.baja.sys.BComponent;
 import javax.baja.sys.BFacets;
 import javax.baja.sys.BIcon;
+import javax.baja.sys.BInteger;
 import javax.baja.sys.BMonth;
 import javax.baja.sys.BString;
+import javax.baja.sys.BValue;
 import javax.baja.sys.BWeekday;
 import javax.baja.sys.Context;
 import javax.baja.sys.Flags;
@@ -26,165 +30,248 @@ import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
 import javax.baja.timezone.BTimeZone;
 import javax.baja.units.BUnit;
+import javax.baja.util.Lexicon;
+
 /**
  * Converts an AbsTime input into individual outputs for date parts
  * @author Mike Arnott, Kors Engineering
  * 
  * Update 6/29/2017 by James Johnson to move to current logger syntax
+ * Update 2/17/2011 by Justin Koffler, added lexicon lookup for days of the week.
+ * 
  */
 
  
 public class BAbsTimeToDateParts extends BComponent 
 {
-	public static int JGREG= 15 + 31*(10+12*1582);
-	public static double HALFSECOND = 0.5;
-
-	/**<p>Executed and output values updated upon value change of the following slots:</br>- timeIn</br>- inSimpleDateFormat</br>*/
-	public void changed(Property property, Context context)
+	public static final int		JGREG		= 15 + 31 * (10 + 12 * 1582);
+	public static final double	HALFSECOND	= 0.5;
+	
+	private Context				context		= null;
+	private Lexicon				bajaLex		= null; // Lexicon.make("baja", Sys.getLanguage());
+	
+	
+	/*------------------------------------------------------------------------------------------------------------------*/
+	public static final Action Update = newAction(0, null, null);
+	public void Update(){invoke(Update, null, null);}
+	public void doUpdate(Context cx)
 	{
-		super.changed(property, context);
+		onUpdate(cx);
+	}
+	
+	/*------------------------------------------------------------------------------------------------------------------*/
+	public static final Action SetTime = newAction(0, BAbsTime.DEFAULT, BFacets.make(BFacets.SHOW_TIME, BBoolean.TRUE, BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
+	public void SetTime(BAbsTime v){invoke(SetTime, null, null);}
+	public void doSetTime(BAbsTime v, Context cx)
+	{
+		if(v.getMillis()==getTimeIn().getMillis())
+		{
+			onUpdate(cx);
+		}
+		else
+		{
+			try {this.context = cx;}catch(Exception e) {}
+			setTimeIn(v);
+		}
+	}
+	
+	/*----------------------------------------------------------------------------------------------------------------*/
+	public BValue getActionParameterDefault(Action paramAction)
+	{
+		if (paramAction == SetTime)
+		{
+			return (BValue) getTimeIn();
+		}
+		
+		return super.getActionParameterDefault(paramAction);
+	}
+	
+	
+	/*------------------------------------------------------------------------------------------------------------------*/
+	/**<p>Executed and output values updated upon value change of the following slots:</br>- timeIn</br>- inSimpleDateFormat</br>*/
+	public void changed(Property property, Context cx)
+	{
 		if(!Sys.atSteadyState() || !isRunning()){return;}
-
+		
 		if (property == timeIn || property == inSimpleDateFormat)
 		{
-			try
-			{
-				BAbsTime dtNow = getTimeIn();
-				BAbsTime dtGmt = BAbsTime.make(dtNow, BTimeZone.GMT);
-				
-				getSecondsOut().setValue((dtNow.getSecond()));
-				getMinutesOut().setValue((dtNow.getMinute()));
-				
-				setHoursOut(new BStatusNumeric(dtNow.getHour()));
-				setDayOut(new BStatusNumeric(dtNow.getDay()));
-				setMonthOut(new BStatusNumeric(getTimeIn().getMonth().getMonthOfYear()));
-				setYearOut(new BStatusNumeric(getTimeIn().getYear()));
-				
-				BMonth myMonth = getTimeIn().getMonth();
-				String stMonth = new String(myMonth.toString());
-				
-				setLongMonthOut(new BStatusString(stMonth));
-				setShortMonthOut(new BStatusString(stMonth.substring(0,3)));
-				
-				BWeekday myDay = getTimeIn().getWeekday();
-				
-				setLongDayOut(new BStatusString(myDay.toString()));
-				setDayOfTheWeek(new BStatusNumeric(toDayOfWeek(getLongDayOut().getValue())));
-				
-				setDaysInTheMonth(new BStatusNumeric(BAbsTime.getDaysInMonth(dtNow.getYear(), dtNow.getMonth())));
-				
-				String stDay = myDay.toString().substring(0,3);
-				
-				setShortDayOut(new BStatusString(stDay));
-				getJulianOut().setValue(toJulian(new int[]{(int)getYearOut().getValue(),(int)getMonthOut().getValue(),(int)getDayOut().getValue()}));
-				
-				
-				Calendar calNow = Calendar.getInstance();
-				Calendar calGmt = Calendar.getInstance();
-				calNow.set(dtNow.getYear(),dtNow.getMonth().getMonthOfYear() - 1,dtNow.getDay(),dtNow.getHour(),dtNow.getMinute(),dtNow.getSecond());
-				calGmt.set(dtGmt.getYear(),dtGmt.getMonth().getMonthOfYear() - 1,dtGmt.getDay(),dtGmt.getHour(),dtGmt.getMinute(),dtGmt.getSecond());
-				
-				getOutSerialTime().setValue(calNow.getTimeInMillis());
-
-	
-				if(getInSimpleDateFormat().length()>0)
-				{
-					DateFormat df = new SimpleDateFormat(getInSimpleDateFormat());
-					getStringDateOut().setValue(df.format(calNow.getTime()));
-					getOutGMTTime().setValue(df.format(calGmt.getTime()));
-				}
-				else
-				{
-					getStringDateOut().setValue(dtNow.encodeToString());
-					getOutGMTTime().setValue(dtGmt.encodeToString());
-				}
-			}
-			catch (Exception e) 
-			{
-				logger.log(Level.SEVERE, "\nERROR in: 'public void changed'" + "\ngetMessage =\n" + e.getMessage() + "\ngetStackTrace =\n" + e.getStackTrace() +	"\ntoString =\n" + e.toString());
-			}
-		
+			onUpdate(this.context!=null?this.context:cx);
 		}
-	}    
-	/**Absolute Time Input*/
-	public final static Property timeIn = newProperty(Flags.SUMMARY, BAbsTime.DEFAULT);
-	public void setTimeIn(BAbsTime v) { set(timeIn, v); }
-	public BAbsTime getTimeIn() { return (BAbsTime)get(timeIn); }
+	}   
+	
+	/*------------------------------------------------------------------------------------------------------------------*/
+	private void onUpdate(Context cx)
+	{
+		try
+		{
+			this.context = cx;
+			if (this.bajaLex == null) { this.bajaLex = Lexicon.make("baja", lang(this.context)); }
+			
+			BAbsTime	time			= getTimeIn();
+			BAbsTime	dtGmt			= BAbsTime.make(time, BTimeZone.GMT);
+			BMonth		myMonth			= time.getMonth();
+			BWeekday	myDay			= time.getWeekday();
+			
+			String		stMonthLong		= myMonth.getDisplayTag(this.context);
+			String		stMonthShort	= myMonth.getShortDisplayTag(this.context);
+			
+			String		stDayLong		= myDay.getDisplayTag(this.context);
+			String		stDayShort		= myDay.getShortDisplayTag(this.context);
+			
+			double		dblDayOfWeek	= toDayOfWeek(stDayLong);
+			
+			getSecondsOut().setValue((time.getSecond()));
+			getMinutesOut().setValue((time.getMinute()));
+			
+			setHoursOut(new BStatusNumeric(time.getHour()));
+			setDayOut(new BStatusNumeric(time.getDay()));
+			setMonthOut(new BStatusNumeric(time.getMonth().getMonthOfYear()));
+			setYearOut(new BStatusNumeric(time.getYear()));
+			
+			setLongMonthOut(new BStatusString(stMonthLong, stMonthLong.isEmpty()?BStatus.fault:BStatus.ok));
+			setShortMonthOut(new BStatusString(stMonthShort, stMonthShort.isEmpty()?BStatus.fault:BStatus.ok));
+			setLongDayOut(new BStatusString(stDayLong, stDayLong.isEmpty()?BStatus.fault:BStatus.ok));
+			setShortDayOut(new BStatusString(stDayShort, stDayShort.isEmpty()?BStatus.fault:BStatus.ok));
+			
+			setDayOfTheWeek(new BStatusNumeric(dblDayOfWeek, dblDayOfWeek==0?BStatus.fault:BStatus.ok));
+			
+			setDaysInTheMonth(new BStatusNumeric(BAbsTime.getDaysInMonth(time.getYear(), time.getMonth())));
+			getJulianOut().setValue(toJulian(new int[]{(int)getYearOut().getValue(),(int)getMonthOut().getValue(),(int)getDayOut().getValue()}));
+			
+			Calendar calNow = Calendar.getInstance();
+			Calendar calGmt = Calendar.getInstance();
+			calNow.set(time.getYear(),time.getMonth().getMonthOfYear() - 1,time.getDay(),time.getHour(),time.getMinute(),time.getSecond());
+			calGmt.set(dtGmt.getYear(),dtGmt.getMonth().getMonthOfYear() - 1,dtGmt.getDay(),dtGmt.getHour(),dtGmt.getMinute(),dtGmt.getSecond());
+			
+			getOutSerialTime().setValue(calNow.getTimeInMillis());
 
-	public static BUnit mySecs = BUnit.getUnit("second");
-	public static BUnit myMins = BUnit.getUnit("minute");
-	public static BUnit myHours = BUnit.getUnit("hour");
+			if(getInSimpleDateFormat().length()>0)
+			{
+				DateFormat df = new SimpleDateFormat(getInSimpleDateFormat());
+				getStringDateOut().setValue(df.format(calNow.getTime()));
+				getOutGMTTime().setValue(df.format(calGmt.getTime()));
+			}
+			else
+			{
+				getStringDateOut().setValue(time.encodeToString());
+				getOutGMTTime().setValue(dtGmt.encodeToString());
+			}
+			
+			this.context = null;
+		}
+		catch (Exception e) 
+		{
+			logger.log(Level.SEVERE, "\nERROR in: 'public void changed'" + "\ngetMessage =\n" + e.getMessage() + "\ngetStackTrace =\n" + e.getStackTrace() +	"\ntoString =\n" + e.toString());
+		}
+	}
+	
+	/*---------------------------------------------------------------------------------------------------------*/
+	private double toDayOfWeek(String dow)
+	{
+		try
+		{
+			double dayNumber = 0;
+			if		(dow.equalsIgnoreCase( this.bajaLex.getText("sunday.short") ) 		|| dow.equalsIgnoreCase( this.bajaLex.getText("sunday") ))		dayNumber = 1;
+			else if	(dow.equalsIgnoreCase( this.bajaLex.getText("monday.short") )		|| dow.equalsIgnoreCase( this.bajaLex.getText("monday") ))		dayNumber = 2;
+			else if	(dow.equalsIgnoreCase( this.bajaLex.getText("tuesday.short") )		|| dow.equalsIgnoreCase( this.bajaLex.getText("tuesday") ))		dayNumber = 3;
+			else if	(dow.equalsIgnoreCase( this.bajaLex.getText("wednesday.short") )	|| dow.equalsIgnoreCase( this.bajaLex.getText("wednesday") ))	dayNumber = 4;
+			else if	(dow.equalsIgnoreCase( this.bajaLex.getText("thursday.short") )		|| dow.equalsIgnoreCase( this.bajaLex.getText("thursday") ))	dayNumber = 5;
+			else if	(dow.equalsIgnoreCase( this.bajaLex.getText("friday.short") )		|| dow.equalsIgnoreCase( this.bajaLex.getText("friday") ))		dayNumber = 6;
+			else if	(dow.equalsIgnoreCase( this.bajaLex.getText("saturday.short") )		|| dow.equalsIgnoreCase( this.bajaLex.getText("saturday") ))	dayNumber = 7;
+			else																																		dayNumber = 0;
+			return dayNumber;
+		}
+		catch (Exception e) 
+		{
+			logger.log(Level.SEVERE, "\nERROR in: 'private double toDayOfWeek'" + "\ngetMessage =\n" + e.getMessage() + "\ngetStackTrace =\n" + e.getStackTrace() +	"\ntoString =\n" + e.toString());
+			return 0;
+		}
+	}
+
+	/*----------------------------------------------------------------------------------------------------------------------------------------*/
+	static String lang(Context cx)
+	{
+		if (cx != null) return cx.getLanguage();
+		return Sys.getLanguage();
+	}
+	
+	
+	/**Absolute Time Input*/
+	public static final Property timeIn = newProperty(Flags.SUMMARY, BAbsTime.DEFAULT, BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
+	public BAbsTime getTimeIn() { return (BAbsTime) get(timeIn); }
+	public void setTimeIn(BAbsTime v) { set(timeIn, v, null); }
 
 	/**StatusNumeric out value representing Julian Date*/
-	public final static Property julianOut = newProperty(Flags.SUMMARY,new BStatusNumeric(),BFacets.makeNumeric(0));
+	public final static Property julianOut = newProperty(Flags.SUMMARY,new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getJulianOut() { return (BStatusNumeric)get(julianOut); }
 	public void setJulianOut(BStatusNumeric v) { set(julianOut, v); }
 
 	/**StatusNumeric out value representing time in seconds*/
-	public final static Property secondsOut = newProperty(Flags.SUMMARY,new BStatusNumeric(),BFacets.makeNumeric(mySecs,0));
+	public final static Property secondsOut = newProperty(Flags.SUMMARY,new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.UNITS, BUnit.getUnit("second"), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getSecondsOut() { return (BStatusNumeric)get(secondsOut); }
 	public void setSecondsOut(BStatusNumeric v) { set(secondsOut, v); }
 
 	/**StatusNumeric out value representing time in minutes*/
-	public final static Property minutesOut = newProperty(Flags.SUMMARY,new BStatusNumeric(),BFacets.makeNumeric(myMins,0));
+	public final static Property minutesOut = newProperty(Flags.SUMMARY,new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.UNITS, BUnit.getUnit("minute"), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getMinutesOut() { return (BStatusNumeric)get(minutesOut); }
 	public void setMinutesOut(BStatusNumeric v) { set(minutesOut, v); }
-
+	
 	/**StatusNumeric out value representing time in hours*/
-	public final static Property hoursOut = newProperty(Flags.SUMMARY,new BStatusNumeric(),BFacets.makeNumeric(myHours,0));
+	public final static Property hoursOut = newProperty(Flags.SUMMARY,new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.UNITS, BUnit.getUnit("hour"), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getHoursOut() { return (BStatusNumeric)get(hoursOut); }
 	public void setHoursOut(BStatusNumeric v) { set(hoursOut, v); }
 
 	/**StatusNumeric out value representing day of month*/
-	public final static Property dayOut = newProperty(Flags.SUMMARY,new BStatusNumeric(),BFacets.makeNumeric(0));
+	public final static Property dayOut = newProperty(Flags.SUMMARY,new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getDayOut() { return (BStatusNumeric)get(dayOut); }
 	public void setDayOut(BStatusNumeric v) { set(dayOut, v); }
 
 	/**StatusNumeric out value representing month*/
-	public final static Property monthOut = newProperty(Flags.SUMMARY,new BStatusNumeric(),BFacets.makeNumeric(0));
+	public final static Property monthOut = newProperty(Flags.SUMMARY,new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getMonthOut() { return (BStatusNumeric)get(monthOut); }
 	public void setMonthOut(BStatusNumeric v) { set(monthOut, v); }
 
 	/**StatusNumeric out value representing years*/
-	public final static Property yearOut = newProperty(Flags.SUMMARY,new BStatusNumeric(),BFacets.makeNumeric(0));
+	public final static Property yearOut = newProperty(Flags.SUMMARY,new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getYearOut() { return (BStatusNumeric)get(yearOut); }
 	public void setYearOut(BStatusNumeric v) { set(yearOut, v); }
 
 	/**StatusString out value representing short month*/
-	public final static Property shortMonthOut = newProperty(Flags.SUMMARY,new BStatusString());
+	public final static Property shortMonthOut = newProperty(Flags.SUMMARY,new BStatusString("", BStatus.ok), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getShortMonthOut() { return (BStatusString)get(shortMonthOut); }
 	public void setShortMonthOut(BStatusString v) { set(shortMonthOut, v); }
 
 	/**StatusString out value representing long month*/
-	public final static Property longMonthOut = newProperty(Flags.SUMMARY,new BStatusString());
+	public final static Property longMonthOut = newProperty(Flags.SUMMARY,new BStatusString("", BStatus.ok), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getLongMonthOut() { return (BStatusString)get(longMonthOut); }
 	public void setLongMonthOut(BStatusString v) { set(longMonthOut, v); }
 
 	/**StatusString out value representing short day*/
-	public final static Property shortDayOut = newProperty(Flags.SUMMARY,new BStatusString());
+	public final static Property shortDayOut = newProperty(Flags.SUMMARY,new BStatusString("", BStatus.ok), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getShortDayOut() { return (BStatusString)get(shortDayOut); }
 	public void setShortDayOut(BStatusString v) { set(shortDayOut, v); }
 
 	/**StatusString out value representing long Day*/
-	public final static Property longDayOut = newProperty(Flags.SUMMARY,new BStatusString());
+	public final static Property longDayOut = newProperty(Flags.SUMMARY,new BStatusString("", BStatus.ok), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getLongDayOut() { return (BStatusString)get(longDayOut); }
 	public void setLongDayOut(BStatusString v) { set(longDayOut, v); }
 	
 	/**StatusNumeric out value representing the day of the week that was inputted. */
-	public static final Property dayOfTheWeek = newProperty(0|Flags.SUMMARY, new BStatusNumeric(0), BFacets.makeNumeric(0));
+	public static final Property dayOfTheWeek = newProperty(0|Flags.SUMMARY, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getDayOfTheWeek() { return (BStatusNumeric)get(dayOfTheWeek); }
 	public void setDayOfTheWeek(BStatusNumeric v) { set(dayOfTheWeek, v, null); }
 
 	/**StatusNumeric out value representing the number of days in the month. */
-	public static final Property daysInTheMonth = newProperty(0|Flags.SUMMARY, new BStatusNumeric(0), BFacets.makeNumeric(0));
+	public static final Property daysInTheMonth = newProperty(0|Flags.SUMMARY, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getDaysInTheMonth() { return (BStatusNumeric)get(daysInTheMonth); }
 	public void setDaysInTheMonth(BStatusNumeric v) { set(daysInTheMonth, v, null); }
 	
-	
 	/**StatusNumeric out value representing milliseconds since epoch (January 1, 1970, 00:00:00 GMT)*/
-	public final static Property outSerialTime = newProperty(Flags.SUMMARY, new BStatusNumeric(),BFacets.makeNumeric(0));
+	public final static Property outSerialTime = newProperty(Flags.SUMMARY, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getOutSerialTime() { return (BStatusNumeric)get(outSerialTime); }
 	public void setOutSerialTime(BStatusNumeric v) { set(outSerialTime, v); }
+	
+	
 	
 	/** This is the format the time string output should be written in. <br>
 	 * <p>Available Fields Include: <br>
@@ -218,17 +305,17 @@ public class BAbsTimeToDateParts extends BComponent
 	 * <p>EXAMPLE: MM/dd/yyyy hh:mm:ss.S a <br>
 	 * 
 	 */
-	public static final Property inSimpleDateFormat = newProperty(0, BString.make("MM/dd/yyyy hh:mm:ss.S a"),null);
+	public static final Property inSimpleDateFormat = newProperty(0, BString.make("MM/dd/yyyy hh:mm:ss.S a"), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public String getInSimpleDateFormat() { return getString(inSimpleDateFormat); }
 	public void setInSimpleDateFormat(String v) { setString(inSimpleDateFormat,v,null); }
 	
-	/**<p>StatusString out value representing date and time</br><p>Format can be modifed using the 'inSimpleDateFormat' slot.</br>*/
-	public final static Property stringDateOut = newProperty(Flags.SUMMARY,new BStatusString());
+	/**<p>StatusString out value representing date and time</br><p>Format can be modified using the 'inSimpleDateFormat' slot.</br>*/
+	public final static Property stringDateOut = newProperty(Flags.SUMMARY,new BStatusString("", BStatus.ok), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getStringDateOut() { return (BStatusString)get(stringDateOut); }
 	public void setStringDateOut(BStatusString v) { set(stringDateOut, v); }
 
-	/**<p>StatusString out value representing date and time as GMT timezone.</br><p>Format can be modifed using the 'inSimpleDateFormat' slot.</br>*/
-	public final static Property outGMTTime = newProperty(Flags.SUMMARY, new BStatusString());
+	/**<p>StatusString out value representing date and time as GMT timezone.</br><p>Format can be modified using the 'inSimpleDateFormat' slot.</br>*/
+	public final static Property outGMTTime = newProperty(Flags.SUMMARY, new BStatusString("", BStatus.ok), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getOutGMTTime() { return (BStatusString)get(outGMTTime); }
 	public void setOutGMTTime(BStatusString v) { set(outGMTTime, v); }
 
@@ -242,28 +329,7 @@ public class BAbsTimeToDateParts extends BComponent
 	public static final Logger logger = Logger.getLogger(TYPE.getModule().getModuleName() + "." + TYPE.getTypeName());
 
 
-	private double toDayOfWeek(String dow)
-	{
-		try
-		{
-			double dayNumber = 0;
-			if		(dow.equalsIgnoreCase("sun") || dow.equalsIgnoreCase("sunday"))		dayNumber = 1;
-			else if	(dow.equalsIgnoreCase("mon") || dow.equalsIgnoreCase("monday"))		dayNumber = 2;
-			else if	(dow.equalsIgnoreCase("tue") || dow.equalsIgnoreCase("tuesday"))	dayNumber = 3;
-			else if	(dow.equalsIgnoreCase("wed") || dow.equalsIgnoreCase("wednesday"))	dayNumber = 4;
-			else if	(dow.equalsIgnoreCase("thu") || dow.equalsIgnoreCase("thursday"))	dayNumber = 5;
-			else if	(dow.equalsIgnoreCase("fri") || dow.equalsIgnoreCase("friday"))		dayNumber = 6;
-			else if	(dow.equalsIgnoreCase("sat") || dow.equalsIgnoreCase("saturday"))	dayNumber = 7;
-			else																		dayNumber = 0;
-			return dayNumber;
-		}
-		catch (Exception e) 
-		{
-			logger.log(Level.SEVERE, "\nERROR in: 'private double toDayOfWeek'" + "\ngetMessage =\n" + e.getMessage() + "\ngetStackTrace =\n" + e.getStackTrace() +	"\ntoString =\n" + e.toString());
-			return 0;
-		}
-	}
-
+	
 
 	//copied from internet
 	private double toJulian(int[] ymd) 
