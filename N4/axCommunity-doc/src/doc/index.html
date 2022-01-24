@@ -43,25 +43,35 @@
 					
 		<pre>
 			<code>
+<b>V22.01.24.01 January 24, 2022</b><i> - Justin Koffler</i>
+	- MODIFIED 'BSetNumericAction'
+		* Added new topic slot 'fireNewIntegerInput' to allow value to be linked to integer action slots on other components.
+	- Added 'BBatchLinkCreator' which apparently I never actually pushed as part of a previous push.
+<hr>
 <b>V21.02.18.01 February 18, 2021</b><i> - Justin Koffler</i>
 	- MODIFIED 'BAbsTimeToDateParts'
 		* Modified logic to utilize lexicon to populate date parts.
+<hr>
 <b>V21.01.12.01 January 12, 2021</b><i> - Justin Koffler</i>
 	- MODIFIED 'BSysInfo'
 		* Added timeout timer in the event the 'executingSave' slot gets stuck in a 'true' state.
+<hr>
 <b>V20.11.06.01 November 6, 2020</b><i> - Justin Koffler</i>
 	- MODIFIED 'BDynamicLinks'
 		* Fixed an issue when link to a component where a target slot would fail to be identified 
 		  as an action thus not allowing more than one link to exist.
 	- MODIFIED anything using a TableCursor by wrapping it in try with resources to make use of the AutoCloseable interface.
+<hr>
 <b>V20.03.09.01 March 3, 2020</b><i> - Justin Koffler</i>
 	- MODIFIED 'BSuperOr' and 'BSuperStringTest'
 		* Added logic so that when a link is removed the slot value is changed to its default value.
     - MODIFIED 'BSuperConcatPlus'
 		* Fixed issue with timestamp not being added to results if only one input slot exists.
+<hr>
 <b>V19.12.05.01 December 5, 2019</b><i> - Justin Koffler</i>
     - MODIFIED 'BDynamicLinks'
 		* Fixed issue when 'enableLinks' is false the outgoing (link to) links were not removed.
+<hr>
 <b>V19.11.08.01 November 8, 2019</b><i> - Justin Koffler</i>
     - MODIFIED 'BBqlNumericRecap'
 		* Made it a threaded process since queries can potentially be cpu intensive.
@@ -70,6 +80,7 @@
 		* Very similar to the BDynamicLinks component, but this one is totally independent 
 		  and creates the links directly on the components in the csv list.
 		* Csv list format is sourceOrd, sourceSlot, targetOrd, targetSlot each link on separate line.			
+<hr>
 <b>V19.10.14.01 October 14, 2019</b><i> - Justin Koffler</i>
 	- MODIFIED 'BSysInfo'
 		* Added BStatusString slot 'outDevicesLimit'.
@@ -84,6 +95,7 @@
 		* Added BStatusString slot 'outPointsUsed'.
 		* Added BStatusString slot 'outSchedulesLimit'.
 		* Added BStatusString slot 'outSchedulesUsed'.
+<hr>
 <b>V19.08.21.01 August 21, 2019</b><i> - Justin Koffler</i>
 	- MODIFIED 'BSysInfo'
 		* Added StatusBoolean slot 'autoSaveEnabled'.

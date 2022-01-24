@@ -50,24 +50,24 @@ public class BReplaceString extends BComponent
 	//********************************************************************************************************************************
 	
 	/**Status String value in representing text to search for and replace.*/
-	public static final Property inStringToReplace = newProperty(Flags.SUMMARY, new BStatusString(""), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property inStringToReplace = newProperty(Flags.SUMMARY, new BStatusString(""), BFacets.make(BFacets.MULTI_LINE, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getInStringToReplace() { return (BStatusString)get(inStringToReplace);}
 	public void setInStringToReplace(BStatusString v) {set(inStringToReplace,v);}
 
 	/** Comma separated values representing the string you wish to search for and replace.*/
-	public static final Property inCsvStringsToReplace = newProperty(0, new BStatusString(""), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property inCsvStringsToReplace = newProperty(0, new BStatusString(""), BFacets.make(BFacets.MULTI_LINE, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getInCsvStringsToReplace() { return (BStatusString)get(inCsvStringsToReplace);}
 	public void setInCsvStringsToReplace(BStatusString v) {set(inCsvStringsToReplace,v);}
 	
 	/** Regular Expression representing the string you wish to search for and replace.*/
-	public static final Property inRegExpToReplace = newProperty(0, new BStatusString(""), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property inRegExpToReplace = newProperty(0, new BStatusString(""), BFacets.make(BFacets.MULTI_LINE, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getInRegExpToReplace() { return (BStatusString)get(inRegExpToReplace);}
 	public void setInRegExpToReplace(BStatusString v) {set(inRegExpToReplace,v);}
 	
 	//********************************************************************************************************************************
 	
 	/**Status String value in representing text to use in place of searched text.*/
-	public static final Property inReplacementString = newProperty(Flags.SUMMARY, new BStatusString(""), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property inReplacementString = newProperty(Flags.SUMMARY, new BStatusString(""), BFacets.make(BFacets.MULTI_LINE, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getInReplacementString() { return (BStatusString)get(inReplacementString);}
 	public void setInReplacementString(BStatusString v) {set(inReplacementString,v);}
 	
@@ -79,11 +79,11 @@ public class BReplaceString extends BComponent
 	public void setInRemoveNonAlphaNumericCharacters(BStatusBoolean v) { set(inRemoveNonAlphaNumericCharacters, v); }
 	
 	/**Character to use as replacement for non-alphanumeric characters. This must only be a SINGLE character*/
-	public static final Property inNonAlphaNumericReplacementString = newProperty(0, new BStatusString(), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property inNonAlphaNumericReplacementString = newProperty(0, new BStatusString(), BFacets.make(BFacets.MULTI_LINE, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getInNonAlphaNumericReplacementString() { return (BStatusString)get(inNonAlphaNumericReplacementString);}
 	public void setInNonAlphaNumericReplacementString(BStatusString v) {set(inNonAlphaNumericReplacementString,v);}
 
-	/**When TRUE if the first or last charactes are one of a replacement character it will be removed.*/
+	/**When TRUE if the first or last characters are one of a replacement character it will be removed.*/
 	public final static Property inTrimReplacementsFromFinalOutput = newProperty(0, new BStatusBoolean(false));
 	public BStatusBoolean getInTrimReplacementsFromFinalOutput() { return (BStatusBoolean)get(inTrimReplacementsFromFinalOutput); }
 	public void setInTrimReplacementsFromFinalOutput(BStatusBoolean v) { set(inTrimReplacementsFromFinalOutput, v); }

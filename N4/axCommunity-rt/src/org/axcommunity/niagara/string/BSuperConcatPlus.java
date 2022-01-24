@@ -55,6 +55,8 @@ import javax.baja.sys.Type;
 
 public class BSuperConcatPlus extends BComponent
 {
+	
+	
 	public static final Property inDebug = newProperty(Flags.HIDDEN, false);
 	public boolean getInDebug() { return getBoolean(inDebug); }
 	public void setInDebug(boolean v) { setBoolean(inDebug, v, null); }
@@ -78,7 +80,7 @@ public class BSuperConcatPlus extends BComponent
 	{
 		try 
 		{ 
-			var = true;
+			updatingSlotCount = true;
 			if(v.getDouble() > 256.0)
 			{
 				_VariableCount = BDouble.make(256);
@@ -93,7 +95,7 @@ public class BSuperConcatPlus extends BComponent
 			}
 			
 			slots(getNumberOfSlots().getValue());
-			var = false;
+			updatingSlotCount = false;
 		}
 		catch (Exception e) {}
 		
@@ -254,8 +256,9 @@ public class BSuperConcatPlus extends BComponent
 	public	final	BComponent	getComponent() { return this; }
 	public	final	BComponent	getProgram() { return this; }
 	
-	private			boolean		last	= false;
-	private			boolean		var		= false;
+	private boolean				lastTrigger			= false;
+	private boolean				updatingSlotCount	= false;
+	private static final String	SLOT_NAME_PREFIX	= "In_";
 	
 	/*------------------------------------------------------------------------------------------------------------------*/
 	/**
@@ -285,7 +288,7 @@ public class BSuperConcatPlus extends BComponent
 			{
 				try
 				{
-					if(!var)
+					if(!updatingSlotCount)
 					{
 						doVariableCount(BDouble.make(getNumberOfSlots().getValue()));
 					}
@@ -297,7 +300,7 @@ public class BSuperConcatPlus extends BComponent
 			}
 
 			// ONE OF THE STRING INPUTS HAS CHANGED ///////////////////////////////////////////////////////////
-			if(calcOnChange==true && p!=numberOfSlots && p!=numberOfValues && p!=outNoDelimeters && p!=outDelimitValuesOnly && p!=outDelimitAll && p!=outDelimitValuesOnlyPlusTimestamp && p!=outDelimitAllPlusTimestamp)
+			else if(calcOnChange==true && p!=numberOfSlots && p!=numberOfValues && p!=outNoDelimeters && p!=outDelimitValuesOnly && p!=outDelimitAll && p!=outDelimitValuesOnlyPlusTimestamp && p!=outDelimitAllPlusTimestamp)
 			{
 				logger.log(Level.FINE, "\n" + getSlotPath()	+ "\nCalculating because " + p.getName() + " changed");
 
@@ -306,18 +309,18 @@ public class BSuperConcatPlus extends BComponent
 			}
 
 			// TRIGER INPUT CHANGED ///////////////////////////////////////////////////////////////////////////
-			if (p==trigger)
+			else if (p==trigger)
 			{
 				boolean input = getTrigger().getValue();
-				if(input && !last)
+				if(input && !lastTrigger)
 				{
-					last = input;
+					lastTrigger = input;
 					Thread t = new Thread(new calculate());
 					t.start();
 				}
 				else
 				{
-					last = input;
+					lastTrigger = input;
 				}
 			}
 		}
@@ -380,16 +383,16 @@ public class BSuperConcatPlus extends BComponent
 		{
 			for (int i = 1; i < (MD + 1); i++)
 			{
-				if (((BObject) get("In_" + i)) == null)
+				if (((BObject) get(SLOT_NAME_PREFIX + i)) == null)
 				{
-					getProgram().add(("In_" + i), new BStatusString(""), Flags.SUMMARY, BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)), null);
+					getProgram().add((SLOT_NAME_PREFIX + i), new BStatusString(""), Flags.SUMMARY, BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)), null);
 				}
 			}
-			for (int i = (int) MD + 1; ((BObject) get("In_" + i)) != null; i++)
+			for (int i = (int) MD + 1; ((BObject) get(SLOT_NAME_PREFIX + i)) != null; i++)
 			{
-				if (((BObject) get("In_" + i)) != null)
+				if (((BObject) get(SLOT_NAME_PREFIX + i)) != null)
 				{
-					getProgram().remove("In_" + i);
+					getProgram().remove(SLOT_NAME_PREFIX + i);
 				}
 			}
 		}
@@ -429,10 +432,10 @@ public class BSuperConcatPlus extends BComponent
 				{
 					try
 					{
-						BStatusString inValue = ((BStatusString) ((BObject)get("In_"+i)));
+						BStatusString inValue = ((BStatusString) ((BObject)get(SLOT_NAME_PREFIX+i)));
 		
 						/** TESTS WHETHER THE SLOT IS LINKED. IF NOT, THE VALUE IS SET TO NULL **/
-						if ( (getProgram().getLinks(getProperty("In_"+i)).length == 0) && (nullOnNoLink==true))
+						if ( (getProgram().getLinks(getProperty(SLOT_NAME_PREFIX+i)).length == 0) && (nullOnNoLink==true))
 						{
 							inValue.setStatusNull(true); 
 						}

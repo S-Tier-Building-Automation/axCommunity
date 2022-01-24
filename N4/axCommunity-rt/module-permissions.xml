@@ -3,23 +3,23 @@
 	<niagara-permission-groups type="ALL">
 		<req-permission>
 			<name>MANAGE_EXECUTION</name>
-			<purposeKey>AxCommunity</purposeKey>
+			<purposeKey>purposeKey.purpose</purposeKey>
 		</req-permission>
 		<req-permission>
 			<name>SHUTDOWN_HOOKS</name>
-			<purposeKey>AxCommunity</purposeKey>
+			<purposeKey>purposeKey.purpose</purposeKey>
 		</req-permission>
 		<req-permission>
 			<name>LOGGING</name>
-			<purposeKey>AxCommunity</purposeKey>
+			<purposeKey>purposeKey.purpose</purposeKey>
 		</req-permission>
 		<req-permission>
 			<name>MODIFY_IO_STREAMS</name>
-			<purposeKey>AxCommunity</purposeKey>
+			<purposeKey>purposeKey.purpose</purposeKey>
 		</req-permission>
 		<req-permission>
 			<name>SYSTEM_PROPERTIES</name>
-			<purposeKey>AxCommunity</purposeKey>
+			<purposeKey>purposeKey.purpose</purposeKey>
 			<parameters>
 				<parameter name="properties"	value="*"/>
 				<parameter name="actions"		value="read,write"/>
@@ -27,29 +27,29 @@
 		</req-permission>
 		<req-permission>
 			<name>SET_SYSTEM_TIME</name>
-			<purposeKey>AxCommunity</purposeKey>
+			<purposeKey>purposeKey.purpose</purposeKey>
 		</req-permission>
 		<req-permission>
 			<name>LOAD_LIBRARIES</name>
-			<purposeKey>AxCommunity</purposeKey>
+			<purposeKey>purposeKey.purpose</purposeKey>
 			<parameters>
 				<parameter name="libraries" value="*"/>
 			</parameters>
 		</req-permission>
 		<req-permission>
 			<name>AUTHENTICATION</name>
-			<purposeKey>AxCommunity</purposeKey>
+			<purposeKey>purposeKey.purpose</purposeKey>
 		</req-permission>
 		<req-permission>
 			<name>GET_ENVIRONMENT_VARIABLES</name>
-			<purposeKey>AxCommunity</purposeKey>
+			<purposeKey>purposeKey.purpose</purposeKey>
 			<parameters>
 				<parameter name="variables"		value="NIAGARA_HOME,NIAGARA_USER_HOME,NIAGARA_DEV_HOME,GRADLE_HOME,JAVA_HOME,MAVEN_HOME,TEMP,TMP,WINDIR,PATH,CLASSPATH,COMSPEC,PATH,USERNAME,LOGONSERVER,USERDOMAIN,USERNAME,USERPROFILE,HOMEPATH,HOMEDRIVE,APPDATA,LOCALAPPDATA,CLIENTNAME"/>
 			</parameters>
 		</req-permission>
 		<req-permission>
 			<name>NETWORK_COMMUNICATION</name>
-			<purposeKey>AxCommunity</purposeKey>
+			<purposeKey>purposeKey.purpose</purposeKey>
 			<parameters>
 				<parameter name="hosts"			value="*"/>
 				<parameter name="ports"			value="1-65535"/>
@@ -59,21 +59,16 @@
 		</req-permission>
 		<req-permission>
 			<name>UNAUTHENTICATED_ACCESS</name>
-			<purposeKey>AxCommunity</purposeKey>
+			<purposeKey>purposeKey.purpose</purposeKey>
 		</req-permission>
 		<req-permission>
 			<name>DIAGNOSTICS</name>
-			<purposeKey>AxCommunity</purposeKey>
+			<purposeKey>purposeKey.purpose</purposeKey>
 		</req-permission>
 		<req-permission>
 			<name>UI</name>
-			<purposeKey>AxCommunity</purposeKey>
+			<purposeKey>purposeKey.purpose</purposeKey>
 		</req-permission>
-		<req-permission>
-			<name>UI</name>
-			<purposeKey>AxCommunity</purposeKey>
-		</req-permission>
-		
 	</niagara-permission-groups>
 </permissions>
 
@@ -83,7 +78,7 @@
 	<niagara-permission-groups type="station"> //Type can be "station" or "workbench"
 		<req-permission> // Required permission
 			<name>NETWORK_COMMUNICATION</name>
-			<purposeKey>This module needs to communicate with devices on port 1234.</purposeKey>
+			<purposeKey>purposeKey.purpose</purposeKey>
 			<parameters>
 				<parameter name="host" value="*"/>
 				<parameter name="ports" value="1234"/>
@@ -91,7 +86,7 @@
 		</req-permission>
 		<opt-permission> // Optional permission
 			<name>SET_SYSTEM_TIME</name>
-			<purposeKey>To do task X, this module needs to be able to set the system time.</purposeKey>
+			<purposeKey>purposeKey.purpose</purposeKey>
 		</opt-permission>
 	</niagara-permission-groups>
 </permissions>

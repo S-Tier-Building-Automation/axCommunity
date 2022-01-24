@@ -26,6 +26,7 @@ public class BSetNumericAction extends BComponent
        		{
        			//new value, fire output
        			this.fireNewNumericInput(BDouble.make(getInNumber().getValue()));
+       			this.fireNewIntegerInput(BInteger.make((int)getInNumber().getValue()));
        		}
        		
    			lastBoolean = getTrigger().getValue();
@@ -41,6 +42,7 @@ public class BSetNumericAction extends BComponent
 	{
 		getOutLastValueSet().setValue(getInNumber().getValue());
 		this.fireNewNumericInput(BDouble.make(getInNumber().getValue()));	
+		this.fireNewIntegerInput(BInteger.make((int)getInNumber().getValue()));
 	}
 	
 	/**invokable action to set the current value directly. If no links exist on 'inNumber' slot then it will be updated also.*/
@@ -48,16 +50,24 @@ public class BSetNumericAction extends BComponent
 	public void SetNumericValue(BDouble v){ invoke(SetNumericValue, v, null); }
 	public void doSetNumericValue(BDouble v, Context cx)
 	{
-		if( this.getLinks(this.getSlot("inNumber")).length <= 0 )
+		try
 		{
-			getInNumber().setValue(v.getDouble());
-			getOutLastValueSet().setValue(v.getDouble());
-			this.fireNewNumericInput(BDouble.make( getInNumber().getValue() ));
+			if (this.getLinks(this.getSlot("inNumber")).length <= 0)
+			{
+				getInNumber().setValue(v.getDouble());
+				getOutLastValueSet().setValue(v.getDouble());
+				this.fireNewNumericInput(BDouble.make(getInNumber().getValue()));
+				this.fireNewIntegerInput(BInteger.make((int)getInNumber().getValue()));
+			}
+			else
+			{
+				getOutLastValueSet().setValue(v.getDouble());
+				this.fireNewNumericInput(BDouble.make(v.getDouble()));
+				this.fireNewIntegerInput(BInteger.make((int)getInNumber().getValue()));
+			} 
 		}
-		else
+		catch (Exception e)
 		{
-			getOutLastValueSet().setValue(v.getDouble());
-			this.fireNewNumericInput(BDouble.make( v.getDouble() ));
 		}
 	}
 	
@@ -92,6 +102,9 @@ public class BSetNumericAction extends BComponent
     /**Event fired to send new Number*/    
     public static final Topic newNumericInput = newTopic(0);
     public void fireNewNumericInput(BDouble event){fire(newNumericInput,event,null); }
+    
+    public static final Topic newIntegerInput = newTopic(0);
+    public void fireNewIntegerInput(BInteger event){fire(newIntegerInput,event,null); }
     
     public BIcon getIcon() { return icon; }
     private static final BIcon icon = BIcon.make("local:|module://axCommunity/org/axcommunity/niagara/graphics/korsLogo.png");
