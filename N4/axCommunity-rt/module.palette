@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bajaObjectGraph version="1.0">
 	<p m="b=baja" t="b:Folder">
-	
+
 		<!-- ****************************************************************************************************** -->
 		<!-- Batch ************************************************************************************************ -->
 		<!-- ****************************************************************************************************** -->
 		<p m="b=baja" t="b:Folder" n="Batch">
 			<p n="BatchLinkCreator"				m="axc=axCommunity" t="axc:BatchLinkCreator">
-				<p n="wsAnnotation"	f=""	t="b:WsAnnotation"	v="2,2,20"/>	
-			</p>				
+				<p n="wsAnnotation"	f=""	t="b:WsAnnotation"	v="2,2,20"/>
+			</p>
 		</p>
-		
+
 		<!-- ****************************************************************************************************** -->
 		<!-- BQL ************************************************************************************************** -->
 		<!-- ****************************************************************************************************** -->
@@ -18,13 +18,13 @@
 			<p n="BqlNumericRecap"					m="axc=axCommunity" t="axc:BqlNumericRecap">
 						<p n="inBqlOrd"		f="h"/>
 						<p n="inBql"		f="s"	t="b:Ord"			v="station:|slot:/|bql:select out from control:NumericPoint where name = 'foo'"/>
-						<p n="wsAnnotation"	f=""	t="b:WsAnnotation"	v="2,2,15"/>	
+						<p n="wsAnnotation"	f=""	t="b:WsAnnotation"	v="2,2,15"/>
 			</p>
-			<p n="HistoryToCSV"						m="axc=axCommunity" t="axc:HistoryToCSV"/>	 
+			<p n="HistoryToCSV"						m="axc=axCommunity" t="axc:HistoryToCSV"/>
 			<p n="TrendAnalyzer"					m="axc=axCommunity" t="axc:TrendAnalyzer"/>
-			<p n="TrendDynamicAnalyzer"				m="axc=axCommunity" t="axc:TrendDynamicAnalyzer"/>	 
+			<p n="TrendDynamicAnalyzer"				m="axc=axCommunity" t="axc:TrendDynamicAnalyzer"/>
 		</p>
-		
+
 		<!-- ****************************************************************************************************** -->
 		<!-- Conversion ******************************************************************************************* -->
 		<!-- ****************************************************************************************************** -->
@@ -55,12 +55,12 @@
 			<p n="StatusStringToString"				m="axc=axCommunity" t="axc:StatusStringToString" />
 			<p n="TimeSplitter"						m="axc=axCommunity" t="axc:TimeSplitter">
 						<p n="updateTime"	f="s"/>
-						<p n="wsAnnotation"	f="r" t="b:WsAnnotation" v="7,3,17"/>	
+						<p n="wsAnnotation"	f="r" t="b:WsAnnotation" v="7,3,17"/>
 			</p>
 			<p n="FileToImage"						m="axc=axCommunity" t="axc:FileToImage" />
 		</p>
 
-			
+
 		<!-- ****************************************************************************************************** -->
 		<!-- Extensions ******************************************************************************************* -->
 		<!-- ****************************************************************************************************** -->
@@ -70,8 +70,8 @@
 			<p n="Scale"							m="axc=axCommunity" t="axc:Scale" />
 			<p n="UnAckAlarmState"					m="axc=axCommunity" t="axc:UnAckAlarmState" />
 		</p>
-			
-			
+
+
 		<!-- ****************************************************************************************************** -->
 		<!-- Hvac ************************************************************************************************* -->
 		<!-- ****************************************************************************************************** -->
@@ -80,7 +80,7 @@
 			<p n="TstatA"							m="axc=axCommunity" t="axc:TstatA" />
 			<p n="TstatB"							m="axc=axCommunity" t="axc:TstatB" />
 		</p>
-			
+
 		<!-- ****************************************************************************************************** -->
 		<!-- Logic ************************************************************************************************ -->
 		<!-- ****************************************************************************************************** -->
@@ -126,8 +126,8 @@
 			<p n="WhoWhenNumericSetpoint"			m="axc=axCommunity" t="axc:WhoWhenNumericSetpoint"	>	<p n="wsAnnotation"	f=""	t="b:WsAnnotation"	v="150,150,12"	/>	</p>
 			<p n="WhoWhenStringSetpoint"			m="axc=axCommunity" t="axc:WhoWhenStringSetpoint"	>	<p n="wsAnnotation"	f=""	t="b:WsAnnotation"	v="155,155,12"	/>	</p>
 		</p>
-			
-			
+
+
 		<!-- ****************************************************************************************************** -->
 		<!-- Math ************************************************************************************************* -->
 		<!-- ****************************************************************************************************** -->
@@ -149,7 +149,7 @@
 			<p n="NumericConstantAdjustable"		m="axc=axCommunity" t="axc:NumericConstantAdjustable"	>	<p n="wsAnnotation"	f=""	t="b:WsAnnotation"	v="10,10,12"	/>	</p>
 		</p>
 
-			
+
 		<!-- ****************************************************************************************************** -->
 		<!-- String *********************************************************************************************** -->
 		<!-- ****************************************************************************************************** -->
@@ -162,11 +162,21 @@
 			</p>
 			<p n="RetainLastValidString"			m="axc=axCommunity" t="axc:RetainLastValidString"/>
 			<p n="StringBufferAndSelect"			m="axc=axCommunity" t="axc:StringBufferAndSelect"/>
-			<p n="SuperConcatPlus"					m="axc=axCommunity" t="axc:SuperConcatPlus"/>
+
+			<p n="SuperConcatPlus"					m="axc=axCommunity"	t="axc:SuperConcatPlus">
+				<p n="wsAnnotation"				f=""	t="b:WsAnnotation"	v="5,5,25"/>
+				<p n="inConcatOnAnyInputChange"			t='b:StatusBoolean'>
+					<p n="value"	v="true"/>
+				</p>
+				<p n="inConcatOnStartup"				t='b:StatusBoolean'>
+					<p n="value"	v="false"/>
+				</p>
+			</p>
+
 			<p n="SuperStringTest"					m="axc=axCommunity" t="axc:SuperStringTest"/>
 		</p>
-			
-			
+
+
 		<!-- ****************************************************************************************************** -->
 		<!-- System *********************************************************************************************** -->
 		<!-- ****************************************************************************************************** -->
@@ -174,8 +184,8 @@
 			<p n="StringToFile"						m="axc=axCommunity" t="axc:StringToFile"/>
 			<p n="SysInfo"							m="axc=axCommunity" t="axc:SysInfo"/>
 		</p>
-			
-			
+
+
 		<!-- ****************************************************************************************************** -->
 		<!-- Time ************************************************************************************************* -->
 		<!-- ****************************************************************************************************** -->
@@ -184,17 +194,17 @@
 			<p n="Stopwatch"						m="axc=axCommunity" t="axc:Stopwatch" />
 			<p n="Stopwatch_v2"						m="axc=axCommunity" t="axc:Stopwatch_v2" />
 		</p>
-			
-			
+
+
 		<!-- ****************************************************************************************************** -->
 		<!-- Web ************************************************************************************************** -->
 		<!-- ****************************************************************************************************** -->
 		<p m="b=baja" t="b:Folder" n="Web">
 			<p n="GetHTTP"							m="axc=axCommunity" t="axc:GetHTTP"/>
 			<p n="StringToFile"						m="axc=axCommunity" t="axc:StringToFile"/>
-		</p>	
-			
-			
+		</p>
+
+
 		<!-- ****************************************************************************************************** -->
 		<!-- Weather ********************************************************************************************** -->
 		<!-- ****************************************************************************************************** -->
@@ -205,13 +215,13 @@
 				<p n="wsAnnotation" t="b:WsAnnotation" v="15,9,15"/>
 			</p>
 		</p>
-			
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
+
 		<!-- ****************************************************************************************************** -->
 		<!-- Widgets ********************************************************************************************** -->
 		<!-- ****************************************************************************************************** -->
@@ -234,7 +244,7 @@
 					<p n="widgetProperty" v="flash"/>
 				</p>
 			</p>
-					
+
 			<p n="DropDownList"						m="axc=axCommunity" t="axc:DropDownList">
 				<p n="layout" v="490.0,420.0,130.0,20.0"/>
 				<p n="image" v="local:|module://axCommunity/org/axcommunity/niagara/graphics/BUTTON_PB_130X20.jpg"/>
@@ -243,12 +253,12 @@
 				<p n="textToIconAlign" v="center"/>
 				<p n="wsAnnotation" t="b:WsAnnotation" v="5,5,10"/>
 			</p>
-			
+
 			<p n="BoundLabelHighlight"				m="axc=axCommunity" t="axc:BoundLabelHighlight">
 				<p n="layout" v="490.0,420.0,130.0,20.0"/>
 			</p>
-					
-					
+
+
 			<p n="RevolvingTextLabel2"				m="axc=axCommunity" t="axc:RevolvingTextLabel2">
 				<p n="layout" v="0.0,0.0,120.0,20.0"/>
 				<!-- /RevolvingTextLabel2/bindText -->
@@ -267,14 +277,14 @@
 					<p n="widgetProperty" v="flash"/>
 				</p>
 			</p>
-					
-				
+
+
 		</p>
-		
+
 		<!-- ****************************************************************************************************** -->
 		<!-- PxGraphics ******************************************************************************************* -->
 		<!-- ****************************************************************************************************** -->
-		
+
 		<p m="b=baja" t="b:Folder" n="PxGraphics">
 			<p n="boolean" t="b:UnrestrictedFolder">
 				<p n="small" t="b:Folder">
@@ -444,9 +454,9 @@
 				</p>
 				<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="60,16,8" />
 			</p>
-			
-			
-			
+
+
+
 			<!-- /dampers -->
 			<p n="dampers" t="b:UnrestrictedFolder">
 				<!-- /dampers/small -->
@@ -510,9 +520,9 @@
 				</p>
 				<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="10,10,8" />
 			</p>
-			
-			
-			
+
+
+
 			<!-- /devices -->
 			<p n="devices" t="b:UnrestrictedFolder">
 				<!-- /devices/small -->
@@ -696,12 +706,12 @@
 					</p>
 				</p>
 			</p>
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
 			<!-- /ducts -->
 			<p n="ducts" t="b:UnrestrictedFolder">
 				<!-- /ducts/small -->
@@ -877,9 +887,9 @@
 					<p n="wsAnnotation" f="r" t="b:WsAnnotation" v="41,25,8" />
 				</p>
 			</p>
-			
-			
-			
+
+
+
 			<!-- /equipment -->
 			<p n="equipment" t="b:UnrestrictedFolder">
 				<!-- /equipment/small -->

@@ -1,7 +1,5 @@
 package org.axcommunity.niagara.string;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,6 +8,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.baja.status.BStatus;
 import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
@@ -35,6 +34,8 @@ import javax.baja.sys.Sys;
 import javax.baja.sys.Topic;
 import javax.baja.sys.Type;
 
+import org.axcommunity.niagara.helperClasses.LoggingComponent;
+
 /**
  * This was created using borrowed then modified code from the "BSuperOr" object
  * which was created by CMH (XENCOM Energy Management)
@@ -53,13 +54,15 @@ import javax.baja.sys.Type;
 
 
 
-public class BSuperConcatPlus extends BComponent
+public class BSuperConcatPlus extends BComponent implements LoggingComponent
 {
-	
-	
 	public static final Property inDebug = newProperty(Flags.HIDDEN, false);
 	public boolean getInDebug() { return getBoolean(inDebug); }
 	public void setInDebug(boolean v) { setBoolean(inDebug, v, null); }
+
+	public static final Property inSuppressSlotPath = newProperty(Flags.HIDDEN, false);
+	public boolean getInSuppressSlotPath() { return getBoolean(inSuppressSlotPath); }
+	public void setInSuppressSlotPath(boolean v) { setBoolean(inSuppressSlotPath, v, null); }
 	
 	/*----------------------------------------------------------------------------------------------------------------*/
 	/** ACTION, "concatenate", PERFORMS THE CONCATENATION OF THE INPUTS   */
@@ -174,6 +177,11 @@ public class BSuperConcatPlus extends BComponent
 	public BStatusBoolean getInNullOnNoLink() { return (BStatusBoolean)get(inNullOnNoLink); }
 	public void setInNullOnNoLink(BStatusBoolean v) { set(inNullOnNoLink, v); }
 
+	
+	public static final Property inConcatOnStartup = newProperty(0, new BStatusBoolean(true, BStatus.ok), null);
+	public BStatusBoolean getInConcatOnStartup() { return (BStatusBoolean)get(inConcatOnStartup); }
+	public void setInConcatOnStartup(BStatusBoolean v) { set(inConcatOnStartup, v, null); }
+	
 	/** STATUS BOOLEAN INPUT, "inConcatOnAnyInputChange", WHEN TRUE OUTPUT WILL BE CALCULATED ON ANY INPUT BEING CHANGED */
 	public final static Property inConcatOnAnyInputChange = newProperty(0, new BStatusBoolean(false));
 	public BStatusBoolean getInConcatOnAnyInputChange() { return (BStatusBoolean)get(inConcatOnAnyInputChange); }
@@ -260,17 +268,45 @@ public class BSuperConcatPlus extends BComponent
 	private boolean				updatingSlotCount	= false;
 	private static final String	SLOT_NAME_PREFIX	= "In_";
 	
+	
+	/*----------------------------------------------------------------------------------------------------------------*/
+	public void started() throws Exception
+	{
+		super.started();
+		if(!Sys.atSteadyState() || !isRunning()){return;}
+		startAndSteadyState();
+	}
+	
+	/*----------------------------------------------------------------------------------------------------------------*/
+	public void stationStarted() throws Exception
+	{
+		super.stationStarted();
+		if(!Sys.atSteadyState() || !isRunning()){return;}
+		startAndSteadyState();
+	}
+	
+	/*----------------------------------------------------------------------------------------------------------------*/
+	public void atSteadyState() throws Exception
+	{
+		super.atSteadyState();
+		if(!Sys.atSteadyState() || !isRunning()){return;}
+		startAndSteadyState();
+	}
+	
 	/*------------------------------------------------------------------------------------------------------------------*/
 	/**
 	 * The logic in this method should only be executed if the station is running and at steadyState.</br>
 	 * This means this will only get ran when this object is initially added to a running station or duplicated/copied from an existing object.
 	 */
-	public void started()
+	private void startAndSteadyState()
 	{
 		if(!Sys.atSteadyState() || !isRunning()){return;}
 		
-		Thread t = new Thread(new calculate());
-		t.start();
+		if(getInConcatOnStartup().getStatus().isValid() && getInConcatOnStartup().getValue())
+		{
+			Thread t = new Thread(new calculate());
+			t.start();
+		}
 	}
 	
 	
@@ -398,7 +434,7 @@ public class BSuperConcatPlus extends BComponent
 		}
 		catch (Exception e)
 		{
-			errorHandler(Level.FINE, "slots()", e);
+			errorHandler(Level.FINE, e);
 		}
 	}
 
@@ -450,7 +486,7 @@ public class BSuperConcatPlus extends BComponent
 					}
 					catch(Exception e)
 					{
-						errorHandler(Level.FINE, "calculate().run()", e);
+						errorHandler(Level.FINE, e);
 					}
 				}
 				
@@ -477,7 +513,7 @@ public class BSuperConcatPlus extends BComponent
 			}
 			catch(Exception e)
 			{
-				errorHandler(Level.FINE, "calculate().run()", e);
+				errorHandler(Level.FINE, e);
 			}
 		}
 	}
@@ -506,43 +542,10 @@ public class BSuperConcatPlus extends BComponent
     	}
     	catch (Exception e) 
     	{
-    		errorHandler(Level.FINE, "timestampAsString()", e);
+    		errorHandler(Level.FINE, e);
     	}
 		
 		return time;
-	}
-	
-		
-	/*----------------------------------------------------------------------------------------------------------------*/
-	private String errorHandler(Level level, String msg, Exception e)
-	{
-		try
-		{
-			int		MAXLOGLENGTH	= 3583;
-			String	MESSAGE			= "";
-			String	STACKTRACE		= "";
-			String	PRINTSTACKTRACE	= "";
-			
-			try{MESSAGE		= e.getMessage().trim();}catch(Exception ex) {}
-			try{STACKTRACE	= e.getStackTrace().toString().trim();}catch(Exception ex) {}
-			try{StringWriter errors = new StringWriter();
-				e.printStackTrace(new PrintWriter(errors));
-				PRINTSTACKTRACE = errors.toString().trim();
-			}catch(Exception ex) {}
-			
-			msg	= "\n\n" + msg + "\n" + "MESSAGE: \n" + MESSAGE + "\n" + "STACKTRACE: \n" + STACKTRACE + "\n" + "PRINTSTACKTRACE: \n" + PRINTSTACKTRACE;
-			msg	= msg.length()>MAXLOGLENGTH? msg.substring(0, MAXLOGLENGTH) : msg;
-			
-			if(getInDebug()) {System.out.println("\n" + this.getSlotPath() + "\n" + msg);}
-			else{logger.log(level, "\n" + this.getSlotPath() + "\n" + msg);}
-		}
-		catch (Exception e1)
-		{
-			if(getInDebug()) {System.out.println("\n" + "EXCEPTION ERROR WITH '" + TYPE.getModule().getModuleName() + "." + TYPE.getTypeName() + "'");}
-			else{logger.log(level, "\n" + "EXCEPTION ERROR WITH '" + TYPE.getModule().getModuleName() + "." + TYPE.getTypeName() + "'");}
-		}
-		
-		return msg.trim();
 	}
 	
 	
