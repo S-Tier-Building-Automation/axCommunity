@@ -29,6 +29,39 @@ license declared by the upstream SourceForge project. See [`LICENSE`](LICENSE).
 
 Pre-N4 Niagara AX sources from the import live under [`archive/AX/`](archive/AX/) for history only; they are obsolete and not maintained.
 
+## Status
+
+Active maintenance under S-Tier Building Automation targets **Niagara 4.15.3**.
+Current module version: **22.2.2** (vendor `Community`).
+
+## Build (local)
+
+Requires a licensed Niagara **4.15.x** install (tested on 4.15.3.28).
+
+```powershell
+cd N4
+copy gradle.properties.example gradle.properties.local
+# Edit gradle.properties.local — set niagara_home to your install path
+.\gradlew.bat clean assemble
+```
+
+Signed JARs are written under `N4/axCommunity-*/build/libs/`. With no SafeNet
+profile configured, signing uses the dev cert **Niagara4Modules** (must be trusted
+in your Niagara user home).
+
+Install all four parts on a station or supervisor: `axCommunity-rt`, `-wb`, `-ux`, `-doc`.
+
+## Known limitations (22.2.2)
+
+- **FireFoxxWeather** — palette entry is fixed, but the component still calls the
+  defunct Yahoo Weather RSS API. It will not return live weather until replaced
+  with a new data source.
+- **PxGraphics palette folder** — HVAC graphics reference the external
+  **johnGraphics** module (`module://johnGraphics/...`) and embed **kitPx**
+  widget types (`kitPx:BoundLabel`, etc.). Install **johnGraphics** and ensure
+  **kitPx-wb** / **kitPx-ux** are on the station or supervisor or those palette
+  items will fail to resolve.
+
 ## CI (self-hosted runner)
 
 GitHub Actions can compile and sign `N4/` on a Windows PC with Niagara installed.
@@ -38,7 +71,8 @@ For day-to-day use without installing the runner as a Windows **service**, use t
 tray app in [`tools/github-runner-tray/`](tools/github-runner-tray/) — it starts
 `run.cmd` in your user session and shows listening/job status in the notification area.
 
-## Status
+## Release history
 
-Active maintenance under S-Tier Building Automation targets **Niagara 4.15.3** —
-building and signing the `N4/` module parts for current Niagara 4.x releases.
+See [`N4/axCommunity-rt/src/relNotes/RelNotes.txt`](N4/axCommunity-rt/src/relNotes/RelNotes.txt)
+for the full component changelog. The **22.2.2** entry documents this N4 4.15.3
+maintenance release.

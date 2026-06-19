@@ -18,6 +18,11 @@ moduleManifest {
   preferredSymbol.set("axc4")
 }
 
+dependencies {
+  nre(":nre")
+  api(":baja")
+}
+
 // Package the documentation tree into the module jar.
 sourceSets {
   main {

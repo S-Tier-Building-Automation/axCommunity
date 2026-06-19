@@ -36,9 +36,9 @@ vendor {
   // "vendor" attribute shown in Niagara when viewing a module or dist.
   defaultVendor("Community")
 
-  // "vendorVersion" attribute on all module parts. Tracks the upstream
-  // SourceForge release lineage (last upstream was 22.02.01.01).
-  defaultModuleVersion("22.2.1")
+  // "vendorVersion" attribute on all module parts. 22.2.2 is the first
+  // S-Tier N4 maintenance release (Niagara 4.15.3); upstream was 22.02.01.01.
+  defaultModuleVersion("22.2.2")
 }
 
 signingServices {

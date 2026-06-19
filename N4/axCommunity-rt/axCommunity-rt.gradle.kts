@@ -32,6 +32,8 @@ dependencies {
   api(":kitControl-rt")
   api(":alarm-rt")
   api(":driver-rt")
+  api(":file-rt")
+  api(":converters-rt")
 }
 
 // Package non-Java resources that live alongside the sources (icons, bog

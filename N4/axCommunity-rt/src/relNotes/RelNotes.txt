@@ -255,7 +255,7 @@ V12.07.02 July 14, 2012
 
 V12.09.01 September 23, 2012
 - Modified 'BBqlNumericRecap' to include a few new slots and logic to support them. 
-	New slots include: queryAndCalculate, calculating, lastQuery, error, calculated, errorOccured.>>>>>>> .r131
+	New slots include: queryAndCalculate, calculating, lastQuery, error, calculated, errorOccured.
 
 V12.09.02 Sept 26, 2012
 - MODIFIED BDynamicTrendAnalyzer - made the TimeRange property non-transient. - Mike Arnott
@@ -315,3 +315,14 @@ V14.08.24 August 24, 2014
 
 V14.09.01 September 25, 2014
 - MODIFIED BBqlNumericRecap to support queries where the datatype of the column to be analyzed is a BSimple (aggregates for example)
+
+V22.02.04 June 19, 2026
+- N4 maintenance release for Niagara 4.15.3 (S-Tier Building Automation fork of SourceForge niagaraaxcommun)
+- MODIFIED Gradle build to Tridium 7.6.x plugins; module parts rt/wb/ux/doc assemble and sign on 4.15.3
+- MODIFIED axCommunity-rt module dependencies: added file-rt and converters-rt for HistoryToCSV and palette converters
+- MODIFIED axCommunity-doc module dependencies: baja pinned to 4.15 (was implicit 4.0)
+- FIXED FireFoxxWeather palette entry (ffc → axc module symbol)
+- FIXED damperV_NC PxGraphics palette BOG typo (ht → t)
+- FIXED RelNotes.txt SVN merge artifact from upstream import
+- NOTE FireFoxxWeather still uses the defunct Yahoo Weather RSS API; component remains for compatibility but does not fetch live data
+- NOTE PxGraphics palette folder references external johnGraphics module for HVAC graphics; install johnGraphics separately or graphics will be missing
