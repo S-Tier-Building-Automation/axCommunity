@@ -2,6 +2,10 @@
 .gradle/
 **/build/
 
+# Machine-specific Niagara paths (niagara_home, signing overrides)
+gradle.properties.local
+**/gradle.properties.local
+
 # Eclipse / IDE build output
 bin/
 *.class

@@ -210,7 +210,7 @@
 		<!-- ****************************************************************************************************** -->
 		<p m="b=baja" t="b:Folder" n="Weather">
 			<!-- /FireFoxxWeather -->
-			<p n="FireFoxxWeather"	m="ffc=axCommunity" t="ffc:FireFoxxWeather">
+			<p n="FireFoxxWeather"	m="axc=axCommunity" t="axc:FireFoxxWeather">
 				<p n="tempFacets" v="units=u:celsius;&#xb0;C;(K);+273.15;|precision=i:1"/>
 				<p n="wsAnnotation" t="b:WsAnnotation" v="15,9,15"/>
 			</p>
@@ -484,7 +484,7 @@
 						<p n="wsAnnotation" t="b:WsAnnotation" v="14,11,8" />
 					</p>
 					<!-- /dampers/small/damperV_NC -->
-					<p n="damperV_NC" ht="kitPx:BoundLabel">
+					<p n="damperV_NC" t="kitPx:BoundLabel">
 						<p n="layout" v="200,200,30,68" />
 						<!-- /dampers/small/damperV_NC/ValueBinding -->
 						<p n="ValueBinding" t="ui:ValueBinding">

@@ -277,7 +277,7 @@ public class BSysInfo extends BComponent
 			getFreeHeap().setValue(freeMem);
 			getMaxHeap().setValue(maxMem);
 			
-			try{getNiagaraHome().setValue(Sys.getNiagaraHome().toString());}
+			try{getNiagaraHome().setValue(Nre.getNiagaraHome().toString());}
 			catch (Exception e){getNiagaraHome().setValue("");}
 			
 			try{getNiagaraUserHome().setValue(Sys.getNiagaraUserHome().toString());}

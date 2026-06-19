@@ -1,0 +1,14 @@
+# Copy to gradle.properties.local (gitignored) and set paths for your machine.
+#
+# niagara_home is required. Use forward slashes or escaped backslashes on Windows.
+niagara_home=C:/TAC/Niagara-4.15.3.28
+
+# Optional: Niagara user home (signing trust for dev cert Niagara4Modules)
+# niagara_user_home=C:/Users/YOU/Niagara4.15/TAC
+
+# Optional: override if your install bundles different Tridium Gradle plugin versions
+# niagara_plugin_version=7.6.22
+
+# Optional: production SafeNet signing (omit to use dev cert Niagara4Modules)
+# signing.profile=C:/path/to/niagara.signing.xml
+# signing.alias=axCommunity
