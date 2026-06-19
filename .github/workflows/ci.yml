@@ -1,0 +1,164 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'N4/**'
+      - '.github/workflows/ci.yml'
+  pull_request:
+    paths:
+      - 'N4/**'
+      - '.github/workflows/ci.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Hosted structural smoke check.
+  #
+  # A genuine `./gradlew assemble` is NOT possible on a stock GitHub-hosted
+  # runner: the Tridium Gradle plugins (com.tridium.niagara, niagara-module,
+  # niagara-home-repositories, ...) resolve from `niagara_home/etc/m2/repository`
+  # and every module dependency resolves from `niagara_home/!modules` as a
+  # flat-file Maven repo. settings.gradle.kts THROWS during settings evaluation
+  # when `niagara_home` is unset, before any task can run. A Niagara install is
+  # not redistributable, so this job only validates the wrapper + build layout.
+  # The real compile/sign happens in build-niagara (self-hosted) below.
+  # ---------------------------------------------------------------------------
+  smoke-check:
+    name: Build Layout Smoke Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v4
+
+      - name: Verify N4 build scripts are present
+        run: |
+          set -euo pipefail
+          fail=0
+          echo "== Required build files =="
+          for f in \
+            N4/settings.gradle.kts \
+            N4/build.gradle.kts \
+            N4/axCommunity-rt/axCommunity-rt.gradle.kts \
+            N4/axCommunity-wb/axCommunity-wb.gradle.kts \
+            N4/axCommunity-ux/axCommunity-ux.gradle.kts \
+            N4/axCommunity-doc/axCommunity-doc.gradle.kts \
+            N4/gradlew \
+            N4/gradle/wrapper/gradle-wrapper.jar
+          do
+            if [[ -f "$f" ]]; then echo "  ok   $f"; else echo "  MISS $f"; fail=1; fi
+          done
+          [[ "$fail" -eq 0 ]] || { echo "::error::N4 build layout smoke check failed"; exit 1; }
+          echo "Structural smoke check passed."
+
+      - name: Niagara compile gate status
+        run: |
+          echo "::notice::axCommunity Java is NOT compiled here — a real compile+sign" \
+               "gate runs on a self-hosted runner with Niagara 4.15.3 installed" \
+               "(build-niagara job, enable via the NIAGARA_BUILD_ENABLED repo variable)."
+
+  # ---------------------------------------------------------------------------
+  # Real compile + sign on a self-hosted Windows runner with Niagara installed.
+  #
+  # DORMANT until you opt in: set repo variable NIAGARA_BUILD_ENABLED=true and
+  # register a self-hosted runner labelled `niagara-build` to this repo, with
+  # repo variables NIAGARA_HOME (and optionally NIAGARA_USER_HOME) pointing at a
+  # Niagara 4.15.x install whose dev signing cert ("Niagara4Modules") is trusted.
+  # Until then this job is skipped (so it never queues forever waiting on a
+  # runner that doesn't exist).
+  # ---------------------------------------------------------------------------
+  build-niagara:
+    name: Niagara Build (assemble + sign)
+    needs: smoke-check
+    if: ${{ vars.NIAGARA_BUILD_ENABLED == 'true' }}
+    runs-on: [self-hosted, Windows, X64, niagara-build]
+    timeout-minutes: 30
+    env:
+      NIAGARA_HOME: ${{ vars.NIAGARA_HOME }}
+      NIAGARA_USER_HOME: ${{ vars.NIAGARA_USER_HOME }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve + validate Niagara paths
+        shell: pwsh
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:NIAGARA_HOME)) {
+            $env:NIAGARA_HOME = [Environment]::GetEnvironmentVariable('NIAGARA_HOME','Machine')
+          }
+          if ([string]::IsNullOrWhiteSpace($env:NIAGARA_HOME)) {
+            $env:NIAGARA_HOME = [Environment]::GetEnvironmentVariable('NIAGARA_HOME','User')
+          }
+          if ([string]::IsNullOrWhiteSpace($env:NIAGARA_USER_HOME)) {
+            $env:NIAGARA_USER_HOME = [Environment]::GetEnvironmentVariable('NIAGARA_USER_HOME','User')
+          }
+          if ([string]::IsNullOrWhiteSpace($env:NIAGARA_HOME)) {
+            throw "NIAGARA_HOME is unset. Set the NIAGARA_HOME repo variable or a machine/user env var on the runner."
+          }
+          if (-not (Test-Path $env:NIAGARA_HOME)) { throw "NIAGARA_HOME does not exist: $env:NIAGARA_HOME" }
+          $jre = Join-Path $env:NIAGARA_HOME "jre\bin\java.exe"
+          if (-not (Test-Path $jre)) { throw "Expected Niagara JRE at $jre" }
+          "NIAGARA_HOME=$($env:NIAGARA_HOME)" >> $env:GITHUB_ENV
+          "JAVA_HOME=$($env:NIAGARA_HOME)\jre" >> $env:GITHUB_ENV
+          if (-not [string]::IsNullOrWhiteSpace($env:NIAGARA_USER_HOME)) {
+            "NIAGARA_USER_HOME=$($env:NIAGARA_USER_HOME)" >> $env:GITHUB_ENV
+          }
+
+      - name: Write N4/gradle.properties.local
+        shell: pwsh
+        run: |
+          $lines = @("niagara_home=$($env:NIAGARA_HOME -replace '\\','/')")
+          if (-not [string]::IsNullOrWhiteSpace($env:NIAGARA_USER_HOME)) {
+            $lines += "niagara_user_home=$($env:NIAGARA_USER_HOME -replace '\\','/')"
+          }
+          # Signing falls back to the Niagara default dev cert (Niagara4Modules)
+          # because build.gradle.kts sets allowDefaultProfile when signing.profile
+          # is absent. Override here only for production SafeNet signing.
+          Set-Content -Path N4/gradle.properties.local -Value $lines -Encoding ASCII
+          Get-Content N4/gradle.properties.local
+
+      - name: Assemble + sign module parts
+        shell: pwsh
+        working-directory: N4
+        run: .\gradlew.bat clean assemble --no-daemon --console=plain
+
+      - name: Upload signed module jars
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: axCommunity-modules-${{ github.run_id }}
+          path: N4/axCommunity-*/build/libs/*.jar
+          if-no-files-found: warn
+
+  ci-gate:
+    name: CI Gate
+    if: always()
+    needs: [smoke-check, build-niagara]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check results
+        run: |
+          # smoke-check must pass. build-niagara may be skipped (no runner yet);
+          # only fail the gate if it actually ran and failed/was cancelled.
+          if [[ "${{ needs.smoke-check.result }}" != "success" ]]; then
+            echo "::error::smoke-check did not succeed (${{ needs.smoke-check.result }})"
+            exit 1
+          fi
+          bn="${{ needs.build-niagara.result }}"
+          if [[ "$bn" == "failure" || "$bn" == "cancelled" ]]; then
+            echo "::error::build-niagara $bn"
+            exit 1
+          fi
+          echo "CI gate passed (build-niagara: $bn)."
