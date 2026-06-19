@@ -1,0 +1,17 @@
+# Gradle (N4 module build)
+.gradle/
+**/build/
+
+# Eclipse / IDE build output
+bin/
+*.class
+.settings/
+.metadata/
+
+# Niagara build/dist artifacts
+*.jar.bak
+
+# OS / editor cruft
+Thumbs.db
+.DS_Store
+*~
