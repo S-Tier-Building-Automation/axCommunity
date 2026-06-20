@@ -151,7 +151,10 @@ if (-not $SkipBuild) {
     Write-Step "Step 3: Building + dev-signing modules"
     Push-Location $N4Dir
     try {
-        $buildArgs = @("-Pniagara_home=$NiagaraHome", "clean", "assemble", "--no-daemon", "--console=plain")
+        # Note: no --no-daemon. The single-use daemon's shutdown can emit a
+        # spurious "Could not dispatch a message to the daemon" non-zero exit
+        # even on a successful build; the reusable daemon avoids that.
+        $buildArgs = @("-Pniagara_home=$NiagaraHome", "clean", "assemble", "--console=plain")
         Write-Host "  Running: gradlew $($buildArgs -join ' ')"
         & .\gradlew.bat @buildArgs
         if ($LASTEXITCODE -ne 0) {
