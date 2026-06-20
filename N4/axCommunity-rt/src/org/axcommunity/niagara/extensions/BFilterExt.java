@@ -29,10 +29,12 @@ import javax.baja.sys.*;
  * The value is clamped to the range 1&ndash;100; a value of 0 is disallowed
  * because it would freeze the output.
  * <p>
- * Filter state ({@code prevIn}/{@code prevOut}) is persisted, so after a station
- * restart the filter resumes from where it left off instead of warming up from
- * zero. On first use it is seeded from the first sample, so the initial output
- * passes through unfiltered (no startup spike).
+ * Filter state ({@code prevIn}/{@code prevOut}) is held in <i>transient</i>
+ * slots and re-seeded from the first sample after each start, so the initial
+ * output passes through unfiltered (no startup spike from zero). Keeping the
+ * fast-changing state transient avoids constant {@code config.bog} writes — and
+ * therefore flash wear on embedded controllers — and avoids resuming with stale
+ * values after a long outage.
  *
  * @author    Dean Mynott - Ronin Control Systems Pty Ltd
  * @creation  16 June 2011
@@ -58,18 +60,18 @@ public class BFilterExt extends BPointExtension
 // Persisted filter state (hidden)
 ////////////////////////////////////////////////////////////////
 
-  /** Previous raw input sample x[n-1]; persisted so the filter survives restarts. */
-  public static final Property prevIn = newProperty(Flags.HIDDEN, 0d, null);
+  /** Previous raw input sample x[n-1]; transient (re-seeded each start, no disk writes). */
+  public static final Property prevIn = newProperty(Flags.HIDDEN | Flags.TRANSIENT, 0d, null);
   public double getPrevIn() { return getDouble(prevIn); }
   public void setPrevIn(double v) { setDouble(prevIn, v, null); }
 
-  /** Previous filtered output y[n-1]; persisted so the filter survives restarts. */
-  public static final Property prevOut = newProperty(Flags.HIDDEN, 0d, null);
+  /** Previous filtered output y[n-1]; transient (re-seeded each start, no disk writes). */
+  public static final Property prevOut = newProperty(Flags.HIDDEN | Flags.TRANSIENT, 0d, null);
   public double getPrevOut() { return getDouble(prevOut); }
   public void setPrevOut(double v) { setDouble(prevOut, v, null); }
 
-  /** True once the filter state has been seeded from the first sample. */
-  public static final Property seeded = newProperty(Flags.HIDDEN, false, null);
+  /** True once the filter state has been seeded from the first sample (transient). */
+  public static final Property seeded = newProperty(Flags.HIDDEN | Flags.TRANSIENT, false, null);
   public boolean getSeeded() { return getBoolean(seeded); }
   public void setSeeded(boolean v) { setBoolean(seeded, v, null); }
 
@@ -124,17 +126,22 @@ public class BFilterExt extends BPointExtension
   public void onExecute(BStatusValue o, Context cx)
   {
     BStatusNumeric out = (BStatusNumeric)o;          // parent output
+
+    // Don't filter (or seed from) an invalid sample: a null/NaN value would
+    // poison the filter state and stay stuck at NaN even after recovery.
+    if (out.getStatus().isNull()) return;
     double xCur = out.getValue();                    // current raw input
+    if (Double.isNaN(xCur)) return;
 
     // Clamp the coefficient to (0,1]; 0 would freeze the output.
     double fv = getFilter().getValue();
-    if (fv < 1)   fv = 1;
-    if (fv > 100) fv = 100;
+    if (Double.isNaN(fv) || fv < 1) fv = 1;
+    else if (fv > 100) fv = 100;
     double f = fv / 100.0;
 
-    // First execution after being added: seed state from the current sample so
-    // the initial output passes through unfiltered (no startup spike). State is
-    // persisted thereafter, so restarts resume rather than re-seed.
+    // First execution after each (re)start: seed state from the current sample
+    // so the initial output passes through unfiltered (no startup spike). State
+    // is transient, so a restart simply re-seeds from the live value.
     if (!getSeeded())
     {
       setPrevIn(xCur);

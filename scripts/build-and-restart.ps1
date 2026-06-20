@@ -89,18 +89,18 @@ if (-not (Test-Administrator)) {
     Remove-Item -Path $LogFile -Force -EA SilentlyContinue
     $elevated = Start-Process powershell -Verb RunAs -ArgumentList $argList -PassThru
 
-    $deadline = (Get-Date).AddMinutes(30); $completed = $false; $logText = ""
+    # Wait only for the elevated process to exit. Reading the transcript while it
+    # is still being written can raise a file-sharing violation (fatal under
+    # ErrorActionPreference=Stop), so read the log once, after exit.
+    $deadline = (Get-Date).AddMinutes(30); $completed = $false
     while ((Get-Date) -lt $deadline) {
         Start-Sleep -Seconds 2
-        if (Test-Path $LogFile) {
-            $logText = Get-Content $LogFile -Raw -EA SilentlyContinue
-            if ($logText -match "Windows PowerShell transcript end") { $completed = $true; break }
-        }
         if (-not (Get-Process -Id $elevated.Id -EA SilentlyContinue)) { $completed = $true; break }
     }
-    if (Test-Path $LogFile) {
+    $logText = if (Test-Path $LogFile) { Get-Content $LogFile -Raw -EA SilentlyContinue } else { "" }
+    if ($logText) {
         Write-Host ""; Write-Host "--- Output from elevated process ---" -ForegroundColor Cyan
-        Get-Content $LogFile | ForEach-Object { Write-Host $_ }
+        Write-Host $logText
     }
     if (-not $completed) { Write-Host "ERROR: Timed out waiting for elevated run." -ForegroundColor Red; exit 1 }
     if ($logText -match "BUILD FAILED|ERROR:") { exit 1 }
