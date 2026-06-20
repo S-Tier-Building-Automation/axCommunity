@@ -55,7 +55,8 @@ if (-not $NiagaraHome) {
         foreach ($base in 'C:\Niagara', 'C:\TAC') {
             if (Test-Path $base) {
                 $found = Get-ChildItem $base -Directory -Filter 'Niagara-*' -EA SilentlyContinue |
-                    Sort-Object Name -Descending | Select-Object -First 1
+                    Sort-Object { try { [Version]($_.Name -replace '^Niagara-', '') } catch { [Version]'0.0' } } -Descending |
+                    Select-Object -First 1
                 if ($found) { $NiagaraHome = $found.FullName; break }
             }
         }
