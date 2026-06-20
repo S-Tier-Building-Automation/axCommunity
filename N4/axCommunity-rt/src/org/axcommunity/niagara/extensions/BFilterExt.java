@@ -5,40 +5,82 @@ import javax.baja.status.*;
 import javax.baja.sys.*;
 
 /**
- * The BFilter is a standard point extension
- * that takes the value of a numeric point and applies
- * a filter function
+ * {@code BFilterExt} is a numeric point extension that applies a first-order
+ * IIR low-pass filter to its parent point's value.
+ * <p>
+ * Each time the parent point executes, the raw value is smoothed using the
+ * trapezoidal (bilinear-transform) one-pole filter:
+ * <pre>
+ *   f    = filter / 100                 (filter coefficient, 0&lt;f&le;1)
+ *   gain = (1 - f) / (1 + f)            (pole)
+ *   a    =      f  / (1 + f)
+ *   y[n] = gain * y[n-1] + a * (x[n] + x[n-1])
+ * </pre>
+ * <p>
+ * <b>The {@code filter} scale is inverted from intuition:</b> a <i>low</i>
+ * value gives <i>heavy</i> smoothing / slow response (pole near 1), while a
+ * <i>high</i> value (up to 100) gives <i>light</i> smoothing. For example:
+ * <ul>
+ *   <li>{@code filter = 5} (default) &rarr; pole 0.905, heavy smoothing</li>
+ *   <li>{@code filter = 50} &rarr; pole 0.33, light smoothing</li>
+ *   <li>{@code filter = 100} &rarr; pole 0, output is roughly the mean of the
+ *       last two samples (minimal smoothing)</li>
+ * </ul>
+ * The value is clamped to the range 1&ndash;100; a value of 0 is disallowed
+ * because it would freeze the output.
+ * <p>
+ * Filter state ({@code prevIn}/{@code prevOut}) is held in <i>transient</i>
+ * slots and re-seeded from the first sample after each start, so the initial
+ * output passes through unfiltered (no startup spike from zero). Keeping the
+ * fast-changing state transient avoids constant {@code config.bog} writes — and
+ * therefore flash wear on embedded controllers — and avoids resuming with stale
+ * values after a long outage.
  *
- * @author    Dean Mynott       - Ronin Control Systems Pty Ltd
+ * @author    Dean Mynott - Ronin Control Systems Pty Ltd
  * @creation  16 June 2011
  */
-public class BFilterExt extends BPointExtension implements Runnable
+public class BFilterExt extends BPointExtension
 {
 
 ////////////////////////////////////////////////////////////////
-// Runnable
+// Property "filter"
 ////////////////////////////////////////////////////////////////
 
-  public void run() { System.out.println("Source BProgram did not override run(). Exiting thread."); }
-
-  
-////////////////////////////////////////////////////////////////
-// Property "Filter"
-////////////////////////////////////////////////////////////////
-//  public static final Property filter = newProperty(Flags.SUMMARY, new BStatusNumeric(95, BStatus.nullStatus),BFacets.make(BFacets.MIN, BInteger.make(0),BFacets.MAX, BInteger.make(100)));
-  public static final Property filter = newProperty(Flags.SUMMARY, new BStatusNumeric(5),BFacets.make(BFacets.MIN, BInteger.make(0),BFacets.MAX, BInteger.make(100)));
+  /**
+   * Filter strength, 1&ndash;100. <b>Lower = heavier smoothing / slower
+   * response; higher = lighter smoothing.</b> A value of 0 is not allowed
+   * (it would freeze the output).
+   */
+  public static final Property filter = newProperty(Flags.SUMMARY, new BStatusNumeric(5),
+      BFacets.make(BFacets.MIN, BInteger.make(1), BFacets.MAX, BInteger.make(100)));
   public BStatusNumeric getFilter() { return (BStatusNumeric)get(filter); }
   public void setFilter(BStatusNumeric v) { set(filter,v,null); }
 
+////////////////////////////////////////////////////////////////
+// Persisted filter state (hidden)
+////////////////////////////////////////////////////////////////
+
+  /** Previous raw input sample x[n-1]; transient (re-seeded each start, no disk writes). */
+  public static final Property prevIn = newProperty(Flags.HIDDEN | Flags.TRANSIENT, 0d, null);
+  public double getPrevIn() { return getDouble(prevIn); }
+  public void setPrevIn(double v) { setDouble(prevIn, v, null); }
+
+  /** Previous filtered output y[n-1]; transient (re-seeded each start, no disk writes). */
+  public static final Property prevOut = newProperty(Flags.HIDDEN | Flags.TRANSIENT, 0d, null);
+  public double getPrevOut() { return getDouble(prevOut); }
+  public void setPrevOut(double v) { setDouble(prevOut, v, null); }
+
+  /** True once the filter state has been seeded from the first sample (transient). */
+  public static final Property seeded = newProperty(Flags.HIDDEN | Flags.TRANSIENT, false, null);
+  public boolean getSeeded() { return getBoolean(seeded); }
+  public void setSeeded(boolean v) { setBoolean(seeded, v, null); }
 
 ////////////////////////////////////////////////////////////////
 // Type
 ////////////////////////////////////////////////////////////////
-  
+
   public Type getType() { return TYPE; }
   public static final Type TYPE = Sys.loadType(BFilterExt.class);
-
-/*+ ------------ END BAJA AUTO GENERATED CODE -------------- +*/
 
 ////////////////////////////////////////////////////////////////
 //  Constructors
@@ -55,13 +97,9 @@ public class BFilterExt extends BPointExtension implements Runnable
   /**
    * Forces the parent to be a numeric point.
    */
-
   public boolean isParentLegal(BComponent parent)
   {
-    if (parent instanceof BNumericPoint)   
-      return true;
-    else
-      return false;
+    return (parent instanceof BNumericPoint);
   }
 
 ////////////////////////////////////////////////////////////////
@@ -70,83 +108,76 @@ public class BFilterExt extends BPointExtension implements Runnable
 
   public void changed(Property p, Context cx)
   {
-   super.changed(p, cx);
-   if(!isRunning())
-    return;
-   if( p.equals(filter) )
-   {
-    BControlPoint parent = getParentPoint();
-    if(parent != null) getParentPoint().execute();
-   }
+    super.changed(p, cx);
+    if (!isRunning())
+      return;
+    if (p.equals(filter))
+    {
+      BControlPoint parent = getParentPoint();
+      if (parent != null) parent.execute();
+    }
   }
 
   /**
    * Called when either me or my parent control point is updated.
+   * Applies the one-pole low-pass filter and writes the result back to the
+   * parent point's output value.
    */
-
   public void onExecute(BStatusValue o, Context cx)
   {
+    BStatusNumeric out = (BStatusNumeric)o;          // parent output
 
-   //System.out.println("EXECUTE WAS CALLED" );
-   
-   BStatusNumeric out = (BStatusNumeric)o;                   //parent output
-  
-//   for( i=2; i>0; i--){
-//          y[i] = y[i-1]   ;                                  //shift output values
-//          x[i] = x[i-1]   ;                                  //shift input values
-//          }
-   x[2] = x[1] = x[0] ;    
-   y[2] = y[1] = y[0] ;  
-   
-   f    = getFilter().getValue()/100;                        //get the filter const
-      
-   x[0] = out.getValue();                                    //current input value from parent
-   
-   double gain = (1-f)/ (f+1);
-   double a    =    f / (f+1);                         
- 
-   //out = gain * previous_out + a * (input + previous_in);  //
-   y[0] =   gain * y[1]        + a * (x[0]  + x[1]);         // calculate new value
-      
-   o.setValueValue(BDouble.make(y[0]));                      //write to parent.valuevalue
-       
-    //getParentPoint().execute();
+    // Don't filter (or seed from) an invalid sample: a null/NaN value would
+    // poison the filter state and stay stuck at NaN even after recovery.
+    if (out.getStatus().isNull()) return;
+    double xCur = out.getValue();                    // current raw input
+    if (Double.isNaN(xCur)) return;
 
-   }
+    // Clamp the coefficient to (0,1]; 0 would freeze the output.
+    double fv = getFilter().getValue();
+    if (Double.isNaN(fv) || fv < 1) fv = 1;
+    else if (fv > 100) fv = 100;
+    double f = fv / 100.0;
 
- 
-  public void onStart() throws Exception
-  {
+    // First execution after each (re)start: seed state from the current sample
+    // so the initial output passes through unfiltered (no startup spike). State
+    // is transient, so a restart simply re-seeds from the live value.
+    if (!getSeeded())
+    {
+      setPrevIn(xCur);
+      setPrevOut(xCur);
+      setSeeded(true);
+    }
+
+    double xPrev = getPrevIn();
+    double yPrev = getPrevOut();
+
+    double gain = (1 - f) / (f + 1);
+    double a    =      f  / (f + 1);
+
+    double yCur = gain * yPrev + a * (xCur + xPrev);  // y[n] = gain*y[n-1] + a*(x[n]+x[n-1])
+
+    o.setValueValue(BDouble.make(yCur));              // write filtered value to parent.out
+
+    // Persist state for the next sample / restart (skip redundant writes).
+    if (xPrev != xCur) setPrevIn(xCur);
+    if (yPrev != yCur) setPrevOut(yCur);
   }
-  
-  public void onStop() throws Exception
-  {
-  }
+
+  // icon for this component
+  public BIcon getIcon() { return icon; }
+  private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/Ronin16.png");
+}
 
 
-    //icon for this component
-    public BIcon getIcon() { return icon; }
-        private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/Ronin16.png"); 
-
-                
-////////////////////////////////////////////////////////////////
-// Attributes
-////////////////////////////////////////////////////////////////
-  double [] y = new double[3];
-  double [] x = new double[3];
-  int       i = 0;
-  double f;
-}  
-
-
-/***************************************************    
+/***************************************************
 
 One-Liner IIR Filters (1st order)
 
 Type : IIR 1-pole
 References : Posted by chris at ariescode dot com
 
-Notes : 
+Notes :
 Here is a collection of one liner IIR filters.
 Each filter has been transformed into a single C++ expression.
 
@@ -154,7 +185,7 @@ The filter parameter is f or g, and the state variable that needs to be kept aro
 
 - Christian
 
-Code : 
+Code :
     101 Leaky Integrator
 
         a0 = 1
@@ -230,7 +261,3 @@ Code :
 
 
  ********************************************************/
-
-
-
-
