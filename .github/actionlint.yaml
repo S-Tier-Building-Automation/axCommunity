@@ -1,0 +1,5 @@
+# actionlint configuration. Declares the custom self-hosted runner label used by
+# the Niagara build/sign jobs so actionlint doesn't flag it as unknown.
+self-hosted-runner:
+  labels:
+    - niagara-build

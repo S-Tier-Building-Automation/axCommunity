@@ -1,0 +1,234 @@
+name: Build, Sign & Release Niagara Modules
+
+# Builds and officially-signs the four axCommunity module parts on a self-hosted
+# Windows runner (Niagara 4.15.x installed; the "S-Tier Building Automation llc"
+# Sectigo cert in the Windows-MY store), verifies each jar's signer against the
+# trusted-fingerprint allowlist, attaches them to the GitHub Release, and
+# publishes them to this repo's GitHub Packages Maven registry.
+#
+# Called by release-please.yml when a Release is created; also runnable manually
+# (workflow_dispatch) to (re)build assets for an existing release tag.
+#
+# Runner requirements: a self-hosted runner labelled `niagara-build` with the
+# Niagara SDK and the signing cert available. Optional repo variables override
+# the defaults: NIAGARA_HOME, NIAGARA_USER_HOME, NIAGARA_SIGNING_PROFILE,
+# NIAGARA_SIGNING_ALIAS. Optional secret SAFENET_PIN if the key is token-backed.
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: 'Release tag to attach assets to (e.g. v22.2.3)'
+        required: true
+        type: string
+      version:
+        description: 'Module version without the v prefix (e.g. 22.2.3)'
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to attach assets to (e.g. v22.2.3)'
+        required: true
+        type: string
+      version:
+        description: 'Module version without the v prefix (e.g. 22.2.3)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: release-build-${{ inputs.tag }}
+  cancel-in-progress: false
+
+env:
+  TRUSTED_FINGERPRINTS_FILE: cert/trusted-signer-fingerprints.txt
+
+jobs:
+  build-sign:
+    name: Build, sign, verify, publish
+    runs-on: [self-hosted, Windows, X64, niagara-build]
+    timeout-minutes: 45
+    env:
+      NIAGARA_HOME: ${{ vars.NIAGARA_HOME || 'C:\TAC\Niagara-4.15.3.28' }}
+      NIAGARA_USER_HOME: ${{ vars.NIAGARA_USER_HOME }}
+      # Empty by default — the "Prepare signing profile" step generates a Windows-MY
+      # profile into RUNNER_TEMP at runtime (signing profiles are never committed;
+      # the Tridium plugin rewrites them with a concrete storepass on build). Set
+      # the NIAGARA_SIGNING_PROFILE repo variable to point at a custom profile
+      # (e.g. a PKCS11/eToken profile) on the runner instead.
+      NIAGARA_SIGNING_PROFILE: ${{ vars.NIAGARA_SIGNING_PROFILE }}
+      NIAGARA_SIGNING_ALIAS: ${{ vars.NIAGARA_SIGNING_ALIAS || 'S-Tier Building Automation llc' }}
+    steps:
+      - name: Validate inputs
+        shell: pwsh
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          if ($env:INPUT_TAG -notmatch '^v[0-9]+(\.[0-9]+){1,3}(-[0-9A-Za-z][0-9A-Za-z.-]*)?$') {
+            throw "Unexpected release tag: $env:INPUT_TAG (expected vX.Y.Z)"
+          }
+          if ($env:INPUT_VERSION -notmatch '^[0-9]+(\.[0-9]+){1,3}(-[0-9A-Za-z][0-9A-Za-z.-]*)?$') {
+            throw "Unexpected version: $env:INPUT_VERSION"
+          }
+
+      - name: Checkout release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+          persist-credentials: false
+
+      - name: Prepare signing profile
+        shell: pwsh
+        run: |
+          if (-not [string]::IsNullOrWhiteSpace($env:NIAGARA_SIGNING_PROFILE)) {
+            Write-Host "Using provided signing profile: $env:NIAGARA_SIGNING_PROFILE"
+          } else {
+            # Generate the default Windows-MY profile (no key material — reads the
+            # cert from the runner's Windows store). Written to RUNNER_TEMP so it is
+            # never committed and the signing plugin may rewrite it freely.
+            $profilePath = Join-Path $env:RUNNER_TEMP 'axc-signing-profile.xml'
+            # Built as a string array (not a here-string): a pwsh here-string needs
+            # its closing '@ at column 0, which would terminate this YAML block
+            # scalar. Single-quoted lines keep ${env.SAFENET_PIN} literal for the
+            # Tridium plugin to resolve.
+            $xml = @(
+              '<?xml version="1.0" encoding="UTF-8" standalone="no"?>',
+              '<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">',
+              '<properties>',
+              '  <comment>Code Signing Properties</comment>',
+              '  <entry key="niagara.signing.alias">S-Tier Building Automation llc</entry>',
+              '  <entry key="niagara.signing.standardtsa">http://timestamp.digicert.com</entry>',
+              '  <entry key="niagara.signing.profileType">com.tridium.gradle.plugins.signing.profile.RestrictedSigningProfile</entry>',
+              '  <entry key="niagara.signing.storetype">Windows-MY</entry>',
+              '  <entry key="niagara.signing.refresh">30</entry>',
+              '  <entry key="niagara.signing.storepass">${env.SAFENET_PIN}</entry>',
+              '</properties>'
+            )
+            Set-Content -Path $profilePath -Value $xml -Encoding UTF8
+            "NIAGARA_SIGNING_PROFILE=$($profilePath -replace '\\','/')" >> $env:GITHUB_ENV
+            Write-Host "Generated signing profile at $profilePath"
+          }
+
+      - name: Validate Niagara + signing prerequisites
+        shell: pwsh
+        run: |
+          if (-not (Test-Path $env:NIAGARA_HOME)) { throw "NIAGARA_HOME missing: $env:NIAGARA_HOME" }
+          $jre = Join-Path $env:NIAGARA_HOME 'jre\bin\java.exe'
+          if (-not (Test-Path $jre)) { throw "Niagara JRE missing: $jre" }
+          $cert = Get-ChildItem Cert:\CurrentUser\My, Cert:\LocalMachine\My -ErrorAction SilentlyContinue |
+            Where-Object { $_.Subject -like '*S-Tier Building Automation*' } | Select-Object -First 1
+          if (-not $cert) {
+            throw "Signing cert 'S-Tier Building Automation llc' not found in the Windows store. If token-backed, connect the eToken."
+          }
+          Write-Host "Signing cert: $($cert.Subject) (expires $($cert.NotAfter))"
+
+      - name: Verify checked-out version matches the tag
+        shell: pwsh
+        env:
+          EXPECTED: ${{ inputs.version }}
+        run: |
+          $line = Select-String -Path N4/build.gradle.kts -Pattern 'x-release-please-version' | Select-Object -First 1
+          if (-not $line) { throw "No x-release-please-version marker in N4/build.gradle.kts" }
+          if ($line.Line -notmatch [regex]::Escape($env:EXPECTED)) {
+            throw "N4/build.gradle.kts version does not match release version '$env:EXPECTED': $($line.Line.Trim())"
+          }
+          Write-Host "Version marker OK: $($line.Line.Trim())"
+
+      - name: Write N4/gradle.properties.local
+        shell: pwsh
+        working-directory: N4
+        run: |
+          # Forward slashes throughout — a .properties file treats backslash as an
+          # escape char, so a Windows path with \ would be silently corrupted.
+          $lines = @(
+            "niagara_home=$($env:NIAGARA_HOME -replace '\\','/')",
+            "signing.profile=$($env:NIAGARA_SIGNING_PROFILE -replace '\\','/')",
+            "signing.alias=$env:NIAGARA_SIGNING_ALIAS"
+          )
+          if (-not [string]::IsNullOrWhiteSpace($env:NIAGARA_USER_HOME)) {
+            $lines += "niagara_user_home=$($env:NIAGARA_USER_HOME -replace '\\','/')"
+          }
+          Set-Content -Path gradle.properties.local -Value $lines -Encoding ASCII
+
+      - name: Assemble + sign module parts
+        shell: pwsh
+        working-directory: N4
+        # SAFENET_PIN is scoped to this step only (not the whole job) — it is read
+        # ambiently by the SafeNet middleware during signing when the key is
+        # token-backed; no other step needs it.
+        env:
+          SAFENET_PIN: ${{ secrets.SAFENET_PIN }}
+        run: .\gradlew.bat clean assemble --console=plain
+
+      - name: Verify jar signatures against trusted fingerprints
+        id: verify
+        shell: pwsh
+        run: |
+          $keytool = Join-Path $env:NIAGARA_HOME 'jre\bin\keytool.exe'
+          if (-not (Test-Path $env:TRUSTED_FINGERPRINTS_FILE)) {
+            throw "$($env:TRUSTED_FINGERPRINTS_FILE) is missing — cannot verify signers."
+          }
+          $trusted = Get-Content $env:TRUSTED_FINGERPRINTS_FILE |
+            ForEach-Object { ($_ -replace '#.*$', '').Trim() } |
+            Where-Object { $_ } |
+            ForEach-Object { ($_ -replace '[:\s]', '').ToUpper() }
+          if (-not $trusted) { throw "No fingerprints in $($env:TRUSTED_FINGERPRINTS_FILE)" }
+
+          $fail = $false
+          $jars = @()
+          foreach ($p in 'rt', 'wb', 'ux', 'doc') {
+            $jar = "N4/axCommunity-$p/build/libs/axCommunity-$p.jar"
+            if (-not (Test-Path $jar)) { Write-Host "::error::missing $jar"; $fail = $true; continue }
+            $out = & $keytool -printcert -jarfile $jar 2>&1 | Out-String
+            $m = [regex]::Match($out, 'SHA256:\s*([0-9A-Fa-f:]+)')
+            if (-not $m.Success) { Write-Host "::error::no SHA256 fingerprint for $jar"; $fail = $true; continue }
+            $fp = ($m.Groups[1].Value -replace '[:\s]', '').ToUpper()
+            if ($trusted -contains $fp) {
+              Write-Host "OK  $jar  $($m.Groups[1].Value)"
+              $jars += (Resolve-Path $jar).Path
+            } else {
+              Write-Host "::error::$jar signed by an untrusted cert ($($m.Groups[1].Value)); add it to $($env:TRUSTED_FINGERPRINTS_FILE) if the cert was rotated."
+              $fail = $true
+            }
+          }
+          if ($fail) { throw "Signature verification failed — aborting release." }
+          $jars -join "`n" | Set-Content -Path verified-jars.txt -Encoding ASCII
+
+      - name: Attach signed jars to the GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $jars = Get-Content verified-jars.txt | Where-Object { $_ }
+          gh release upload "${{ inputs.tag }}" @jars --clobber
+
+      - name: Publish to GitHub Packages (Maven)
+        shell: pwsh
+        working-directory: N4
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          # GitHub Packages' Maven registry rejects re-publishing an existing
+          # version (HTTP 409). Tolerate ONLY that case so a manual re-run for an
+          # existing tag completes green; any other failure (auth, network,
+          # signing) still fails the job.
+          $out = .\gradlew.bat publish --console=plain 2>&1 | Tee-Object -Variable pubOut
+          $code = $LASTEXITCODE
+          if ($code -ne 0) {
+            if ($pubOut -match '409' -or $pubOut -match 'Conflict') {
+              Write-Host "::notice::Publish hit 409 Conflict — version already in GitHub Packages; treating re-run as success."
+            } else {
+              exit $code
+            }
+          }
+
+      - name: Clean up working file
+        if: always()
+        shell: pwsh
+        run: Remove-Item verified-jars.txt -ErrorAction SilentlyContinue

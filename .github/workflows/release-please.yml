@@ -1,0 +1,52 @@
+name: Release Please
+
+# Version bumping + GitHub Releases. On every push to main, release-please reads
+# conventional-commit history and maintains a "Release PR" that bumps the version
+# in N4/build.gradle.kts (the `x-release-please-version` marker) and updates
+# CHANGELOG.md. Merging that PR cuts a tag + GitHub Release, which then triggers
+# the self-hosted build-release job to sign and attach the module jars.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: release-please
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+      version: ${{ steps.release.outputs.version }}
+    steps:
+      - uses: googleapis/release-please-action@v5
+        id: release
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      # Note: the Release PR's required checks are NOT forged here. ci.yml ("CI
+      # Gate") runs on every PR and pr-checks.yml ("PR Gate") passes on the
+      # release PR's conventional "chore: release" title, so both report real
+      # results and the PR can be (auto-)merged through branch protection.
+
+  build-release:
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    uses: ./.github/workflows/release-build.yml
+    with:
+      tag: ${{ needs.release-please.outputs.tag_name }}
+      version: ${{ needs.release-please.outputs.version }}
+    permissions:
+      contents: write
+      packages: write
+    secrets: inherit

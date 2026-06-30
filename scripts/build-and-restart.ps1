@@ -44,6 +44,15 @@ $N4Dir = Join-Path $ProjectRoot "N4"
 $LogFile = Join-Path $ProjectRoot "build-and-restart.log"
 $Parts = @("axCommunity-rt", "axCommunity-wb", "axCommunity-ux", "axCommunity-doc")
 
+# Resolve the active signing alias from gradle.properties.local (commented lines
+# are skipped). Falls back to the Niagara dev cert when none is set.
+$SigningAlias = "Niagara4Modules"
+$PropsFileForAlias = Join-Path $N4Dir "gradle.properties.local"
+if (Test-Path $PropsFileForAlias) {
+    $aliasMatch = Select-String -Path $PropsFileForAlias -Pattern '^\s*signing\.alias\s*=\s*(.+)$'
+    if ($aliasMatch) { $SigningAlias = $aliasMatch.Matches[0].Groups[1].Value.Trim() }
+}
+
 # ---------- Resolve Niagara home ----------
 if (-not $NiagaraHome) {
     $propsFile = Join-Path $N4Dir "gradle.properties.local"
@@ -118,10 +127,14 @@ if (-not $NoWorkbench -and -not (Test-Path $WbExe)) {
 
 $startTime = Get-Date
 Write-Host ""
-Write-Host "axCommunity Build & Restart (dev cert: Niagara4Modules)" -ForegroundColor Green
+Write-Host "axCommunity Build & Restart (signing alias: $SigningAlias)" -ForegroundColor Green
 Write-Host "  Project:      $ProjectRoot"
 Write-Host "  Niagara Home: $NiagaraHome"
 Write-Host "  Service:      $ServiceName"
+if ($SigningAlias -eq "S-Tier Building Automation llc") {
+    Write-Host "  Official signing via Windows-MY store (cert must be in Cert:\CurrentUser\My)." -ForegroundColor Cyan
+    Write-Host "  If the key is on a disconnected eToken, connect it + set a USER-level SAFENET_PIN." -ForegroundColor Cyan
+}
 
 # ---------- Step 1: Close Workbench ----------
 Write-Step "Step 1: Closing Workbench"
@@ -197,11 +210,5 @@ $elapsed = [math]::Round(((Get-Date) - $startTime).TotalSeconds)
 Write-Host ""
 Write-Host "=== Complete! (${elapsed}s) ===" -ForegroundColor Green
 Write-Host "axCommunity-rt/-wb/-ux/-doc deployed and Niagara restarted."
-$alias = 'Niagara4Modules'
-$pf = Join-Path $N4Dir 'gradle.properties.local'
-if (Test-Path $pf) {
-    $am = Select-String -Path $pf -Pattern '^\s*signing\.alias\s*=\s*(.+)$'
-    if ($am) { $alias = $am.Matches[0].Groups[1].Value.Trim() }
-}
-Write-Host "Signed with dev cert: $alias. If -wb types don't appear, trust that cert in the Workbench User Trust Store."
+Write-Host "Signed with: $SigningAlias. If -wb types don't appear, trust that cert in the Workbench User Trust Store."
 Stop-Transcript | Out-Null
