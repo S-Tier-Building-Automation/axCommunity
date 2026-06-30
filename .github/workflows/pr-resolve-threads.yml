@@ -1,0 +1,70 @@
+name: Resolve Outdated Review Threads
+
+# "Resolving comments": when a PR author pushes new commits, GitHub marks review
+# threads whose lines no longer exist as *outdated* but leaves them open, which
+# can block merge and clutter the conversation. This resolves threads that are
+# both outdated and still open, so addressed feedback clears itself.
+#
+# (Upgrade path: to have Claude actually address review feedback and push fixes,
+# add a claude.yml using anthropics/claude-code-action gated on an
+# ANTHROPIC_API_KEY secret. Left out here to avoid a workflow that errors with no
+# key configured.)
+
+on:
+  pull_request:
+    types: [synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: resolve-threads-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  resolve-outdated:
+    name: Resolve outdated threads
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Resolve outdated, unresolved review threads
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          # First 100 threads is plenty for this repo's PRs; if a PR ever exceeds
+          # that, the rest are simply left for manual resolution.
+          resp=$(gh api graphql -f query='
+            query($owner:String!,$repo:String!,$pr:Int!) {
+              repository(owner:$owner, name:$repo) {
+                pullRequest(number:$pr) {
+                  reviewThreads(first:100) {
+                    nodes { id isResolved isOutdated }
+                  }
+                }
+              }
+            }' -F owner="$OWNER" -F repo="$REPO" -F pr="$PR")
+
+          ids=$(echo "$resp" | jq -r '
+            .data.repository.pullRequest.reviewThreads.nodes[]
+            | select(.isResolved == false and .isOutdated == true) | .id')
+
+          if [ -z "$ids" ]; then
+            echo "No outdated, unresolved threads."
+            exit 0
+          fi
+
+          count=0
+          for id in $ids; do
+            gh api graphql -f query='
+              mutation($id:ID!) {
+                resolveReviewThread(input:{threadId:$id}) { thread { id } }
+              }' -F id="$id" >/dev/null
+            count=$((count + 1))
+            echo "Resolved outdated thread $id"
+          done
+          echo "Resolved $count outdated thread(s)."

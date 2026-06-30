@@ -71,6 +71,25 @@ For day-to-day use without installing the runner as a Windows **service**, use t
 tray app in [`tools/github-runner-tray/`](tools/github-runner-tray/) — it starts
 `run.cmd` in your user session and shows listening/job status in the notification area.
 
+## PR & release automation
+
+The full PR→release lifecycle runs on GitHub Actions:
+
+- **PRs** are gated by a conventional-commit title check (**PR Gate**) and the
+  build (**CI Gate**); outdated review threads auto-resolve, and PRs labelled
+  `automerge` (plus Dependabot patch/minor bumps) merge themselves once green.
+- **Releases** are cut by [release-please](https://github.com/googleapis/release-please):
+  merge PRs with conventional titles (`feat:`, `fix:`, `feat!:`), and it maintains
+  a Release PR that bumps the version and `CHANGELOG.md`. Merging that PR tags a
+  `vX.Y.Z` release; a self-hosted runner then builds, officially signs, verifies,
+  and attaches the four module jars and publishes them to GitHub Packages.
+
+The signed jars on each [GitHub Release](https://github.com/S-Tier-Building-Automation/axCommunity/releases)
+are verified against the trusted signer fingerprint in
+[`cert/trusted-signer-fingerprints.txt`](cert/trusted-signer-fingerprints.txt) before upload.
+See the **CI/CD & release automation** section of [`CLAUDE.md`](CLAUDE.md) for the
+full workflow map and one-time setup steps.
+
 ## Release history
 
 See [`N4/axCommunity-rt/src/relNotes/RelNotes.txt`](N4/axCommunity-rt/src/relNotes/RelNotes.txt)

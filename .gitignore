@@ -15,6 +15,13 @@ bin/
 # Niagara build/dist artifacts
 *.jar.bak
 
+# Code-signing profiles: the Tridium signing plugin rewrites them in place with a
+# concrete storepass on build, so they must never be committed. CI generates the
+# Windows-MY profile at runtime; local dev points signing.profile at a
+# machine-local copy.
+cert/safenet_signing_profile*.xml
+cert/*.windows-my
+
 # build-and-restart helper log
 build-and-restart.log
 

@@ -6,10 +6,11 @@ on:
     paths:
       - 'N4/**'
       - '.github/workflows/ci.yml'
+  # No paths filter on pull_request: "CI Gate" is a required status check, and a
+  # required check that never reports leaves auto-merge waiting forever on PRs
+  # that don't touch N4/ (e.g. Dependabot action bumps, docs). smoke-check is a
+  # fast hosted job and build-niagara stays skipped unless NIAGARA_BUILD_ENABLED.
   pull_request:
-    paths:
-      - 'N4/**'
-      - '.github/workflows/ci.yml'
   workflow_dispatch:
 
 permissions:

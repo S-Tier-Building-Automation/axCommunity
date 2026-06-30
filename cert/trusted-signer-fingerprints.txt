@@ -1,0 +1,23 @@
+# Trusted module-signing certificate SHA-256 fingerprints for axCommunity.
+#
+# .github/workflows/release-build.yml verifies that every signed module JAR is
+# signed by a certificate whose SHA-256 fingerprint is listed here BEFORE the
+# jars are attached to a GitHub Release or published to GitHub Packages. A jar
+# signed by any other cert — including one minted with an identical Common Name —
+# fails the release.
+#
+# Why a fingerprint and not the CN: a Common Name is not a unique identifier
+# (anyone can mint a cert with the same CN). The SHA-256 of the DER-encoded
+# certificate is the authoritative identity.
+#
+# ROTATING THE SIGNING CERT: add the new cert's SHA-256 fingerprint here BEFORE
+# the first release signed with it. Keep the old one until no supported release
+# still ships jars signed by it, then prune. Read a fingerprint with:
+#   keytool -printcert -jarfile <module>.jar     # the SHA256: line
+#   keytool -printcert -file <cert>.pem
+#
+# FORMAT: one fingerprint per line, colon-separated hex as keytool prints it.
+# Comparison is case- and colon-insensitive; comments (#) and blank lines ignored.
+
+# S-Tier Building Automation llc — Sectigo OV code-signing cert (valid to 2026-08-30).
+AF:79:F7:14:AF:FF:50:5B:0A:39:32:3D:37:0F:CE:99:76:6D:7E:D6:AC:3C:63:08:B7:2A:B2:C5:7A:8B:33:5D

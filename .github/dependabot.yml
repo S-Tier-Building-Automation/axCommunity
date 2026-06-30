@@ -1,0 +1,22 @@
+version: 2
+updates:
+  # Keep the GitHub Actions used by the workflows above current. This is the
+  # high-value ecosystem here — pinned action versions drift and accrue CVEs.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    labels: [dependencies]
+    commit-message:
+      prefix: ci
+
+  # Gradle dependencies for the N4 build. Most module deps resolve from the local
+  # Niagara install (not a public registry, so Dependabot can't see them); this
+  # mainly tracks the few mavenCentral/plugin-portal artifacts.
+  - package-ecosystem: gradle
+    directory: "/N4"
+    schedule:
+      interval: weekly
+    labels: [dependencies]
+    commit-message:
+      prefix: build
