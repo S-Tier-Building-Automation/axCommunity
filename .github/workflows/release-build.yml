@@ -217,15 +217,19 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           # GitHub Packages' Maven registry rejects re-publishing an existing
-          # version (HTTP 409). Tolerate ONLY that case so a manual re-run for an
-          # existing tag completes green; any other failure (auth, network,
-          # signing) still fails the job.
-          $pubOut = .\gradlew.bat publish --console=plain --stacktrace 2>&1
+          # version (HTTP 409, or 422 Unprocessable Entity). Use --continue so all
+          # four parts are attempted even if some already exist; then tolerate the
+          # run only when EVERY upload failure is a duplicate-version status —
+          # any other error (auth, network) still fails the job.
+          $pubOut = .\gradlew.bat publish --continue --console=plain --stacktrace 2>&1
           $code = $LASTEXITCODE
           $pubOut | ForEach-Object { Write-Host $_ }   # echo Gradle output to the log
           if ($code -ne 0) {
-            if (($pubOut -join "`n") -match '409|Conflict') {
-              Write-Host "::notice::Publish hit 409 Conflict — version already in GitHub Packages; treating re-run as success."
+            $text = $pubOut -join "`n"
+            $codes = [regex]::Matches($text, 'Received status code (\d+)') | ForEach-Object { $_.Groups[1].Value }
+            $nonDup = $codes | Where-Object { $_ -ne '409' -and $_ -ne '422' }
+            if (($codes.Count -gt 0) -and ($nonDup.Count -eq 0)) {
+              Write-Host "::notice::All publish targets already exist (status $((($codes | Select-Object -Unique) -join ', '))) — treating as success."
             } else {
               exit $code
             }
