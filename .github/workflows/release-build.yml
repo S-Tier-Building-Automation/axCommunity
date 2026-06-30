@@ -77,7 +77,7 @@ jobs:
           }
 
       - name: Checkout release tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ inputs.tag }}
           persist-credentials: false
