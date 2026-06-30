@@ -20,3 +20,9 @@ updates:
     labels: [dependencies]
     commit-message:
       prefix: build
+    ignore:
+      # The Tridium Niagara plugins require Gradle 7.6, so never propose a major
+      # bump of the Gradle wrapper or any gradle dependency (e.g. wrapper 7.6 -> 9.x
+      # breaks the build). Patch/minor updates are still allowed.
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
