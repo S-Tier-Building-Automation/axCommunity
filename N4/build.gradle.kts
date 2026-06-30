@@ -38,7 +38,7 @@ plugins {
 // Single source of truth for the module version. release-please rewrites the
 // literal on the line tagged `x-release-please-version` when a Release PR merges
 // (see release-please-config.json); it also feeds the Maven publication below.
-val moduleVersion = "22.2.2" // x-release-please-version
+val moduleVersion = "22.3.0" // x-release-please-version
 
 vendor {
   // "vendor" attribute shown in Niagara when viewing a module or dist.
