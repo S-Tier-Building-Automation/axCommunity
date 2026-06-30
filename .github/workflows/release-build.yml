@@ -230,6 +230,7 @@ jobs:
             $nonDup = $codes | Where-Object { $_ -ne '409' -and $_ -ne '422' }
             if (($codes.Count -gt 0) -and ($nonDup.Count -eq 0)) {
               Write-Host "::notice::All publish targets already exist (status $((($codes | Select-Object -Unique) -join ', '))) — treating as success."
+              exit 0   # else the step inherits gradle's non-zero $LASTEXITCODE
             } else {
               exit $code
             }
