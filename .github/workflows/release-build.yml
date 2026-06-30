@@ -220,10 +220,11 @@ jobs:
           # version (HTTP 409). Tolerate ONLY that case so a manual re-run for an
           # existing tag completes green; any other failure (auth, network,
           # signing) still fails the job.
-          $out = .\gradlew.bat publish --console=plain 2>&1 | Tee-Object -Variable pubOut
+          $pubOut = .\gradlew.bat publish --console=plain --stacktrace 2>&1
           $code = $LASTEXITCODE
+          $pubOut | ForEach-Object { Write-Host $_ }   # echo Gradle output to the log
           if ($code -ne 0) {
-            if ($pubOut -match '409' -or $pubOut -match 'Conflict') {
+            if (($pubOut -join "`n") -match '409|Conflict') {
               Write-Host "::notice::Publish hit 409 Conflict — version already in GitHub Packages; treating re-run as success."
             } else {
               exit $code
