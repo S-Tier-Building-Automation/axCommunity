@@ -132,12 +132,14 @@ jobs:
         env:
           EXPECTED: ${{ inputs.version }}
         run: |
-          $line = Select-String -Path N4/build.gradle.kts -Pattern 'x-release-please-version' | Select-Object -First 1
-          if (-not $line) { throw "No x-release-please-version marker in N4/build.gradle.kts" }
+          # Match the version-bearing line specifically (not any line mentioning
+          # the release-please marker — the surrounding comment may too).
+          $line = Select-String -Path N4/build.gradle.kts -Pattern 'moduleVersion\s*=\s*"[^"]+"' | Select-Object -First 1
+          if (-not $line) { throw "No 'moduleVersion = ...' line in N4/build.gradle.kts" }
           if ($line.Line -notmatch [regex]::Escape($env:EXPECTED)) {
             throw "N4/build.gradle.kts version does not match release version '$env:EXPECTED': $($line.Line.Trim())"
           }
-          Write-Host "Version marker OK: $($line.Line.Trim())"
+          Write-Host "Version OK: $($line.Line.Trim())"
 
       - name: Write N4/gradle.properties.local
         shell: pwsh
