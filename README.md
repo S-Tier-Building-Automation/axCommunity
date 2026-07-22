@@ -64,6 +64,11 @@ runner (see below).
 
 Install all four parts on a station or supervisor: `axCommunity-rt`, `-wb`, `-ux`, `-doc`.
 
+## Troubleshooting (dev machine)
+
+- **Workbench won't launch / platform "Connection refused" on a machine with two Niagara versions.** A global `NIAGARA_HOME`/`NIAGARA_USER_HOME` pinned to one version breaks the other (Workbench dies with an `AccessControlException` on `niagara.user.home`; the `Niagara` service's `niagarad` won't start). Don't set those env vars globally — the launchers self-locate. See the **Multi-version machine & platform troubleshooting** section of [`CLAUDE.md`](CLAUDE.md) for the exact symptoms and the per-service fix.
+- **`-wb` types don't appear after install.** The dev-cert (`axCommunityDev`) must be trusted: export it as PEM (`keytool -exportcert -rfc -alias axCommunityDev -file axCommunityDev.pem -keystore "%USERPROFILE%\.gradle\axCommunity\dev-signing.jks" -storepass changeit`) and import it into the Workbench **User Trust Store**, then restart Workbench. If it still fails, confirm the *deployed* jar is signed (`jarsigner -verify <niagara_home>\modules\axCommunity-rt.jar`) — a stale unsigned copy in `modules/` is the usual culprit.
+
 ## Known limitations (22.3.0)
 
 - **FireFoxxWeather** — palette entry is fixed, but the component still calls the

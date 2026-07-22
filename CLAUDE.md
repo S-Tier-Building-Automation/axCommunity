@@ -59,6 +59,25 @@ The module is split into four parts by Niagara **runtime profile**, each its own
 
 Install **all four** parts together on a station/supervisor. Build settings (`niagara_home` resolution, plugin management, project discovery) live in [`N4/settings.gradle`](N4/settings.gradle); the root [`N4/build.gradle`](N4/build.gradle) applies the toolchain (`gradle/niagara.gradle`), signing (`gradle/signing.gradle`), and publishing (`gradle/publish.gradle`) to each part; vendor, module version, and the minimum-Niagara `niagaraDepVersion` live in [`N4/vendor.gradle`](N4/vendor.gradle).
 
+## Multi-version machine & platform troubleshooting
+
+This module compiles against 4.10 but is usually tested on a box that also has a newer install (e.g. 4.15). A **global** `NIAGARA_HOME`/`NIAGARA_USER_HOME` (User or Machine env var) pinned to one version silently breaks the *other* version, two ways:
+
+- **Workbench won't launch.** The wrong-version `wb.exe` bootstraps `nre` against the pinned install's security policy and dies before any window appears (exit 249): `AccessControlException: access denied ("java.util.PropertyPermission" "niagara.user.home" "read")` in `com.tridium.nre.security.DefaultSecurityInitializerConfig` / `Bootstrap`.
+- **Platform daemon (`niagarad`) won't start.** The `Niagara` Windows service inherits the environment the Service Control Manager cached at boot, so even after you clear the env var the service still hands the stale `NIAGARA_HOME` to `niagarad`, which exits instantly — SCM reports a 30s connect timeout (event 7009) and nothing listens on platform ports 3011 (plain) / 5011 (TLS, `platformssl`).
+
+Fix on a multi-version machine: **do not set a global `NIAGARA_HOME`/`NIAGARA_USER_HOME`** — the launchers self-locate from their own path. Remove them from **both** User and Machine scope. For the platform daemon, either reboot (so SCM reloads the cleared env) or add a per-service override so it self-locates without a reboot — set `Environment` (REG_MULTI_SZ) on `HKLM\SYSTEM\CurrentControlSet\Services\Niagara` to `NIAGARA_HOME=<install>` + `niagara_home=<install>`, then restart the service. The build itself is unaffected: `gradle.properties.local` / `-Pniagara_home` set the home per-invocation, so builds still target 4.10 regardless of env vars.
+
+### Trusting the dev cert + verifying the deployed jars
+
+Self-signed dev-cert jars (alias `axCommunityDev`) only load once the cert is trusted, and Niagara's trust stores import **PEM**. Export it and add it to the Workbench **User Trust Store** (and a station's **System Trust Store** if installing there), then restart Workbench:
+
+```powershell
+keytool -exportcert -rfc -alias axCommunityDev -file axCommunityDev.pem -keystore "$env:USERPROFILE\.gradle\axCommunity\dev-signing.jks" -storepass changeit
+```
+
+If `-wb` types still don't resolve, confirm the *deployed* jars are actually signed — `jarsigner -verify <niagara_home>\modules\axCommunity-rt.jar` should print `jar verified`. A stale **unsigned** copy left in `modules/` is a common cause; redeploy the signed jars from `build/libs` (or re-run `build-and-restart.ps1`, which gates on `jarsigner -verify` before copying). The same signed jars load byte-for-byte on both 4.10 and 4.15.
+
 ## Component conventions
 
 Components are classic **Baja `BComponent`/`BPointExtension` subclasses using the manual slot pattern** — *not* the `@NiagaraType` annotation processor (the processor plugin is enabled but unused). When reading or writing a component, follow the existing idiom:
