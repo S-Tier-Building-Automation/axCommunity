@@ -1,0 +1,54 @@
+/*
+ * Copyright (c) 2014 Tridium Inc., All Rights Reserved
+ */
+allprojects {
+  apply plugin: 'idea'
+}
+
+subprojects {
+  idea {
+    module {
+      testSourceDirs += file('srcTest')
+    }
+  }
+}
+
+idea {
+  module {
+    project.rootDir.listFiles().findAll({ it.isDirectory() }).each {
+      if (!['gradle', 'rel', 'local'].contains(it.name)) {
+        excludeDirs += file(it)
+      }
+    }
+  }
+
+  project {
+    languageLevel = "1.8"
+
+    ipr {
+      withXml { provider ->
+        def pmm = provider.asNode().component.find { it.@name == 'ProjectModuleManager' }
+        pmm.modules.module.each {
+          // Don't add these modules to the project
+          //
+          if (it.@filepath =~ /lexicon|icons|themes/) {
+            it.parent().remove(it)
+            return
+          }
+          def matcher = it.@filepath =~ /.PROJECT_DIR.\\/(.*?)\\//
+          if (matcher) {
+            // put projects in group based on first directory name
+            it.@group = matcher.group(1)
+            return
+          }
+          // Otherwise put it in group with name of first non-backup directory
+          //
+          matcher = it.@filepath =~/(\.\.\\/)+(.*?)\//
+          if (matcher) {
+            it.@group = matcher.group(2)
+          }
+        }
+      }
+    }
+  }
+}

@@ -48,8 +48,8 @@ function Ensure-Config {
         } else {
             @{
                 runnerRoot = 'C:\actions-runner\axCommunity-niagara-build'
-                niagaraHome = 'C:\TAC\Niagara-4.15.3.28'
-                niagaraUserHome = "$env:USERPROFILE\Niagara4.15\TAC"
+                niagaraHome = 'C:\TAC\niagara-4.10.11.12'
+                niagaraUserHome = "$env:USERPROFILE\Niagara4.10\TAC"
                 autoStartRunner = $true
                 startWithWindows = $false
                 runnerName = 'GitHub Actions runner'

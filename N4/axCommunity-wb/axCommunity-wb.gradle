@@ -1,0 +1,38 @@
+/*
+ * axCommunity-wb — Workbench views, widgets, and Px graphics. Depends on -rt.
+ */
+
+description = "Open source AX Community module"
+
+ext {
+  name  = 'axCommunity'
+  group = 'Community'
+}
+
+niagaraModule {
+  moduleName      = "axCommunity"
+  preferredSymbol = "axc4"
+  runtimeProfile  = "wb"
+}
+
+// Dependency version == minimum required Niagara version stamped into
+// module.xml (see axCommunity-rt.gradle). "4.10" keeps the jar loadable on
+// 4.10 through 4.15+.
+dependencies {
+  compile "Tridium:baja:${niagaraDepVersion}"
+  compile "Tridium:control-rt:${niagaraDepVersion}"
+  compile "Tridium:gx-rt:${niagaraDepVersion}"
+  compile "Tridium:converters-rt:${niagaraDepVersion}"
+  compile "Tridium:bajaui-wb:${niagaraDepVersion}"
+  compile "Tridium:workbench-wb:${niagaraDepVersion}"
+  compile "Tridium:kitPx-wb:${niagaraDepVersion}"
+  compile project(':axCommunity-rt')
+}
+
+jar {
+  from('src') {
+    include 'org/axcommunity/niagara/graphics/*.png'
+    include 'org/axcommunity/niagara/graphics/*.jpg'
+    include 'org/axcommunity/niagara/graphics/*.gif'
+  }
+}

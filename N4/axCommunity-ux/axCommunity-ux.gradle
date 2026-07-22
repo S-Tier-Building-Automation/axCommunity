@@ -1,0 +1,34 @@
+/*
+ * axCommunity-ux — bajaux profile. Currently no JS/HBS sources; kept as a
+ * placeholder module part so the four-part install layout is preserved.
+ */
+
+description = "Open source AX Community module"
+
+ext {
+  name  = 'axCommunity'
+  group = 'Community'
+}
+
+niagaraModule {
+  moduleName      = "axCommunity"
+  preferredSymbol = "axc4"
+  runtimeProfile  = "ux"
+}
+
+// baja pinned to the minimum supported Niagara so every part uniformly
+// requires >= 4.10 (this part has no other dependencies).
+dependencies {
+  compile "Tridium:baja:${niagaraDepVersion}"
+}
+
+jar {
+  from('src') {
+    include 'rc/**/*.js'
+    include 'rc/**/*.css'
+    include 'rc/**/*.hbs'
+    include 'rc/**/*.jpg'
+    include 'rc/**/*.png'
+    include 'rc/**/*.gif'
+  }
+}

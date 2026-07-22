@@ -25,33 +25,46 @@ license declared by the upstream SourceForge project. See [`LICENSE`](LICENSE).
 
 | Path | Description |
 |------|-------------|
-| `N4/` | Active Niagara **4** build — Gradle multi-module (`axCommunity-rt`, `-wb`, `-ux`, `-doc`) with `gradlew` and Kotlin DSL build scripts. |
+| `N4/` | Active Niagara **4** build — Gradle multi-module (`axCommunity-rt`, `-wb`, `-ux`, `-doc`) with `gradlew` and Groovy build scripts (Gradle 4.10.3 toolchain). |
 
 Pre-N4 Niagara AX sources from the import live under [`archive/AX/`](archive/AX/) for history only; they are obsolete and not maintained.
 
 ## Status
 
-Active maintenance under S-Tier Building Automation targets **Niagara 4.15.3**.
-Current module version: **22.2.2** (vendor `Community`).
+Active maintenance under S-Tier Building Automation supports **Niagara 4.10 and
+newer** from a **single set of jars**. Current module version: **22.3.0** (vendor
+`Community`).
+
+Compatibility is achieved by compiling against the **oldest** supported Niagara
+(4.10.11.12): each `module.xml` stamps its Tridium dependencies as `>= 4.10`, so
+the same jars load on 4.10 through 4.15+.
 
 ## Build (local)
 
-Requires a licensed Niagara **4.15.x** install (tested on 4.15.3.28).
+Requires a licensed Niagara **4.10.x** install (compile against the oldest
+version you intend to support; tested on 4.10.11.12) and a full **JDK 8** —
+signing uses `jarsigner`, which a Niagara JRE does not bundle.
 
 ```powershell
 cd N4
 copy gradle.properties.example gradle.properties.local
-# Edit gradle.properties.local — set niagara_home to your install path
-.\gradlew.bat clean assemble
+# Edit gradle.properties.local — set niagara_home to your 4.10.x install path
+.\gradlew.bat clean --console=plain
+.\gradlew.bat assemble --console=plain
 ```
 
-Signed JARs are written under `N4/axCommunity-*/build/libs/`. With no SafeNet
-profile configured, signing uses the dev cert **Niagara4Modules** (must be trusted
-in your Niagara user home).
+> Run `clean` and `assemble` as separate invocations — the Gradle 4.10.x
+> toolchain can otherwise execute `clean` out of order and wipe the fresh jars.
+
+Signed JARs are written under `N4/axCommunity-*/build/libs/`. With no `signing.*`
+configured, the build signs with an auto-generated self-signed dev cert (alias
+**axCommunityDev**); trust it once in the Workbench **User Trust Store** so
+`-wb` types appear. Official release signing is configured on the self-hosted
+runner (see below).
 
 Install all four parts on a station or supervisor: `axCommunity-rt`, `-wb`, `-ux`, `-doc`.
 
-## Known limitations (22.2.2)
+## Known limitations (22.3.0)
 
 - **FireFoxxWeather** — palette entry is fixed, but the component still calls the
   defunct Yahoo Weather RSS API. It will not return live weather until replaced
@@ -93,5 +106,5 @@ full workflow map and one-time setup steps.
 ## Release history
 
 See [`N4/axCommunity-rt/src/relNotes/RelNotes.txt`](N4/axCommunity-rt/src/relNotes/RelNotes.txt)
-for the full component changelog. The **22.2.2** entry documents this N4 4.15.3
-maintenance release.
+for the full component changelog. The **22.3.0** entry documents the move to a
+single Niagara 4.10+ compatible artifact.

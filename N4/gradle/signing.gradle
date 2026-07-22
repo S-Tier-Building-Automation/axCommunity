@@ -1,0 +1,134 @@
+/*
+ * Niagara module signing via the JDK's jarsigner (standard JAR signing).
+ *
+ * Niagara 4 modules are ordinary signed jars: the platform verifies the signer
+ * certificate against its trust store and expects META-INF/<ALIAS>.SF/.RSA (e.g.
+ * NIAGARA4.SF/.RSA for the built-in dev cert). The 4.10 install ships the
+ * niagara-module-plugin (3.0.18) which builds the jar but does NOT sign it, and
+ * the old niagara-plugins:4.1.5 signing plugin's profile classes are absent from
+ * this install -- so we sign explicitly with jarsigner, which is version-neutral
+ * and produces jars that load on 4.10 through 4.15+.
+ *
+ * Modes:
+ *   - Official/release: set in gradle.properties.local (or -P):
+ *       signing.keystore   (path, or NONE for an OS keystore such as Windows-MY)
+ *       signing.alias      (cert alias / friendly name)
+ *       signing.storepass  (optional for Windows-MY)
+ *       signing.keypass    (optional; defaults to storepass)
+ *       signing.storetype  (optional; e.g. Windows-MY, PKCS12, JKS)
+ *   - Dev (default, nothing set): a self-signed keystore is generated once at
+ *       <gradle user home>/axCommunity/dev-signing.jks (alias "axCommunityDev")
+ *       and reused. Trust it once in the Workbench User Trust Store so -wb types
+ *       appear.
+ *
+ * jarsigner/keytool are resolved from (in order): -Psigning.jdkHome, JAVA_HOME,
+ * java.home (and its parent, for a jre-in-jdk layout), then an Eclipse Adoptium
+ * install. Point JAVA_HOME at a full JDK 8 (not a JRE) so jarsigner is present.
+ */
+
+import org.gradle.internal.os.OperatingSystem
+
+ext.resolveJdkTool = { String tool ->
+  def exe = OperatingSystem.current().isWindows() ? "${tool}.exe" : tool
+  def candidates = []
+  def explicit = project.findProperty('signing.jdkHome')
+  if (explicit) { candidates << explicit.toString() }
+  if (System.getenv('JAVA_HOME')) { candidates << System.getenv('JAVA_HOME') }
+  def javaHome = System.getProperty('java.home')
+  if (javaHome) {
+    candidates << javaHome
+    candidates << new File(javaHome).parent
+  }
+  for (base in candidates) {
+    if (!base) { continue }
+    def f = new File("${base}/bin/${exe}")
+    if (f.exists()) { return f.absolutePath }
+  }
+  def adoptium = new File('C:/Program Files/Eclipse Adoptium')
+  if (adoptium.isDirectory()) {
+    def hit = adoptium.listFiles()?.sort { it.name }?.reverse()?.findResult { d ->
+      def f = new File(d, "bin/${exe}"); f.exists() ? f.absolutePath : null
+    }
+    if (hit) { return hit }
+  }
+  return null
+}
+
+// ---- Resolve signing configuration (official vs dev) -------------------------
+def configuredKeystore = project.findProperty('signing.keystore')?.toString()
+ext.signIsDev = (configuredKeystore == null)
+
+ext.signKeystore  = null
+ext.signAlias     = null
+ext.signStorePass = null
+ext.signKeyPass   = null
+ext.signStoreType = null
+
+if (!signIsDev) {
+  signKeystore  = configuredKeystore
+  signAlias     = project.findProperty('signing.alias')?.toString() ?: 'axCommunity'
+  signStorePass = project.findProperty('signing.storepass')?.toString()
+  signKeyPass   = project.findProperty('signing.keypass')?.toString() ?: signStorePass
+  signStoreType = project.findProperty('signing.storetype')?.toString()
+} else {
+  def devDir = new File(gradle.gradleUserHomeDir, 'axCommunity')
+  signKeystore  = new File(devDir, 'dev-signing.jks').absolutePath
+  signAlias     = 'axCommunityDev'
+  signStorePass = 'changeit'
+  signKeyPass   = 'changeit'
+  signStoreType = 'JKS'
+}
+
+// ---- Generate the dev cert once (dev mode only) ------------------------------
+task ensureSigningCert {
+  onlyIf { signIsDev }
+  doLast {
+    def ks = new File(signKeystore)
+    if (ks.exists()) { return }
+    ks.parentFile.mkdirs()
+    def keytool = resolveJdkTool('keytool')
+    if (!keytool) {
+      throw new GradleException("keytool not found. Point JAVA_HOME (or -Psigning.jdkHome) at a JDK 8.")
+    }
+    logger.lifecycle("Generating self-signed dev signing cert (alias '${signAlias}') at ${signKeystore}")
+    exec {
+      commandLine keytool, '-genkeypair',
+        '-alias', signAlias,
+        '-keyalg', 'RSA', '-keysize', '2048', '-validity', '3650',
+        '-dname', 'CN=axCommunity Dev Signing, O=Community, C=US',
+        '-keystore', signKeystore, '-storepass', signStorePass, '-keypass', signKeyPass,
+        '-storetype', signStoreType
+    }
+  }
+}
+
+// ---- Sign the module jar in place --------------------------------------------
+task signModule(dependsOn: [tasks.jar, tasks.ensureSigningCert]) {
+  inputs.file { tasks.jar.archivePath }
+  doLast {
+    def jarsigner = resolveJdkTool('jarsigner')
+    if (!jarsigner) {
+      throw new GradleException(
+        "jarsigner not found. Point JAVA_HOME at a full JDK 8 (a JRE has no " +
+        "jarsigner), or set -Psigning.jdkHome=<jdk>. Niagara JREs do not bundle jarsigner.")
+    }
+    def jarFile = tasks.jar.archivePath
+    def args = [jarsigner]
+    args += ['-keystore', signKeystore]
+    if (signStoreType) { args += ['-storetype', signStoreType] }
+    if (signStorePass != null && signStorePass.length() > 0) { args += ['-storepass', signStorePass] }
+    if (signKeyPass   != null && signKeyPass.length()   > 0) { args += ['-keypass',   signKeyPass] }
+    args += ['-sigalg', 'SHA256withRSA', '-digestalg', 'SHA-256']
+    // Timestamp the signature (recommended for release/official signing so jars
+    // stay valid past cert expiry). Set signing.tsa=<url> to enable.
+    def tsa = project.findProperty('signing.tsa')?.toString()
+    if (tsa) { args += ['-tsa', tsa] }
+    args += [jarFile.absolutePath, signAlias]
+    logger.lifecycle("Signing ${jarFile.name} with alias '${signAlias}'" + (signIsDev ? ' (dev cert)' : ''))
+    exec { commandLine args }
+  }
+}
+
+// Make the standard lifecycle produce SIGNED jars.
+tasks.assemble.dependsOn tasks.signModule
+tasks.matching { it.name == 'build' }.all { it.dependsOn tasks.signModule }

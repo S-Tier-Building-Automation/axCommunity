@@ -1,0 +1,96 @@
+/*
+ * axCommunity — Niagara 4 build settings (4.10+ toolchain).
+ *
+ * Uses the discrete 4.10 module toolchain that ships in the install
+ * (niagara-module-plugin 3.0.18, applied by class from gradle/niagara.gradle's
+ * buildscript classpath; Gradle 4.10.3 wrapper) so the module compiles against
+ * Niagara 4.10.x. The minimum Niagara version stamped into each module.xml comes
+ * from niagaraDepVersion (vendor.gradle, "4.10"), and compiling against the
+ * oldest supported install keeps the jars forward-compatible (load on 4.10
+ * through 4.15+).
+ *
+ * niagara_home is resolved, in order, from:
+ *   -Pniagara_home=...          (Gradle project property)
+ *   -Dniagara_home=...          (JVM system property)
+ *   gradle.properties.local     (machine-local, gitignored)
+ *   NIAGARA_HOME / niagara_home (environment variables)
+ * gradle.properties.local intentionally beats the NIAGARA_HOME env var, because
+ * a machine may have NIAGARA_HOME pointed at a newer install (e.g. 4.15) while
+ * this build must target the oldest supported one (4.10.x). Point it at your
+ * oldest supported install (e.g. C:/TAC/niagara-4.10.11.12).
+ */
+
+import groovy.io.FileVisitResult
+import groovy.io.FileType
+
+pluginManagement {
+  // Load machine-local props (gitignored) so niagara_home can live there
+  // without being committed. Mirrors the previous Kotlin DSL behaviour.
+  def localProps = new Properties()
+  def localFile = new File(rootDir, 'gradle.properties.local')
+  if (localFile.exists()) { localFile.withInputStream { localProps.load(it) } }
+
+  def niagaraHome = settings.startParameter.projectProperties['niagara_home'] ?:
+                    System.getProperty('niagara_home') ?:
+                    localProps.getProperty('niagara_home') ?:
+                    System.getenv('NIAGARA_HOME') ?:
+                    System.getenv('niagara_home')
+
+  if (!niagaraHome) {
+    throw new GradleException(
+      "niagara_home is not set. Add 'niagara_home=C:/TAC/niagara-4.10.11.12' to " +
+      "N4/gradle.properties.local, pass -Pniagara_home=..., or set the NIAGARA_HOME " +
+      "environment variable. Build against your OLDEST supported Niagara so the jars " +
+      "stay forward-compatible.")
+  }
+
+  // Expose to build scripts (niagara.gradle reads rootProject/gradle 'niagara_home').
+  gradle.ext.niagara_home = niagaraHome.toString().replace('\\', '/')
+
+  // Niagara plugins are applied by class from gradle/niagara.gradle's buildscript
+  // classpath (matching the install template), so no com.tridium plugin ids are
+  // resolved here. Keep the install's m2 repo available for any plugins {} usage.
+  repositories {
+    maven { url "${gradle.ext.niagara_home}/etc/m2/repository" }
+    gradlePluginPortal()
+  }
+}
+
+def discoveredProjects = [:] as Map<String, File>
+
+ext {
+  // Search these roots for module-part sub-projects (a dir with a
+  // "<dirName>.gradle" build script). '.' == the N4 directory.
+  niagaraRoots = ['.']
+  // Directories that never contain module-part projects.
+  excludeDirs = ['.hg', '.git', 'build', 'out', 'src', 'srcTest', 'gradle',
+                 'archive', 'scripts', 'tools', '.github', 'cert']
+}
+
+// Discover module parts by "<dirName>.gradle" convention.
+niagaraRoots.collect({ file(it) }).findAll({ it.exists() }).each { File projectRoot ->
+  projectRoot.traverse(
+    type: FileType.DIRECTORIES,
+    preRoot: true,
+    preDir: { File projectDir ->
+      def projectName = projectDir.name
+      if (excludeDirs.contains(projectName)) {
+        return FileVisitResult.SKIP_SUBTREE
+      }
+      File buildScript = new File(projectDir, "${projectName}.gradle")
+      if (buildScript.exists()) {
+        discoveredProjects[projectName] = projectDir
+        include projectName
+        return FileVisitResult.SKIP_SUBTREE
+      }
+    }
+  )
+}
+
+rootProject.name = 'AxCommunity'
+rootProject.children.each { project ->
+  project.projectDir = discoveredProjects[project.name]
+  project.buildFileName = "${project.name}.gradle"
+  assert project.projectDir.isDirectory()
+  assert project.buildFile.isFile()
+}

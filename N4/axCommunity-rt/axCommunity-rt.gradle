@@ -1,0 +1,65 @@
+/*
+ * axCommunity-rt — runtime module part (all ~104 component classes).
+ *
+ * The "Tridium:<mod>:<ver>" dependency version is the MINIMUM required Niagara
+ * version the module plugin stamps into module.xml (verified: the coordinate
+ * version drives the stamp, e.g. "4.10" -> vendorVersion="4.10"). It is fed from
+ * niagaraDepVersion (N4/vendor.gradle) so all parts stay consistent. Compile
+ * against the oldest supported Niagara (4.10.x) install so the code also links
+ * against 4.10 APIs; the resulting jars load on 4.10 through 4.15+.
+ */
+
+description = "Open source AX Community module"
+
+ext {
+  name  = 'axCommunity'
+  group = 'Community'
+}
+
+niagaraModule {
+  moduleName      = "axCommunity"
+  preferredSymbol = "axc4"
+  runtimeProfile  = "rt"
+
+  modulePart { name = "axCommunity-wb";  runtimeProfile = "wb" }
+  modulePart { name = "axCommunity-doc"; runtimeProfile = "doc" }
+  modulePart { name = "axCommunity-ux";  runtimeProfile = "ux" }
+}
+
+repositories {
+  mavenCentral()
+  mavenLocal()
+  flatDir { dirs 'libs' }
+}
+
+// Derived from the rt sources' imports. kitControl-rt/gx-rt cover the internal
+// com.tridium.kitControl.* / graphics usage; bql-rt covers com.tridium.bql.util
+// (BTrendDynamicAnalyzer); platform-rt + baja/nre cover com.tridium.platform.* /
+// com.tridium.sys.* (BSysInfo).
+//
+// The dependency version is the MINIMUM required Niagara version stamped into
+// module.xml. "4.10" == "requires Niagara >= 4.10", which is satisfied on 4.10
+// through 4.15+, giving the single forward-compatible artifact this project ships.
+dependencies {
+  compile "Tridium:nre:${niagaraDepVersion}"
+  compile "Tridium:baja:${niagaraDepVersion}"
+  compile "Tridium:control-rt:${niagaraDepVersion}"
+  compile "Tridium:gx-rt:${niagaraDepVersion}"
+  compile "Tridium:bql-rt:${niagaraDepVersion}"
+  compile "Tridium:platform-rt:${niagaraDepVersion}"
+  compile "Tridium:kitControl-rt:${niagaraDepVersion}"
+  compile "Tridium:alarm-rt:${niagaraDepVersion}"
+  compile "Tridium:driver-rt:${niagaraDepVersion}"
+  compile "Tridium:file-rt:${niagaraDepVersion}"
+  compile "Tridium:converters-rt:${niagaraDepVersion}"
+}
+
+// Package non-Java resources that live alongside the sources (relNotes, icons,
+// bog fragments, Px graphics) into the module jar.
+jar {
+  from("src") {
+    include 'relNotes/**'
+    include 'org/axcommunity/niagara/graphics/**'
+    include 'org/axcommunity/niagara/bogs/**'
+  }
+}

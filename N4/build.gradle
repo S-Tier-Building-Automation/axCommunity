@@ -1,0 +1,44 @@
+/*
+ * axCommunity — Niagara 4 root build (4.10+ toolchain).
+ *
+ * Models the Niagara 4.10 module-development template shipped in
+ * <niagara_home>/etc/gradle: the Tridium gradle plugins are applied BY CLASS
+ * from a buildscript classpath (see gradle/niagara.gradle) rather than through
+ * the plugins {} + niagara-plugins aggregator, because 4.10.11.12 ships the
+ * discrete plugins (niagara-module-plugin 3.0.18, niagara-signing-plugin 1.0.10,
+ * niagara-rjs-plugin 2.0.4) and the old aggregator's signing profile classes
+ * are absent from this install.
+ *
+ * Compiling against 4.10.x stamps each module.xml dependency with the installed
+ * (4.10) vendorVersion, keeping the jars forward-compatible (load on 4.10 -> 4.15+).
+ */
+
+def getGradleProperty(String propName) {
+  if (gradle.hasProperty(propName)) {
+    gradle.getProperty(propName)
+  } else {
+    System.getProperty(propName) ?: System.getenv(propName)
+  }
+}
+
+ext.niagara_home      = getGradleProperty('niagara_home')
+ext.niagara_dev_home  = getGradleProperty('niagara_dev_home')
+ext.niagara_user_home = getGradleProperty('niagara_user_home')
+
+// Apply vendor/version to every project, and the Niagara module toolchain +
+// doc packaging to the module-part sub-projects only (the root aggregator has
+// no sources / module-include.xml and must not get the module plugin).
+gradle.beforeProject { p ->
+  configure(p) {
+    def vendorSettings = file("${rootDir}/vendor.gradle")
+    if (vendorSettings.exists()) {
+      apply from: vendorSettings
+    }
+    if (p != rootProject) {
+      apply from: "${rootDir}/gradle/niagara.gradle"
+      apply from: "${rootDir}/gradle/docmodule.gradle"
+      apply from: "${rootDir}/gradle/signing.gradle"
+      apply from: "${rootDir}/gradle/publish.gradle"
+    }
+  }
+}

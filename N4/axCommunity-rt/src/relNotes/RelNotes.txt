@@ -327,5 +327,14 @@ V22.02.04 June 19, 2026
 - NOTE FireFoxxWeather still uses the defunct Yahoo Weather RSS API; component remains for compatibility but does not fetch live data
 - NOTE PxGraphics palette folder references external johnGraphics module for HVAC graphics; install johnGraphics separately or graphics will be missing
 
+V22.03.00
+- CHANGED supported Niagara range to 4.10 and up from a SINGLE set of jars. Compiling against the oldest supported install (4.10.11.12) stamps each module.xml dependency as ">= 4.10", so the same jars load on 4.10 through 4.15+
+- MODIFIED Gradle build back to the discrete 4.10 toolchain (niagara-module-plugin 3.0.18, applied by class; Gradle 4.10.3 wrapper; Groovy build scripts) from the 4.15-only Tridium 7.6.x Kotlin DSL build
+- MODIFIED module signing to use the JDK jarsigner (produces standard META-INF/<ALIAS>.SF/.RSA that Niagara verifies): self-signed dev cert "axCommunityDev" by default, official Windows-MY signing on the release runner. Requires a full JDK 8 (a Niagara JRE has no jarsigner)
+- MODIFIED module version to a single source of truth in N4/vendor.gradle (release-please marker); jars install unversioned (axCommunity-rt.jar)
+- FIXED BSysInfo: replaced Nre.getNiagaraHome() (added after 4.10) with the version-stable "niagara.home" system property
+- NOTE FireFoxxWeather still uses the defunct Yahoo Weather RSS API; component remains for compatibility but does not fetch live data
+- NOTE PxGraphics palette folder references external johnGraphics module for HVAC graphics; install johnGraphics separately or graphics will be missing
+
 Unreleased
 - ADDED BqlTopNAvg (BQL folder): executes a BQL query on an editable Execute Period (default 15 min) and reports the average of the N highest values returned (topAvg), plus count/avg/min/max/sum. Value read from the column named by valueColumn (default "value"), falling back to the first column. NaN/invalid-status values omitted; fallback used when no valid values. Query runs off the engine thread. Built on the BBqlNumericRecap idiom.

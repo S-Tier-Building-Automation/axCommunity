@@ -2,7 +2,7 @@ name: Release Please
 
 # Version bumping + GitHub Releases. On every push to main, release-please reads
 # conventional-commit history and maintains a "Release PR" that bumps the version
-# in N4/build.gradle.kts (the `x-release-please-version` marker) and updates
+# in N4/vendor.gradle (the `x-release-please-version` marker) and updates
 # CHANGELOG.md. Merging that PR cuts a tag + GitHub Release, which then triggers
 # the self-hosted build-release job to sign and attach the module jars.
 

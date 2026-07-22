@@ -277,7 +277,10 @@ public class BSysInfo extends BComponent
 			getFreeHeap().setValue(freeMem);
 			getMaxHeap().setValue(maxMem);
 			
-			try{getNiagaraHome().setValue(Nre.getNiagaraHome().toString());}
+			// Nre.getNiagaraHome() was added after 4.10; the "niagara.home" system
+			// property is stable across 4.10 through 4.15+ and keeps the jars
+			// forward-compatible.
+			try{getNiagaraHome().setValue(System.getProperty("niagara.home", ""));}
 			catch (Exception e){getNiagaraHome().setValue("");}
 			
 			try{getNiagaraUserHome().setValue(Sys.getNiagaraUserHome().toString());}

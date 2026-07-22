@@ -25,13 +25,12 @@ jobs:
   # Hosted structural smoke check.
   #
   # A genuine `./gradlew assemble` is NOT possible on a stock GitHub-hosted
-  # runner: the Tridium Gradle plugins (com.tridium.niagara, niagara-module,
-  # niagara-home-repositories, ...) resolve from `niagara_home/etc/m2/repository`
-  # and every module dependency resolves from `niagara_home/!modules` as a
-  # flat-file Maven repo. settings.gradle.kts THROWS during settings evaluation
-  # when `niagara_home` is unset, before any task can run. A Niagara install is
-  # not redistributable, so this job only validates the wrapper + build layout.
-  # The real compile/sign happens in build-niagara (self-hosted) below.
+  # runner: the Tridium Gradle plugins (niagara-module-plugin, etc.) and every
+  # module dependency resolve from the local Niagara install (etc/m2/repository,
+  # bin/ext, modules). settings.gradle THROWS during settings evaluation when
+  # `niagara_home` is unset, before any task can run. A Niagara install is not
+  # redistributable, so this job only validates the wrapper + build layout. The
+  # real compile/sign happens in build-niagara (self-hosted) below.
   # ---------------------------------------------------------------------------
   smoke-check:
     name: Build Layout Smoke Check
@@ -50,12 +49,15 @@ jobs:
           fail=0
           echo "== Required build files =="
           for f in \
-            N4/settings.gradle.kts \
-            N4/build.gradle.kts \
-            N4/axCommunity-rt/axCommunity-rt.gradle.kts \
-            N4/axCommunity-wb/axCommunity-wb.gradle.kts \
-            N4/axCommunity-ux/axCommunity-ux.gradle.kts \
-            N4/axCommunity-doc/axCommunity-doc.gradle.kts \
+            N4/settings.gradle \
+            N4/build.gradle \
+            N4/vendor.gradle \
+            N4/gradle/niagara.gradle \
+            N4/gradle/signing.gradle \
+            N4/axCommunity-rt/axCommunity-rt.gradle \
+            N4/axCommunity-wb/axCommunity-wb.gradle \
+            N4/axCommunity-ux/axCommunity-ux.gradle \
+            N4/axCommunity-doc/axCommunity-doc.gradle \
             N4/gradlew \
             N4/gradle/wrapper/gradle-wrapper.jar
           do
@@ -67,16 +69,19 @@ jobs:
       - name: Niagara compile gate status
         run: |
           echo "::notice::axCommunity Java is NOT compiled here — a real compile+sign" \
-               "gate runs on a self-hosted runner with Niagara 4.15.3 installed" \
-               "(build-niagara job, enable via the NIAGARA_BUILD_ENABLED repo variable)."
+               "gate runs on a self-hosted runner with the OLDEST supported Niagara" \
+               "(4.10.x) installed so jars stay forward-compatible (build-niagara job," \
+               "enable via the NIAGARA_BUILD_ENABLED repo variable)."
 
   # ---------------------------------------------------------------------------
   # Real compile + sign on a self-hosted Windows runner with Niagara installed.
   #
   # DORMANT until you opt in: set repo variable NIAGARA_BUILD_ENABLED=true and
   # register a self-hosted runner labelled `niagara-build` to this repo, with
-  # repo variables NIAGARA_HOME (and optionally NIAGARA_USER_HOME) pointing at a
-  # Niagara 4.15.x install whose dev signing cert ("Niagara4Modules") is trusted.
+  # repo variable NIAGARA_HOME (and optionally NIAGARA_USER_HOME) pointing at the
+  # OLDEST supported Niagara install (4.10.x) — compiling there keeps the jars
+  # forward-compatible (load on 4.10 through 4.15+). The runner also needs a full
+  # JDK 8 (with jarsigner) on JAVA_HOME; a Niagara JRE alone has no jarsigner.
   # Until then this job is skipped (so it never queues forever waiting on a
   # runner that doesn't exist).
   # ---------------------------------------------------------------------------
@@ -112,7 +117,20 @@ jobs:
           $jre = Join-Path $env:NIAGARA_HOME "jre\bin\java.exe"
           if (-not (Test-Path $jre)) { throw "Expected Niagara JRE at $jre" }
           "NIAGARA_HOME=$($env:NIAGARA_HOME)" >> $env:GITHUB_ENV
-          "JAVA_HOME=$($env:NIAGARA_HOME)\jre" >> $env:GITHUB_ENV
+          # Signing needs jarsigner, which a Niagara JRE does NOT bundle. Prefer a
+          # full JDK 8 for JAVA_HOME (it provides javac AND jarsigner). Order:
+          # existing JAVA_HOME if it has jarsigner, then the NIAGARA_JDK_HOME repo
+          # var, else fall back to the Niagara JRE (compiles, but signing.gradle
+          # must then locate jarsigner via -Psigning.jdkHome).
+          $jdk = $null
+          foreach ($cand in @($env:JAVA_HOME, '${{ vars.NIAGARA_JDK_HOME }}')) {
+            if (-not [string]::IsNullOrWhiteSpace($cand) -and (Test-Path (Join-Path $cand 'bin\jarsigner.exe'))) { $jdk = $cand; break }
+          }
+          if ($jdk) { "JAVA_HOME=$jdk" >> $env:GITHUB_ENV }
+          else {
+            Write-Host "::warning::No JDK with jarsigner found; using Niagara JRE for compile. Set the NIAGARA_JDK_HOME repo var to a JDK 8 so signing works."
+            "JAVA_HOME=$($env:NIAGARA_HOME)\jre" >> $env:GITHUB_ENV
+          }
           if (-not [string]::IsNullOrWhiteSpace($env:NIAGARA_USER_HOME)) {
             "NIAGARA_USER_HOME=$($env:NIAGARA_USER_HOME)" >> $env:GITHUB_ENV
           }
@@ -124,16 +142,39 @@ jobs:
           if (-not [string]::IsNullOrWhiteSpace($env:NIAGARA_USER_HOME)) {
             $lines += "niagara_user_home=$($env:NIAGARA_USER_HOME -replace '\\','/')"
           }
-          # Signing falls back to the Niagara default dev cert (Niagara4Modules)
-          # because build.gradle.kts sets allowDefaultProfile when signing.profile
-          # is absent. Override here only for production SafeNet signing.
+          # With no signing.* set, gradle/signing.gradle signs with an
+          # auto-generated self-signed dev cert (alias axCommunityDev) via
+          # jarsigner. Official signing is handled by release-build.yml.
           Set-Content -Path N4/gradle.properties.local -Value $lines -Encoding ASCII
           Get-Content N4/gradle.properties.local
 
       - name: Assemble + sign module parts
         shell: pwsh
         working-directory: N4
-        run: .\gradlew.bat clean assemble --no-daemon --console=plain
+        # clean and assemble as separate invocations: with the Gradle 4.10.x
+        # toolchain a combined `clean assemble` can run clean out of order.
+        run: |
+          .\gradlew.bat clean --no-daemon --console=plain
+          .\gradlew.bat assemble --no-daemon --console=plain
+
+      - name: Verify jar signatures
+        shell: pwsh
+        working-directory: N4
+        # Fail fast if any part came out unsigned / mis-signed (mirrors the local
+        # dev-loop gate in scripts/build-and-restart.ps1). release-build.yml adds
+        # the stricter trusted-fingerprint check for official releases.
+        run: |
+          $jarsigner = Join-Path $env:JAVA_HOME 'bin\jarsigner.exe'
+          if (-not (Test-Path $jarsigner)) { throw "jarsigner not found under JAVA_HOME ($env:JAVA_HOME); a full JDK 8 is required." }
+          $fail = $false
+          foreach ($p in 'rt','wb','ux','doc') {
+            $jar = "axCommunity-$p/build/libs/axCommunity-$p.jar"
+            if (-not (Test-Path $jar)) { Write-Host "::error::missing $jar"; $fail = $true; continue }
+            $out = & $jarsigner -verify $jar 2>&1 | Out-String
+            if ($out -match 'jar verified') { Write-Host "OK  $jar" }
+            else { Write-Host "::error::$jar is not signed/verified"; $fail = $true }
+          }
+          if ($fail) { throw "Signature verification failed." }
 
       - name: Upload signed module jars
         if: always()

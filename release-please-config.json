@@ -10,7 +10,7 @@
       "extra-files": [
         {
           "type": "generic",
-          "path": "N4/build.gradle.kts"
+          "path": "N4/vendor.gradle"
         }
       ]
     }

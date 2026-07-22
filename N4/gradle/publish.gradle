@@ -1,0 +1,35 @@
+/*
+ * Publish each SIGNED module part to this repo's GitHub Packages Maven registry
+ * (in addition to attaching jars to the GitHub Release). groupId/artifactId/
+ * version match the pre-4.10 build so consumers see no coordinate change.
+ *
+ * The GitHubPackages credentials come from the GITHUB_ACTOR/GITHUB_TOKEN env
+ * (set by the release-build CI job). Locally these are unset and you simply
+ * don't invoke `publish` — it does not affect `assemble`.
+ *
+ * maven-publish is applied by gradle/niagara.gradle; signModule (gradle/
+ * signing.gradle) signs build/libs/<part>.jar in place, so publish must run
+ * after it to upload the signed artifact.
+ */
+publishing {
+  publications {
+    gpr(MavenPublication) {
+      groupId    = 'org.axcommunity'
+      artifactId = project.name
+      version    = project.version
+      artifact tasks.jar
+    }
+  }
+  repositories {
+    maven {
+      name = 'GitHubPackages'
+      url  = uri('https://maven.pkg.github.com/S-Tier-Building-Automation/axCommunity')
+      credentials {
+        username = System.getenv('GITHUB_ACTOR')
+        password = System.getenv('GITHUB_TOKEN')
+      }
+    }
+  }
+}
+
+tasks.withType(AbstractPublishToMaven).all { dependsOn tasks.signModule }

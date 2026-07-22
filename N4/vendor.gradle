@@ -1,0 +1,25 @@
+/*
+ * Vendor / version settings applied to every module part (see build.gradle's
+ * gradle.beforeProject hook).
+ *
+ * vendorVersion is the module's own version ("22.x" S-Tier maintenance line),
+ * NOT the Niagara OS version. The Niagara dependency versions stamped into
+ * each module.xml come from the install you compile against (niagara_home) —
+ * build against the oldest supported Niagara (4.10.x) to stay forward-compatible.
+ */
+
+group           = 'Community'
+
+// Single source of truth for the module version. release-please rewrites the
+// version literal on the marked line below when a Release PR merges
+// (see release-please-config.json -> extra-files: N4/vendor.gradle).
+version         = '22.3.0' // x-release-please-version
+
+ext.description = "Open source AX Community module"
+ext.copyright   = 'Copyright \u00A9 2000-2026 AxCommunity Project. All rights reserved.'
+
+// Minimum supported Niagara version. Used as the "Tridium:<mod>:<ver>" dependency
+// coordinate, which the module plugin stamps into each module.xml as the minimum
+// required dependency vendorVersion. "4.10" == the jars load on 4.10 through 4.15+.
+// Bump this only if a component starts requiring a newer Niagara API.
+ext.niagaraDepVersion = '4.10'

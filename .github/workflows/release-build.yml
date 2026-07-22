@@ -1,18 +1,23 @@
 name: Build, Sign & Release Niagara Modules
 
 # Builds and officially-signs the four axCommunity module parts on a self-hosted
-# Windows runner (Niagara 4.15.x installed; the "S-Tier Building Automation llc"
-# Sectigo cert in the Windows-MY store), verifies each jar's signer against the
-# trusted-fingerprint allowlist, attaches them to the GitHub Release, and
-# publishes them to this repo's GitHub Packages Maven registry.
+# Windows runner, verifies each jar's signer against the trusted-fingerprint
+# allowlist, attaches them to the GitHub Release, and publishes them to this
+# repo's GitHub Packages Maven registry.
+#
+# COMPATIBILITY: the runner must compile against the OLDEST supported Niagara
+# (4.10.x) so the module.xml dependency stamps stay low and the jars load on
+# 4.10 through 4.15+. Signing uses the JDK's jarsigner against the
+# "S-Tier Building Automation llc" Sectigo cert in the Windows-MY store.
 #
 # Called by release-please.yml when a Release is created; also runnable manually
 # (workflow_dispatch) to (re)build assets for an existing release tag.
 #
-# Runner requirements: a self-hosted runner labelled `niagara-build` with the
-# Niagara SDK and the signing cert available. Optional repo variables override
-# the defaults: NIAGARA_HOME, NIAGARA_USER_HOME, NIAGARA_SIGNING_PROFILE,
-# NIAGARA_SIGNING_ALIAS. Optional secret SAFENET_PIN if the key is token-backed.
+# Runner requirements: a self-hosted runner labelled `niagara-build` with a
+# Niagara 4.10.x install, a full JDK 8 (with jarsigner), and the signing cert
+# available. Optional repo variables override the defaults: NIAGARA_HOME,
+# NIAGARA_USER_HOME, NIAGARA_JDK_HOME, NIAGARA_SIGNING_ALIAS, NIAGARA_SIGNING_TSA.
+# Optional secret SAFENET_PIN if the key is token-backed.
 
 on:
   workflow_call:
@@ -53,15 +58,14 @@ jobs:
     runs-on: [self-hosted, Windows, X64, niagara-build]
     timeout-minutes: 45
     env:
-      NIAGARA_HOME: ${{ vars.NIAGARA_HOME || 'C:\TAC\Niagara-4.15.3.28' }}
+      # Compile against the OLDEST supported Niagara so jars stay forward-compatible.
+      NIAGARA_HOME: ${{ vars.NIAGARA_HOME || 'C:\TAC\niagara-4.10.11.12' }}
       NIAGARA_USER_HOME: ${{ vars.NIAGARA_USER_HOME }}
-      # Empty by default — the "Prepare signing profile" step generates a Windows-MY
-      # profile into RUNNER_TEMP at runtime (signing profiles are never committed;
-      # the Tridium plugin rewrites them with a concrete storepass on build). Set
-      # the NIAGARA_SIGNING_PROFILE repo variable to point at a custom profile
-      # (e.g. a PKCS11/eToken profile) on the runner instead.
-      NIAGARA_SIGNING_PROFILE: ${{ vars.NIAGARA_SIGNING_PROFILE }}
+      # Official signing via jarsigner against the Windows-MY cert store (no
+      # keystore file; the cert is read from the runner's Windows store by alias).
       NIAGARA_SIGNING_ALIAS: ${{ vars.NIAGARA_SIGNING_ALIAS || 'S-Tier Building Automation llc' }}
+      # RFC-3161 timestamp authority so signatures remain valid past cert expiry.
+      NIAGARA_SIGNING_TSA: ${{ vars.NIAGARA_SIGNING_TSA || 'http://timestamp.digicert.com' }}
     steps:
       - name: Validate inputs
         shell: pwsh
@@ -82,37 +86,21 @@ jobs:
           ref: ${{ inputs.tag }}
           persist-credentials: false
 
-      - name: Prepare signing profile
+      - name: Resolve signing JDK (jarsigner)
         shell: pwsh
         run: |
-          if (-not [string]::IsNullOrWhiteSpace($env:NIAGARA_SIGNING_PROFILE)) {
-            Write-Host "Using provided signing profile: $env:NIAGARA_SIGNING_PROFILE"
-          } else {
-            # Generate the default Windows-MY profile (no key material — reads the
-            # cert from the runner's Windows store). Written to RUNNER_TEMP so it is
-            # never committed and the signing plugin may rewrite it freely.
-            $profilePath = Join-Path $env:RUNNER_TEMP 'axc-signing-profile.xml'
-            # Built as a string array (not a here-string): a pwsh here-string needs
-            # its closing '@ at column 0, which would terminate this YAML block
-            # scalar. Single-quoted lines keep ${env.SAFENET_PIN} literal for the
-            # Tridium plugin to resolve.
-            $xml = @(
-              '<?xml version="1.0" encoding="UTF-8" standalone="no"?>',
-              '<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">',
-              '<properties>',
-              '  <comment>Code Signing Properties</comment>',
-              '  <entry key="niagara.signing.alias">S-Tier Building Automation llc</entry>',
-              '  <entry key="niagara.signing.standardtsa">http://timestamp.digicert.com</entry>',
-              '  <entry key="niagara.signing.profileType">com.tridium.gradle.plugins.signing.profile.RestrictedSigningProfile</entry>',
-              '  <entry key="niagara.signing.storetype">Windows-MY</entry>',
-              '  <entry key="niagara.signing.refresh">30</entry>',
-              '  <entry key="niagara.signing.storepass">${env.SAFENET_PIN}</entry>',
-              '</properties>'
-            )
-            Set-Content -Path $profilePath -Value $xml -Encoding UTF8
-            "NIAGARA_SIGNING_PROFILE=$($profilePath -replace '\\','/')" >> $env:GITHUB_ENV
-            Write-Host "Generated signing profile at $profilePath"
+          # jarsigner lives in a full JDK, not a Niagara JRE. Prefer the runner's
+          # JAVA_HOME if it has jarsigner, then the NIAGARA_JDK_HOME repo var.
+          $jdk = $null
+          foreach ($cand in @($env:JAVA_HOME, '${{ vars.NIAGARA_JDK_HOME }}')) {
+            if (-not [string]::IsNullOrWhiteSpace($cand) -and (Test-Path (Join-Path $cand 'bin\jarsigner.exe'))) { $jdk = $cand; break }
           }
+          if (-not $jdk) {
+            throw "No JDK 8 with jarsigner found. Set the NIAGARA_JDK_HOME repo var (or JAVA_HOME) to a full JDK 8 on the runner."
+          }
+          Write-Host "Signing JDK: $jdk"
+          "JAVA_HOME=$jdk" >> $env:GITHUB_ENV
+          "SIGNING_JDK_HOME=$($jdk -replace '\\','/')" >> $env:GITHUB_ENV
 
       - name: Validate Niagara + signing prerequisites
         shell: pwsh
@@ -134,10 +122,10 @@ jobs:
         run: |
           # Match the version-bearing line specifically (not any line mentioning
           # the release-please marker — the surrounding comment may too).
-          $line = Select-String -Path N4/build.gradle.kts -Pattern 'moduleVersion\s*=\s*"[^"]+"' | Select-Object -First 1
-          if (-not $line) { throw "No 'moduleVersion = ...' line in N4/build.gradle.kts" }
+          $line = Select-String -Path N4/vendor.gradle -Pattern "version\s*=\s*'[^']+'" | Select-Object -First 1
+          if (-not $line) { throw "No 'version = ...' line in N4/vendor.gradle" }
           if ($line.Line -notmatch [regex]::Escape($env:EXPECTED)) {
-            throw "N4/build.gradle.kts version does not match release version '$env:EXPECTED': $($line.Line.Trim())"
+            throw "N4/vendor.gradle version does not match release version '$env:EXPECTED': $($line.Line.Trim())"
           }
           Write-Host "Version OK: $($line.Line.Trim())"
 
@@ -147,10 +135,16 @@ jobs:
         run: |
           # Forward slashes throughout — a .properties file treats backslash as an
           # escape char, so a Windows path with \ would be silently corrupted.
+          # Official signing: jarsigner against the Windows-MY store (keystore=NONE,
+          # cert selected by alias). No storepass for a Windows store cert; the
+          # SafeNet middleware prompts/uses SAFENET_PIN if the key is token-backed.
           $lines = @(
             "niagara_home=$($env:NIAGARA_HOME -replace '\\','/')",
-            "signing.profile=$($env:NIAGARA_SIGNING_PROFILE -replace '\\','/')",
-            "signing.alias=$env:NIAGARA_SIGNING_ALIAS"
+            "signing.keystore=NONE",
+            "signing.storetype=Windows-MY",
+            "signing.alias=$env:NIAGARA_SIGNING_ALIAS",
+            "signing.tsa=$env:NIAGARA_SIGNING_TSA",
+            "signing.jdkHome=$env:SIGNING_JDK_HOME"
           )
           if (-not [string]::IsNullOrWhiteSpace($env:NIAGARA_USER_HOME)) {
             $lines += "niagara_user_home=$($env:NIAGARA_USER_HOME -replace '\\','/')"
@@ -165,7 +159,11 @@ jobs:
         # token-backed; no other step needs it.
         env:
           SAFENET_PIN: ${{ secrets.SAFENET_PIN }}
-        run: .\gradlew.bat clean assemble --console=plain
+        # clean and assemble as separate invocations: with the Gradle 4.10.x
+        # toolchain a combined `clean assemble` can run clean out of order.
+        run: |
+          .\gradlew.bat clean --no-daemon --console=plain
+          .\gradlew.bat assemble --no-daemon --console=plain
 
       - name: Verify jar signatures against trusted fingerprints
         id: verify

@@ -1,0 +1,42 @@
+/*
+ * axCommunity-doc — packages the HTML/bajadoc documentation tree.
+ */
+
+description = "Open source AX Community module"
+
+ext {
+  name  = 'axCommunity'
+  group = 'Community'
+}
+
+niagaraModule {
+  moduleName      = "axCommunity"
+  preferredSymbol = "axc4"
+  runtimeProfile  = "doc"
+
+  modulePart { name = "axCommunity-wb"; runtimeProfile = "wb" }
+  modulePart { name = "axCommunity-ux"; runtimeProfile = "ux" }
+}
+
+// baja pinned to the minimum supported Niagara so every part uniformly
+// requires >= 4.10.
+dependencies {
+  compile "Tridium:baja:${niagaraDepVersion}"
+}
+
+bajadoc {
+  source project(":axCommunity-rt")
+  includePattern "**/*.*"
+}
+
+bajadoc {
+  source project(":axCommunity-wb")
+  includePattern "**/*.*"
+}
+
+jar {
+  from('src') {
+    include 'doc/*.*'
+    include 'doc/images/**/*.*'
+  }
+}

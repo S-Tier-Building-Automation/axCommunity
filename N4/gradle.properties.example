@@ -1,14 +1,32 @@
 # Copy to gradle.properties.local (gitignored) and set paths for your machine.
 #
+# COMPATIBILITY: build against your OLDEST supported Niagara (4.10.x) so the code
+# links against 4.10 APIs. The minimum Niagara version stamped into each
+# module.xml comes from niagaraDepVersion in N4/vendor.gradle (default "4.10"),
+# so the jars load on 4.10 through 4.15+.
+#
 # niagara_home is required. Use forward slashes or escaped backslashes on Windows.
-niagara_home=C:/TAC/Niagara-4.15.3.28
+# It intentionally beats the NIAGARA_HOME env var (which often points at a newer
+# install), so this build always targets the oldest supported one.
+niagara_home=C:/TAC/niagara-4.10.11.12
 
-# Optional: Niagara user home (signing trust for dev cert Niagara4Modules)
-# niagara_user_home=C:/Users/YOU/Niagara4.15/TAC
+# Optional: Niagara user home. If unset, Niagara's default user home for this
+# install is used. Create it by launching Workbench once against this install.
+# niagara_user_home=C:/Users/YOU/Niagara4.10/tridium
 
-# Optional: override if your install bundles different Tridium Gradle plugin versions
-# niagara_plugin_version=7.6.22
+# SIGNING: with nothing set below, the build signs with an auto-generated
+# self-signed dev cert (alias "axCommunityDev") via the JDK's jarsigner. Trust it
+# once in the Workbench User Trust Store so -wb types appear. Signing needs a full
+# JDK 8 on JAVA_HOME (a Niagara JRE has no jarsigner).
+#
+# For official signing, set a keystore + alias (and optionally a timestamp URL):
+#   signing.keystore=NONE            # a path, or NONE for an OS store
+#   signing.storetype=Windows-MY     # e.g. Windows-MY, PKCS12, JKS
+#   signing.alias=S-Tier Building Automation llc
+#   signing.tsa=http://timestamp.digicert.com
+#   signing.storepass=...            # omit for a Windows-MY cert
+#   signing.jdkHome=C:/Program Files/Eclipse Adoptium/jdk-8...  # if JAVA_HOME is a JRE
 
-# Optional: production SafeNet signing (omit to use dev cert Niagara4Modules)
-# signing.profile=C:/path/to/niagara.signing.xml
-# signing.alias=axCommunity
+# Optional (used by scripts/build-and-restart.ps1, NOT by Gradle): TCP port polled
+# after restart to detect the station is up. Default 4911 (foxs); set if yours differs.
+# station_fox_port=4911

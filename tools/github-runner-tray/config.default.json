@@ -1,7 +1,7 @@
 {
   "runnerRoot": "C:\\actions-runner\\axCommunity-niagara-build",
-  "niagaraHome": "C:\\TAC\\Niagara-4.15.3.28",
-  "niagaraUserHome": "C:\\Users\\YOU\\Niagara4.15\\TAC",
+  "niagaraHome": "C:\\TAC\\niagara-4.10.11.12",
+  "niagaraUserHome": "C:\\Users\\YOU\\Niagara4.10\\TAC",
   "autoStartRunner": true,
   "startWithWindows": false,
   "runnerName": "axCommunity niagara-build"
