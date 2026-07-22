@@ -20,6 +20,11 @@
 						<p n="inBql"		f="s"	t="b:Ord"			v="station:|slot:/|bql:select out from control:NumericPoint where name = 'foo'"/>
 						<p n="wsAnnotation"	f=""	t="b:WsAnnotation"	v="2,2,15"/>
 			</p>
+			<p n="BqlTopNAvg"						m="axc=axCommunity" t="axc:BqlTopNAvg">
+						<p n="inBqlOrd"		f="h"/>
+						<p n="inBql"		f="s"	t="b:Ord"			v="station:|slot:/|bql:select out from control:NumericPoint where name = 'foo'"/>
+						<p n="wsAnnotation"	f=""	t="b:WsAnnotation"	v="2,2,15"/>
+			</p>
 			<p n="HistoryToCSV"						m="axc=axCommunity" t="axc:HistoryToCSV"/>
 			<p n="TrendAnalyzer"					m="axc=axCommunity" t="axc:TrendAnalyzer"/>
 			<p n="TrendDynamicAnalyzer"				m="axc=axCommunity" t="axc:TrendDynamicAnalyzer"/>

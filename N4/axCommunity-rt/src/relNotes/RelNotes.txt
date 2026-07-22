@@ -326,3 +326,6 @@ V22.02.04 June 19, 2026
 - FIXED RelNotes.txt SVN merge artifact from upstream import
 - NOTE FireFoxxWeather still uses the defunct Yahoo Weather RSS API; component remains for compatibility but does not fetch live data
 - NOTE PxGraphics palette folder references external johnGraphics module for HVAC graphics; install johnGraphics separately or graphics will be missing
+
+Unreleased
+- ADDED BqlTopNAvg (BQL folder): executes a BQL query on an editable Execute Period (default 15 min) and reports the average of the N highest values returned (topAvg), plus count/avg/min/max/sum. Value read from the column named by valueColumn (default "value"), falling back to the first column. NaN/invalid-status values omitted; fallback used when no valid values. Query runs off the engine thread. Built on the BBqlNumericRecap idiom.

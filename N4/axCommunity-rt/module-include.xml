@@ -81,7 +81,8 @@
 	<type name="DynamicLinkString"					class="org.axcommunity.niagara.logic.BDynamicLinkString" />
 	<type name="DynamicLinks"						class="org.axcommunity.niagara.logic.BDynamicLinks" />
 	
-	<type name="BqlNumericRecap"					class="org.axcommunity.niagara.bql.BBqlNumericRecap"/> 
+	<type name="BqlNumericRecap"					class="org.axcommunity.niagara.bql.BBqlNumericRecap"/>
+	<type name="BqlTopNAvg"							class="org.axcommunity.niagara.bql.BBqlTopNAvg"/>
 	<type name="TrendAnalyzer"						class="org.axcommunity.niagara.bql.BTrendAnalyzer"/>
 	<type name="HistoryToCSV"						class="org.axcommunity.niagara.bql.BHistoryToCSV"/>
 	<type name="TrendDynamicAnalyzer"				class="org.axcommunity.niagara.bql.BTrendDynamicAnalyzer" />  
