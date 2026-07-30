@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/S-Tier-Building-Automation/axCommunity/security/advisories/new
+    about: Never report security issues in public issues — use private vulnerability reporting.
+  - name: Releases & downloads
+    url: https://github.com/S-Tier-Building-Automation/axCommunity/releases
+    about: Signed module jars for Niagara 4.10+.

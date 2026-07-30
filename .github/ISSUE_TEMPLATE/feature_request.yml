@@ -1,0 +1,40 @@
+name: Feature request
+description: Propose a new component or an improvement to an existing one
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - New component
+        - Existing component improvement
+        - Palette / UX
+        - Documentation
+        - Build / release
+    validations:
+      required: true
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case
+      description: What are you trying to do on a wire sheet or in Workbench that you can't do today?
+      placeholder: Describe the problem this solves...
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What should the component or change look like? (inputs, outputs, actions)
+      placeholder: Describe your idea...
+    validations:
+      required: false
+  - type: checkboxes
+    id: prior-art
+    attributes:
+      label: Prior art check
+      options:
+        - label: I checked RelNotes.txt and the README known-limitations section for existing related work
+          required: false

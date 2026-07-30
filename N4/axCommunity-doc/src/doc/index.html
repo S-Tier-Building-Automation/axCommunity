@@ -16,11 +16,6 @@
 						
 						<table>
 							<tr style="border:0">
-								<td rowspan="2" style="border:0">
-									<img src="images/logos/AxCommLogo_120x120.png" alt="AxCommunity" height="120">
-									
-								</td>
-								<td rowspan="2" style="width: 25px; border:0;"></td>
 								<td class="titleModuleName" style="border:0">AxCommunity</td>
 							</tr>
 							
@@ -32,10 +27,19 @@
 					<tr>
 						<td style="width: 600px; height: 40px; border:0;">
 							<p>
-								This module is an open source effort for AX/N4 developers.<br>
-								For more information, go to <a href="http://sourceforge.net/projects/niagaraaxcommun/">Sourceforge axCommunity Website</a> 
+								This module is an open source effort for AX/N4 developers, maintained as a fork of the
+								original SourceForge project (imported at SVN r250).<br>
+								For more information, go to the <a href="https://github.com/S-Tier-Building-Automation/axCommunity">axCommunity project on GitHub</a>.<br>
+								Station programmers: see the <a href="https://github.com/S-Tier-Building-Automation/axCommunity/blob/main/USER-GUIDE.md">User Guide</a> for installation and the component catalog.
 							</p>
 							<h1>AxCommunity Change Log</h1>
+							<p>
+								<b>This log covers 2009 &ndash; February 2022 and is preserved for history.</b>
+								For all later changes see
+								<a href="https://github.com/S-Tier-Building-Automation/axCommunity/blob/main/N4/axCommunity-rt/src/relNotes/RelNotes.txt">RelNotes.txt</a>
+								(the single source of truth, also bundled in this module) and
+								<a href="https://github.com/S-Tier-Building-Automation/axCommunity/releases">GitHub Releases</a>.
+							</p>
 						</td>
 					</tr>
 					<tr>
@@ -500,7 +504,7 @@
 <b>V13.02.01 Feb 7, 2013</b><i> - Eric Bishop</i>
 	- ADDED BRevolvingTextLabel2 as an enhanced version of the BRevolvingTextLabel
 		* fixed the default height so that it defaults to the height of the font
-		* Removed the default colors, so it doesn’t constantly revert to a green background.
+		* Removed the default colors, so it doesn?t constantly revert to a green background.
 		* added scroll speed setting.
 		* added an optional pause at the beginning of the string.
 		* added end-of-string input (to change from the default ????).
@@ -538,8 +542,8 @@
 	- MODIFIED Palette, Alphabetized most of the palette, sorry this was driving me nuts but hope this doesn't confuse anyone.
 <hr>
 <b>V12.07.01 July 10, 2012</b>
-	- MODIFIED BTstatA extension – reverse acting version. Goes 'on' at Setpoint - differential, and 'off' at Setpoint - Dean Mynott
-	- ADDED    BLimitOutput – takes StatusNumeric input and applies high and  low limits. Ignores limits if they are null - Dean Mynott
+	- MODIFIED BTstatA extension ? reverse acting version. Goes 'on' at Setpoint - differential, and 'off' at Setpoint - Dean Mynott
+	- ADDED    BLimitOutput ? takes StatusNumeric input and applies high and  low limits. Ignores limits if they are null - Dean Mynott
 <hr>
 <b>V12.06.02 June 29, 2012</b>
 	- MODIFIED 'BFireOnChange' by adding try|catch block to changed method and added error level logging when exception is caught.

@@ -16,7 +16,10 @@ group           = 'Community'
 version         = '22.3.0' // x-release-please-version
 
 ext.description = "Open source AX Community module"
-ext.copyright   = 'Copyright \u00A9 2000-2026 AxCommunity Project. All rights reserved.'
+// Copyright start year is 2008 (first upstream SourceForge commit), not 2000.
+// Holder phrased as the contributor collective — the module has had many
+// authors across the AX era and this fork; see LICENSE-NOTES.md.
+ext.copyright   = 'Copyright \u00A9 2008-2026 axCommunity Project contributors'
 
 // Minimum supported Niagara version. Used as the "Tridium:<mod>:<ver>" dependency
 // coordinate, which the module plugin stamps into each module.xml as the minimum
