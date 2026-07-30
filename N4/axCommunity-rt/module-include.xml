@@ -116,8 +116,7 @@
 	<type name="TstatB"								class="org.axcommunity.niagara.hvac.BTstatB" /> 
 	
 	
-	<type name="FireFoxxWeather" 					class="org.axcommunity.niagara.weather.BFireFoxxWeather"/>
-  	<type name="LocationStorage" 					class="org.axcommunity.niagara.weather.BLocationStorage"/>
+ 	<type name="FireFoxxWeather" 					class="org.axcommunity.niagara.weather.BFireFoxxWeather"/>
   	<type name="SiteLocation" 						class="org.axcommunity.niagara.weather.BSiteLocation"/>
   	<type name="FoxxWeatherState" 					class="org.axcommunity.niagara.weather.BFoxxWeatherState"/>
   	<type name="WindDirection" 						class="org.axcommunity.niagara.weather.BWindDirection"/>
