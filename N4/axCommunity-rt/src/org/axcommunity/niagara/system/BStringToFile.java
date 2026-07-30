@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import javax.baja.status.*;
 import javax.baja.sys.*;
+import org.axcommunity.niagara.util.AxcExecutor;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -32,10 +33,10 @@ public class BStringToFile extends BComponent
 	{
 		getOutSuccess().setValue(false);
 		getOutFail().setValue(false);
-		new FileThread().start();
+		AxcExecutor.execute(new FileThread());
 	}
 
-	class FileThread extends Thread
+	class FileThread implements Runnable
 	{
 		public void run()
 		{

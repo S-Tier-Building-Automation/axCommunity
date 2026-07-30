@@ -3,6 +3,7 @@ package org.axcommunity.niagara.web;
 import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusString;
 import javax.baja.sys.*;
+import org.axcommunity.niagara.util.AxcExecutor;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,7 +22,7 @@ public class BGetHTTP extends BComponent{
 	private static BFacets tBox = BFacets.make("multiLine",true);
 	
 	
-	class HttpThread extends Thread{
+	class HttpThread implements Runnable{
 		public void run(){
 			try {
 
@@ -44,7 +45,7 @@ public class BGetHTTP extends BComponent{
 	}
 	//invokes
 	public void doRefresh(){
-		new HttpThread().start();
+		AxcExecutor.execute(new HttpThread());
 	}
 
 	/**Enter the URL to Get here*/
@@ -61,8 +62,9 @@ public class BGetHTTP extends BComponent{
 	public BStatusBoolean getHttpsOnly() { return (BStatusBoolean) get(httpsOnly); }
 	public void setHttpsOnly(BStatusBoolean v) { set(httpsOnly, v); }
 	
-	/**Returned document*/
-    public static final Property httpOut = newProperty(Flags.SUMMARY, new BStatusString(),tBox);
+	/**Returned document. Transient: refetched on demand, and persisting whole
+	 * pages would churn config.bog / JACE flash on every refresh.*/
+    public static final Property httpOut = newProperty(Flags.SUMMARY|Flags.TRANSIENT, new BStatusString(),tBox);
     public BStatusString getHttpOut() { return (BStatusString)get(httpOut); }
     public void setHttpOut(BStatusString v) { set(httpOut, v); }
     

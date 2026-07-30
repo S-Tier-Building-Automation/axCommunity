@@ -30,6 +30,7 @@ import javax.baja.sys.Slot;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Topic;
 import javax.baja.sys.Type;
+import org.axcommunity.niagara.util.AxcExecutor;
 
 import com.tridium.platform.BSystemPlatformService;
 import com.tridium.sys.BIPlatform;
@@ -323,8 +324,9 @@ public class BSysInfo extends BComponent
 			//Make sure this is the last thing execute in this method otherwise the 'Updated' topic may not get fired.
 			if(getPopulateNetworkInfo()==true)
 			{
-				Thread t = new Thread(new InetInfo());
-				t.start();
+				// DNS lookups block; run on the shared pool and skip this period
+				// if it is saturated rather than stalling the timer thread.
+				AxcExecutor.tryExecute(new InetInfo());
 			}
 			else
 			{
@@ -776,140 +778,140 @@ public class BSysInfo extends BComponent
 	}
 
 	/***/
-	public static final Property bajaHome = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property bajaHome = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setBajaHome(BStatusString v) { set(bajaHome, v); }
 	public BStatusString getBajaHome() {return (BStatusString)get(bajaHome);}
 
 	/***/
-	public static final Property stationHostId = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property stationHostId = newProperty(Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setStationHostId(BStatusString v) { set(stationHostId, v); }
 	public BStatusString getStationHostId() {return (BStatusString)get(stationHostId);}
 
 	/***/
-	public static final Property javaVmName = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property javaVmName = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setJavaVmName(BStatusString v) { set(javaVmName, v); }
 	public BStatusString getJavaVmName() {return (BStatusString)get(javaVmName);}
 
 	/***/
-	public static final Property javaVmVersion = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property javaVmVersion = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setJavaVmVersion(BStatusString v) { set(javaVmVersion, v); }
 	public BStatusString getJavaVmVersion() {return (BStatusString)get(javaVmVersion);}
 
 	/***/
-	public static final Property locale = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property locale = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setLocale(BStatusString v) { set(locale, v); }
 	public BStatusString getLocale() {return (BStatusString)get(locale);}
 
 	/***/
-	public static final Property niagaraVersion = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property niagaraVersion = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setNiagaraVersion(BStatusString v) { set(niagaraVersion, v); }
 	public BStatusString getNiagaraVersion() {return (BStatusString)get(niagaraVersion);}
 
 	/***/
-	public static final Property osArch = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property osArch = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setOsArch(BStatusString v) { set(osArch, v); }
 	public BStatusString getOsArch() {return (BStatusString)get(osArch);}
 
 	/***/
-	public static final Property osName = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property osName = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setOsName(BStatusString v) { set(osName, v); }
 	public BStatusString getOsName() {return (BStatusString)get(osName);}
 
 	/***/
-	public static final Property osVersion = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property osVersion = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setOsVersion(BStatusString v) { set(osVersion, v); }
 	public BStatusString getOsVersion() {return (BStatusString)get(osVersion);}
 
 	/***/
-	public static final Property platformServiceDescription = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property platformServiceDescription = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setPlatformServiceDescription(BStatusString v) { set(platformServiceDescription, v); }
 	public BStatusString getPlatformServiceDescription() {return (BStatusString)get(platformServiceDescription);}
 
 	/***/
-	public static final Property stationName = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property stationName = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setStationName(BStatusString v) { set(stationName, v); }
 	public BStatusString getStationName() {return (BStatusString)get(stationName);}
 
 	/***/
-	public static final Property ipAddress = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property ipAddress = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setIpAddress(BStatusString v) { set(ipAddress, v); }
 	public BStatusString getIpAddress() {return (BStatusString)get(ipAddress);}
 
 	/***/
-	public static final Property ipAddressList = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property ipAddressList = newProperty(Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setIpAddressList(BStatusString v) { set(ipAddressList, v); }
 	public BStatusString getIpAddressList() {return (BStatusString)get(ipAddressList);}
 	
 	/***/
-	public static final Property hostName = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property hostName = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setHostName(BStatusString v) { set(hostName, v); }
 	public BStatusString getHostName() {return (BStatusString)get(hostName);}
 
 	/***/
-	public static final Property domain = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property domain = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setDomain(BStatusString v) { set(domain, v); }
 	public BStatusString getDomain() {return (BStatusString)get(domain);}
 
 	/***/
-	public static final Property fqdn = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property fqdn = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString(), BFacets.make(BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setFqdn(BStatusString v) { set(fqdn, v); }
 	public BStatusString getFqdn() {return (BStatusString)get(fqdn);}
 
 	
-	public static final Property niagaraHome = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString("", BStatus.DEFAULT), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property niagaraHome = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString("", BStatus.DEFAULT), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getNiagaraHome() { return (BStatusString)get(niagaraHome);}
 	public void setNiagaraHome(BStatusString v) {set(niagaraHome,v);}
 	
 	
-	public static final Property niagaraUserHome = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString("", BStatus.DEFAULT), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property niagaraUserHome = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString("", BStatus.DEFAULT), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getNiagaraUserHome() { return (BStatusString)get(niagaraUserHome);}
 	public void setNiagaraUserHome(BStatusString v) {set(niagaraUserHome,v);}
 	
-	public static final Property protectedStationHome = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString("", BStatus.DEFAULT), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property protectedStationHome = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString("", BStatus.DEFAULT), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getProtectedStationHome() { return (BStatusString)get(protectedStationHome);}
 	public void setProtectedStationHome(BStatusString v) {set(protectedStationHome,v);}
 	
-	public static final Property stationHome = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString("", BStatus.DEFAULT), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property stationHome = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString("", BStatus.DEFAULT), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getStationHome() { return (BStatusString)get(stationHome);}
 	public void setStationHome(BStatusString v) {set(stationHome,v);}
 	
 	/***/
-	public static final Property cpuUsage = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property cpuUsage = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setCpuUsage(BStatusNumeric v) { set(cpuUsage, v); }
 	public BStatusNumeric getCpuUsage() {return (BStatusNumeric)get(cpuUsage);}
 
 	/***/
-	public static final Property totalPhysicalMemory = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property totalPhysicalMemory = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setTotalPhysicalMemory(BStatusNumeric v) { set(totalPhysicalMemory, v); }
 	public BStatusNumeric getTotalPhysicalMemory() {return (BStatusNumeric)get(totalPhysicalMemory);}
 
 	/***/
-	public static final Property freePhysicalMemory = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property freePhysicalMemory = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setFreePhysicalMemory(BStatusNumeric v) { set(freePhysicalMemory, v); }
 	public BStatusNumeric getFreePhysicalMemory() {return (BStatusNumeric)get(freePhysicalMemory);}
 
 	/***/
-	public static final Property overallCpuUsage = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property overallCpuUsage = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public void setOverallCpuUsage(BStatusNumeric v) { set(overallCpuUsage, v); }
 	public BStatusNumeric getOverallCpuUsage() {return (BStatusNumeric)get(overallCpuUsage);}
 
 	/***/
-	public static final Property usedHeap = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property usedHeap = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusNumeric getUsedHeap() { return (BStatusNumeric)get(usedHeap); }
 	public void setUsedHeap(javax.baja.status.BStatusNumeric v) { set(usedHeap, v); }
 
 	/***/
-	public static final Property maxHeap = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property maxHeap = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusNumeric getMaxHeap() { return (BStatusNumeric)get(maxHeap); }
 	public void setMaxHeap(javax.baja.status.BStatusNumeric v) { set(maxHeap, v); }
 	
 	/***/
-	public static final Property totalHeap = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property totalHeap = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusNumeric getTotalHeap() { return (BStatusNumeric)get(totalHeap); }
 	public void setTotalHeap(javax.baja.status.BStatusNumeric v) { set(totalHeap, v); }
 
 	/***/
-	public static final Property freeHeap = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property freeHeap = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.SHOW_SEPARATORS, BBoolean.TRUE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusNumeric getFreeHeap() { return (BStatusNumeric)get(freeHeap); }
 	public void setFreeHeap(javax.baja.status.BStatusNumeric v) { set(freeHeap, v); }
 		
@@ -922,84 +924,84 @@ public class BSysInfo extends BComponent
 	
 	
 	
-	public static final Property autoSaveEnabled = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusBoolean(Boolean.FALSE, BStatus.ok), null);
+	public static final Property autoSaveEnabled = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusBoolean(Boolean.FALSE, BStatus.ok), null);
 	public BStatusBoolean getAutoSaveEnabled() { return (BStatusBoolean) get(autoSaveEnabled); }
 	public void setAutoSaveEnabled(BStatusBoolean v) { set(autoSaveEnabled, v); }
 	
-	public static final Property autoSaveFrequency = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, BRelTime.DEFAULT, BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
+	public static final Property autoSaveFrequency = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, BRelTime.DEFAULT, BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
 	public BRelTime getAutoSaveFrequency() { return (BRelTime) get(autoSaveFrequency); }
 	public void setAutoSaveFrequency(BRelTime v) { set(autoSaveFrequency, v); }
 	
-	public static final Property saveBackupCount = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public static final Property saveBackupCount = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getSaveBackupCount() { return (BStatusNumeric) get(saveBackupCount); }
 	public void setSaveBackupCount(BStatusNumeric v) { set(saveBackupCount, v); }
 	
-	public static final Property bootTime = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, BAbsTime.DEFAULT, BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
+	public static final Property bootTime = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, BAbsTime.DEFAULT, BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
 	public BAbsTime getBootTime() { return (BAbsTime) get(bootTime); }
 	public void setBootTime(BAbsTime v) { set(bootTime, v, null); }
 	
-	public static final Property uptime = newProperty(Flags.SUMMARY, BRelTime.DEFAULT, BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
+	public static final Property uptime = newProperty(Flags.SUMMARY|Flags.TRANSIENT, BRelTime.DEFAULT, BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
 	public BRelTime getUptime() { return (BRelTime)get(uptime); }
 	public void setUptime(BRelTime v) { set(uptime, v, null); }
 	
-	public static final Property lastSaveDuration = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, new BStatusString("", BStatus.ok), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
+	public static final Property lastSaveDuration = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusString("", BStatus.ok), BFacets.make(BFacets.MULTI_LINE, BBoolean.FALSE, BFacets.FIELD_WIDTH, BInteger.make(100)));
 	public BStatusString getLastSaveDuration() { return (BStatusString) get(lastSaveDuration); }
 	public void setLastSaveDuration(BStatusString v) { set(lastSaveDuration, v); }
 	
-	public static final Property lastSuccessfulSaveTime = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, BAbsTime.DEFAULT, BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
+	public static final Property lastSuccessfulSaveTime = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, BAbsTime.DEFAULT, BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
 	public BAbsTime getLastSuccessfulSaveTime() { return (BAbsTime) get(lastSuccessfulSaveTime); }
 	public void setLastSuccessfulSaveTime(BAbsTime v) { set(lastSuccessfulSaveTime, v, null); }
 	
-	public static final Property lastSaveSpan = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE, BRelTime.DEFAULT, BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
+	public static final Property lastSaveSpan = newProperty(Flags.SUMMARY|Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, BRelTime.DEFAULT, BFacets.make(BFacets.SHOW_MILLISECONDS, BBoolean.TRUE));
 	public BRelTime getLastSaveSpan() { return (BRelTime) get(lastSaveSpan); }
 	public void setLastSaveSpan(BRelTime v) { set(lastSaveSpan, v); }
 	
 	
-	public static final Property outDevicesLimit = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public static final Property outDevicesLimit = newProperty(Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getOutDevicesLimit() { return (BStatusNumeric) get(outDevicesLimit); }
 	public void setOutDevicesLimit(BStatusNumeric v) { set(outDevicesLimit, v); }
 	
-	public static final Property outDevicesUsed = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public static final Property outDevicesUsed = newProperty(Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getOutDevicesUsed() { return (BStatusNumeric) get(outDevicesUsed); }
 	public void setOutDevicesUsed(BStatusNumeric v) { set(outDevicesUsed, v); }
 	
-	public static final Property outHistoriesLimit = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public static final Property outHistoriesLimit = newProperty(Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getOutHistoriesLimit() { return (BStatusNumeric) get(outHistoriesLimit); }
 	public void setOutHistoriesLimit(BStatusNumeric v) { set(outHistoriesLimit, v); }
 	
-	public static final Property outHistoriesUsed = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public static final Property outHistoriesUsed = newProperty(Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getOutHistoriesUsed() { return (BStatusNumeric) get(outHistoriesUsed); }
 	public void setOutHistoriesUsed(BStatusNumeric v) { set(outHistoriesUsed, v); }
 	
-	public static final Property outLinksLimit = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public static final Property outLinksLimit = newProperty(Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getOutLinksLimit() { return (BStatusNumeric) get(outLinksLimit); }
 	public void setOutLinksLimit(BStatusNumeric v) { set(outLinksLimit, v); }
 	
-	public static final Property outLinksUsed = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public static final Property outLinksUsed = newProperty(Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getOutLinksUsed() { return (BStatusNumeric) get(outLinksUsed); }
 	public void setOutLinksUsed(BStatusNumeric v) { set(outLinksUsed, v); }
 	
-	public static final Property outNetworksLimit = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public static final Property outNetworksLimit = newProperty(Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getOutNetworksLimit() { return (BStatusNumeric) get(outNetworksLimit); }
 	public void setOutNetworksLimit(BStatusNumeric v) { set(outNetworksLimit, v); }
 	
-	public static final Property outNetworksUsed = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public static final Property outNetworksUsed = newProperty(Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getOutNetworksUsed() { return (BStatusNumeric) get(outNetworksUsed); }
 	public void setOutNetworksUsed(BStatusNumeric v) { set(outNetworksUsed, v); }
 	
-	public static final Property outPointsLimit = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public static final Property outPointsLimit = newProperty(Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getOutPointsLimit() { return (BStatusNumeric) get(outPointsLimit); }
 	public void setOutPointsLimit(BStatusNumeric v) { set(outPointsLimit, v); }
 	
-	public static final Property outPointsUsed = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public static final Property outPointsUsed = newProperty(Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getOutPointsUsed() { return (BStatusNumeric) get(outPointsUsed); }
 	public void setOutPointsUsed(BStatusNumeric v) { set(outPointsUsed, v); }
 	
-	public static final Property outSchedulesLimit = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public static final Property outSchedulesLimit = newProperty(Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getOutSchedulesLimit() { return (BStatusNumeric) get(outSchedulesLimit); }
 	public void setOutSchedulesLimit(BStatusNumeric v) { set(outSchedulesLimit, v); }
 	
-	public static final Property outSchedulesUsed = newProperty(Flags.DEFAULT_ON_CLONE, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
+	public static final Property outSchedulesUsed = newProperty(Flags.DEFAULT_ON_CLONE|Flags.TRANSIENT, new BStatusNumeric(0, BStatus.ok), BFacets.make(BFacets.PRECISION, BInteger.make(0), BFacets.FIELD_WIDTH, BInteger.make(50)));
 	public BStatusNumeric getOutSchedulesUsed() { return (BStatusNumeric) get(outSchedulesUsed); }
 	public void setOutSchedulesUsed(BStatusNumeric v) { set(outSchedulesUsed, v); }
 

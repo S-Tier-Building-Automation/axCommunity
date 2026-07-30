@@ -17,6 +17,7 @@ import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
 import javax.baja.sys.*;
+import org.axcommunity.niagara.util.AxcExecutor;
 
 
 /**
@@ -107,8 +108,7 @@ public class BBqlTopNAvg extends BComponent
 		if( getCalculating().getValue()==false )
 		{
 			getCalculating().setValue(true);
-			Thread tCalc = new Thread(new threadedCalculate());
-			tCalc.start();
+			AxcExecutor.execute(new threadedCalculate());
 		}
 		else
 		{
@@ -231,8 +231,7 @@ public class BBqlTopNAvg extends BComponent
 		if( getCalculating().getValue()==false )
 		{
 			getCalculating().setValue(true);
-			Thread tCalc = new Thread(new threadedCalculate());
-			tCalc.start();
+			AxcExecutor.execute(new threadedCalculate());
 		}
 		else
 		{
@@ -247,14 +246,14 @@ public class BBqlTopNAvg extends BComponent
 
 		if ( p == inBqlOrd )
 		{
-			if(getInBqlOrd().getValue()!=getInBql().toString())
+			if(!getInBqlOrd().getValue().equals(getInBql().toString()))
 			{
 				if(getInBqlOrd().getValue().length()>0)
 				{
 					try
 					{
 						setInBql( BOrd.make(getInBqlOrd().getValue()) );
-						if(getUpdateOnBqlChange().getValue()==true && getInBqlOrd().getValue()==getInBql().toString()) {doQueryAndCalculate();}
+						if(getUpdateOnBqlChange().getValue()==true && getInBqlOrd().getValue().equals(getInBql().toString())) {doQueryAndCalculate();}
 					}
 					catch(Exception e) {errorHandler("ERROR in changed(inBqlOrd) method!", e);}
 				}
@@ -266,14 +265,14 @@ public class BBqlTopNAvg extends BComponent
 		}
 		else if ( p == inBql )
 		{
-			if(getInBqlOrd().getValue()!=getInBql().toString())
+			if(!getInBqlOrd().getValue().equals(getInBql().toString()))
 			{
 				if(getInBql()!=null && getInBql()!=BOrd.DEFAULT && getInBql().toString().length()>0)
 				{
 					try
 					{
 						getInBqlOrd().setValue( getInBql().toString() );
-						if(getUpdateOnBqlChange().getValue()==true && getInBqlOrd().getValue()==getInBql().toString()) {doQueryAndCalculate();}
+						if(getUpdateOnBqlChange().getValue()==true && getInBqlOrd().getValue().equals(getInBql().toString())) {doQueryAndCalculate();}
 					}
 					catch(Exception e) {errorHandler("ERROR in changed(inBql) method!", e);}
 				}
@@ -295,6 +294,7 @@ public class BBqlTopNAvg extends BComponent
 	/*----------------------------------------------------------------------------------------------------------------*/
 	public void stopped() throws Exception
 	{
+		super.stopped();
 		getCalculating().setValue(false);
 		if (ticket != null) ticket.cancel();
 	}
@@ -302,6 +302,7 @@ public class BBqlTopNAvg extends BComponent
 	/*----------------------------------------------------------------------------------------------------------------*/
 	public void started() throws Exception
 	{
+		super.started();
 		if(!Sys.atSteadyState() || !isRunning()){return;}
 		startAndSteadyState();
 	}
@@ -309,6 +310,7 @@ public class BBqlTopNAvg extends BComponent
 	/*----------------------------------------------------------------------------------------------------------------*/
 	public void atSteadyState() throws Exception
 	{
+		super.atSteadyState();
 		if(!Sys.atSteadyState() || !isRunning()){return;}
 		startAndSteadyState();
 	}
@@ -318,7 +320,7 @@ public class BBqlTopNAvg extends BComponent
 	{
 		if(!Sys.atSteadyState() || !isRunning()){return;}
 
-		if ( getInBqlOrd().getValue().length()>0 && (getInBql().toString().length()<=0 || getInBqlOrd().getValue()!=getInBql().toString())  )
+		if ( getInBqlOrd().getValue().length()>0 && (getInBql().toString().length()<=0 || !getInBqlOrd().getValue().equals(getInBql().toString()))  )
 		{
 			try{setInBql( BOrd.make(getInBqlOrd().getValue()) ); }catch(Exception e) {errorHandler("ERROR in startAndSteadyState() method!", e);}
 		}
@@ -359,7 +361,7 @@ public class BBqlTopNAvg extends BComponent
 
 				double	sum		= 0;
 				double	min		= Double.MAX_VALUE;
-				double	max		= Double.MIN_VALUE;
+				double	max		= -Double.MAX_VALUE;
 				ArrayList<Double> values = new ArrayList<Double>();
 
 				BITable 	result 	= (BITable)BOrd.make(ord).resolve(Sys.getStation()).get(); 	// execute bql into table

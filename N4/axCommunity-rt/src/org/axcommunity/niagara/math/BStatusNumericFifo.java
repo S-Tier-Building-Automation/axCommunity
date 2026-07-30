@@ -6,6 +6,8 @@ import javax.baja.naming.*;
 import javax.baja.status.*;
 import javax.baja.sys.*;
 import javax.baja.units.BUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Numeric values are stored in a stack of 33 values, on transition
@@ -19,19 +21,21 @@ public class BStatusNumericFifo extends BComponent
 {
 	
 	boolean					fire		= false;
-	static String[]			slotNames;
-	final int				MAXSLOTS	= 33;
+	// Instance-scoped: two FIFO instances must not race on one shared array.
+	final String[]			slotNames	= new String[MAXSLOTS];
+	static final int		MAXSLOTS	= 33;
 	BLink[]					linked;
 	BUnit					degrees;
 	BFacets					bfc;
 	static final String		INPUT		= "Input", MAX = "Max$20Value", MIN = "Min$20Value", AVG = "Average";
-	static BStatusNumeric	bsn;
+
+	private static final Logger logger = Logger.getLogger("axCommunity.StatusNumericFifo");
 	
 	public void started()
 	{
 		try
 		{
-			slotNames = new String[MAXSLOTS];
+			super.started();
 			setNames();
 			if (!getSlot(INPUT).isProperty())
 			{
@@ -54,7 +58,7 @@ public class BStatusNumericFifo extends BComponent
 		}
 		catch (Exception ex)
 		{
-			System.out.println(BAbsTime.now().toString() + ": Kors Component Error at " + this.getSlotPath().toString() + ":" + ex.toString());
+			logger.log(Level.SEVERE, "Kors Component Error at " + this.getSlotPath() + ": " + ex.getMessage(), ex);
 		}
 	}
 	
@@ -111,65 +115,52 @@ public class BStatusNumericFifo extends BComponent
 		
 		if (property == trigger && getTrigger().getValue() && fire == false)
 		{
-			// linked = new BLink[getLinks(getSlot("input")).length];
-			// linked = getLinks(getSlot("input"));
 			try
 			{
-				linked	= new BLink[getLinks(getSlot(INPUT)).length];
 				linked	= getLinks(getSlot(INPUT));
 				for (int x = 0; x < linked.length; ++x)
 				{
-					BComponent bCom = new BComponent();
-					bCom = linked[x].getSourceComponent();
-					int		ordEnd	= bCom.getNavOrd().toString().indexOf(bCom.getName());
-					String	ordStr	= bCom.getNavOrd().toString().substring(7, ordEnd - 1);
-					BOrd	ord		= BOrd.make(ordStr + "|bql:select from control:ControlPoint where displayName = '" + bCom.getName() + "'");
-					BITable	result	= (BITable) ord.resolve().get();
-					try (Cursor c = result.cursor())
+					// Read the linked component directly. The previous BQL query
+					// (displayName string-concatenated into the where clause and
+					// resolved synchronously on the engine thread) was fragile,
+					// injectable via crafted component names, and unnecessary.
+					BComponent bCom = linked[x].getSourceComponent();
+					if (!(bCom instanceof BControlPoint))
 					{
-						while (c.next())
+						((BStatusNumeric) get(getProperty(INPUT))).setStatus(BStatus.fault);
+						continue;
+					}
+					BControlPoint	point	= (BControlPoint) bCom;
+					BStatusValue	out		= point.getOutStatusValue();
+					if (out instanceof BStatusNumeric)
+					{
+						double	value	= ((BStatusNumeric) out).getValue();
+						BFacets	facets	= point.getFacets();
+						if (facets == null)
 						{
-							BControlPoint	point	= (BControlPoint) c.get();
-							BStatusValue	out		= point.getOutStatusValue();
-							if (out instanceof BStatusString)
-							{
-								((BStatusNumeric) get(getProperty(INPUT))).setStatus(BStatus.fault);
-							}
-							if (out instanceof BStatusBoolean)
-							{
-								((BStatusNumeric) get(getProperty(INPUT))).setStatus(BStatus.fault);
-							}
-							if (out instanceof BStatusEnum)
-							{
-								((BStatusNumeric) get(getProperty(INPUT))).setStatus(BStatus.fault);
-							}
-							if (out instanceof BStatusNumeric)
-							{
-								double	value	= ((BStatusNumeric) out).getValue();
-								BFacets	bfc		= point.getFacets();
-								// System.out.println(bfc == null);
-								if (bfc == null)
-								{
-									shiftData(value);
-									minData();
-									maxData();
-									avgData();
-								}
-								else
-								{
-									shiftData(value, bfc);
-									minData(bfc);
-									maxData(bfc);
-									avgData(bfc);
-								}
-							}
+							shiftData(value);
+							minData();
+							maxData();
+							avgData();
 						}
+						else
+						{
+							shiftData(value, facets);
+							minData(facets);
+							maxData(facets);
+							avgData(facets);
+						}
+					}
+					else
+					{
+						// Non-numeric source cannot be buffered.
+						((BStatusNumeric) get(getProperty(INPUT))).setStatus(BStatus.fault);
 					}
 				}
 			}
 			catch (Exception e)
 			{
-				System.out.println(BAbsTime.now().toString() + ": Kors Component Error at " + this.getSlotPath().toString() + ":" + e.toString());
+				logger.log(Level.SEVERE, "Kors Component Error at " + this.getSlotPath() + ": " + e.getMessage(), e);
 			}
 			finally
 			{
@@ -210,141 +201,70 @@ public class BStatusNumericFifo extends BComponent
 	
 	private void minData(BFacets bfc)
 	{
-		double tempVal, minVal;
-		tempVal = minVal = 0;
-		for (int x = 0; x < slotNames.length; ++x)
-		{
-			tempVal = ((BStatusNumeric) get(getProperty(slotNames[x]))).getValue();
-			if (minVal == 0)
-			{
-				minVal = tempVal;
-			}
-			else
-			{
-				if (tempVal > 0 && tempVal < minVal)
-				{
-					minVal = tempVal;
-				}
-			}
-		}
-		set(getProperty(MIN), new BStatusNumeric(minVal));
+		set(getProperty(MIN), new BStatusNumeric(minValue()));
 		setFacets(getSlot(MIN), bfc);
 	}
-	
+
 	private void minData()
 	{
-		double tempVal, minVal;
-		tempVal = minVal = 0;
-		for (int x = 0; x < slotNames.length; ++x)
-		{
-			tempVal = ((BStatusNumeric) get(getProperty(slotNames[x]))).getValue();
-			if (minVal == 0)
-			{
-				minVal = tempVal;
-			}
-			else
-			{
-				if (tempVal > 0 && tempVal < minVal)
-				{
-					minVal = tempVal;
-				}
-			}
-		}
-		set(getProperty(MIN), new BStatusNumeric(minVal));
+		set(getProperty(MIN), new BStatusNumeric(minValue()));
 	}
-	
+
 	private void maxData(BFacets bfc)
 	{
-		double tempVal, maxVal;
-		tempVal = maxVal = 0;
-		for (int x = 0; x < slotNames.length; ++x)
-		{
-			tempVal = ((BStatusNumeric) get(getProperty(slotNames[x]))).getValue();
-			if (maxVal == 0)
-			{
-				maxVal = tempVal;
-			}
-			else
-			{
-				if (tempVal > 0 && tempVal > maxVal)
-				{
-					maxVal = tempVal;
-				}
-			}
-		}
-		set(getProperty(MAX), new BStatusNumeric(maxVal));
+		set(getProperty(MAX), new BStatusNumeric(maxValue()));
 		setFacets(getSlot(MAX), bfc);
 	}
-	
+
 	private void maxData()
 	{
-		double tempVal, maxVal;
-		tempVal = maxVal = 0;
-		for (int x = 0; x < slotNames.length; ++x)
-		{
-			tempVal = ((BStatusNumeric) get(getProperty(slotNames[x]))).getValue();
-			if (maxVal == 0)
-			{
-				maxVal = tempVal;
-			}
-			else
-			{
-				if (tempVal > 0 && tempVal > maxVal)
-				{
-					maxVal = tempVal;
-				}
-			}
-		}
-		set(getProperty(MAX), new BStatusNumeric(maxVal));
+		set(getProperty(MAX), new BStatusNumeric(maxValue()));
 	}
-	
+
 	private void avgData(BFacets bfc)
 	{
-		double tempVal, avgVal, checkVal, goodVals;
-		tempVal = avgVal = checkVal = goodVals = 0;
-		for (int x = 0; x < slotNames.length; ++x)
-		{
-			checkVal	= ((BStatusNumeric) get(getProperty(slotNames[x]))).getValue();
-			tempVal		+= checkVal;
-			if (checkVal > 0)
-			{
-				goodVals += 1;
-			}
-		}
-		if (goodVals > 0)
-		{
-			avgVal = tempVal / goodVals;
-		}
-		else
-		{
-			avgVal = 0;
-		}
-		set(getProperty(AVG), new BStatusNumeric(avgVal));
+		set(getProperty(AVG), new BStatusNumeric(avgValue()));
 		setFacets(getSlot(AVG), bfc);
 	}
-	
+
 	private void avgData()
 	{
-		double tempVal, avgVal, checkVal, goodVals;
-		tempVal = avgVal = checkVal = goodVals = 0;
+		set(getProperty(AVG), new BStatusNumeric(avgValue()));
+	}
+
+	// Min/max/avg are computed over ALL buffered values. The previous versions
+	// used 0 as a sentinel and counted only positive values, so any buffer
+	// containing negatives (or an all-negative buffer) reported wrong stats.
+	private double minValue()
+	{
+		double min = ((BStatusNumeric) get(getProperty(slotNames[0]))).getValue();
+		for (int x = 1; x < slotNames.length; ++x)
+		{
+			double v = ((BStatusNumeric) get(getProperty(slotNames[x]))).getValue();
+			if (v < min) min = v;
+		}
+		return min;
+	}
+
+	private double maxValue()
+	{
+		double max = ((BStatusNumeric) get(getProperty(slotNames[0]))).getValue();
+		for (int x = 1; x < slotNames.length; ++x)
+		{
+			double v = ((BStatusNumeric) get(getProperty(slotNames[x]))).getValue();
+			if (v > max) max = v;
+		}
+		return max;
+	}
+
+	private double avgValue()
+	{
+		double sum = 0;
 		for (int x = 0; x < slotNames.length; ++x)
 		{
-			checkVal	= ((BStatusNumeric) get(getProperty(slotNames[x]))).getValue();
-			tempVal		+= checkVal;
-			if (checkVal > 0)
-			{
-				goodVals += 1;
-			}
+			sum += ((BStatusNumeric) get(getProperty(slotNames[x]))).getValue();
 		}
-		if (goodVals > 0)
-		{
-			avgVal = tempVal / goodVals;
-		}
-		else
-		{
-			avgVal = 0;
-		}
-		set(getProperty(AVG), new BStatusNumeric(avgVal));
+		return sum / slotNames.length;
 	}
 	
 	/*@formatter:off*/
