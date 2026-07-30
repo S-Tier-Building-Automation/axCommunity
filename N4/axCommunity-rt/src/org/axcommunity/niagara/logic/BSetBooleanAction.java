@@ -1,9 +1,23 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.logic;
 
 import javax.baja.status.BStatusBoolean;
 import javax.baja.sys.*;
 
 
+/**
+ * Actions to set a boolean true/false: fires boolean events that can be
+ * linked to the set/override actions of BooleanWritables.
+ *
+ * <p>Invoking the {@code SetTrue} or {@code SetFalse} action fires the
+ * {@code newOutputValue} topic with true or false; the {@code triggerTrue}
+ * and {@code triggerFalse} inputs do the same on a false-to-true
+ * transition. Use it wherever wiresheet logic needs to push a discrete
+ * command into a writable point.</p>
+ *
+ * @author Mike Arnott, Kors Engineering
+ */
 public class BSetBooleanAction extends BComponent{
 
 	private boolean lastTriggerTrue = false;

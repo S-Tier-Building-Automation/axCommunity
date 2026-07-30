@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.string;
 
 import javax.baja.status.BStatus;
@@ -21,6 +23,19 @@ import javax.baja.sys.Slot;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
 
+/**
+ * Tests one input string against up to 60 test strings with a selectable
+ * comparison, giving a boolean output per test plus an any-match rollup.
+ *
+ * <p>Set {@code numberOfTests} to generate the {@code in1..inN} test-string
+ * slots and matching {@code out1..outN} booleans. {@code testSelect}
+ * chooses the comparison applied to every test: equals, equals ignoring
+ * case, starts-with, ends-with or contains. {@code outAnyMatch} is true
+ * whenever at least one test matches; null or blank entries never
+ * match.</p>
+ *
+ * @author Eric Bishop, Texas Machining Technologies
+ */
 public class BSuperStringTest extends BComponent
 {
   public static final Property numberOfTests = newProperty(0, 0, BFacets.make(BFacets.MIN, BInteger.make(0), BFacets.MAX, BInteger.make(60)));

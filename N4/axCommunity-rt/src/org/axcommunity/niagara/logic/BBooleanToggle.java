@@ -1,7 +1,18 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.logic;
 import javax.baja.status.*;
 import javax.baja.sys.*;
 
+/**
+ * Toggles a boolean output ON/OFF via a trigger or action input.
+ *
+ * <p>Invoke the {@code toggle} action — directly, from a Px button, or from
+ * an execute-on-change input — to flip {@code out} (StatusBoolean) and
+ * {@code outBool} (plain boolean) to the opposite state.</p>
+ *
+ * @author    Dean Mynott - Ronin Control Systems Pty Ltd
+ */
 public class BBooleanToggle extends BComponent implements Runnable
 {
 

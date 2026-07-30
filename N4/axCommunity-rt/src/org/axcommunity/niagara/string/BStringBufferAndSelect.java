@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.string;
 
 import java.util.logging.Level;
@@ -20,6 +22,22 @@ import javax.baja.sys.Type;
 
 //	Update 6/29/2017 by James Johnson to move to current logger syntax
 
+/**
+ * Captures and recalls presets of string values: the current inputs can be
+ * stored into one of up to 60 numbered buffers and later re-selected onto
+ * the outputs.
+ *
+ * <p>Set {@code numberOfInputs} / {@code numberOfBuffers} to generate the
+ * {@code in1..inN} / {@code out1..outN} slots and the hidden buffer slots.
+ * The {@code setBuffer} action copies all inputs into the buffer numbered
+ * by {@code setBufferNumber}, and {@code selectBuffer} copies the buffer
+ * numbered by {@code selectBufferNumber} onto the outputs (buffer 0 nulls
+ * the outputs); both can also fire automatically on slot change via the
+ * {@code executeOn*} flags. {@code resetBuffers} clears every buffer.
+ * Typical use: recallable message/text presets driven from Px pages.</p>
+ *
+ * @author Eric Bishop, Texas Machining Technologies
+ */
 public class BStringBufferAndSelect extends BComponent
 {
   private static String inputPrefix = "in";

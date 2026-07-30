@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.views;
 
 
@@ -12,6 +14,16 @@ import javax.baja.ui.pane.BCanvasPane;
 import javax.baja.workbench.view.*;
 
 
+/**
+ * A workbench view of the {@link BSetBooleanAction} button that works like
+ * a momentary pushbutton — finally, a momentary PB in Niagara.
+ *
+ * <p>Renders the target component's display name as a button; pressing the
+ * mouse button invokes its {@code SetTrue} action and releasing invokes
+ * {@code SetFalse}.</p>
+ *
+ * @author Mike Arnott, Kors Engineering
+ */
 public class BSetBooleanActionView
     extends BWbComponentView
 {

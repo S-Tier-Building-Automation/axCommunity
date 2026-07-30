@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.string;
 
 import javax.baja.status.BStatus;
@@ -15,6 +17,17 @@ import javax.baja.sys.Slot;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
 
+/**
+ * Passes a StatusString input straight through, substituting a configured
+ * replacement whenever the input is null, invalid or blank.
+ *
+ * <p>If {@code in} has valid status and non-zero length it is copied to
+ * {@code out}; otherwise {@code out} takes the value and status of
+ * {@code replacementString}. Useful for guaranteeing a displayable string
+ * on Px pages when the source point may be down.</p>
+ *
+ * @author Eric Bishop, Texas Machining Technologies
+ */
 public class BReplaceNullOrBlankString extends BComponent
 {
   public static final Property facets = newProperty(0, BFacets.DEFAULT);

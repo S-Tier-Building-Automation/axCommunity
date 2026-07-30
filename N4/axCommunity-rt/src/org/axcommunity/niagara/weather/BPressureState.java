@@ -1,9 +1,21 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.weather;
 
 import javax.baja.sys.BFrozenEnum;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
 
+/**
+ * Frozen enum of barometric-pressure trend states ({@code steady},
+ * {@code rising}, {@code falling}, {@code variable}) backing
+ * {@link BFireFoxxWeather}'s {@code barometricPressureState} slot.
+ *
+ * <p>{@code makeDegrees} maps the feed's numeric rising code: 0 steady,
+ * 1 rising, 2 falling, anything else variable.</p>
+ *
+ * @author Ron Lea, FireFoxx Controls
+ */
 public final class BPressureState
 extends BFrozenEnum
 {

@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.string;
 
 import javax.baja.status.BStatus;
@@ -15,6 +17,17 @@ import javax.baja.sys.Slot;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
 
+/**
+ * Retains the last valid string: the output only updates while the input
+ * is valid and non-blank.
+ *
+ * <p>While {@code in} has valid status and non-zero length it is copied
+ * straight to {@code out}; when the input goes null, invalid or blank,
+ * {@code out} simply keeps its last good value instead of following the
+ * source down.</p>
+ *
+ * @author Eric Bishop, Texas Machining Technologies
+ */
 public class BRetainLastValidString extends BComponent
 {
   public static final Property facets = newProperty(0, BFacets.DEFAULT);

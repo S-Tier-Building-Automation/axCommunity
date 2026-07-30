@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 
 package org.axcommunity.niagara.hvac;
 
@@ -5,7 +7,16 @@ import javax.baja.status.*;
 import javax.baja.sys.*;
 import javax.baja.units.UnitDatabase;
 /**
+ * A simple two-position thermostat: compares a control value against a
+ * setpoint with an adjustable differential and drives a boolean output.
  *
+ * <p>Link {@code cv} (the controlled value) and set {@code sp} /
+ * {@code diff}; with {@code action} = Direct the {@code out} turns on when
+ * {@code cv} rises above {@code sp + diff} and off again at {@code sp},
+ * while Reverse flips the polarity. {@code InFacets} / {@code OutFacets}
+ * control the display units of the numeric and boolean slots.</p>
+ *
+ * @author Murat Egrikavuk
  */
 public class BSimpleTstat extends BComponent
 { 

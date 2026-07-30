@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.weather;
 
 
@@ -6,6 +8,18 @@ import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
 
 
+/**
+ * Frozen enum of the preset weather sites offered by
+ * {@link BFireFoxxWeather}'s {@code selectSite} dropdown: eight
+ * western-Canada locations (Whistler, Calgary, Edmonton, North Vancouver,
+ * Vancouver, Victoria, Winnipeg, Saskatoon) plus {@code Other}.
+ *
+ * <p>Choosing a preset writes the matching location code to
+ * {@code locationId} automatically; choose {@code Other} to enter a code
+ * manually for any other city.</p>
+ *
+ * @author Ron Lea, FireFoxx Controls
+ */
 public final class BSiteLocation
 extends BFrozenEnum
 {

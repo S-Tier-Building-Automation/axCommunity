@@ -1,9 +1,22 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.weather;
 
 import javax.baja.sys.BFrozenEnum;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
 
+/**
+ * Frozen enum of the eight compass wind directions (N, NE, E, SE, S, SW,
+ * W, NW) plus {@code variable}, backing {@link BFireFoxxWeather}'s
+ * {@code windDirection} slot.
+ *
+ * <p>{@code makeDegrees} converts the feed's 0-360 degree direction into
+ * the nearest compass point, returning {@code variable} for out-of-range
+ * values.</p>
+ *
+ * @author Ron Lea, FireFoxx Controls
+ */
 public final class BWindDirection
 extends BFrozenEnum
 {

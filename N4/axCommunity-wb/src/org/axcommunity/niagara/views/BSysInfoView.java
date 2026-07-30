@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.views;
 
 import javax.baja.converters.BINumericToNumber;
@@ -33,6 +35,16 @@ import com.tridium.kitpx.BBargraph;
 import com.tridium.kitpx.BBoundLabel;
 
 
+/**
+ * A custom workbench view for the {@link BSysInfo} object.
+ *
+ * <p>Renders the system-information outputs as a "SYSTEM INFORMATION"
+ * panel of bar graphs and bound labels — CPU usage, overall CPU usage,
+ * total/free physical memory and max/total/used/free heap — with values
+ * refreshed live from the target component.</p>
+ *
+ * @author Mike Arnott, Kors Engineering
+ */
 public class BSysInfoView extends BWbComponentView
 {
 	/*------------------------------------------------------------------------------------------------------*/
