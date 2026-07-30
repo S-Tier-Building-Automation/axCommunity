@@ -13,7 +13,7 @@ group           = 'Community'
 // Single source of truth for the module version. release-please rewrites the
 // version literal on the marked line below when a Release PR merges
 // (see release-please-config.json -> extra-files: N4/vendor.gradle).
-version         = '22.3.0' // x-release-please-version
+version         = '22.4.0' // x-release-please-version
 
 ext.description = "Open source AX Community module"
 ext.copyright   = 'Copyright \u00A9 2000-2026 AxCommunity Project. All rights reserved.'
