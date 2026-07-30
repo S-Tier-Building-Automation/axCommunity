@@ -4,10 +4,11 @@ import javax.baja.file.*;
 import javax.baja.naming.*;
 import javax.baja.status.*;
 import javax.baja.sys.*;
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*************************************************************************************************
  * This Code will Export a History file and save it as a .csv.  
@@ -50,11 +51,10 @@ public class BHistoryToCSV extends BComponent{
 	public void doExecute(){
 		try{
 			OrdTarget table = query();
-			String csv = exportToCsv(table);  
-			hist(getHistoryName() + ".csv",csv);              
+			writeCsv(table);
 		}
 		catch(Exception e){
-			System.out.println(e.toString());
+			logger.log(Level.SEVERE, getSlotPath() + " export failed: " + e.getMessage(), e);
 		}
 	}
 
@@ -68,51 +68,31 @@ public class BHistoryToCSV extends BComponent{
 	}
 
 	/**
-	 * Run the CSV exporter against the specified table to build an
-	 * in memory representation of the table as a CSV file.
+	 * Stream the table straight through the CSV exporter to disk. (The previous
+	 * version wrote the CSV String via ObjectOutputStream, producing a Java
+	 * serialization blob instead of a CSV file.)
+	 *
+	 * path and historyName are linkable properties, so treat them as operator
+	 * input: refuse '..' traversal and path-in-filename tricks.
 	 */
-	private String exportToCsv(OrdTarget table) 
+	private void writeCsv(OrdTarget table)
 	throws Exception
-	{ 
-		/**
-		 * create instance of ITableToCsv exporter                        
-		 */
-		BExporter exporter = (BExporter)Sys.getType("file:ITableToCsv").getInstance(); 
+	{
+		String dir = getPath().getValue();
+		String name = getHistoryName().getValue() + ".csv";
+		if (dir.contains("..") || name.contains(".."))
+			throw new IOException("refusing path containing '..': " + dir + name);
+		if (name.contains("/") || name.contains("\\") || new File(name).isAbsolute())
+			throw new IOException("historyName must be a plain file name, not a path: " + name);
 
-		/**
-		 * run the CSV exporter to export to memory based byte array
-		 */
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ExportOp op = ExportOp.make(table, out);  
-		exporter.export(op);
-
-		/**
-		 * return as string (this String works because we  will use the default 
-		 * encoding, which should match encoding ITableToCsv exporter used to 
-		 * create a PrintWriter from a raw OutputStream)    
-		 */
-		return new String(out.toByteArray());
-	}
-
-	/**
-	 * This action saves the converted History file in the Path specified using the History name as the file name. 
-	 */
-
-	private void hist(String fileName, String attachment) 
-	throws Exception
-	{ 
-		try
-		{ 
-			FileOutputStream fos = new FileOutputStream( getPath().getValue() + getHistoryName().getValue() + ".csv", false);
-			ObjectOutputStream oos = new ObjectOutputStream (fos);
-			oos.writeObject(attachment);
-			oos.close();
-		}
-		catch (FileNotFoundException fnfe)
-		{  
-			System.out.println( " Unable to find " + getHistoryName() + ".csv" );
+		BExporter exporter = (BExporter)Sys.getType("file:ITableToCsv").getInstance();
+		try (FileOutputStream fos = new FileOutputStream(dir + name, false))
+		{
+			exporter.export(ExportOp.make(table, fos));
 		}
 	}
+
+	private static final Logger logger = Logger.getLogger("axCommunity.HistoryToCSV");
     public BIcon getIcon() { return icon; }
     private static final BIcon icon = BIcon.make("module://axCommunity/org/axcommunity/niagara/graphics/XENCOM_LogoMini.png");
 

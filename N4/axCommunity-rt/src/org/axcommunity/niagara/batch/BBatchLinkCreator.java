@@ -12,6 +12,7 @@ import javax.baja.sys.*;
 import javax.baja.util.*;
 
 import org.axcommunity.niagara.helperClasses.LoggingComponent;
+import org.axcommunity.niagara.util.AxcExecutor;
 
 /**
  * This component will add links to components as specified in the link list csv.
@@ -342,8 +343,7 @@ public class BBatchLinkCreator extends BComponent implements LoggingComponent
 				
 				if(getInLinkListCsv().trim().length() > 0 && getInLinkListCsv().trim().compareTo(DEFAULT_CSV)!=0 )
 				{
-					Thread t = new Thread(new ThreadedProcessor(inCheckOnly));
-					t.start();
+					AxcExecutor.execute(new ThreadedProcessor(inCheckOnly));
 				}
 				else
 				{
@@ -815,7 +815,7 @@ public class BBatchLinkCreator extends BComponent implements LoggingComponent
 							}
 							else
 							{
-								tmpMsg = "ERROR: Could not determine the link converter, source type: '" + sourceType + "', target type: '" + sourceType + "', " + logString + "";
+								tmpMsg = "ERROR: Could not determine the link converter, source type: '" + sourceType + "', target type: '" + targetType + "', " + logString + "";
 								if(getInDebug())messageHandler(tmpMsg);
 								messages.add(tmpMsg);
 								result = false;

@@ -81,7 +81,7 @@ jobs:
           }
 
       - name: Checkout release tag
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ inputs.tag }}
           persist-credentials: false
@@ -170,6 +170,10 @@ jobs:
         shell: pwsh
         run: |
           $keytool = Join-Path $env:NIAGARA_HOME 'jre\bin\keytool.exe'
+          # JAVA_HOME is pinned to a full JDK 8 with jarsigner by the earlier
+          # 'Resolve signing JDK (jarsigner)' step.
+          $jarsigner = Join-Path $env:JAVA_HOME 'bin\jarsigner.exe'
+          if (-not (Test-Path $jarsigner)) { throw "jarsigner not found under JAVA_HOME ($env:JAVA_HOME); a full JDK 8 is required (see the 'Resolve signing JDK' step)." }
           if (-not (Test-Path $env:TRUSTED_FINGERPRINTS_FILE)) {
             throw "$($env:TRUSTED_FINGERPRINTS_FILE) is missing — cannot verify signers."
           }
@@ -184,17 +188,34 @@ jobs:
           foreach ($p in 'rt', 'wb', 'ux', 'doc') {
             $jar = "N4/axCommunity-$p/build/libs/axCommunity-$p.jar"
             if (-not (Test-Path $jar)) { Write-Host "::error::missing $jar"; $fail = $true; continue }
-            $out = & $keytool -printcert -jarfile $jar 2>&1 | Out-String
-            $m = [regex]::Match($out, 'SHA256:\s*([0-9A-Fa-f:]+)')
-            if (-not $m.Success) { Write-Host "::error::no SHA256 fingerprint for $jar"; $fail = $true; continue }
-            $fp = ($m.Groups[1].Value -replace '[:\s]', '').ToUpper()
-            if ($trusted -contains $fp) {
-              Write-Host "OK  $jar  $($m.Groups[1].Value)"
-              $jars += (Resolve-Path $jar).Path
-            } else {
-              Write-Host "::error::$jar signed by an untrusted cert ($($m.Groups[1].Value)); add it to $($env:TRUSTED_FINGERPRINTS_FILE) if the cert was rotated."
-              $fail = $true
+            # keytool -printcert below only reads the signature BLOCK; jarsigner
+            # -verify re-checks every jar entry against the signature, and -strict
+            # turns any verification warning into a non-zero exit. Require both a
+            # clean exit and the explicit success line (an unsigned jar can exit 0).
+            $jsOut = & $jarsigner -verify -strict -certs $jar 2>&1 | Out-String
+            if ($LASTEXITCODE -ne 0 -or $jsOut -notmatch 'jar verified\.') {
+              Write-Host "::error::jarsigner -verify -strict failed for $jar — the jar is unsigned, was modified after signing, or has verification warnings:"
+              Write-Host $jsOut
+              $fail = $true; continue
             }
+            $out = & $keytool -printcert -jarfile $jar 2>&1 | Out-String
+            $rawFps = [regex]::Matches($out, 'SHA256:\s*([0-9A-Fa-f:]+)') |
+              ForEach-Object { $_.Groups[1].Value.Trim() } | Select-Object -Unique
+            if (-not $rawFps) { Write-Host "::error::no SHA256 fingerprint for $jar"; $fail = $true; continue }
+            # Fail closed: EVERY signer cert fingerprint printed for this jar must
+            # be allowlisted — a second signer with an unknown cert must abort the
+            # release, not ride through on the strength of the first match.
+            $jarOk = $true
+            foreach ($raw in $rawFps) {
+              $fp = ($raw -replace '[:\s]', '').ToUpper()
+              if ($trusted -contains $fp) {
+                Write-Host "OK  $jar  $raw"
+              } else {
+                Write-Host "::error::$jar has an untrusted signer cert (SHA256: $raw) — every signer fingerprint must be in $($env:TRUSTED_FINGERPRINTS_FILE); add it there if the cert was rotated."
+                $jarOk = $false
+              }
+            }
+            if ($jarOk) { $jars += (Resolve-Path $jar).Path } else { $fail = $true }
           }
           if ($fail) { throw "Signature verification failed — aborting release." }
           $jars -join "`n" | Set-Content -Path verified-jars.txt -Encoding ASCII

@@ -21,3 +21,19 @@
 
 # S-Tier Building Automation llc — Sectigo OV code-signing cert (valid to 2026-08-30).
 AF:79:F7:14:AF:FF:50:5B:0A:39:32:3D:37:0F:CE:99:76:6D:7E:D6:AC:3C:63:08:B7:2A:B2:C5:7A:8B:33:5D
+
+# Chain + timestamp counter-signature certs. release-build.yml checks EVERY
+# fingerprint that keytool -printcert reports for a jar, so the signing chain
+# and the RFC-3161 TSA counter-signature chain must be allowlisted too. These
+# were extracted from the v22.3.0 release jars. If the TSA responder cert
+# rotates, add the new fingerprint BEFORE the next release.
+# Sectigo Public Code Signing CA R36 (intermediate, valid to 2036-03-22)
+7F:B0:F5:8D:71:13:0A:BE:72:49:69:F1:CD:C9:B6:A8:D3:27:4D:A1:8D:05:92:29:B0:09:A5:B9:B5:55:74:45
+# Sectigo Public Code Signing Root R46 (root, valid to 2046-03-22)
+7E:76:26:0A:E6:9A:55:D3:F0:60:B0:FD:18:B2:A8:C0:14:43:C8:7B:60:79:10:30:C9:FA:0B:05:85:10:1A:38
+# DigiCert SHA256 RSA4096 Timestamp Responder 2025 1 (TSA counter-signature, valid to 2036-09-04)
+4A:A0:3F:A2:2C:D7:5C:84:C5:5C:93:8F:82:8E:67:6B:9C:AE:CA:B3:3F:E3:6D:26:9A:A3:34:F1:46:11:0A:33
+# DigiCert Trusted G4 TimeStamping RSA4096 SHA256 2025 CA1 (TSA intermediate, valid to 2038-01-15)
+CA:0B:15:54:EC:D9:01:EA:19:DC:AD:87:49:E9:F2:64:8C:8D:6D:FC:EA:1A:DD:9D:2C:21:09:41:5B:B8:2C:CD
+# DigiCert Trusted Root G4 (TSA root, valid to 2031-11-10)
+33:84:6B:54:5A:49:C9:BE:49:03:C6:0E:01:71:3C:1B:D4:E4:EF:31:EA:65:CD:95:D6:9E:62:79:4F:30:B9:41

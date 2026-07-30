@@ -15,6 +15,7 @@ import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusNumeric;
 import javax.baja.status.BStatusString;
 import javax.baja.sys.*;
+import org.axcommunity.niagara.util.AxcExecutor;
 
 
 /**
@@ -98,8 +99,7 @@ public class BBqlNumericRecap extends BComponent
 		if( getCalculating().getValue()==false )
 		{
 			getCalculating().setValue(true);
-			Thread tCalc = new Thread(new threadedCalculate());
-			tCalc.start();
+			AxcExecutor.execute(new threadedCalculate());
 		}
 		else
 		{
@@ -204,8 +204,7 @@ public class BBqlNumericRecap extends BComponent
 		if( getCalculating().getValue()==false )
 		{
 			getCalculating().setValue(true);
-			Thread tCalc = new Thread(new threadedCalculate());
-			tCalc.start();
+			AxcExecutor.execute(new threadedCalculate());
 		}
 		else
 		{

@@ -35,6 +35,7 @@ import javax.baja.sys.Topic;
 import javax.baja.sys.Type;
 
 import org.axcommunity.niagara.helperClasses.LoggingComponent;
+import org.axcommunity.niagara.util.AxcExecutor;
 
 /**
  * This was created using borrowed then modified code from the "BSuperOr" object
@@ -70,8 +71,7 @@ public class BSuperConcatPlus extends BComponent implements LoggingComponent
 	public void concatenate(){invoke(concatenate,null,null);}
 	public void doConcatenate()
 	{
-		Thread t = new Thread(new calculate());
-		t.start();		
+		AxcExecutor.execute(new calculate());
 	}
 	
 	/*----------------------------------------------------------------------------------------------------------------*/
@@ -304,8 +304,7 @@ public class BSuperConcatPlus extends BComponent implements LoggingComponent
 		
 		if(getInConcatOnStartup().getStatus().isValid() && getInConcatOnStartup().getValue())
 		{
-			Thread t = new Thread(new calculate());
-			t.start();
+			AxcExecutor.execute(new calculate());
 		}
 	}
 	
@@ -338,10 +337,9 @@ public class BSuperConcatPlus extends BComponent implements LoggingComponent
 			// ONE OF THE STRING INPUTS HAS CHANGED ///////////////////////////////////////////////////////////
 			else if(calcOnChange==true && p!=numberOfSlots && p!=numberOfValues && p!=outNoDelimeters && p!=outDelimitValuesOnly && p!=outDelimitAll && p!=outDelimitValuesOnlyPlusTimestamp && p!=outDelimitAllPlusTimestamp)
 			{
-				logger.log(Level.FINE, "\n" + getSlotPath()	+ "\nCalculating because " + p.getName() + " changed");
+			logger.log(Level.FINE, "\n" + getSlotPath()	+ "\nCalculating because " + p.getName() + " changed");
 
-				Thread t = new Thread(new calculate());
-				t.start();
+			AxcExecutor.execute(new calculate());
 			}
 
 			// TRIGER INPUT CHANGED ///////////////////////////////////////////////////////////////////////////
@@ -351,8 +349,7 @@ public class BSuperConcatPlus extends BComponent implements LoggingComponent
 				if(input && !lastTrigger)
 				{
 					lastTrigger = input;
-					Thread t = new Thread(new calculate());
-					t.start();
+					AxcExecutor.execute(new calculate());
 				}
 				else
 				{

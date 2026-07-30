@@ -5,8 +5,11 @@ import java.util.logging.Logger;
 
 import javax.baja.status.*;
 import javax.baja.sys.*;
+import org.axcommunity.niagara.util.AxcExecutor;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 
 /*************************************************************************************************
 * This Code will save a string input to a file  
@@ -30,10 +33,10 @@ public class BStringToFile extends BComponent
 	{
 		getOutSuccess().setValue(false);
 		getOutFail().setValue(false);
-		new FileThread().start();
+		AxcExecutor.execute(new FileThread());
 	}
 
-	class FileThread extends Thread
+	class FileThread implements Runnable
 	{
 		public void run()
 		{
@@ -43,11 +46,11 @@ public class BStringToFile extends BComponent
 				String attachment = getInStringToSave().getValue();
 				if(filename.length()>3&&attachment.length()>0)
 				{
-					FileWriter fstream = new FileWriter(getPath().getValue() + filename, getInAppendToFile().getValue());
-					BufferedWriter out = new BufferedWriter(fstream);
-					out.write(attachment);
-					//Close the output stream
-					out.close();
+					String target = resolveSafePath(getPath().getValue(), filename);
+					try (BufferedWriter out = new BufferedWriter(new FileWriter(target, getInAppendToFile().getValue())))
+					{
+						out.write(attachment);
+					}
 					getOutSuccess().setValue(true);
 					fireSuccesss(BBoolean.make(true));
 				}
@@ -56,11 +59,24 @@ public class BStringToFile extends BComponent
 			{
 				getOutFail().setValue(true);
 				fireFail(BBoolean.make(true));
-				logger.log(Level.SEVERE, "\n" + getSlotPath()	+ "\n" + e.getMessage() + "\n" + e.getStackTrace());
-				throw new RuntimeException(e);
+				logger.log(Level.SEVERE, getSlotPath() + " write failed: " + e.getMessage(), e);
 			}
 			setLastTransaction(BAbsTime.make());
 		}
+	}
+
+	/**
+	 * path and fileName are linkable properties, so treat them as operator input:
+	 * refuse '..' traversal out of the configured directory and path-in-filename
+	 * tricks. The configured path itself may be absolute (documented use).
+	 */
+	private static String resolveSafePath(String dir, String name) throws IOException
+	{
+		if (dir.contains("..") || name.contains(".."))
+			throw new IOException("refusing path containing '..': " + dir + name);
+		if (name.contains("/") || name.contains("\\") || new File(name).isAbsolute())
+			throw new IOException("fileName must be a plain file name, not a path: " + name);
+		return dir + name;
 	}
 
 	/**String input.*/

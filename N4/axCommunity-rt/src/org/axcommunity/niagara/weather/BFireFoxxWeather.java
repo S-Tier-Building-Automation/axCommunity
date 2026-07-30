@@ -11,8 +11,10 @@ import javax.baja.sys.*;
 import javax.baja.units.BUnit;
 import javax.baja.xml.XElem;
 import javax.baja.xml.XParser;
+import org.axcommunity.niagara.util.AxcExecutor;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 //	Update 6/29/2017 by James Johnson to move to current logger syntax
 
@@ -85,10 +87,10 @@ extends BComponent
           
           public void doRefresh() throws Exception
           {
-            updateReport();
+            startFetchThread();
           }
 
-          
+
 ////////////////////////////////////////////////////////////////
 //Timers///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
@@ -111,9 +113,39 @@ extends BComponent
 
           public void doRefreshTimerExpired()
           {
-            updateReport();
-            updateTimeTicket.cancel();
+            // Reschedule first, then fetch on a worker: this action runs on the
+            // station clock thread, and a hung endpoint must not stall shared
+            // station scheduling.
+            if (updateTimeTicket != null)
+              updateTimeTicket.cancel();
             updateTimeTimer();
+            startFetchThread();
+          }
+
+////////////////////////////////////////////////////////////////
+//Fetch worker//////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+
+          private final AtomicBoolean fetchInFlight = new AtomicBoolean(false);
+
+          /**
+           * Fetch on the shared bounded executor instead of the clock/engine
+           * thread the callers run on. A fetch already in flight is not doubled
+           * up, and a failed fetch logs instead of throwing on a borrowed thread.
+           */
+          private void startFetchThread()
+          {
+            if (!fetchInFlight.compareAndSet(false, true))
+              return;
+            AxcExecutor.execute(new Runnable()
+            {
+              public void run()
+              {
+                try { updateReport(); }
+                catch (Exception e) { log1.log(Level.WARNING, "weather update failed: " + e.getMessage()); }
+                finally { fetchInFlight.set(false); }
+              }
+            });
           }
               
 ////////////////////////////////////////////////////////////////
@@ -161,7 +193,7 @@ extends BComponent
           setString(locationId, "CAXX0523");
           break;
         }
-          updateReport();
+          startFetchThread();
         }
 
 ////////////////////////////////// Get Connection////////////////////////////////////////////////////////////////
@@ -259,8 +291,11 @@ extends BComponent
           root = root.elem("channel");
         
             XElem[] forecasts = root.elem("item").elems("forecast");
-            for (int i = 0; i < forecasts.length; i++)
+            if (forecasts.length > 0)
             {
+              // forecast[0] is today; tomorrow is index 1 (fall back to the
+              // last entry if the feed ever returns just one).
+              int i = forecasts.length > 1 ? 1 : forecasts.length - 1;
               String str1;
               String str2;
               setTomorrowsHigh(new BStatusNumeric(Integer.parseInt(forecasts[i].get("high"))));
