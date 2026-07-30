@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.weather;
 
 import java.util.logging.Level;
@@ -18,6 +20,26 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 //	Update 6/29/2017 by James Johnson to move to current logger syntax
 
+/**
+ * Weather object that fetches current conditions and tomorrow's forecast
+ * for a selected site and exposes them as linkable status slots.
+ *
+ * <p>Pick a preset western-Canada city with {@code selectSite}, or select
+ * {@code Other} and enter the location code manually in {@code locationId}.
+ * Every {@code refreshTime} (default 1 hour) — or on demand via the
+ * {@code Refresh} action — the feed is fetched on a guarded worker thread
+ * and parsed into {@code temp}, {@code weatherSummary}, {@code state},
+ * {@code humidity}, {@code windSpeed} / {@code windDirection} /
+ * {@code windChill}, {@code barometricPressure} /
+ * {@code barometricPressureState}, {@code sunrise} / {@code sunset} and the
+ * {@code tomorrows*} forecast slots.</p>
+ *
+ * <p><b>NOTE:</b> this component still uses the defunct Yahoo Weather RSS
+ * API; it returns no live data until the provider is replaced. It remains
+ * in the palette for backward compatibility only.</p>
+ *
+ * @author Ron Lea, FireFoxx Controls
+ */
 public class BFireFoxxWeather
 extends BComponent
 {

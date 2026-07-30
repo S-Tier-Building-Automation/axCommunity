@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 /**
  * Used to determine peaks and Date/Time stamps of the peaks, set up to "zero out" monthly
  * @author vance.hensley
@@ -13,6 +15,20 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Takes a StatusNumeric input and checks for peaks, keeping a String
+ * display of the date/time stamp at which the peak occurred.
+ *
+ * <p>Whenever {@code in} rises above the previous hold value, {@code out}
+ * is updated to the new peak and {@code outTstamp} shows the time and date
+ * as a formatted string; inputs with invalid status are ignored. The hold
+ * value is coded to "zero out" at the first of the month, so the reported
+ * peak is effectively a monthly peak, and the {@code clear} action resets
+ * it manually at any time. {@code facets} are applied against all out
+ * properties.</p>
+ *
+ * @author vance.hensley
+ */
 public class BPeakValueAndTstamp extends BComponent
 {
 	/**

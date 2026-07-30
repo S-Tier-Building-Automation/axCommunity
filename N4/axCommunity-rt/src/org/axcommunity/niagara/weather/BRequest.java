@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.weather;
 
 import java.io.BufferedReader;
@@ -7,6 +9,17 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
+/**
+ * Static HTTP GET helper used by {@link BFireFoxxWeather} to retrieve the
+ * weather feed.
+ *
+ * <p>Opens the given {@link URL} with hard 10-second connect/read timeouts
+ * and returns the response body as a String, aborting with an
+ * {@link java.io.IOException} if the body exceeds a 1 MB cap — a hung or
+ * runaway endpoint can no longer stall the calling worker thread.</p>
+ *
+ * @author Ron Lea, FireFoxx Controls
+ */
 public class BRequest
 {
   

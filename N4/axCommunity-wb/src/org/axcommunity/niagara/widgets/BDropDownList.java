@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.widgets;
 
 import javax.baja.naming.BOrd;
@@ -5,6 +7,17 @@ import javax.baja.sys.*;
 import javax.baja.ui.*;
 import javax.baja.ui.event.BMouseEvent;
 
+/**
+ * A PX-only button that pops up a nav menu with up to 20 hyperlink/label
+ * entries.
+ *
+ * <p>Fill in the {@code Label01..Label20} / {@code linkTo01..linkTo20}
+ * slot pairs; clicking the label on a Px page pops up the menu of labels,
+ * and choosing an entry hyperlinks the Px profile to that entry's
+ * ord.</p>
+ *
+ * @author Ron Lea, FireFoxx Controls
+ */
 public class BDropDownList
     extends BLabel
 {

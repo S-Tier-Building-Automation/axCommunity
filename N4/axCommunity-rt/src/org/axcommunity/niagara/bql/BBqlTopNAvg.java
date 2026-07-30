@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.bql;
 
 import java.io.PrintWriter;
@@ -43,7 +45,7 @@ import org.axcommunity.niagara.util.AxcExecutor;
  * <p>Built on the same module idiom as {@code BBqlNumericRecap} (BQL query +
  * {@code Clock.schedulePeriodically} interval + off-engine-thread calculation).</p>
  *
- * @author  STC Worldwide
+ * @author  S-Tier Building Automation
  */
 public class BBqlTopNAvg extends BComponent
 {

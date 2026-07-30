@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.string;
 
 import javax.baja.status.BStatusString;
@@ -17,6 +19,21 @@ import javax.baja.sys.Topic;
 import javax.baja.sys.Type;
 import javax.baja.util.BFormat;
 
+/**
+ * Simple object that gets the parent folder name and outputs it as a
+ * String.
+ *
+ * <p>After {@code startupDelay} (default 10 s, giving the station time to
+ * boot) the {@code inFormat} BFormat — default
+ * {@code %parent.displayName%} — is resolved against this component and the
+ * result is written to {@code parentName}; edit {@code inFormat} to output
+ * any other format-pattern value. The {@code refresh} action re-evaluates
+ * on demand, the {@code changed} topic fires when the value changes, and
+ * the {@code ParentName} topic fires the new string after every
+ * refresh.</p>
+ *
+ * @author Tyler Long, McKenney's Inc.
+ */
 public class BParentFolderInfo extends BComponent
 {
 	Clock.Ticket ticket;

@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.conversion;
 
 import javax.baja.agent.BPxView;
@@ -22,6 +24,17 @@ import javax.baja.sys.Type;
 * object.
 * */
 //*****************************************************
+/**
+ * Sets a PXView slot using an ord input, allowing a custom Px view for
+ * each folder or object.
+ *
+ * <p>Point {@code inPxFile} at a {@code file:PxFile} ord (typically via a
+ * link from computed logic) and the object writes that file into the
+ * {@code outPxView} BPxView slot, so the view that renders the parent
+ * follows whatever ord the logic decides on.</p>
+ *
+ * @author Eric Bishop
+ */
 public class BOrdToPxView extends BComponent
 {
   public static final Property inPxFile = newProperty(Flags.SUMMARY, BOrd.NULL,BFacets.make(BFacets.TARGET_TYPE, "file:PxFile"));

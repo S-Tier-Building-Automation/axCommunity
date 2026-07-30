@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.logic;
 
 /**
@@ -11,6 +13,15 @@ import javax.baja.gx.BFont;
 import javax.baja.status.BStatusBoolean;
 import javax.baja.sys.*;
 
+/**
+ * Switches between two fonts using a boolean input.
+ *
+ * <p>When {@code inSwitch} is true the {@code inTrue} font is passed to
+ * {@code out}; when false, {@code inFalse} is passed instead. Handy for
+ * driving font changes on Px bound labels from station logic.</p>
+ *
+ * @author Eric Bishop, Texas Machining Technologies
+ */
 public class BFontSwitch extends BComponent
 { 
   public static final Property out = newProperty(Flags.SUMMARY, BFont.DEFAULT);

@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.bql;
 
 import com.tridium.bql.util.BDynamicTimeRange;
@@ -12,6 +14,19 @@ import javax.baja.util.BAbsTimeRange;
 // updated 06/29/17 by James Johnson: replace the '|bql:historyFunc:HistoryRollup' syntax with
 // '|bql:history:HistoryRollup'.
 
+/**
+ * Similar to the existing {@link BTrendAnalyzer}, but rolls a history up
+ * over a dynamic (relative) time range such as "last month" instead of
+ * fixed dates.
+ *
+ * <p>Point {@code history} at a history ord and choose a
+ * {@code timeRange} ({@code timeRangeDelta} switches the range to delta
+ * mode); invoking the {@code execute} action runs a HistoryRollup BQL
+ * query and writes {@code count}, {@code min}, {@code max},
+ * {@code average} and {@code sum} for the period.</p>
+ *
+ * @author Alper Uzmezler, BAS Services
+ */
 @SuppressWarnings("rawtypes")
 public class BTrendDynamicAnalyzer extends BComponent
 {

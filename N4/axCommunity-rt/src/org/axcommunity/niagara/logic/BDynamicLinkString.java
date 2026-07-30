@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.logic;
 /**
 * The idea is to be able to dynamically change the input link of a StatusString based on a 
@@ -22,6 +24,21 @@ import javax.baja.naming.BOrd;
 import javax.baja.status.*;
 import javax.baja.sys.*;
 
+/**
+ * A simple String in/out whose input link is created dynamically from the
+ * ord written to {@code ordIn}.
+ *
+ * <p>When {@code ordIn} changes (or the {@code UpdateLink} action fires)
+ * the object builds a link from the {@code out} slot of the component named
+ * by {@code ordIn} — e.g. {@code station:|slot:/ind/Output01} — to its
+ * {@code in} slot, and passes the value straight through to {@code out}.
+ * If the ord is invalid the link is deleted and {@code out} goes to "".
+ * The {@code RemoveThenUpdateLink} action forces a relink by removing the
+ * existing link first; be aware this causes a change of value on
+ * {@code out}.</p>
+ *
+ * @author Mike Arnott, Kors Engineering
+ */
 public class BDynamicLinkString
 extends BComponent
 {

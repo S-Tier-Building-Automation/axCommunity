@@ -19,7 +19,16 @@ SourceForge with its full commit history preserved.
 ## License
 
 Distributed under the **GNU General Public License, version 2 (GPLv2)** — the
-license declared by the upstream SourceForge project. See [`LICENSE`](LICENSE).
+license declared by the upstream SourceForge project. See [`LICENSE`](LICENSE)
+and [`LICENSE-NOTES.md`](LICENSE-NOTES.md) (what GPLv2 means for integrators,
+and why the project stays on it).
+
+## Docs
+
+- [`USER-GUIDE.md`](USER-GUIDE.md) — install + palette/component catalog for station programmers
+- [`SECURITY.md`](SECURITY.md) — vulnerability reporting & release verification
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — dev setup, PR conventions, component idiom
+- [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)
 
 ## Layout
 

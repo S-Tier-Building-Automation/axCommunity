@@ -1,0 +1,62 @@
+name: Bug report
+description: Something a component does wrong on a station or in Workbench
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: input
+    id: component
+    attributes:
+      label: Component
+      description: Which axCommunity component is misbehaving? (e.g. BSuperOr, BSysInfo)
+      placeholder: BComponentName
+    validations:
+      required: true
+  - type: input
+    id: module-version
+    attributes:
+      label: Module version
+      description: axCommunity version installed (see the GitHub Release tag or module.xml)
+      placeholder: 22.3.0
+    validations:
+      required: true
+  - type: input
+    id: niagara-version
+    attributes:
+      label: Niagara version
+      description: e.g. 4.10.11.12, 4.15.3
+      placeholder: 4.x.y.z
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Where does it happen?
+      options:
+        - Station runtime (JACE)
+        - Station runtime (Supervisor)
+        - Workbench
+        - Build / CI
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened, and what did you expect?
+      description: Steps to reproduce, expected behavior, actual behavior
+      placeholder: Describe the problem...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Station output, Application Director output, or stack trace mentioning axCommunity
+      render: text
+  - type: checkboxes
+    id: security-check
+    attributes:
+      label: Security check
+      description: If this report describes a security vulnerability, STOP and use private reporting instead.
+      options:
+        - label: This is NOT a security vulnerability (those go to Security → Advisories, not public issues)
+          required: true

@@ -1,9 +1,23 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.conversion;
 
 import javax.baja.status.*;
 import javax.baja.sys.*;
 import javax.baja.util.*;
 
+/**
+ * Converts a StatusString into a BFormat — great for bringing Alarm
+ * Extension text fields out to Px pages.
+ *
+ * <p>Write or link a format pattern (e.g.
+ * {@code %alarmData.sourceName% ...}) into {@code inString}; on each change
+ * (or via the {@code execute} action) the string is compiled with
+ * {@code BFormat.make} and presented on {@code outBFormat} for binding to
+ * Px widgets that take a format.</p>
+ *
+ * @author    Dean Mynott - Ronin Control Systems Pty Ltd
+ */
 public class BStatusStringToFormat
   extends BComponent implements Runnable
 {

@@ -1,9 +1,22 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.weather;
 
 import javax.baja.sys.BFrozenEnum;
 import javax.baja.sys.Sys;
 import javax.baja.sys.Type;
 
+/**
+ * Frozen enum of the 49 Yahoo Weather condition codes (tornado through
+ * isolated thundershowers, plus code 3200 "not available") backing
+ * {@link BFireFoxxWeather}'s {@code state} slot.
+ *
+ * <p>{@code make} maps the feed's numeric condition code to the matching
+ * enum tag (e.g. 26 cloudy, 32 sunny), defaulting to
+ * {@code not_available}.</p>
+ *
+ * @author Ron Lea, FireFoxx Controls
+ */
 public  final class BFoxxWeatherState
 extends BFrozenEnum
 {
