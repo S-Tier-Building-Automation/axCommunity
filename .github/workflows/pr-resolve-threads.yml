@@ -11,7 +11,11 @@ name: Resolve Outdated Review Threads
 # key configured.)
 
 on:
-  pull_request:
+  # pull_request_target (not pull_request): this job never checks out code and
+  # only calls the GitHub API with integer/repo-name context, so the elevated
+  # base-repo token is safe — and it's required, because the pull_request token
+  # is read-only on fork PRs and 403s the GraphQL mutations.
+  pull_request_target:
     types: [synchronize]
 
 permissions:
@@ -38,7 +42,12 @@ jobs:
           set -euo pipefail
           # First 100 threads is plenty for this repo's PRs; if a PR ever exceeds
           # that, the rest are simply left for manual resolution.
-          resp=$(gh api graphql -f query='
+          #
+          # Resilience: this workflow is best-effort cleanup, not a gate. The
+          # Actions token cannot read/resolve review threads authored by other
+          # GitHub Apps (e.g. CodeRabbit) — "Resource not accessible by
+          # integration" — so any API failure becomes a warning, never a red X.
+          if ! resp=$(gh api graphql -f query='
             query($owner:String!,$repo:String!,$pr:Int!) {
               repository(owner:$owner, name:$repo) {
                 pullRequest(number:$pr) {
@@ -47,7 +56,10 @@ jobs:
                   }
                 }
               }
-            }' -F owner="$OWNER" -F repo="$REPO" -F pr="$PR")
+            }' -F owner="$OWNER" -F repo="$REPO" -F pr="$PR" 2>&1); then
+            echo "::warning::reviewThreads query failed (likely app-authored review threads the Actions token cannot read); skipping. Response: $resp"
+            exit 0
+          fi
 
           ids=$(echo "$resp" | jq -r '
             .data.repository.pullRequest.reviewThreads.nodes[]
@@ -60,11 +72,14 @@ jobs:
 
           count=0
           for id in $ids; do
-            gh api graphql -f query='
+            if gh api graphql -f query='
               mutation($id:ID!) {
                 resolveReviewThread(input:{threadId:$id}) { thread { id } }
-              }' -F id="$id" >/dev/null
-            count=$((count + 1))
-            echo "Resolved outdated thread $id"
+              }' -F id="$id" >/dev/null 2>&1; then
+              count=$((count + 1))
+              echo "Resolved outdated thread $id"
+            else
+              echo "::warning::could not resolve thread $id (app-authored thread?); leaving open."
+            fi
           done
           echo "Resolved $count outdated thread(s)."
