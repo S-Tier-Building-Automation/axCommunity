@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.widgets;
 
 import javax.baja.gx.BBrush;

@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: GPL-2.0-only */
+
 package org.axcommunity.niagara.conversion;
 
 import javax.baja.control.BEnumWritable;
