@@ -1,5 +1,6 @@
 package org.axcommunity.niagara.web;
 
+import javax.baja.status.BStatusBoolean;
 import javax.baja.status.BStatusString;
 import javax.baja.sys.*;
 import java.io.BufferedReader;
@@ -25,12 +26,14 @@ public class BGetHTTP extends BComponent{
 			try {
 
 				String url = getInURL().getValue();
+				if (getHttpsOnly().getBoolean() && !url.toLowerCase().startsWith("https://"))
+					throw new IOException("httpsOnly is set - refusing non-HTTPS URL: " + url);
 				String response = Requester.get(new URL(url));
 				getHttpOut().setValue(response);
 			}catch (Exception e) {
-				//logger.warning( e.getClass().getName() + " : " + e.getMessage() + "\n");
+				// Report through httpOut; never rethrow - an exception escaping a
+				// raw worker thread dies silently.
 				getHttpOut().setValue(e.toString());
-				throw new RuntimeException(e);
 			}
 		}
 	}
@@ -53,6 +56,11 @@ public class BGetHTTP extends BComponent{
 		set(inURL, v);
 	}
 	
+	/**When true, only https:// URLs are fetched; plain http is refused. Recommended on untrusted networks - inURL is a linkable property, so treat it as operator input.*/
+	public static final Property httpsOnly = newProperty(Flags.SUMMARY, new BStatusBoolean(false));
+	public BStatusBoolean getHttpsOnly() { return (BStatusBoolean) get(httpsOnly); }
+	public void setHttpsOnly(BStatusBoolean v) { set(httpsOnly, v); }
+	
 	/**Returned document*/
     public static final Property httpOut = newProperty(Flags.SUMMARY, new BStatusString(),tBox);
     public BStatusString getHttpOut() { return (BStatusString)get(httpOut); }
@@ -71,6 +79,10 @@ class Requester{
 	 */
 	protected Requester(){}
 
+	private static final int CONNECT_TIMEOUT_MS = 10000;
+	private static final int READ_TIMEOUT_MS = 10000;
+	private static final int MAX_RESPONSE_BYTES = 1024 * 1024;
+
 	/**
 	 * @param destination
 	 * @return String with the response body.
@@ -79,19 +91,21 @@ class Requester{
 	public static String get(URL destination) throws IOException {
 		HttpURLConnection connection = (HttpURLConnection) destination.openConnection();
 		connection.setRequestMethod("GET");
-		connection.setRequestProperty("Host", destination.getHost());
-		connection.setDoOutput(true);
-		connection.connect();
+		connection.setConnectTimeout(CONNECT_TIMEOUT_MS);
+		connection.setReadTimeout(READ_TIMEOUT_MS);
 
-		String inString = "";
-		BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		String inBuffer = "";
-		while ((inBuffer = in.readLine()) != null) {
-			inString += inBuffer + "\n";
+		StringBuilder response = new StringBuilder();
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+			String line;
+			while ((line = in.readLine()) != null) {
+				if (response.length() + line.length() > MAX_RESPONSE_BYTES)
+					throw new IOException("response exceeds " + MAX_RESPONSE_BYTES + " byte cap");
+				response.append(line).append('\n');
+			}
+		} finally {
+			connection.disconnect();
 		}
-
-		connection.disconnect();
-		return inString;
+		return response.toString();
 	}
 }
 

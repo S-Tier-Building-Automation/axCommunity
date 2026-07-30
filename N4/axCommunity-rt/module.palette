@@ -655,14 +655,7 @@
 					<!-- /devices/small/Sensor$2dSmoDetector$2dAni -->
 					<p n="Sensor$2dSmoDetector$2dAni" t="kitPx:BoundLabel">
 						<p n="layout" v="360,430,35,65" />
-						<!-- /devices/small/Sensor$2dSmoDetector$2dAni/ValueBinding -->
-						<p n="ValueBinding" t="ui:ValueBinding">
-							<p n="ord" v="station:|slot:/Drivers/NiagaraNetwork/Kaiser_3701_PH/Playground/BWTrue" />
-							<p n="image" t="conv:IBooleanToSimple">
-								<p n="trueValue" t="gx:Image" v="module://johnGraphics/devices/small/smokeDetectorOn.png" />
-								<p n="falseValue" t="gx:Image" v="module://johnGraphics/devices/small/smokeDetectorOff.png" />
-							</p>
-						</p>
+						<p n="image" v="module://johnGraphics/devices/small/smokeDetectorOff.png" />
 						<p n="wsAnnotation" t="b:WsAnnotation" v="5,3,8" />
 					</p>
 					<!-- /devices/small/tempSensorBottom -->

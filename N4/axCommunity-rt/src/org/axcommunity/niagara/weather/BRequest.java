@@ -15,24 +15,30 @@ public class BRequest
 //Main
 ////////////////////////////////////////////////////////////////
   
+      private static final int CONNECT_TIMEOUT_MS = 10000;
+      private static final int READ_TIMEOUT_MS = 10000;
+      private static final int MAX_RESPONSE_BYTES = 1024 * 1024;
+
       public static String get(URL paramURL)
       throws IOException
       {
         HttpURLConnection localHttpURLConnection = (HttpURLConnection)paramURL.openConnection();
         localHttpURLConnection.setRequestMethod("GET");
-        localHttpURLConnection.setRequestProperty("Host", paramURL.getHost());
-        localHttpURLConnection.setDoOutput(true);
-        localHttpURLConnection.connect();
+        localHttpURLConnection.setConnectTimeout(CONNECT_TIMEOUT_MS);
+        localHttpURLConnection.setReadTimeout(READ_TIMEOUT_MS);
 
-        String str1 = "";
-        BufferedReader localBufferedReader = new BufferedReader(new InputStreamReader(localHttpURLConnection.getInputStream()));
-        String str2 = "";
-        while ((str2 = localBufferedReader.readLine()) != null) {
-          str1 = str1 + str2 + '\n';
+        StringBuilder response = new StringBuilder();
+        try (BufferedReader localBufferedReader = new BufferedReader(new InputStreamReader(localHttpURLConnection.getInputStream()))) {
+          String str2;
+          while ((str2 = localBufferedReader.readLine()) != null) {
+            if (response.length() + str2.length() > MAX_RESPONSE_BYTES)
+              throw new IOException("response exceeds " + MAX_RESPONSE_BYTES + " byte cap");
+            response.append(str2).append('\n');
+          }
+        } finally {
+          localHttpURLConnection.disconnect();
         }
-
-        localHttpURLConnection.disconnect();
-        return str1;
+        return response.toString();
       }
   
 

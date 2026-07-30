@@ -338,3 +338,8 @@ V22.03.00
 
 Unreleased
 - ADDED BqlTopNAvg (BQL folder): executes a BQL query on an editable Execute Period (default 15 min) and reports the average of the N highest values returned (topAvg), plus count/avg/min/max/sum. Value read from the column named by valueColumn (default "value"), falling back to the first column. NaN/invalid-status values omitted; fallback used when no valid values. Query runs off the engine thread. Built on the BBqlNumericRecap idiom.
+- SECURITY BGetHTTP: added connect/read timeouts (10 s) and a 1 MB response cap; added 'httpsOnly' property that refuses plain-http URLs when set (inURL is linkable, so treat it as operator input); fetch failures now report through httpOut instead of killing the worker thread - S-Tier
+- SECURITY BFireFoxxWeather: feed fetch moved off the station clock thread (and out of changed()/startup) to a single guarded worker thread; hard connect/read timeouts added; failures log a warning instead of throwing on a borrowed thread. NOTE the component still targets the defunct Yahoo API - no live data until the provider is replaced - S-Tier
+- SECURITY BStringToFile: refuses '..' traversal and path-in-filename writes (path/fileName are linkable); failures now log a real stack trace and no longer kill the worker thread - S-Tier
+- FIXED BHistoryToCSV: the export was written via ObjectOutputStream, producing a Java-serialization blob instead of a CSV file (broken since 2009); now streams real CSV straight to disk, refuses unsafe paths, and logs failures instead of System.out - S-Tier
+- FIXED module.palette: removed a hardcoded customer-site station ord from the PxGraphics smoke-detector entry (now a static graphic like its neighbours) - S-Tier

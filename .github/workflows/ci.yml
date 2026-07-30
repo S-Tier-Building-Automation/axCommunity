@@ -88,7 +88,12 @@ jobs:
   build-niagara:
     name: Niagara Build (assemble + sign)
     needs: smoke-check
-    if: ${{ vars.NIAGARA_BUILD_ENABLED == 'true' }}
+    # Fork PRs must NEVER run here: this job executes the PR's own gradlew.bat
+    # and Gradle scripts on the self-hosted runner — for a fork that is arbitrary
+    # code execution on the machine that also holds the official signing cert.
+    # Same-repo PRs and pushes only. Maintainers can still build a fork PR by
+    # pulling the branch into a same-repo PR after review.
+    if: ${{ vars.NIAGARA_BUILD_ENABLED == 'true' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
     runs-on: [self-hosted, Windows, X64, niagara-build]
     timeout-minutes: 30
     env:
@@ -193,8 +198,7 @@ jobs:
     steps:
       - name: Check results
         run: |
-          # smoke-check must pass. build-niagara may be skipped (no runner yet);
-          # only fail the gate if it actually ran and failed/was cancelled.
+          # smoke-check must always pass.
           if [[ "${{ needs.smoke-check.result }}" != "success" ]]; then
             echo "::error::smoke-check did not succeed (${{ needs.smoke-check.result }})"
             exit 1
@@ -203,5 +207,22 @@ jobs:
           if [[ "$bn" == "failure" || "$bn" == "cancelled" ]]; then
             echo "::error::build-niagara $bn"
             exit 1
+          fi
+          # build-niagara may legitimately skip only when the self-hosted runner
+          # is intentionally disabled (NIAGARA_BUILD_ENABLED unset) or the PR is
+          # from a fork (guarded out for signing-machine safety). Any other skip
+          # means the compile/sign gate silently did not run — fail rather than
+          # let uncompiled code ride auto-merge into a signed release.
+          if [[ "$bn" == "skipped" ]]; then
+            runner_enabled="${{ vars.NIAGARA_BUILD_ENABLED }}"
+            fork_pr="false"
+            if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.event.pull_request.head.repo.full_name }}" != "${{ github.repository }}" ]]; then
+              fork_pr="true"
+            fi
+            if [[ "$runner_enabled" == "true" && "$fork_pr" == "false" ]]; then
+              echo "::error::build-niagara was skipped even though the Niagara runner is enabled and this is not a fork PR — the compile/sign gate did not run."
+              exit 1
+            fi
+            echo "build-niagara skipped (runner enabled: '$runner_enabled', fork PR: $fork_pr) — accepted."
           fi
           echo "CI gate passed (build-niagara: $bn)."

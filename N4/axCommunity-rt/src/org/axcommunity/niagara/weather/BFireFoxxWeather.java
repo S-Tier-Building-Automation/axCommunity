@@ -85,10 +85,10 @@ extends BComponent
           
           public void doRefresh() throws Exception
           {
-            updateReport();
+            startFetchThread();
           }
 
-          
+
 ////////////////////////////////////////////////////////////////
 //Timers///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
@@ -111,9 +111,40 @@ extends BComponent
 
           public void doRefreshTimerExpired()
           {
-            updateReport();
-            updateTimeTicket.cancel();
+            // Reschedule first, then fetch on a worker: this action runs on the
+            // station clock thread, and a hung endpoint must not stall shared
+            // station scheduling.
+            if (updateTimeTicket != null)
+              updateTimeTicket.cancel();
             updateTimeTimer();
+            startFetchThread();
+          }
+
+////////////////////////////////////////////////////////////////
+//Fetch worker//////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+
+          private Thread fetchThread;
+
+          /**
+           * Fetch on a single guarded worker thread instead of the clock/engine
+           * thread the callers run on. A fetch already in flight is not doubled
+           * up, and a failed fetch logs instead of throwing on a borrowed thread.
+           */
+          private synchronized void startFetchThread()
+          {
+            if (fetchThread != null && fetchThread.isAlive())
+              return;
+            fetchThread = new Thread("axCommunity-FireFoxxWeather-fetch")
+            {
+              public void run()
+              {
+                try { updateReport(); }
+                catch (Exception e) { log1.log(Level.WARNING, "weather update failed: " + e.getMessage()); }
+              }
+            };
+            fetchThread.setDaemon(true);
+            fetchThread.start();
           }
               
 ////////////////////////////////////////////////////////////////
@@ -161,7 +192,7 @@ extends BComponent
           setString(locationId, "CAXX0523");
           break;
         }
-          updateReport();
+          startFetchThread();
         }
 
 ////////////////////////////////// Get Connection////////////////////////////////////////////////////////////////
